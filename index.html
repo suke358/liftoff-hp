@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lift-off｜防府のお店のホームページ制作・WEB担当者代行</title>
+<meta name="description" content="山口県防府市で、小さなお店・事業者のホームページを作り、毎月の更新まで引き受けます。料金は税込・月額にドメインとフォームの費用込み。">
+<!-- 公開準備ができるまで検索に出さない。本公開時に外す -->
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Lift-off｜防府のお店のホームページ制作・WEB担当者代行">
+<meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;900&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Lift-off",
+  "description": "防府市の小さなお店・事業者向けのホームページ制作と毎月の更新代行",
+  "telephone": "090-1189-6726",
+  "email": "liftoff.358@gmail.com",
+  "address": {"@type": "PostalAddress", "addressRegion": "山口県", "addressLocality": "防府市", "addressCountry": "JP"},
+  "areaServed": "山口県防府市"
+}
+</script>
+<style>
+:root{
+  --ink:#1B2A38;
+  --sea:#2F6F8F;
+  --sea-deep:#1F4E66;
+  --sky:#E8F1F5;
+  --paper:#FFFFFF;
+  --signal:#F2C230;
+  --line:#C9D9E2;
+  --muted:#52677A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:"BIZ UDPGothic",sans-serif;color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:var(--sea-deep)}
+:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1080px,100% - 32px);margin-inline:auto}
+h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-weight:900;letter-spacing:.02em}
+h2{font-size:clamp(26px,4vw,36px);margin-bottom:12px}
+.lead{color:var(--muted);max-width:40em;margin-bottom:40px}
+section{padding:88px 0}
+section + section{border-top:1px solid var(--line)}
+
+/* header */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
+.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0}
+.nav{display:flex;gap:22px;font-size:15px}
+.nav a{text-decoration:none;color:var(--ink)}
+.nav a:hover{color:var(--sea)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 24px;border:2px solid var(--ink);color:var(--ink);background:var(--paper);font-size:16px;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--sea-deep);border-color:var(--sea-deep)}
+.btn:hover{border-color:var(--sea)}
+.top .btn{padding:8px 18px;font-size:14px}
+@media (max-width:860px){.nav{display:none}}
+
+/* hero */
+.hero{padding:72px 0 0;background:linear-gradient(var(--sky),var(--paper) 85%);border:none;overflow:hidden}
+.hero .wrap{position:relative}
+.hero p.place{color:var(--sea-deep);font-weight:700;margin-bottom:14px}
+.hero h1{font-size:clamp(34px,6.4vw,66px);max-width:12em}
+.hero h1 span{display:block}
+.hero .sub{margin:24px 0 32px;max-width:32em;font-size:18px}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px}
+.flight{margin-top:24px;height:auto;width:100%}
+.flight .trail{stroke-dasharray:10 10;stroke-dashoffset:0;animation:fly 2.4s ease-out both}
+.flight .plane{animation:plane 2.4s ease-out both}
+@keyframes fly{from{stroke-dashoffset:900;opacity:0}to{stroke-dashoffset:0;opacity:1}}
+@keyframes plane{from{opacity:0;transform:translate(-40px,30px)}to{opacity:1;transform:none}}
+
+/* できること */
+.can{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 64px;max-width:900px}
+@media (max-width:640px){.can{grid-template-columns:1fr}}
+.can h3{font-size:21px;margin-bottom:8px;padding-top:14px;border-top:4px solid var(--ink);width:fit-content;min-width:3em}
+.can p{color:var(--ink)}
+.promise{margin-top:56px;background:var(--sky);border-radius:20px;padding:32px clamp(20px,4vw,44px)}
+.promise h3{font-size:20px;margin-bottom:10px}
+.promise ul{list-style:none;display:grid;gap:8px}
+.promise li{padding-left:1.4em;position:relative}
+.promise li::before{content:"";position:absolute;left:0;top:.75em;width:.6em;height:.6em;border-radius:50%;background:var(--sea)}
+
+/* 料金：搭乗券 */
+.passes{display:grid;gap:24px}
+.pass{display:grid;grid-template-columns:1fr 220px;border:2px solid var(--ink);border-radius:18px;background:var(--paper);position:relative}
+.pass.rec{box-shadow:8px 8px 0 var(--signal)}
+.pass .main{padding:26px 28px}
+.pass .stub{border-left:2px dashed var(--ink);padding:26px 22px;display:flex;flex-direction:column;justify-content:center;background:var(--sky);border-radius:0 16px 16px 0}
+.pass::before,.pass::after{content:"";position:absolute;right:211px;width:20px;height:20px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
+.pass::before{top:-11px;clip-path:inset(50% 0 0 0)}
+.pass::after{bottom:-11px;clip-path:inset(0 0 50% 0)}
+.pass .who{color:var(--muted);font-size:15px}
+.pass h3{font-size:26px;margin:2px 0 14px}
+.pass .tag{display:inline-block;background:var(--signal);font-weight:700;font-size:13px;padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;font-family:"BIZ UDPGothic"}
+.pass dl{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;font-size:15px}
+.pass dt{color:var(--muted)}
+.price-k{font-size:13px;color:var(--muted)}
+.price{font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:32px;line-height:1.2}
+.price small{font-size:15px;font-weight:500}
+.price.init{font-size:20px;margin-top:10px}
+.note{font-size:14px;color:var(--muted);margin-top:22px}
+@media (max-width:640px){
+  .pass{grid-template-columns:1fr}
+  .pass .stub{border-left:none;border-top:2px dashed var(--ink);border-radius:0 0 16px 16px}
+  .pass::before,.pass::after{display:none}
+}
+
+/* データ管理 */
+.data{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.data div{border-left:4px solid var(--sea);padding:4px 0 4px 18px}
+.data h3{font-size:18px;margin-bottom:4px}
+
+/* 流れ */
+.flow{list-style:none;counter-reset:s;display:grid;gap:0;max-width:760px}
+.flow li{counter-increment:s;display:grid;grid-template-columns:56px 1fr;gap:18px;position:relative;padding-bottom:30px}
+.flow li::before{content:counter(s);width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:20px;position:relative;z-index:1}
+.flow li:not(:last-child)::after{content:"";position:absolute;left:23px;top:48px;bottom:0;border-left:2px dashed var(--sea)}
+.flow li:last-child::before{background:var(--signal);color:var(--ink)}
+.flow h3{font-size:19px;margin:9px 0 4px}
+
+/* 制作例 */
+.work{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.work .shot{border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--sky);aspect-ratio:16/10}
+.work iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;pointer-events:none}
+.work h3{font-size:24px;margin-bottom:8px}
+@media (max-width:760px){.work{grid-template-columns:1fr}}
+
+/* FAQ */
+details{border-bottom:1px solid var(--line);padding:18px 0;max-width:820px}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--sea)}
+details[open] summary::after{content:"－"}
+details p{margin-top:10px;color:var(--ink)}
+
+/* 他サービス */
+.other{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;border:2px solid var(--ink);border-radius:18px;padding:28px}
+.other h3{font-size:22px}
+
+/* お問い合わせ */
+.contact{background:var(--ink);color:#fff;border:none}
+.contact h2{color:#fff}
+.contact .lead{color:#C7D6E0}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px}
+.contact .tel{font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:clamp(28px,5vw,40px);color:#fff;text-decoration:none;display:block}
+.contact .mail{color:var(--signal);word-break:break-all}
+.contact dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;color:#C7D6E0}
+form{display:grid;gap:16px}
+label{font-weight:700;font-size:15px;display:grid;gap:6px}
+input,textarea,select{font:inherit;font-weight:400;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink)}
+input:focus,textarea:focus,select:focus{border-color:var(--signal);outline:none}
+textarea{min-height:130px;resize:vertical}
+.contact .btn{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.formnote{font-size:13px;color:#C7D6E0}
+@media (max-width:760px){.contact-grid{grid-template-columns:1fr}}
+footer{background:var(--ink);color:#8FA6B6;font-size:13px;padding:24px 0 96px;border-top:1px solid #2F4253}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* スマホ固定ボタン */
+.fixbar{position:fixed;left:0;right:0;bottom:0;display:none;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);z-index:30}
+.fixbar .btn{flex:1;padding:12px 8px}
+@media (max-width:760px){.fixbar{display:flex}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 24 L26 6 M26 6 L15 7 M26 6 L25 17" stroke="#1B2A38" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Lift-off <small>ホームページ制作</small></span>
+    </a>
+    <nav class="nav" aria-label="ページ内">
+      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">制作例</a>
+    </nav>
+    <a class="btn primary" href="#contact">相談する</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <p class="place">山口県防府市のホームページ屋さん</p>
+    <h1><span>お店のホームページ、</span><span>作ったあとも</span><span>引き受けます。</span></h1>
+    <p class="sub">作って終わりにせず、お休みのお知らせやメニューの変更も、LINEや電話でひと言いただければこちらで直します。パソコンが苦手でも大丈夫です。</p>
+    <div class="actions">
+      <a class="btn primary" href="#contact">まずは相談する（無料）</a>
+      <a class="btn" href="#price">料金を見る</a>
+    </div>
+    <svg class="flight" viewBox="0 0 1080 200" aria-hidden="true">
+      <path class="trail" d="M20 190 C 300 190, 520 170, 760 90 S 1010 20, 1040 14" fill="none" stroke="#2F6F8F" stroke-width="3" stroke-linecap="round"/>
+      <g class="plane" transform="translate(0 0)"><path d="M1012 26 L1058 6 L1044 30 Z" fill="#1B2A38"/></g>
+      <rect x="20" y="150" width="70" height="40" fill="#1B2A38"/><path d="M14 152 L55 128 L96 152 Z" fill="#1B2A38"/><rect x="44" y="166" width="20" height="24" fill="#F2C230"/>
+    </svg>
+  </div>
+</section>
+
+<section id="can">
+  <div class="wrap">
+    <h2>できること</h2>
+    <p class="lead">ホームページ係の担当者を一人雇うかわりに、外から手伝う形です。お店の仕事に集中していただけるよう、ネットまわりをまとめて引き受けます。</p>
+    <div class="can">
+      <div><h3>作る</h3><p>お店の雰囲気に合わせてデザインします。スマホで見やすく、電話や予約にすぐつながる作りにします。</p></div>
+      <div><h3>直す・更新する</h3><p>営業日やメニュー、写真の入れ替えは、ひと言いただければこちらで。依頼には原則3営業日以内に対応します。</p></div>
+      <div><h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、Googleマップとのつなぎこみなど、公開時の基本の設定はひととおり行います。</p></div>
+      <div><h3>問い合わせを受ける</h3><p>お問い合わせフォームや予約の受付（RESERVA・Googleカレンダー）をつけられます。</p></div>
+    </div>
+    <div class="promise">
+      <h3>お約束していること</h3>
+      <ul>
+        <li>「検索で1位」「必ずお客さんが増える」などの約束はしません。できることを正直にお伝えします。</li>
+        <li>お店のサイトに、効果を言い切る表現や大げさな言葉は使いません。</li>
+        <li>写真やお名前は、了承をいただいてから載せます。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="price">
+  <div class="wrap">
+    <h2>料金プラン</h2>
+    <p class="lead">すべて税込です。ドメイン（ホームページの住所）とお問い合わせフォームの費用は、どのプランも月額に含まれています。</p>
+    <div class="passes">
+      <article class="pass">
+        <div class="main">
+          <p class="who">まずは費用をおさえて始めたい方に</p>
+          <h3>ライト</h3>
+          <dl>
+            <dt>初期費用</dt><dd>なし</dd>
+            <dt>契約期間</dt><dd>12か月から</dd>
+            <dt>含まれるもの</dt><dd>ドメイン・フォームの費用</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">9,800<small>円</small></span>
+          <span class="price init">初期 0円</span>
+        </div>
+      </article>
+      <article class="pass rec">
+        <div class="main">
+          <p class="who">しっかり作って、更新はときどき</p>
+          <h3>スタンダード</h3>
+          <dl>
+            <dt>更新</dt><dd>月2回まで</dd>
+            <dt>契約期間</dt><dd>縛りなし</dd>
+            <dt>含まれるもの</dt><dd>ドメイン・フォームの費用</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">5,500<small>円</small></span>
+          <span class="price init">初期 98,000円</span>
+        </div>
+      </article>
+      <article class="pass">
+        <div class="main">
+          <p class="who">ネットのことは、まるごと任せたい方に</p>
+          <h3>WEB担当者代行</h3>
+          <dl>
+            <dt>更新</dt><dd>月2回をこえる更新もおまかせ</dd>
+            <dt>Googleマップ</dt><dd>お知らせの投稿もこちらで</dd>
+            <dt>契約期間</dt><dd>縛りなし</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">19,800<small>円</small></span>
+          <span class="price init">初期 98,000円</span>
+        </div>
+      </article>
+    </div>
+    <p class="note">初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。ライトのみ、12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。紹介料などの仕組みはありません。</p>
+  </div>
+</section>
+
+<section id="data">
+  <div class="wrap">
+    <h2>データの管理</h2>
+    <p class="lead">ホームページはお店の大事な財産です。やめるときに困らないよう、最初からお店のものとして持っていただきます。</p>
+    <div class="data">
+      <div><h3>ドメインはお店の名義</h3><p>ホームページの住所（〇〇.jp など）は、お店の名義で取ります。</p></div>
+      <div><h3>変更の記録を残します</h3><p>いつ・どこを直したかを全部記録しているので、前の状態に戻すこともできます。</p></div>
+      <div><h3>やめるときはデータ一式をお渡し</h3><p>解約されるときは、サイトのデータをすべてお渡しします。ほかの会社に引き継ぐこともできます。解約後のドメインの更新費用はお店のご負担になります。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="flow">
+  <div class="wrap">
+    <h2>作成の流れ</h2>
+    <p class="lead">打ち合わせは基本1回。あとはLINEや電話でのやりとりで進めます。</p>
+    <ol class="flow">
+      <li><div><h3>お問い合わせ</h3><p>電話・メール・下のフォームからお気軽にどうぞ。相談だけでも大丈夫です。</p></div></li>
+      <li><div><h3>打ち合わせ</h3><p>お店にうかがって、載せたい内容やお好みのデザインをお聞きします。写真もこのときに。</p></div></li>
+      <li><div><h3>見本を作って確認</h3><p>実際にスマホで見られる見本をお送りします。気になるところは何度でもお伝えください。</p></div></li>
+      <li><div><h3>公開</h3><p>ドメインの取得やGoogleへの登録などの設定をして、ネットに公開します。</p></div></li>
+      <li><div><h3>毎月の更新</h3><p>公開後も、変更はひと言いただければこちらで直します。</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <h2>制作例</h2>
+    <div class="work">
+      <div class="shot"><iframe src="https://suke358.github.io/colore-website/" title="colore のホームページ" loading="lazy" tabindex="-1"></iframe></div>
+      <div>
+        <h3>よもぎ蒸し・脱毛サロン colore さん</h3>
+        <p>防府市のサロンさんです。看護師のオーナーさんのやさしい人柄が伝わるよう、落ち着いた色と写真で構成しました。</p>
+        <p style="margin-top:20px"><a class="btn" href="https://suke358.github.io/colore-website/" target="_blank" rel="noopener">サイトを見る（別のタブで開きます）</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>よくある質問</h2>
+    <details><summary>パソコンが使えなくても大丈夫ですか？</summary><p>大丈夫です。更新のご依頼はLINEや電話でひと言いただくだけで、作業はこちらで行います。</p></details>
+    <details><summary>写真がありません。</summary><p>スマホで撮った写真でも使えます。撮り方のコツもお伝えします。</p></details>
+    <details><summary>すでにホームページがあります。作り直しもできますか？</summary><p>できます。今のサイトの状態を見てからご提案しますので、まずはご相談ください。</p></details>
+    <details><summary>防府市以外でもお願いできますか？</summary><p>防府市を中心に、近くの地域もご相談ください。打ち合わせにうかがえる範囲かどうかをお伝えします。</p></details>
+  </div>
+</section>
+
+<section id="other">
+  <div class="wrap">
+    <h2>ほかのサービス</h2>
+    <div class="other">
+      <div>
+        <h3>伐採・伐木・抜根・草刈り</h3>
+        <p>Lift-off では、木の伐採や草刈りの仕事も行っています。防府市近郊の空き家・空き地のお手入れもご相談ください。</p>
+      </div>
+      <!-- 伐採サイトのURLが決まったら href を差し替える -->
+      <a class="btn" href="#contact">伐採・草刈りについて相談する</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap">
+    <h2>お問い合わせ</h2>
+    <p class="lead">ご相談・お見積もりは無料です。「こんなことできる？」だけでもお気軽にどうぞ。</p>
+    <div class="contact-grid">
+      <div>
+        <a class="tel" href="tel:09011896726">090-1189-6726</a>
+        <p>メール：<a class="mail" href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
+        <dl>
+          <dt>屋号</dt><dd>Lift-off（リフトオフ）</dd>
+          <dt>所在地</dt><dd>山口県防府市</dd>
+          <dt>対応地域</dt><dd>防府市とその周辺</dd>
+        </dl>
+      </div>
+      <form id="form" action="" method="POST">
+        <label>お名前<input name="name" required autocomplete="name"></label>
+        <label>お店・会社の名前（任意）<input name="shop"></label>
+        <label>ご連絡先（電話またはメール）<input name="contact" required></label>
+        <label>ご相談の内容
+          <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
+        </label>
+        <label>くわしい内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
+        <button class="btn" type="submit">この内容で送る</button>
+        <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© Lift-off</span><span>山口県防府市</span></div></footer>
+
+<div class="fixbar">
+  <a class="btn primary" href="tel:09011896726">電話する</a>
+  <a class="btn" href="#contact">フォームで相談</a>
+</div>
+
+<script>
+// Formspree のIDが決まったら FORMSPREE に入れる（例 "https://formspree.io/f/xxxx"）。空のあいだはメール画面を開く
+const FORMSPREE = "";
+const form = document.getElementById('form');
+if (FORMSPREE) { form.action = FORMSPREE; document.getElementById('formnote').textContent = '送信後、こちらから折り返しご連絡します。'; }
+else form.addEventListener('submit', e => {
+  e.preventDefault();
+  const d = new FormData(form);
+  const body = `お名前：${d.get('name')}\nお店・会社：${d.get('shop')}\nご連絡先：${d.get('contact')}\nご相談：${d.get('topic')}\n\n${d.get('message')}`;
+  location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + d.get('name')) + '&body=' + encodeURIComponent(body);
+});
+</script>
+</body>
+</html>
