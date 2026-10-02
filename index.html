@@ -108,6 +108,10 @@ section + section{border-top:1px solid var(--line)}
 .price{font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:32px;line-height:1.2}
 .price small{font-size:15px;font-weight:500}
 .price.init{font-size:20px;margin-top:10px}
+.extra{margin-top:28px;border:2px dashed var(--line);border-radius:14px;padding:20px 24px;max-width:560px}
+.extra h3{font-size:17px;margin-bottom:6px}
+.extra dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;font-size:15px}
+.extra dt{color:var(--muted)}
 .note{font-size:14px;color:var(--muted);margin-top:22px}
 @media (max-width:640px){
   .pass{grid-template-columns:1fr}
@@ -231,30 +235,14 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
     <h2>料金プラン</h2>
     <p class="lead">すべて税込です。ドメイン（ホームページの住所）とお問い合わせフォームの費用は、どのプランも月額に含まれています。</p>
     <div class="passes">
-      <article class="pass">
-        <div class="main">
-          <p class="who">まずは費用をおさえて始めたい方に</p>
-          <h3>ライト</h3>
-          <dl>
-            <dt>初期費用</dt><dd>なし</dd>
-            <dt>契約期間</dt><dd>12か月から</dd>
-            <dt>含まれるもの</dt><dd>ドメイン・フォームの費用</dd>
-          </dl>
-        </div>
-        <div class="stub">
-          <span class="price-k">月額</span>
-          <span class="price">9,800<small>円</small></span>
-          <span class="price init">初期 0円</span>
-        </div>
-      </article>
       <article class="pass rec">
         <div class="main">
-          <p class="who">しっかり作って、更新はときどき</p>
-          <h3>スタンダード</h3>
+          <p class="who">作って、ときどき更新する基本のプラン</p>
+          <h3>スタンダード <span class="tag">おすすめ</span></h3>
           <dl>
+            <dt>サイト</dt><dd>スマホで見やすい縦長の1ページ</dd>
             <dt>更新</dt><dd>月2回まで</dd>
             <dt>契約期間</dt><dd>縛りなし</dd>
-            <dt>含まれるもの</dt><dd>ドメイン・フォームの費用</dd>
           </dl>
         </div>
         <div class="stub">
@@ -265,11 +253,29 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
       </article>
       <article class="pass">
         <div class="main">
+          <p class="who">最初にまとまったお金をかけずに始めたい方に</p>
+          <h3>初期0円プラン</h3>
+          <dl>
+            <dt>中身</dt><dd>スタンダードと同じ（初期費用を月額に分けてお支払い）</dd>
+            <dt>更新</dt><dd>月2回まで</dd>
+            <dt>契約期間</dt><dd>12か月から</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">9,800<small>円</small></span>
+          <span class="price init">初期 0円</span>
+        </div>
+      </article>
+      <article class="pass">
+        <div class="main">
           <p class="who">ネットのことは、まるごと任せたい方に</p>
           <h3>WEB担当者代行</h3>
           <dl>
-            <dt>更新</dt><dd>月2回をこえる更新もおまかせ</dd>
-            <dt>Googleマップ</dt><dd>お知らせの投稿もこちらで</dd>
+            <dt>サイト</dt><dd>スタンダードと同じ</dd>
+            <dt>更新</dt><dd>月4回まで</dd>
+            <dt>Googleマップ</dt><dd>お知らせの投稿 月4回、口コミへの返信文の下書き</dd>
+            <dt>報告</dt><dd>月1回、サイトの見られ方を簡単にお知らせ</dd>
             <dt>契約期間</dt><dd>縛りなし</dd>
           </dl>
         </div>
@@ -280,7 +286,14 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
         </div>
       </article>
     </div>
-    <p class="note">初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。ライトのみ、12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。紹介料などの仕組みはありません。</p>
+    <div class="extra">
+      <h3>追加でお願いする場合</h3>
+      <dl>
+        <dt>回数をこえた更新</dt><dd>1回 3,300円</dd>
+        <dt>ページの追加</dt><dd>1ページ 22,000円</dd>
+      </dl>
+    </div>
+    <p class="note">初期0円プランは、続けて使うほどお支払いの合計がスタンダードより多くなります（23か月目ごろに逆転します）。長く使う予定ならスタンダードがお得です。12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。<br>初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。紹介料などの仕組みはありません。</p>
   </div>
 </section>
 
