@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ラグジュアリー（よもぎ色×金）｜デザイン見本</title>
+<meta name="description" content="Lift-off ホームページ制作のデザイン見本です（架空のお店）。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1d2a23">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   A案：ラグジュアリー
+   深いよもぎ色 × 施術スペースのマントと同じ、くすんだ金色
+   ========================================================= */
+:root{
+  --forest:#1d2a23;    /* 深いよもぎ色（背景） */
+  --forest-2:#24342b;
+  --gold:#b89a5e;      /* マントの金色 */
+  --gold-soft:#d9c69a;
+  --mist:#eef0eb;      /* 湯気のような白 */
+  --ink:#22302a;
+  --stone:#68736b;
+  --line-dark:rgba(217,198,154,.28);
+  --line-light:#d6d9d0;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
+  --latin:"Cormorant Garamond","Shippori Mincho B1",serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--gothic);font-weight:400;font-size:15.5px;line-height:2.05;letter-spacing:.08em}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.wrap{width:min(1100px,100% - 48px);margin-inline:auto}
+h1,h2,h3{font-family:var(--mincho);font-weight:500;margin:0;line-height:1.7}
+p{margin:0 0 1.2em}
+.dark{background:var(--forest);color:#e9e6dc}
+.dark .muted{color:#b9bdb2}
+.muted{color:var(--stone)}
+/* 写真の色味をそろえる（落ち着いた、あたたかいトーンに） */
+.tone{filter:saturate(.72) contrast(1.04) sepia(.12) brightness(.96)}
+
+/* ---------- ヘッダー ---------- */
+.head{position:absolute;inset:0 0 auto 0;z-index:30}
+.head .wrap{display:flex;justify-content:space-between;align-items:center;height:88px;color:#efe9da}
+.word{text-decoration:none;display:flex;align-items:baseline;gap:14px}
+.word b{font-family:var(--latin);font-style:italic;font-weight:500;font-size:2rem;letter-spacing:.04em;line-height:1}
+.word span{font-size:.72rem;letter-spacing:.24em;color:var(--gold-soft)}
+.nav{display:flex;gap:30px;align-items:center;font-size:.85rem}
+.nav a{text-decoration:none;opacity:.86}
+.nav a:hover{opacity:1;color:var(--gold-soft)}
+.nav .rsv{border:1px solid var(--gold);color:var(--gold-soft);padding:.45em 1.4em;opacity:1}
+.nav .rsv:hover{background:var(--gold);color:var(--forest)}
+@media (max-width:860px){.nav a:not(.rsv){display:none}.word span{display:none}}
+
+/* ---------- トップ ---------- */
+.hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 0 80px}
+.hero .wrap{display:grid;grid-template-columns:1fr auto;gap:72px;align-items:center}
+.hero-photo{justify-self:end;width:min(440px,100%);padding:12px;border:1px solid var(--gold)}
+.hero-photo img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:70% 75%}
+.hero-text{display:flex;gap:48px;align-items:flex-start;justify-content:center}
+.hero h1{writing-mode:vertical-rl;font-size:clamp(1.9rem,3.2vw,2.6rem);letter-spacing:.28em;line-height:2.3;font-weight:500;color:#f3efe3;white-space:nowrap}
+.hero-sub{writing-mode:vertical-rl;font-size:.9rem;letter-spacing:.3em;color:var(--gold-soft);line-height:2.6;border-right:1px solid var(--line-dark);padding-right:18px;white-space:nowrap;margin:0}
+.steam{position:absolute;width:150px;height:200px;left:6%;bottom:6%;opacity:.5}
+.steam path{fill:none;stroke:var(--gold-soft);stroke-width:1.2;stroke-linecap:round;stroke-dasharray:260;stroke-dashoffset:260;animation:rise 4s ease-out .3s forwards}
+.steam path:nth-child(2){animation-delay:.9s}
+@keyframes rise{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion:reduce){.steam path{animation:none;stroke-dashoffset:0}}
+@media (max-width:860px){
+  .hero{min-height:auto;padding:120px 0 72px}
+  .hero .wrap{grid-template-columns:1fr;gap:56px}
+  .hero-text{order:-1;justify-content:center}
+  .hero h1{font-size:1.6rem}
+  .hero-sub{font-size:.78rem}
+  .hero-photo{justify-self:center;width:min(82%,340px)}
+  .steam{display:none}
+}
+
+/* ---------- 共通 ---------- */
+.sec{padding:140px 0}
+.sec-head{display:flex;align-items:baseline;gap:22px;margin-bottom:56px}
+.sec-head h2{font-size:clamp(1.55rem,2.8vw,2rem);letter-spacing:.16em}
+.sec-head i{font-family:var(--latin);font-style:italic;font-size:1.15rem;color:var(--gold);letter-spacing:.06em}
+@media (max-width:860px){.sec{padding:96px 0}.sec-head{margin-bottom:40px;flex-wrap:wrap;gap:6px 16px}}
+
+/* ---------- よもぎ蒸しとは ---------- */
+.about .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:96px}
+.about-lead{font-family:var(--mincho);font-size:1.35rem;line-height:2.1;letter-spacing:.14em;border-left:1px solid var(--gold);padding-left:32px}
+.for{list-style:none;padding:0;margin:44px 0 0;border-top:1px solid var(--line-light)}
+.for li{display:grid;grid-template-columns:11em 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line-light)}
+.for b{font-family:var(--mincho);font-weight:500;letter-spacing:.12em}
+.for span{color:var(--stone);font-size:.92rem}
+.note{font-size:.8rem;color:var(--stone);margin-top:32px;line-height:1.9}
+@media (max-width:860px){.about .wrap{grid-template-columns:1fr;gap:48px}.for li{grid-template-columns:1fr;gap:2px}.about-lead{font-size:1.15rem;padding-left:22px}}
+
+/* ---------- オーナー ---------- */
+.owner .wrap{display:grid;grid-template-columns:auto 1fr;gap:88px;align-items:center;max-width:960px}
+.owner-photo{width:286px;padding:12px;border:1px solid var(--gold)}
+.owner-photo img{width:260px;height:320px;object-fit:cover}
+.owner-role{font-size:.8rem;color:var(--gold-soft);letter-spacing:.3em;margin-bottom:18px;display:block}
+.owner h2{font-size:clamp(1.4rem,2.6vw,1.85rem);letter-spacing:.14em;margin-bottom:30px;color:#f3efe3}
+@media (max-width:860px){.owner .wrap{grid-template-columns:1fr;gap:56px}.owner-photo{width:244px}.owner-photo img{width:220px;height:270px}}
+
+/* ---------- メニュー ---------- */
+.menu-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--gold)}
+.menu-item{display:grid;grid-template-columns:200px 1fr;gap:56px;padding:44px 0;border-bottom:1px solid var(--line-light);align-items:center}
+.menu-item img{width:200px;height:150px;object-fit:cover}
+.menu-item .ph{width:200px;height:150px;background:var(--forest);display:grid;place-items:center}
+.menu-item h3{font-size:1.5rem;letter-spacing:.18em;margin-bottom:10px}
+.menu-item p{color:var(--stone);margin:0;max-width:34em}
+.sub-items{font-family:var(--mincho);letter-spacing:.12em;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:0 1.4em}
+.sub-items span{white-space:nowrap}
+.price-note{margin-top:36px;font-size:.92rem}
+.menu-item .pr{font-family:var(--mincho);color:var(--ink);margin-top:12px;letter-spacing:.12em}
+@media (max-width:640px){.menu-item{grid-template-columns:1fr;gap:22px;padding:36px 0}.menu-item img,.menu-item .ph{width:100%;height:190px}}
+
+/* ---------- ご予約 ---------- */
+.reserve .wrap{max-width:900px;text-align:center}
+.reserve .sec-head{justify-content:center}
+.ways{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark);margin-top:24px}
+.way{padding:46px 24px}
+.way + .way{border-left:1px solid var(--line-dark)}
+.way h3{font-size:1rem;letter-spacing:.24em;color:var(--gold-soft);margin-bottom:16px}
+.tel{font-family:var(--latin);font-size:clamp(2rem,4.4vw,2.7rem);letter-spacing:.08em;text-decoration:none;color:#f3efe3;line-height:1.3;display:inline-block}
+.way small{display:block;font-size:.8rem;color:#b9bdb2;margin-top:12px;line-height:1.9}
+.btn-gold{display:inline-block;background:var(--gold);color:var(--forest);text-decoration:none;font-weight:500;letter-spacing:.2em;padding:1em 2.4em;transition:background .25s}
+.btn-gold:hover{background:var(--gold-soft)}
+@media (max-width:760px){.ways{grid-template-columns:1fr}.way + .way{border-left:none;border-top:1px solid var(--line-dark)}}
+
+/* ---------- 店舗情報 ---------- */
+.access .wrap{display:grid;grid-template-columns:1fr 1fr;gap:72px}
+.info{margin:0;border-top:1px solid var(--gold)}
+.info div{display:grid;grid-template-columns:7.5em 1fr;padding:16px 0;border-bottom:1px solid var(--line-light);font-size:.94rem}
+.info dt{font-family:var(--mincho);letter-spacing:.14em}
+.info dd{margin:0}
+.map{min-height:420px;background:#dfe2db}
+.map iframe{width:100%;height:100%;min-height:420px;border:0;display:block;filter:grayscale(.85) contrast(.95)}
+@media (max-width:860px){.access .wrap{grid-template-columns:1fr;gap:48px}.map,.map iframe{min-height:300px}}
+
+/* ---------- お問い合わせ ---------- */
+.contact{background:#e6e9e2}
+.form{max-width:640px}
+.form label{display:block;font-family:var(--mincho);letter-spacing:.14em;margin-bottom:4px}
+.req{font-family:var(--gothic);font-size:.72rem;color:var(--gold);margin-left:.8em;letter-spacing:.1em}
+.form input,.form textarea{width:100%;font:inherit;letter-spacing:.04em;padding:.7em 0;border:none;border-bottom:1px solid #9aa398;background:transparent;margin-bottom:34px;color:var(--ink)}
+.form textarea{border:1px solid #9aa398;padding:.8em;min-height:150px}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 1px 0 var(--gold)}
+.form button{font:inherit;letter-spacing:.3em;background:var(--forest);color:#f3efe3;border:none;padding:1.1em 3.4em;cursor:pointer;transition:background .25s}
+.form button:hover{background:var(--forest-2)}
+.demo-msg{border-left:2px solid var(--gold);padding:.6em 1em;margin-bottom:24px;background:#f4f1e8}
+
+/* ---------- フッター ---------- */
+.foot{padding:72px 0 36px;font-size:.85rem}
+.foot .wrap{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.foot .word b{font-size:1.7rem}
+.foot nav{display:flex;flex-wrap:wrap;gap:8px 26px}
+.foot nav a{text-decoration:none;opacity:.8}
+.foot nav a:hover{opacity:1;color:var(--gold-soft)}
+.copy{text-align:center;font-family:var(--latin);font-style:italic;color:#8e978e;margin-top:48px;letter-spacing:.1em}
+
+/* ---------- スマホ下の固定ボタン ---------- */
+.spbar{display:none}
+@media (max-width:860px){
+  .spbar{display:grid;grid-template-columns:1fr 1fr;position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--forest);border-top:1px solid var(--gold);padding-bottom:env(safe-area-inset-bottom)}
+  .spbar a{text-align:center;text-decoration:none;color:#f3efe3;padding:1.05em .5em;font-size:.9rem;letter-spacing:.16em}
+  .spbar a + a{background:var(--gold);color:var(--forest);font-weight:500}
+  body{padding-bottom:58px}
+}
+
+/* ===== 見本帳用の表示 ===== */
+.mihon{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.mihon:hover{background:#000}
+@media (max-width:860px){.mihon{bottom:78px}}
+.mapph{display:grid;place-items:center;min-height:inherit;height:100%;color:#8a7d6a;font-size:.9rem;letter-spacing:.1em;background:#e8e1d6}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap">
+    <a href="#top" class="word" aria-label="hiyori トップへ"><b>hiyori</b><span>よもぎ蒸しサロン</span></a>
+    <nav class="nav" aria-label="ページ内">
+      <a href="#about">よもぎ蒸しとは</a>
+      <a href="#menu">メニュー</a>
+      <a href="#access">アクセス</a>
+      <a href="#contact">お問い合わせ</a>
+      <a href="#reserve" class="rsv">ご予約</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- トップ -->
+  <section class="hero dark">
+    <svg class="steam" viewBox="0 0 150 200" aria-hidden="true">
+      <path d="M50 198c-22-30 22-48 0-82s18-52 4-82"/>
+      <path d="M96 198c-22-30 22-48 0-82s18-52 4-82"/>
+    </svg>
+    <div class="wrap">
+      <div class="hero-text">
+        <h1>よもぎの湯気に<br>包まれる<br>ほっとひと息の時間</h1>
+        <p class="hero-sub">〇〇市〇〇町<br>完全予約制の　プライベートサロン</p>
+      </div>
+            <figure class="hero-photo" style="margin:0">
+        <img src="../img/ph-hero.svg" alt="店内の写真が入ります" width="800" height="1000">
+      </figure>
+    </div>
+  </section>
+
+  <!-- よもぎ蒸しとは -->
+  <section id="about" class="sec about">
+    <div class="wrap">
+      <div>
+        <div class="sec-head"><h2>よもぎ蒸しとは</h2><i>about</i></div>
+        <p class="about-lead">よもぎの香りと、<br>やわらかな蒸気に包まれる、<br>自分のためだけの時間。</p>
+      </div>
+      <div>
+        <p>よもぎ蒸しは、韓国で古くから親しまれてきた温活の習慣です。よもぎなどの薬草を煮出した蒸気を、専用の椅子に座ってマントの中で下半身からじっくりと浴びていただきます。</p>
+        <p>ぽかぽかとした温かさに包まれて、じんわり汗をかく心地よさを味わえます。忙しい毎日の、ほっとひと息つく時間におすすめです。</p>
+        <ul class="for">
+          <li><b>冷えが気になる方に</b><span>ぽかぽかの温かさで、冷えやすい季節も心地よく。</span></li>
+          <li><b>汗をかきたい方に</b><span>ふだん汗をかく機会が少ない方にも。</span></li>
+          <li><b>ひと息つきたい方に</b><span>よもぎのやさしい香りに包まれて、自分をいたわる時間を。</span></li>
+        </ul>
+        <p class="note">※感じ方には個人差があります。よもぎ蒸しは医療行為ではなく、病気の治療を目的としたものではありません。妊娠中の方・持病のある方は事前にご相談ください。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- オーナー -->
+  <section class="sec owner dark">
+    <div class="wrap">
+      <div class="owner-photo"><img src="../img/ph-owner.svg" alt="オーナーの写真が入ります" width="260" height="320"></div>
+      <div>
+        <span class="owner-role">セラピスト　／　サロンオーナー</span>
+        <h2>ひだまりのように、<br>ほっとできる場所を。</h2>
+        <p class="muted">hiyoriのホームページをご覧いただき、ありがとうございます。心地よいと感じるケアは、人それぞれ。おひとりおひとりのお話をうかがいながら、その日の体調にあわせた時間をご用意します。</p>
+        <p class="muted">家でも職場でもない、もうひとつの居場所のように。はじめての方も、どうぞ気軽にお越しください。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- メニュー -->
+  <section id="menu" class="sec menu">
+    <div class="wrap">
+      <div class="sec-head"><h2>メニュー</h2><i>menu</i></div>
+      <ul class="menu-list">
+        <li class="menu-item">
+          <img src="../img/ph-menu1.svg" alt="メニューの写真が入ります">
+          <div>
+            <h3>よもぎ蒸し</h3>
+            <p>よもぎなどの薬草を煮出した蒸気を、専用の座椅子に座ってマントの中でじっくり浴びる温活メニューです。</p>
+            <p class="pr">40分　4,400円</p>
+          </div>
+        </li>
+        <li class="menu-item">
+          <img src="../img/ph-menu2.svg" alt="メニューの写真が入ります">
+          <div>
+            <h3>フェイシャル</h3>
+            <p>お顔のお手入れの時間。よもぎ蒸しと組み合わせてのご利用もおすすめです。</p>
+            <p class="pr">60分　6,600円</p>
+          </div>
+        </li>
+        <li class="menu-item">
+          <div class="ph" aria-hidden="true">
+            <svg viewBox="0 0 120 80" width="110" height="74"><g fill="none" stroke="#d9c69a" stroke-width="1.6" stroke-linecap="round"><path d="M20 62c10-4 24-6 34-2 4 2 6 6 6 10"/><path d="M20 62c-2-14 2-26 10-34 4-4 9-2 9 3l1 16"/><path d="M100 62c-10-4-24-6-34-2-4 2-6 6-6 10"/><path d="M100 62c2-14-2-26-10-34-4-4-9-2-9 3l-1 16"/><path d="M60 30c-8-6-8-16 0-22 8 6 8 16 0 22z"/></g></svg>
+          </div>
+          <div>
+            <h3>ボディケア</h3>
+            <p class="sub-items"><span>ヘッドマッサージ</span><span>ハンドケア</span><span>フットケア</span></p>
+            <p>お時間にあわせて、気になるところをゆっくりと。</p>
+            <p class="pr">30分　3,300円〜</p>
+          </div>
+        </li>
+      </ul>
+            <p class="price-note muted">料金はすべて税込です。組み合わせのご相談も承ります。</p>
+    </div>
+  </section>
+
+  <!-- ご予約 -->
+  <section id="reserve" class="sec reserve dark">
+    <div class="wrap">
+      <div class="sec-head"><h2>ご予約・ご相談</h2><i>reservation</i></div>
+      <p class="muted">ご予約は、お電話または Instagram の DM で承ります。<br>メニュー選びや体調のことも、お気軽にご相談ください。</p>
+      <div class="ways">
+        <div class="way">
+          <h3>お電話</h3>
+          <a class="tel" href="#">0000-00-0000</a>
+          <small>施術中はお電話に出られないことがあります。<br>折り返しご連絡いたします。</small>
+        </div>
+        <div class="way">
+          <h3>Instagram の DM</h3>
+          <a class="btn-gold" href="#">DMで予約・相談する</a>
+          <small>最新の空き状況やお知らせも、Instagram でご案内しています。</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 店舗情報 -->
+  <section id="access" class="sec access">
+    <div class="wrap">
+      <div>
+        <div class="sec-head"><h2>店舗情報</h2><i>access</i></div>
+        <dl class="info">
+          <div><dt>店名</dt><dd>よもぎ蒸しサロン hiyori（ひより）</dd></div>
+                    <div><dt>住所</dt><dd>〒000-0000<br>山口県〇〇市〇〇町1丁目2-3<br>ひよりビル2階</dd></div>
+          <div><dt>アクセス</dt><dd>〇〇駅から徒歩5分</dd></div>
+          <div><dt>営業時間</dt><dd>10:00〜18:00</dd></div>
+          <div><dt>定休日</dt><dd>日曜日</dd></div>
+          <div><dt>駐車場</dt><dd>あり（2台）</dd></div>
+          <div><dt>電話</dt><dd><a href="#">0000-00-0000</a></dd></div>
+          <div><dt>Instagram</dt><dd><a href="#">@hiyori_sample</a></dd></div>
+        </dl>
+      </div>
+      <div class="map">
+        <div class="mapph">Googleマップが入ります</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- お問い合わせ -->
+  <section id="contact" class="sec contact">
+    <div class="wrap">
+      <div class="sec-head"><h2>お問い合わせ</h2><i>contact</i></div>
+      <p class="muted" style="margin-bottom:44px">メニューのこと、体調のことなど、お気軽にご相談ください。</p>
+            <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <p class="demo-msg" hidden>デザイン見本なので、送信はされません。実際のサイトでは、このフォームからお店にメールが届きます。</p>
+        <label for="name">お名前<span class="req">必須</span></label>
+        <input id="name" name="name" type="text" autocomplete="name" required>
+        <label for="email">メールアドレス<span class="req">必須</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <label for="message">ご相談内容<span class="req">必須</span></label>
+        <textarea id="message" name="message" rows="6" placeholder="ご希望のメニューや日時、気になることなど" required></textarea>
+        <input type="hidden" name="_subject" value="HPからのお問い合わせ">
+        <button type="submit">送信する</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div>
+      <a href="#top" class="word"><b>hiyori</b></a>
+      <p class="muted" style="margin:14px 0 0;font-size:.82rem">山口県〇〇市〇〇町1丁目2-3<br>TEL <a href="#">0000-00-0000</a></p>
+    </div>
+    <nav aria-label="フッター">
+      <a href="#about">よもぎ蒸しとは</a><a href="#menu">メニュー</a><a href="#reserve">ご予約</a><a href="#access">店舗情報</a><a href="#contact">お問い合わせ</a>
+      <a href="#">Instagram</a>
+    </nav>
+  </div>
+  <p class="copy">© hiyori</p>
+</footer>
+
+<nav class="spbar" aria-label="ご予約">
+  <a href="#">電話する</a>
+  <a href="#">DMで予約</a>
+</nav>
+
+<script>
+  var form=document.querySelector('.form');
+  if(form && form.action.indexOf('YOUR_FORM_ID')!==-1){
+    form.addEventListener('submit',function(e){e.preventDefault();var m=form.querySelector('.demo-msg');m.hidden=false;m.scrollIntoView({block:'center'});});
+  }
+</script>
+<a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
+</body>
+</html>

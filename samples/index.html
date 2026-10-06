@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>デザイン見本｜Lift-off ホームページ制作</title>
+<meta name="description" content="Lift-off ホームページ制作のデザイン見本です。同じ架空のお店で、雰囲気だけを変えています。">
+<!-- 公開準備ができるまで検索に出さない。本公開時に外す -->
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;900&display=swap" rel="stylesheet">
+<style>
+/* 自社サイト（Lift-off）と同じ色・文字 */
+:root{
+  --ink:#1B2A38;
+  --sea:#2F6F8F;
+  --sky:#E8F1F5;
+  --paper:#FFFFFF;
+  --signal:#F2C230;
+  --line:#C9D9E2;
+  --muted:#52677A;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"BIZ UDPGothic",sans-serif;color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-weight:900;letter-spacing:.02em}
+
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{text-decoration:none;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
+.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);margin-left:8px}
+.back{font-size:15px;text-decoration:none;color:var(--sea);font-weight:700}
+
+.intro{padding:64px 0 40px}
+.intro .place{font-size:14px;color:var(--muted);margin-bottom:8px}
+.intro h1{font-size:clamp(30px,5vw,44px);margin-bottom:16px}
+.intro p.lead{color:var(--muted);max-width:40em}
+.points{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding:0;list-style:none}
+.points li{background:var(--sky);border-radius:999px;padding:6px 16px;font-size:15px}
+
+.list{display:grid;gap:40px;padding:24px 0 80px}
+.card{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;border:2px solid var(--ink);border-radius:20px;padding:28px;background:#fff}
+.card .shot{border-radius:12px;overflow:hidden;display:block;border:1px solid var(--line)}
+.card .shot img{width:100%;height:auto;transition:transform .3s}
+.card .shot:hover img{transform:scale(1.02)}
+.num{display:inline-block;background:var(--signal);font-weight:700;font-size:13px;padding:2px 12px;border-radius:6px;margin-bottom:10px}
+.card h2{font-size:clamp(22px,3vw,28px);margin-bottom:12px}
+.chips{display:flex;gap:6px;margin-bottom:14px}
+.chips span{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin-bottom:22px}
+.card dt{color:var(--muted);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 26px;border:2px solid var(--ink);background:var(--ink);color:#fff;font-size:16px}
+.btn:hover{background:var(--sea);border-color:var(--sea)}
+@media (max-width:820px){.card{grid-template-columns:1fr;gap:22px;padding:18px}.btn{width:100%}}
+
+.howto{background:var(--sky);padding:64px 0}
+.howto .wrap{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.howto h2{font-size:clamp(22px,3vw,28px);margin-bottom:14px}
+.howto ul{padding-left:1.2em;color:var(--ink)}
+.howto li{margin-bottom:6px}
+.qr{background:#fff;border-radius:16px;padding:16px;text-align:center;font-size:13px;color:var(--muted)}
+.qr img{width:180px;height:180px;margin:0 auto 6px}
+@media (max-width:820px){.howto .wrap{grid-template-columns:1fr}.qr{justify-self:center}}
+
+.foot{padding:40px 0;text-align:center;font-size:14px;color:var(--muted)}
+.foot a{color:var(--sea)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../index.html">Lift-off<small>ホームページ制作</small></a>
+    <a class="back" href="../index.html#work">← 制作例にもどる</a>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="wrap">
+      <p class="place">山口県防府市のホームページ屋さん</p>
+      <h1>デザイン見本</h1>
+      <p class="lead">同じ架空のお店（よもぎ蒸しサロン）で、雰囲気だけを変えた見本です。「この感じがいい」と思うものを選んでください。色・文字・写真は、お店に合わせて変えられます。いいところだけを組み合わせることもできます。</p>
+      <ul class="points">
+        <li>スマホでもそのまま見られます</li>
+        <li>見本の店名・住所・料金・写真は架空です</li>
+      </ul>
+    </div>
+  </section>
+
+  <!--
+    見本を足すとき：
+    1. samples/ の中に新しいフォルダ（例：wafu）を作り、index.html を入れる（写真は ../img/ の「写真が入ります」画像を使う）
+    2. thumbs/ に一覧用の画像（1200×780）を入れる
+    3. 下の <article class="card"> をひとつコピーして、番号・名前・中身を書きかえる
+  -->
+  <div class="wrap list">
+
+    <article class="card">
+      <a class="shot" href="homey/index.html"><img src="thumbs/homey.jpg" alt="アットホームな見本の画面（パソコンとスマホ）" width="1200" height="780"></a>
+      <div>
+        <span class="num">見本 1</span>
+        <h2>アットホーム</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#24342b"></span><span style="background:#fe97b2"></span><span style="background:#c4a466"></span><span style="background:#faf5ee"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>やわらかい・あたたかい・親しみやすい</dd>
+          <dt>特徴</dt><dd>角の丸い写真、ロゴの♡を見出しに。ネット予約・LINE・SNSのボタンを大きく</dd>
+          <dt>向いているお店</dt><dd>サロン、整体、ネイル、カフェ、教室など、常連さんとの距離が近いお店</dd>
+        </dl>
+        <a class="btn" href="homey/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="luxury/index.html"><img src="thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 2</span>
+        <h2>ラグジュアリー</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1d2a23"></span><span style="background:#b89a5e"></span><span style="background:#eef0eb"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>上品・落ち着いた・特別感</dd>
+          <dt>特徴</dt><dd>深い色と金色、縦書きの見出し。余白を広くとって、ゆったり見せる</dd>
+          <dt>向いているお店</dt><dd>エステ、プライベートサロン、和食・割烹、旅館など、特別な時間を売るお店</dd>
+        </dl>
+        <a class="btn" href="luxury/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="pop/index.html"><img src="thumbs/pop.jpg" alt="カラフルな見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 3</span>
+        <h2>カラフル</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#ee8aa2"></span><span style="background:#f2d24a"></span><span style="background:#7fae6a"></span><span style="background:#2e4634"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>明るい・元気・わかりやすい</dd>
+          <dt>特徴</dt><dd>白い背景に色の四角を重ねて、手書き風の見出し。文字が読みやすい</dd>
+          <dt>向いているお店</dt><dd>子ども向けの教室、パン屋、雑貨屋、地域のお店など、気軽に来てほしいお店</dd>
+        </dl>
+        <a class="btn" href="pop/index.html">見本を開く</a>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="howto">
+    <div class="wrap">
+      <div>
+        <h2>見たあとは</h2>
+        <ul>
+          <li>気に入った見本の番号を教えてください（「1の色で、2の見出し」なども大丈夫です）</li>
+          <li>ロゴやお店の写真があれば、それに合わせて色を決めます</li>
+          <li>見本をもとに、お店の情報を入れた試作を作ってお見せします</li>
+        </ul>
+      </div>
+      <div class="qr">
+        <img src="thumbs/qr.png" alt="このページを開くQRコード" width="180" height="180">
+        スマホでこのページを開く
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><a href="../index.html">Lift-off ホームページ制作</a>（山口県防府市）</p>
+</footer>
+
+</body>
+</html>
