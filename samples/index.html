@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="../img/favicon.png" type="image/png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>デザイン見本｜Lift-off ホームページ制作</title>
 <meta name="description" content="Lift-off ホームページ制作のデザイン見本です。同じ架空のお店で、雰囲気だけを変えています。">
@@ -31,7 +32,10 @@ h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-
 .top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
 .logo{text-decoration:none;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
-.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);margin-left:8px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{height:40px;width:auto}
+.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);padding-left:10px;border-left:1px solid var(--line)}
+@media (max-width:420px){.logo small{display:none}}
 .back{font-size:15px;text-decoration:none;color:var(--sea);font-weight:700}
 
 .intro{padding:64px 0 40px}
@@ -73,16 +77,15 @@ h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="../index.html">Lift-off<small>ホームページ制作</small></a>
-    <a class="back" href="../index.html#work">← 制作例にもどる</a>
+    <a class="logo" href="../index.html" aria-label="Lift-Off トップへ"><img src="../img/logo.svg" alt="Lift-Off" width="397" height="140"><small>ホームページ制作</small></a>
+    <a class="back" href="../index.html">← トップにもどる</a>
   </div>
 </header>
 
 <main>
   <section class="intro">
     <div class="wrap">
-      <p class="place">山口県防府市のホームページ屋さん</p>
-      <h1>デザイン見本</h1>
+            <h1>デザイン見本</h1>
       <p class="lead">同じ架空のお店（よもぎ蒸しサロン）で、雰囲気だけを変えた見本です。「この感じがいい」と思うものを選んでください。色・文字・写真は、お店に合わせて変えられます。いいところだけを組み合わせることもできます。</p>
       <ul class="points">
         <li>スマホでもそのまま見られます</li>

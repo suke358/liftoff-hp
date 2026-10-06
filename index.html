@@ -10,9 +10,13 @@
 <meta property="og:title" content="Lift-off｜防府のお店のホームページ制作・WEB担当者代行">
 <meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#17283A">
+<link rel="icon" href="img/favicon.png" type="image/png">
+<link rel="icon" href="img/emblem.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -26,169 +30,246 @@
 }
 </script>
 <style>
+/* =========================================================
+   Lift-off ホームページ制作
+   紺（空の高いところ）× 黄色（滑走路の誘導灯）
+   いちばんの見せ場は、トップの「LINEでひと言 → サイトが直る」画面
+   ========================================================= */
 :root{
-  --ink:#1B2A38;
-  --sea:#2F6F8F;
-  --sea-deep:#1F4E66;
-  --sky:#E8F1F5;
+  --ink:#17283A;      /* 紺：文字・濃い背景 */
+  --ink-2:#22384E;
+  --sea:#2F6F8F;      /* 青：リンク・線 */
+  --sky:#EAF2F6;      /* うすい空色：交互の背景 */
   --paper:#FFFFFF;
-  --signal:#F2C230;
-  --line:#C9D9E2;
-  --muted:#52677A;
+  --signal:#F2C230;   /* 黄色：大事なところだけ */
+  --line:#D2DEE6;
+  --muted:#53687B;
+  --chat:#06C755;     /* LINEの吹き出しの緑 */
+  --head:"Zen Kaku Gothic Antique","Hiragino Sans",sans-serif;
+  --body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
-body{font-family:"BIZ UDPGothic",sans-serif;color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.bubble,.notice{opacity:1!important;transform:none!important}}
+body{font-family:var(--body);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.9;-webkit-font-smoothing:antialiased}
 img,svg{display:block;max-width:100%}
-a{color:var(--sea-deep)}
+a{color:var(--sea)}
 :focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
-.wrap{width:min(1080px,100% - 32px);margin-inline:auto}
-h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-weight:900;letter-spacing:.02em}
-h2{font-size:clamp(26px,4vw,36px);margin-bottom:12px}
-.lead{color:var(--muted);max-width:40em;margin-bottom:40px}
-section{padding:88px 0}
-section + section{border-top:1px solid var(--line)}
+.wrap{width:min(1120px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:.02em}
+.sec{padding:104px 0}
+.sec.alt{background:var(--sky)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px 64px;align-items:end;margin-bottom:56px}
+.sec-head h2{font-size:clamp(28px,4.2vw,42px);line-height:1.3}
+.sec-head p{color:var(--muted);max-width:34em}
+@media (max-width:860px){.sec{padding:76px 0}.sec-head{grid-template-columns:1fr;margin-bottom:36px}}
 
-/* header */
-.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
-.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0}
-.nav{display:flex;gap:22px;font-size:15px}
+/* ---------- ボタン ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--head);font-weight:700;text-decoration:none;border-radius:999px;padding:14px 28px;border:2px solid var(--ink);color:var(--ink);background:var(--paper);font-size:16px;cursor:pointer;line-height:1.4;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{border-color:var(--sea);color:var(--sea)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--sea);border-color:var(--sea);color:#fff}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.btn.signal:hover{background:#ffd54a;border-color:#ffd54a;color:var(--ink)}
+
+/* ---------- ヘッダー ---------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:var(--head);font-weight:900;font-size:22px;letter-spacing:.03em}
+.logo img{height:42px;width:auto}
+.logo small{font-family:var(--body);font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0;padding-left:12px;border-left:1px solid var(--line);line-height:1.4}
+@media (max-width:420px){.logo img{height:36px}.logo small{display:none}}
+.hero-logo{margin-bottom:22px}
+.hero-logo img{height:72px;width:auto}
+@media (max-width:900px){.hero-logo img{height:56px}}
+.nav{display:flex;gap:26px;font-size:15px}
 .nav a{text-decoration:none;color:var(--ink)}
 .nav a:hover{color:var(--sea)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 24px;border:2px solid var(--ink);color:var(--ink);background:var(--paper);font-size:16px;cursor:pointer;font-family:inherit}
-.btn.primary{background:var(--ink);color:#fff}
-.btn.primary:hover{background:var(--sea-deep);border-color:var(--sea-deep)}
-.btn:hover{border-color:var(--sea)}
-.top .btn{padding:8px 18px;font-size:14px}
-@media (max-width:860px){.nav{display:none}}
+.top .btn{padding:9px 20px;font-size:14px}
+@media (max-width:900px){.nav{display:none}}
 
-/* hero */
-.hero{padding:72px 0 0;background:linear-gradient(var(--sky),var(--paper) 85%);border:none;overflow:hidden}
-.hero .wrap{position:relative}
-.hero p.place{color:var(--sea-deep);font-weight:700;margin-bottom:14px}
-.hero h1{font-size:clamp(34px,6.4vw,66px);max-width:12em}
-.hero h1 span{display:block}
-.hero .sub{margin:24px 0 32px;max-width:32em;font-size:18px}
-.hero .actions{display:flex;flex-wrap:wrap;gap:12px}
-.flight{margin-top:24px;height:auto;width:100%}
-.flight .trail{stroke-dasharray:10 10;stroke-dashoffset:0;animation:fly 2.4s ease-out both}
-.flight .plane{animation:plane 2.4s ease-out both}
-@keyframes fly{from{stroke-dashoffset:900;opacity:0}to{stroke-dashoffset:0;opacity:1}}
-@keyframes plane{from{opacity:0;transform:translate(-40px,30px)}to{opacity:1;transform:none}}
+/* ---------- トップ ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#F5F9FB 0%,var(--sky) 100%);padding:72px 0 0}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:end}
+.place{display:inline-flex;align-items:center;gap:10px;font-family:var(--head);font-weight:700;color:var(--sea);margin-bottom:18px;font-size:15px}
+.place::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(242,194,48,.25)}
+.hero h1{font-size:clamp(28px,4.1vw,52px);line-height:1.28;margin-bottom:28px}
+.hero h1 span{display:block;white-space:nowrap}
+.hero .sub{max-width:30em;font-size:18px;margin-bottom:34px}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.hero-copy{padding-bottom:96px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:34px;list-style:none;font-size:15px;color:var(--muted)}
+.facts li{display:flex;align-items:center;gap:8px}
+.facts svg{width:18px;height:18px;flex:none}
 
-/* できること */
-.can{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 64px;max-width:900px}
-@media (max-width:640px){.can{grid-template-columns:1fr}}
-.can h3{font-size:21px;margin-bottom:8px;padding-top:14px;border-top:4px solid var(--ink);width:fit-content;min-width:3em}
-.can p{color:var(--ink)}
-.promise{margin-top:56px;background:var(--sky);border-radius:20px;padding:32px clamp(20px,4vw,44px)}
-.promise h3{font-size:20px;margin-bottom:10px}
+/* 見せ場：スマホと吹き出し */
+.stage{position:relative;height:600px}
+.runway{position:absolute;left:-10%;right:-40%;bottom:0;height:120px;background:var(--ink)}
+.runway::before{content:"";position:absolute;left:0;right:0;top:56px;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.phone{position:absolute;right:2%;bottom:36px;width:260px;border-radius:40px;background:#0f1a26;padding:12px;box-shadow:0 30px 60px rgba(23,40,58,.28)}
+.phone .screen{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:375/760;background:#24342b}
+.phone .screen img{width:100%;height:100%;object-fit:cover;object-position:top}
+.notice{position:absolute;left:10px;right:10px;top:62px;background:#fff;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.25);border-left:5px solid var(--signal);opacity:0;transform:translateY(-8px);animation:pop .5s ease-out 2.6s forwards}
+.notice b{display:block;font-family:var(--head);font-size:12px;color:var(--sea)}
+.chat{position:absolute;left:0;top:250px;width:min(290px,60%);display:grid;gap:12px;z-index:2}
+.bubble{position:relative;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.6;box-shadow:0 10px 24px rgba(23,40,58,.12);opacity:0;transform:translateY(10px);animation:pop .5s ease-out forwards}
+.bubble small{display:block;font-size:11px;opacity:.75;margin-bottom:2px}
+.bubble.shop{background:#fff;border-bottom-left-radius:4px;animation-delay:.4s}
+.bubble.us{background:var(--chat);color:#fff;border-bottom-right-radius:4px;margin-left:28px;animation-delay:1.6s}
+@keyframes pop{to{opacity:1;transform:none}}
+.stage-note{position:absolute;left:0;bottom:14px;color:#c9d6e0;font-size:13px;z-index:1}
+@media (max-width:900px){
+  .hero{padding-top:48px}
+  .hero .wrap{grid-template-columns:1fr;gap:0}
+  .hero-copy{padding-bottom:36px}
+  .stage{height:540px;margin-inline:-20px}
+  .runway{left:0;right:0}
+  .phone{right:20px;width:236px}
+  .chat{left:20px;top:260px;width:min(260px,58%)}
+  .stage-note{left:20px}
+}
+@media (max-width:420px){.phone{width:200px;right:14px}.chat{width:60%;top:240px}.bubble{font-size:14px;padding:10px 13px}.stage{height:480px}}
+
+/* ---------- できること ---------- */
+.can{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.can article{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:30px 30px 28px;display:grid;grid-template-columns:56px 1fr;gap:6px 20px;align-items:start}
+.can .ic{grid-row:span 2;width:56px;height:56px;border-radius:16px;background:var(--sky);display:grid;place-items:center}
+.can .ic svg{width:30px;height:30px}
+.can h3{font-size:21px}
+@media (max-width:760px){.can{grid-template-columns:1fr}.can article{grid-template-columns:48px 1fr;padding:24px 22px}.can .ic{width:48px;height:48px;border-radius:14px}}
+.promise{margin-top:28px;background:var(--ink);color:#fff;border-radius:20px;padding:32px clamp(22px,4vw,44px);display:grid;grid-template-columns:auto 1fr;gap:12px 40px;align-items:start}
+.promise h3{font-size:20px;color:var(--signal);white-space:nowrap}
 .promise ul{list-style:none;display:grid;gap:8px}
-.promise li{padding-left:1.4em;position:relative}
-.promise li::before{content:"";position:absolute;left:0;top:.75em;width:.6em;height:.6em;border-radius:50%;background:var(--sea)}
+.promise li{padding-left:1.5em;position:relative;color:#dbe6ee}
+.promise li::before{content:"";position:absolute;left:0;top:.62em;width:.75em;height:.4em;border-left:2px solid var(--signal);border-bottom:2px solid var(--signal);transform:rotate(-45deg)}
+@media (max-width:760px){.promise{grid-template-columns:1fr}}
 
-/* 料金：搭乗券 */
+/* ---------- 料金：搭乗券 ---------- */
 .passes{display:grid;gap:24px}
-.pass{display:grid;grid-template-columns:1fr 220px;border:2px solid var(--ink);border-radius:18px;background:var(--paper);position:relative}
-.pass.rec{box-shadow:8px 8px 0 var(--signal)}
-.pass .main{padding:26px 28px}
-.pass .stub{border-left:2px dashed var(--ink);padding:26px 22px;display:flex;flex-direction:column;justify-content:center;background:var(--sky);border-radius:0 16px 16px 0}
-.pass::before,.pass::after{content:"";position:absolute;right:211px;width:20px;height:20px;border-radius:50%;background:var(--paper);border:2px solid var(--ink)}
-.pass::before{top:-11px;clip-path:inset(50% 0 0 0)}
-.pass::after{bottom:-11px;clip-path:inset(0 0 50% 0)}
+.pass{display:grid;grid-template-columns:1fr 240px;border:2px solid var(--ink);border-radius:20px;background:var(--paper);position:relative}
+.pass.rec{box-shadow:10px 10px 0 var(--signal)}
+.pass .main{padding:28px 32px}
+.pass .stub{border-left:2px dashed var(--ink);padding:26px 24px;display:flex;flex-direction:column;justify-content:center;background:var(--sky);border-radius:0 18px 18px 0}
+.pass.rec .stub{background:var(--ink);color:#fff}
+.pass.rec .price-k,.pass.rec .price.init{color:#c9d6e0}
+.pass::before,.pass::after{content:"";position:absolute;right:229px;width:22px;height:22px;border-radius:50%;background:var(--sky);border:2px solid var(--ink)}
+.pass::before{top:-12px;clip-path:inset(50% 0 0 0)}
+.pass::after{bottom:-12px;clip-path:inset(0 0 50% 0)}
 .pass .who{color:var(--muted);font-size:15px}
-.pass h3{font-size:26px;margin:2px 0 14px}
-.pass .tag{display:inline-block;background:var(--signal);font-weight:700;font-size:13px;padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;font-family:"BIZ UDPGothic"}
-.pass dl{display:grid;grid-template-columns:auto 1fr;gap:4px 18px;font-size:15px}
+.pass h3{font-size:28px;margin:2px 0 14px}
+.pass .tag{display:inline-block;background:var(--signal);font-family:var(--body);font-weight:700;font-size:13px;padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;color:var(--ink)}
+.pass dl{display:grid;grid-template-columns:auto 1fr;gap:4px 20px;font-size:15px}
 .pass dt{color:var(--muted)}
 .price-k{font-size:13px;color:var(--muted)}
-.price{font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:32px;line-height:1.2}
+.price{font-family:var(--head);font-weight:900;font-size:36px;line-height:1.2}
 .price small{font-size:15px;font-weight:500}
-.price.init{font-size:20px;margin-top:10px}
-.extra{margin-top:28px;border:2px dashed var(--line);border-radius:14px;padding:20px 24px;max-width:560px}
+.price.init{font-size:18px;font-weight:700;margin-top:10px;color:var(--muted)}
+.price-foot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:24px 40px;margin-top:36px;align-items:start}
+.extra{border:2px dashed #b9cbd7;border-radius:16px;padding:20px 24px;background:var(--paper)}
 .extra h3{font-size:17px;margin-bottom:6px}
 .extra dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;font-size:15px}
 .extra dt{color:var(--muted)}
-.note{font-size:14px;color:var(--muted);margin-top:22px}
-@media (max-width:640px){
+.note{font-size:14px;color:var(--muted)}
+@media (max-width:760px){
   .pass{grid-template-columns:1fr}
-  .pass .stub{border-left:none;border-top:2px dashed var(--ink);border-radius:0 0 16px 16px}
+  .pass .main{padding:24px 22px}
+  .pass .stub{border-left:none;border-top:2px dashed var(--ink);border-radius:0 0 18px 18px;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+  .pass .stub .price.init{margin-top:0}
   .pass::before,.pass::after{display:none}
+  .price-foot{grid-template-columns:1fr}
 }
 
-/* データ管理 */
-.data{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-.data div{border-left:4px solid var(--sea);padding:4px 0 4px 18px}
-.data h3{font-size:18px;margin-bottom:4px}
+/* ---------- データ管理 ---------- */
+.data{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.data article{background:var(--paper);border-radius:20px;padding:30px 28px;border:1px solid var(--line)}
+.data .key{width:48px;height:48px;border-radius:50%;background:var(--signal);display:grid;place-items:center;margin-bottom:18px}
+.data .key svg{width:26px;height:26px}
+.data h3{font-size:19px;margin-bottom:6px}
+.data p{font-size:16px}
+@media (max-width:860px){.data{grid-template-columns:1fr}}
 
-/* 流れ */
-.flow{list-style:none;counter-reset:s;display:grid;gap:0;max-width:760px}
-.flow li{counter-increment:s;display:grid;grid-template-columns:56px 1fr;gap:18px;position:relative;padding-bottom:30px}
-.flow li::before{content:counter(s);width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:20px;position:relative;z-index:1}
-.flow li:not(:last-child)::after{content:"";position:absolute;left:23px;top:48px;bottom:0;border-left:2px dashed var(--sea)}
+/* ---------- 流れ ---------- */
+.flow{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px;position:relative}
+.flow::before{content:"";position:absolute;left:25px;right:25px;top:25px;border-top:2px dashed var(--sea)}
+.flow li{counter-increment:s;position:relative}
+.flow li::before{content:counter(s);width:50px;height:50px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:var(--head);font-weight:900;font-size:20px;position:relative;z-index:1;margin-bottom:16px;box-shadow:0 0 0 6px var(--sky)}
 .flow li:last-child::before{background:var(--signal);color:var(--ink)}
-.flow h3{font-size:19px;margin:9px 0 4px}
+.flow h3{font-size:18px;margin-bottom:4px}
+.flow p{font-size:15px}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr;gap:0}
+  .flow::before{left:25px;right:auto;top:25px;bottom:40px;border-top:none;border-left:2px dashed var(--sea)}
+  .flow li{display:grid;grid-template-columns:50px 1fr;gap:18px;padding-bottom:26px}
+  .flow li::before{margin:0}
+  .flow h3{margin-top:10px}
+}
 
-/* 制作例 */
-.work{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
-.work .shot{border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--sky);aspect-ratio:16/10}
-.work iframe{width:200%;height:200%;border:0;transform:scale(.5);transform-origin:0 0;pointer-events:none}
-.work h3{font-size:24px;margin-bottom:8px}
-@media (max-width:760px){.work{grid-template-columns:1fr}}
+/* ---------- デザイン見本 ---------- */
+.samples{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.sample{text-decoration:none;color:var(--ink);display:block}
+.sample .shot{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--sky)}
+.sample img{width:100%;height:auto;transition:transform .35s}
+.sample:hover img{transform:scale(1.03)}
+.sample h3{font-size:19px;margin:14px 0 0}
+.sample p{font-size:15px;color:var(--muted)}
+.work-foot{margin-top:36px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;border-top:1px solid var(--line);padding-top:28px}
+.work-foot p{color:var(--muted);max-width:40em;font-size:15px}
+@media (max-width:860px){.samples{grid-template-columns:1fr;max-width:520px}}
 
-/* FAQ */
-details{border-bottom:1px solid var(--line);padding:18px 0;max-width:820px}
-summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+/* ---------- FAQ ---------- */
+.faq{max-width:860px}
+details{border-bottom:1px solid #c4d4de}
+details:first-child{border-top:1px solid #c4d4de}
+summary{cursor:pointer;font-family:var(--head);font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"＋";color:var(--sea)}
-details[open] summary::after{content:"－"}
-details p{margin-top:10px;color:var(--ink)}
+summary::after{content:"";flex:none;width:30px;height:30px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M10 15h10M15 10v10' stroke='%232F6F8F' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center/100% no-repeat;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 22px;max-width:44em}
 
-/* 他サービス */
-.other{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;border:2px solid var(--ink);border-radius:18px;padding:28px}
-.other h3{font-size:22px}
+/* ---------- 他サービス ---------- */
+.other{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px 32px;border:2px solid var(--ink);border-radius:20px;padding:30px 32px}
+.other .ic{width:64px;height:64px;border-radius:18px;background:var(--sky);display:grid;place-items:center}
+.other .ic svg{width:36px;height:36px}
+.other h3{font-size:22px;margin-bottom:4px}
+@media (max-width:760px){.other{grid-template-columns:1fr;padding:24px 22px}}
 
-/* お問い合わせ */
-.contact{background:var(--ink);color:#fff;border:none}
-.contact h2{color:#fff}
-.contact .lead{color:#C7D6E0}
-.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px}
-.contact .tel{font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:clamp(28px,5vw,40px);color:#fff;text-decoration:none;display:block}
+/* ---------- お問い合わせ ---------- */
+.contact{background:var(--ink);color:#fff;position:relative}
+.contact::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.contact .sec-head h2{color:#fff}
+.contact .sec-head p{color:#c3d2dd}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:56px}
+.contact .tel{font-family:var(--head);font-weight:900;font-size:clamp(30px,5vw,44px);color:#fff;text-decoration:none;display:block;letter-spacing:.02em}
 .contact .mail{color:var(--signal);word-break:break-all}
-.contact dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;color:#C7D6E0}
+.contact dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;color:#c3d2dd}
+.formbox{background:var(--ink-2);border-radius:20px;padding:28px}
 form{display:grid;gap:16px}
 label{font-weight:700;font-size:15px;display:grid;gap:6px}
 input,textarea,select{font:inherit;font-weight:400;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink)}
 input:focus,textarea:focus,select:focus{border-color:var(--signal);outline:none}
 textarea{min-height:130px;resize:vertical}
-.contact .btn{background:var(--signal);border-color:var(--signal);color:var(--ink)}
-.formnote{font-size:13px;color:#C7D6E0}
-@media (max-width:760px){.contact-grid{grid-template-columns:1fr}}
-footer{background:var(--ink);color:#8FA6B6;font-size:13px;padding:24px 0 96px;border-top:1px solid #2F4253}
-footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.formnote{font-size:13px;color:#c3d2dd}
+@media (max-width:760px){.contact-grid{grid-template-columns:1fr;gap:36px}.formbox{padding:22px 18px}}
+footer{background:var(--ink);color:#8fa6b6;font-size:13px;padding:32px 0 96px;border-top:1px solid #2c4256}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.foot-logo{height:40px;width:auto}
 
-/* スマホ固定ボタン */
+/* ---------- スマホ固定ボタン ---------- */
 .fixbar{position:fixed;left:0;right:0;bottom:0;display:none;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);z-index:30}
 .fixbar .btn{flex:1;padding:12px 8px}
 @media (max-width:760px){.fixbar{display:flex}}
-.samples-link{margin-top:40px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--sky);border-radius:16px;padding:24px 28px}
-.samples-link h3{font-size:20px;margin-bottom:4px}
-.samples-link p{color:var(--muted);max-width:36em;margin:0}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#">
-      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M4 24 L26 6 M26 6 L15 7 M26 6 L25 17" stroke="#1B2A38" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span>Lift-off <small>ホームページ制作</small></span>
+    <a class="logo" href="#" aria-label="Lift-Off ホームページ制作 トップへ">
+      <img src="img/logo.svg" alt="Lift-Off" width="397" height="140">
+      <small>ホームページ制作</small>
     </a>
     <nav class="nav" aria-label="ページ内">
-      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">制作例</a>
+      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">デザイン見本</a><a href="#faq">よくある質問</a>
     </nav>
     <a class="btn primary" href="#contact">相談する</a>
   </div>
@@ -197,30 +278,62 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 <main>
 <section class="hero">
   <div class="wrap">
-    <p class="place">山口県防府市のホームページ屋さん</p>
-    <h1><span>お店のホームページ、</span><span>作ったあとも</span><span>引き受けます。</span></h1>
-    <p class="sub">作って終わりにせず、お休みのお知らせやメニューの変更も、LINEや電話でひと言いただければこちらで直します。パソコンが苦手でも大丈夫です。</p>
-    <div class="actions">
-      <a class="btn primary" href="#contact">まずは相談する（無料）</a>
-      <a class="btn" href="#price">料金を見る</a>
+    <div class="hero-copy">
+      <p class="hero-logo"><img src="img/logo.svg" alt="Lift-Off" width="397" height="140"></p>
+      <h1><span>お店のホームページ、</span><span>作ったあとも</span><span>引き受けます。</span></h1>
+      <p class="sub">作って終わりにせず、お休みのお知らせやメニューの変更も、LINEや電話でひと言いただければこちらで直します。パソコンが苦手でも大丈夫です。</p>
+      <div class="actions">
+        <a class="btn primary" href="#contact">まずは相談する（無料）</a>
+        <a class="btn" href="#price">料金を見る</a>
+      </div>
+      <ul class="facts">
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>料金はすべて税込</li>
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>ドメイン代・フォーム代は月額に込み</li>
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>スタンダードは契約の縛りなし</li>
+      </ul>
     </div>
-    <svg class="flight" viewBox="0 0 1080 200" aria-hidden="true">
-      <path class="trail" d="M20 190 C 300 190, 520 170, 760 90 S 1010 20, 1040 14" fill="none" stroke="#2F6F8F" stroke-width="3" stroke-linecap="round"/>
-      <g class="plane" transform="translate(0 0)"><path d="M1012 26 L1058 6 L1044 30 Z" fill="#1B2A38"/></g>
-      <rect x="20" y="150" width="70" height="40" fill="#1B2A38"/><path d="M14 152 L55 128 L96 152 Z" fill="#1B2A38"/><rect x="44" y="166" width="20" height="24" fill="#F2C230"/>
-    </svg>
+
+    <!-- 見せ場：お店からLINEでひと言 → サイトにお知らせが出る（画面は架空のお店の見本） -->
+    <div class="stage" role="img" aria-label="更新のイメージ：お店がLINEで「来週の水曜はお休みにします」と送ると、サイトにお知らせが出ます">
+      <div class="runway"></div>
+      <div class="chat">
+        <p class="bubble shop"><small>お店から</small>来週の水曜、臨時でお休みにします！</p>
+        <p class="bubble us"><small>Lift-off</small>了解です。サイトにお知らせを出しました。</p>
+      </div>
+      <div class="phone">
+        <div class="screen">
+          <img src="img/hero-phone.jpg" alt="" width="500" height="1013">
+          <p class="notice"><b>お知らせ</b>来週の水曜日は、臨時休業とさせていただきます。</p>
+        </div>
+      </div>
+      <p class="stage-note">※画面は架空のお店の見本です</p>
+    </div>
   </div>
 </section>
 
-<section id="can">
+<section id="can" class="sec">
   <div class="wrap">
-    <h2>できること</h2>
-    <p class="lead">ホームページ係の担当者を一人雇うかわりに、外から手伝う形です。お店の仕事に集中していただけるよう、ネットまわりをまとめて引き受けます。</p>
+    <div class="sec-head">
+      <h2>できること</h2>
+      <p>ホームページ係の担当者を一人雇うかわりに、外から手伝う形です。お店の仕事に集中していただけるよう、ネットまわりをまとめて引き受けます。</p>
+    </div>
     <div class="can">
-      <div><h3>作る</h3><p>お店の雰囲気に合わせてデザインします。スマホで見やすく、電話や予約にすぐつながる作りにします。</p></div>
-      <div><h3>直す・更新する</h3><p>営業日やメニュー、写真の入れ替えは、ひと言いただければこちらで。依頼には原則3営業日以内に対応します。</p></div>
-      <div><h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、Googleマップとのつなぎこみなど、公開時の基本の設定はひととおり行います。</p></div>
-      <div><h3>問い合わせを受ける</h3><p>お問い合わせフォームや予約の受付（RESERVA・Googleカレンダー）をつけられます。</p></div>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="14" height="24" rx="3"/><path d="M13 23h4"/><path d="M11 9h8M11 13h8M11 17h5" stroke="#2F6F8F"/></svg></span>
+        <h3>作る</h3><p>お店の雰囲気に合わせてデザインします。スマホで見やすく、電話や予約にすぐつながる作りにします。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h15a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-7l-5 4v-4H4z"/><path d="M19 25l6-6 2 2-6 6h-2z" stroke="#2F6F8F"/></svg></span>
+        <h3>直す・更新する</h3><p>営業日やメニュー、写真の入れ替えは、ひと言いただければこちらで。依頼には原則3営業日以内に対応します。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 27s-8-7.5-8-14a8 8 0 0 1 16 0c0 6.5-8 14-8 14z"/><circle cx="15" cy="13" r="3" stroke="#2F6F8F"/></svg></span>
+        <h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、Googleマップとのつなぎこみなど、公開時の基本の設定はひととおり行います。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="20" rx="3"/><path d="M4 12h22M10 3v6M20 3v6"/><path d="M10 18l3 3 6-6" stroke="#2F6F8F"/></svg></span>
+        <h3>問い合わせを受ける</h3><p>お問い合わせフォームや予約の受付（RESERVA・Googleカレンダー）をつけられます。</p>
+      </article>
     </div>
     <div class="promise">
       <h3>お約束していること</h3>
@@ -233,10 +346,12 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   </div>
 </section>
 
-<section id="price">
+<section id="price" class="sec alt">
   <div class="wrap">
-    <h2>料金プラン</h2>
-    <p class="lead">すべて税込です。ドメイン（ホームページの住所）とお問い合わせフォームの費用は、どのプランも月額に含まれています。</p>
+    <div class="sec-head">
+      <h2>料金プラン</h2>
+      <p>すべて税込です。ドメイン（ホームページの住所）とお問い合わせフォームの費用は、どのプランも月額に含まれています。</p>
+    </div>
     <div class="passes">
       <article class="pass rec">
         <div class="main">
@@ -289,33 +404,48 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
         </div>
       </article>
     </div>
-    <div class="extra">
-      <h3>追加でお願いする場合</h3>
-      <dl>
-        <dt>回数をこえた更新</dt><dd>1回 3,300円</dd>
-        <dt>ページの追加</dt><dd>1ページ 22,000円</dd>
-      </dl>
+    <div class="price-foot">
+      <div class="extra">
+        <h3>追加でお願いする場合</h3>
+        <dl>
+          <dt>回数をこえた更新</dt><dd>1回 3,300円</dd>
+          <dt>ページの追加</dt><dd>1ページ 22,000円</dd>
+        </dl>
+      </div>
+      <p class="note">初期0円プランは、続けて使うほどお支払いの合計がスタンダードより多くなります（23か月目ごろに逆転します）。長く使う予定ならスタンダードがお得です。12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。<br>初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。紹介料などの仕組みはありません。</p>
     </div>
-    <p class="note">初期0円プランは、続けて使うほどお支払いの合計がスタンダードより多くなります（23か月目ごろに逆転します）。長く使う予定ならスタンダードがお得です。12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。<br>初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。紹介料などの仕組みはありません。</p>
   </div>
 </section>
 
-<section id="data">
+<section id="data" class="sec">
   <div class="wrap">
-    <h2>データの管理</h2>
-    <p class="lead">ホームページはお店の大事な財産です。やめるときに困らないよう、最初からお店のものとして持っていただきます。</p>
+    <div class="sec-head">
+      <h2>データの管理</h2>
+      <p>ホームページはお店の大事な財産です。やめるときに困らないよう、最初からお店のものとして持っていただきます。</p>
+    </div>
     <div class="data">
-      <div><h3>ドメインはお店の名義</h3><p>ホームページの住所（〇〇.jp など）は、お店の名義で取ります。</p></div>
-      <div><h3>変更の記録を残します</h3><p>いつ・どこを直したかを全部記録しているので、前の状態に戻すこともできます。</p></div>
-      <div><h3>やめるときはデータ一式をお渡し</h3><p>解約されるときは、サイトのデータをすべてお渡しします。ほかの会社に引き継ぐこともできます。解約後のドメインの更新費用はお店のご負担になります。</p></div>
+      <article>
+        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13" r="4.5"/><path d="M13.5 13H23M19 13v4M22 13v3"/></svg></span>
+        <h3>ドメインはお店の名義</h3><p>ホームページの住所（〇〇.jp など）は、お店の名義で取ります。</p>
+      </article>
+      <article>
+        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a9 9 0 1 0 3-6.7"/><path d="M4 4v4h4"/><path d="M13 8v5l3 2"/></svg></span>
+        <h3>変更の記録を残します</h3><p>いつ・どこを直したかを全部記録しているので、前の状態に戻すこともできます。</p>
+      </article>
+      <article>
+        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l9-5 9 5v10l-9 5-9-5z"/><path d="M4 9l9 5 9-5M13 14v10"/></svg></span>
+        <h3>やめるときはデータ一式をお渡し</h3><p>解約されるときは、サイトのデータをすべてお渡しします。ほかの会社に引き継ぐこともできます。解約後のドメインの更新費用はお店のご負担になります。</p>
+      </article>
     </div>
   </div>
 </section>
 
-<section id="flow">
+<section id="flow" class="sec alt">
   <div class="wrap">
-    <h2>作成の流れ</h2>
-    <p class="lead">打ち合わせは基本1回。あとはLINEや電話でのやりとりで進めます。</p>
+    <div class="sec-head">
+      <h2>作成の流れ</h2>
+      <p>打ち合わせは基本1回。あとはLINEや電話でのやりとりで進めます。</p>
+    </div>
     <ol class="flow">
       <li><div><h3>お問い合わせ</h3><p>電話・メール・下のフォームからお気軽にどうぞ。相談だけでも大丈夫です。</p></div></li>
       <li><div><h3>打ち合わせ</h3><p>お店にうかがって、載せたい内容やお好みのデザインをお聞きします。写真もこのときに。</p></div></li>
@@ -326,43 +456,55 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   </div>
 </section>
 
-<section id="work">
+<!-- 実在のお店は載せず、架空のお店の見本だけを見せる（実際のサイトは打ち合わせで直接見せる） -->
+<section id="work" class="sec">
   <div class="wrap">
-    <h2>制作例</h2>
-    <div class="work">
-      <div class="shot"><iframe src="https://suke358.github.io/colore-website/" title="colore のホームページ" loading="lazy" tabindex="-1"></iframe></div>
-      <div>
-        <h3>よもぎ蒸し・脱毛サロン colore さん</h3>
-        <p>防府市のサロンさんです。看護師のオーナーさんのやさしい人柄が伝わるよう、落ち着いた色と写真で構成しました。</p>
-        <p style="margin-top:20px"><a class="btn" href="https://suke358.github.io/colore-website/" target="_blank" rel="noopener">サイトを見る（別のタブで開きます）</a></p>
-      </div>
+    <div class="sec-head">
+      <h2>デザイン見本</h2>
+      <p>同じ架空のお店で、雰囲気だけを変えた見本です。色・文字・写真は、お店に合わせて変えられます。</p>
     </div>
-    <div class="samples-link">
-      <div>
-        <h3>ほかの雰囲気も見てみる</h3>
-        <p>同じ架空のお店で、「アットホーム」「ラグジュアリー」「カラフル」の3つの雰囲気を並べています。お店に合う雰囲気を選ぶときにどうぞ。</p>
-      </div>
-      <a class="btn primary" href="samples/index.html">デザイン見本を見る</a>
+    <div class="samples">
+      <a class="sample" href="samples/homey/index.html">
+        <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <h3>アットホーム</h3><p>やわらかく、親しみやすく</p>
+      </a>
+      <a class="sample" href="samples/luxury/index.html">
+        <div class="shot"><img src="samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <h3>ラグジュアリー</h3><p>上品に、落ち着いて</p>
+      </a>
+      <a class="sample" href="samples/pop/index.html">
+        <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <h3>カラフル</h3><p>明るく、わかりやすく</p>
+      </a>
+    </div>
+    <div class="work-foot">
+      <p>実際にお作りしたお店のホームページは、打ち合わせのときにお見せします。</p>
+      <a class="btn" href="samples/index.html">見本の一覧を見る</a>
     </div>
   </div>
 </section>
 
-<section id="faq">
+<section id="faq" class="sec alt">
   <div class="wrap">
-    <h2>よくある質問</h2>
-    <details><summary>パソコンが使えなくても大丈夫ですか？</summary><p>大丈夫です。更新のご依頼はLINEや電話でひと言いただくだけで、作業はこちらで行います。</p></details>
-    <details><summary>写真がありません。</summary><p>スマホで撮った写真でも使えます。撮り方のコツもお伝えします。</p></details>
-    <details><summary>すでにホームページがあります。作り直しもできますか？</summary><p>できます。今のサイトの状態を見てからご提案しますので、まずはご相談ください。</p></details>
-    <details><summary>防府市以外でもお願いできますか？</summary><p>防府市を中心に、近くの地域もご相談ください。打ち合わせにうかがえる範囲かどうかをお伝えします。</p></details>
+    <div class="sec-head">
+      <h2>よくある質問</h2>
+      <p>ほかにも気になることがあれば、お気軽にお問い合わせください。</p>
+    </div>
+    <div class="faq">
+      <details><summary>パソコンが使えなくても大丈夫ですか？</summary><p>大丈夫です。更新のご依頼はLINEや電話でひと言いただくだけで、作業はこちらで行います。</p></details>
+      <details><summary>写真がありません。</summary><p>スマホで撮った写真でも使えます。撮り方のコツもお伝えします。</p></details>
+      <details><summary>すでにホームページがあります。作り直しもできますか？</summary><p>できます。今のサイトの状態を見てからご提案しますので、まずはご相談ください。</p></details>
+      <details><summary>防府市以外でもお願いできますか？</summary><p>防府市を中心に、近くの地域もご相談ください。打ち合わせにうかがえる範囲かどうかをお伝えします。</p></details>
+    </div>
   </div>
 </section>
 
-<section id="other">
+<section id="other" class="sec">
   <div class="wrap">
-    <h2>ほかのサービス</h2>
     <div class="other">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4l-8 11h5l-7 9h20l-7-9h5z" stroke="#2F6F8F"/><path d="M18 24v8"/></svg></span>
       <div>
-        <h3>伐採・伐木・抜根・草刈り</h3>
+        <h3>伐採・伐木・抜根・草刈りも</h3>
         <p>Lift-off では、木の伐採や草刈りの仕事も行っています。防府市近郊の空き家・空き地のお手入れもご相談ください。</p>
       </div>
       <!-- 伐採サイトのURLが決まったら href を差し替える -->
@@ -371,10 +513,12 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
   </div>
 </section>
 
-<section id="contact" class="contact">
+<section id="contact" class="sec contact">
   <div class="wrap">
-    <h2>お問い合わせ</h2>
-    <p class="lead">ご相談・お見積もりは無料です。「こんなことできる？」だけでもお気軽にどうぞ。</p>
+    <div class="sec-head">
+      <h2>お問い合わせ</h2>
+      <p>ご相談・お見積もりは無料です。「こんなことできる？」だけでもお気軽にどうぞ。</p>
+    </div>
     <div class="contact-grid">
       <div>
         <a class="tel" href="tel:09011896726">090-1189-6726</a>
@@ -385,23 +529,25 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
           <dt>対応地域</dt><dd>防府市とその周辺</dd>
         </dl>
       </div>
-      <form id="form" action="" method="POST">
-        <label>お名前<input name="name" required autocomplete="name"></label>
-        <label>お店・会社の名前（任意）<input name="shop"></label>
-        <label>ご連絡先（電話またはメール）<input name="contact" required></label>
-        <label>ご相談の内容
-          <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
-        </label>
-        <label>くわしい内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
-        <button class="btn" type="submit">この内容で送る</button>
-        <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
-      </form>
+      <div class="formbox">
+        <form id="form" action="" method="POST">
+          <label>お名前<input name="name" required autocomplete="name"></label>
+          <label>お店・会社の名前（任意）<input name="shop"></label>
+          <label>ご連絡先（電話またはメール）<input name="contact" required></label>
+          <label>ご相談の内容
+            <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
+          </label>
+          <label>くわしい内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
+          <button class="btn signal" type="submit">この内容で送る</button>
+          <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
+        </form>
+      </div>
     </div>
   </div>
 </section>
 </main>
 
-<footer><div class="wrap"><span>© Lift-off</span><span>山口県防府市</span></div></footer>
+<footer><div class="wrap"><img class="foot-logo" src="img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy"><span>© Lift-Off　山口県防府市</span></div></footer>
 
 <div class="fixbar">
   <a class="btn primary" href="tel:09011896726">電話する</a>
