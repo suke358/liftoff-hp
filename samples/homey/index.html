@@ -475,5 +475,33 @@ p{margin:0 0 1.2em}
   document.querySelectorAll('a.soon').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();});});
 </script>
 <a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
+<script>
+// 戻ったときに、見ていた場所に戻す（2026/10/7。押すと一番上に戻ってしまうため）
+(function(){
+  var key = 'y:' + location.pathname;
+  // 「もどる」リンク：同じサイトから来たときは、ブラウザの「戻る」と同じ動きにする（見ていた場所に戻る）
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || a.textContent.indexOf('もどる') < 0) return;
+    try {
+      if (document.referrer && document.referrer.indexOf(location.protocol + '//' + location.host) === 0 && history.length > 1) {
+        e.preventDefault(); history.back();
+      }
+    } catch (err) {}
+  });
+  // ブラウザの「戻る」で戻ってきたのに一番上に出たときは、前に見ていた場所へ
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) {
+      window.addEventListener('load', function(){
+        var y = parseInt(sessionStorage.getItem(key) || '0', 10);
+        if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y);
+      });
+    }
+  } catch (err) {}
+})();
+</script>
 </body>
 </html>
