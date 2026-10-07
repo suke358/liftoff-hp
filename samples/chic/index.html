@@ -40,7 +40,7 @@ body{margin:0;background:var(--mist);color:var(--ink);font-family:var(--gothic);
 img{max-width:100%;display:block}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--gold);outline-offset:4px}
-.wrap{width:min(1100px,100% - 48px);margin-inline:auto}
+.wrap{width:min(1100px,100% - 48px);margin-left:auto;margin-right:auto;margin-inline:auto}
 h1,h2,h3{font-family:var(--mincho);font-weight:500;margin:0;line-height:1.7}
 p{margin:0 0 1.2em}
 .dark{background:var(--forest);color:#e9e6dc}
@@ -50,7 +50,7 @@ p{margin:0 0 1.2em}
 .tone{filter:saturate(.72) contrast(1.04) sepia(.12) brightness(.92)}
 
 /* ---------- ヘッダー ---------- */
-.head{position:absolute;inset:0 0 auto 0;z-index:30}
+.head{position:absolute;top:0;left:0;right:0;inset:0 0 auto 0;z-index:30}
 .head .wrap{display:flex;justify-content:space-between;align-items:center;height:88px;color:#efe9da}
 .word{text-decoration:none;display:flex;align-items:baseline;gap:14px}
 .word b{font-family:var(--latin);font-style:italic;font-weight:500;font-size:2rem;letter-spacing:.04em;line-height:1}
@@ -63,7 +63,7 @@ p{margin:0 0 1.2em}
 @media (max-width:860px){.nav a:not(.rsv){display:none}.word span{display:none}}
 
 /* ---------- トップ（ロゴを真ん中に。絵は使わない） ---------- */
-.hero{min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 0 90px;background:radial-gradient(70% 55% at 50% 40%,rgba(201,168,110,.16),rgba(20,16,17,0) 70%),var(--forest)}
+.hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;padding:120px 0 90px;background:radial-gradient(70% 55% at 50% 40%,rgba(201,168,110,.16),rgba(20,16,17,0) 70%),var(--forest)}
 .mark{position:relative;display:inline-block;margin:0;padding-bottom:.18em !important;font-family:var(--latin);font-style:italic;font-weight:500;font-size:clamp(4.2rem,11vw,7.6rem);line-height:1;letter-spacing:.02em;background:linear-gradient(180deg,#f3e3bd 0%,#c9a86e 55%,#9c7d48 100%);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .12em}
 .mark .heart{position:absolute;right:-.28em;top:-.18em;width:.42em;height:.42em}
 .mark-line{display:block;width:min(320px,70%);height:14px;margin:-.4em auto 46px}

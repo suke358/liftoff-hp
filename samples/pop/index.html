@@ -31,7 +31,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);f
 img{max-width:100%;display:block}
 a{color:var(--ink)}
 :focus-visible{outline:3px solid var(--pink);outline-offset:3px}
-.wrap{width:min(1080px,100% - 40px);margin-inline:auto}
+.wrap{width:min(1080px,100% - 40px);margin-left:auto;margin-right:auto;margin-inline:auto}
 h1,h2,h3{font-family:var(--hand);font-weight:600;line-height:1.5;margin:0}
 p{margin:0 0 1em}
 
@@ -75,6 +75,7 @@ p{margin:0 0 1em}
 /* 写真を囲む、ロゴの3色の四角 */
 .blocks{position:relative;aspect-ratio:1/1;width:min(100%,460px);justify-self:center}
 .blocks .b{position:absolute}
+@supports not (aspect-ratio:1/1){.blocks::before{content:"";display:block;padding-top:100%}}
 .b-pink{background:var(--pink);width:58%;height:58%;left:0;top:4%}
 .b-lemon{background:var(--lemon);width:44%;height:44%;right:0;bottom:0}
 .b-photo{width:64%;height:72%;left:20%;top:14%;background:var(--yomogi);padding:12px}
@@ -118,7 +119,7 @@ p{margin:0 0 1em}
 /* ========== オーナー ========== */
 .owner .wrap{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center;max-width:900px}
 .owner-photo{position:relative;width:230px}
-.owner-photo::before{content:"";position:absolute;inset:16px -16px -16px 16px;background:var(--pink)}
+.owner-photo::before{content:"";position:absolute;top:16px;right:-16px;bottom:-16px;left:16px;inset:16px -16px -16px 16px;background:var(--pink)}
 .owner-photo img{position:relative;width:230px;height:230px;object-fit:cover;border:6px solid #fff}
 .owner-role{display:inline-block;font-size:.88rem;font-weight:700;color:#fff;background:var(--yomogi);padding:.15em .9em;margin-bottom:14px}
 .owner h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:18px}
