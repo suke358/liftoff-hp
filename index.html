@@ -538,6 +538,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
             <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
           </label>
           <label>くわしい内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
+          <input type="hidden" name="_subject" value="【Lift-Off】ホームページからのお問い合わせ">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <button class="btn signal" type="submit">この内容で送る</button>
           <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
         </form>
@@ -555,15 +557,33 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 </div>
 
 <script>
-// Formspree のIDが決まったら FORMSPREE に入れる（例 "https://formspree.io/f/xxxx"）。空のあいだはメール画面を開く
-const FORMSPREE = "";
+// 問い合わせフォーム：Formspree（https://formspree.io/f/xrpeekdb）に送り、liftoff.358@gmail.com に届く
+// 送ったあともこのページのまま「送りました」と出す。送れなかったときはメールの画面を開く
+const FORMSPREE = "https://formspree.io/f/xrpeekdb";
 const form = document.getElementById('form');
-if (FORMSPREE) { form.action = FORMSPREE; document.getElementById('formnote').textContent = '送信後、こちらから折り返しご連絡します。'; }
-else form.addEventListener('submit', e => {
-  e.preventDefault();
+const note = document.getElementById('formnote');
+const btn = form.querySelector('button[type=submit]');
+form.action = FORMSPREE;
+note.textContent = '送信後、こちらから折り返しご連絡します。';
+function openMail(){
   const d = new FormData(form);
   const body = `お名前：${d.get('name')}\nお店・会社：${d.get('shop')}\nご連絡先：${d.get('contact')}\nご相談：${d.get('topic')}\n\n${d.get('message')}`;
   location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + d.get('name')) + '&body=' + encodeURIComponent(body);
+}
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  btn.disabled = true; btn.textContent = '送信中…';
+  try {
+    const r = await fetch(FORMSPREE, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    if (!r.ok) throw new Error('send failed');
+    form.reset();
+    btn.textContent = '送信しました';
+    note.textContent = 'ありがとうございます。内容を確認して、こちらから折り返しご連絡します。';
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'この内容で送る';
+    note.textContent = 'うまく送れませんでした。メールの画面を開きます。そのまま送信してください（お電話でも受け付けています）。';
+    openMail();
+  }
 });
 </script>
 </body>
