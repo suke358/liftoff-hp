@@ -30,6 +30,9 @@
 }
 </script>
 <style>
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
 /* =========================================================
    Lift-Off ホームページ制作
    紺（空の高いところ）× 黄色（滑走路の誘導灯）
@@ -300,7 +303,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <small>ホームページ制作</small>
     </a>
     <nav class="nav" id="nav" aria-label="ページ内">
-      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">デザイン見本</a><a href="#faq">よくある質問</a><a href="#contact">お問い合わせ</a>
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">お問い合わせ</a>
     </nav>
     <div class="top-right">
       <a class="btn primary" href="#contact">相談する</a>
@@ -314,16 +317,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <div class="wrap">
     <div class="hero-copy">
       <p class="hero-logo"><img src="img/logo.svg" alt="Lift-Off" width="397" height="140"></p>
-      <h1><span>お店のホームページ、</span><span>作ったあとも</span><span>引き受けます。</span></h1>
-      <p class="sub">作って終わりにせず、お休みのお知らせやメニューの変更も、LINEや電話でひと言いただければこちらで直します。パソコンが苦手でも大丈夫です。</p>
+      <h1><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
+      <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと<wbr>言いただければ<wbr>こちらで<wbr>直します。<wbr>パソコンが<wbr>苦手でも<wbr>大丈夫です。</p>
       <div class="actions">
-        <a class="btn primary" href="#contact">まずは相談する（無料）</a>
-        <a class="btn" href="#price">料金を見る</a>
+        <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料）</a>
+        <a class="btn" href="#price">料金を<wbr>見る</a>
       </div>
       <ul class="facts">
-        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>料金はすべて税込</li>
-        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>ドメイン代・フォーム代は月額に込み</li>
-        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>スタンダードは契約の縛りなし</li>
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>料金は<wbr>すべて<wbr>税込</li>
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>ドメイン代・フォーム代は<wbr>月額に<wbr>込み</li>
+        <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>スタンダードは<wbr>契約の<wbr>縛りなし</li>
       </ul>
     </div>
 
@@ -331,16 +334,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
     <div class="stage" role="img" aria-label="更新のイメージ：お店がLINEで「来週の水曜はお休みにします」と送ると、サイトにお知らせが出ます">
       <div class="runway"></div>
       <div class="chat">
-        <p class="bubble shop"><small>お店から</small>来週の水曜、臨時でお休みにします！</p>
-        <p class="bubble us"><small>Lift-Off</small>了解です。サイトにお知らせを出しました。</p>
+        <p class="bubble shop"><small>お店から</small>来週の<wbr>水曜、<wbr>臨時で<wbr>お休みにします！</p>
+        <p class="bubble us"><small>Lift-Off</small>了解です。<wbr>サイトに<wbr>お知らせを<wbr>出しました。</p>
       </div>
       <div class="phone">
         <div class="screen">
           <img src="img/hero-phone.jpg" alt="" width="500" height="1013">
-          <p class="notice"><b>お知らせ</b>来週の水曜日は、臨時休業とさせていただきます。</p>
+          <p class="notice"><b>お知らせ</b>来週の<wbr>水曜日は、<wbr>臨時休業とさせていただきます。</p>
         </div>
       </div>
-      <p class="stage-note">※画面は架空のお店の見本です</p>
+      <p class="stage-note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
     </div>
   </div>
 </section>
@@ -348,33 +351,33 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <section id="can" class="sec">
   <div class="wrap">
     <div class="sec-head">
-      <h2>できること</h2>
-      <p>ホームページ係の担当者を一人雇うかわりに、外から手伝う形です。お店の仕事に集中していただけるよう、ネットまわりをまとめて引き受けます。</p>
+      <h2>できる<wbr>こと</h2>
+      <p>ホームページ係の<wbr>担当者を<wbr>一人<wbr>雇うかわりに、<wbr>外から<wbr>手伝う形です。<wbr>お店の<wbr>仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて<wbr>引き<wbr>受けます。</p>
     </div>
     <div class="can">
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="14" height="24" rx="3"/><path d="M13 23h4"/><path d="M11 9h8M11 13h8M11 17h5" stroke="#2F6F8F"/></svg></span>
-        <h3>作る</h3><p>お店の雰囲気に合わせてデザインします。スマホで見やすく、電話や予約にすぐつながる作りにします。</p>
+        <h3>作る</h3><p>お店の<wbr>雰囲気に<wbr>合わせて<wbr>デザインします。<wbr>スマホで<wbr>見やすく、<wbr>電話や<wbr>予約に<wbr>すぐ<wbr>つながる<wbr>作りにします。</p>
       </article>
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h15a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-7l-5 4v-4H4z"/><path d="M19 25l6-6 2 2-6 6h-2z" stroke="#2F6F8F"/></svg></span>
-        <h3>直す・更新する</h3><p>営業日やメニュー、写真の入れ替えは、ひと言いただければこちらで。依頼には原則3営業日以内に対応します。</p>
+        <h3>直す・更新する</h3><p>営業日や<wbr>メニュー、<wbr>写真の<wbr>入れ替えは、<wbr>ひと<wbr>言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p>
       </article>
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 27s-8-7.5-8-14a8 8 0 0 1 16 0c0 6.5-8 14-8 14z"/><circle cx="15" cy="13" r="3" stroke="#2F6F8F"/></svg></span>
-        <h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、お店の地図をサイトに載せるなど、公開時の基本の設定はひととおり行います。</p>
+        <h3>見つけて<wbr>もらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの<wbr>検索に<wbr>登録する<wbr>設定、<wbr>お店の<wbr>地図を<wbr>サイトに<wbr>載せるなど、<wbr>公開時の<wbr>基本の<wbr>設定は<wbr>ひととおり行います。</p>
       </article>
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="20" rx="3"/><path d="M4 12h22M10 3v6M20 3v6"/><path d="M10 18l3 3 6-6" stroke="#2F6F8F"/></svg></span>
-        <h3>問い合わせを受ける</h3><p>お問い合わせフォームや予約の受付（RESERVA・Googleカレンダー）をつけられます。</p>
+        <h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>予約の<wbr>受付<wbr>（RESERVA・Googleカレンダー）を<wbr>つけられます。</p>
       </article>
     </div>
     <div class="promise">
-      <h3>お約束していること</h3>
+      <h3>お約束している<wbr>こと</h3>
       <ul>
-        <li>「検索で1位」「必ずお客さんが増える」などの約束はしません。できることを正直にお伝えします。</li>
-        <li>お店のサイトに、効果を言い切る表現や大げさな言葉は使いません。</li>
-        <li>写真やお名前は、了承をいただいてから載せます。</li>
+        <li>「検索で<wbr>1位」<wbr>「必ず<wbr>お客さんが<wbr>増える」などの<wbr>約束は<wbr>しません。<wbr>できる<wbr>ことを<wbr>正直に<wbr>お伝えします。</li>
+        <li>お店の<wbr>サイトに、<wbr>効果を<wbr>言い切る<wbr>表現や<wbr>大げさな<wbr>言葉は<wbr>使いません。</li>
+        <li>写真や<wbr>お名前は、<wbr>了承を<wbr>いただいてから<wbr>載せます。</li>
       </ul>
     </div>
   </div>
@@ -384,15 +387,15 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <div class="wrap">
     <div class="sec-head">
       <h2>料金プラン</h2>
-      <p>すべて税込です。ドメイン（ホームページの住所）とお問い合わせフォームの費用は、どのプランも月額に含まれています。</p>
+      <p>すべて<wbr>税込です。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）と<wbr>お問い合わせフォームの<wbr>費用は、<wbr>どの<wbr>プランも<wbr>月額に<wbr>含まれています。</p>
     </div>
     <div class="passes">
       <article class="pass rec">
         <div class="main">
-          <p class="who">作って、ときどき更新する基本のプラン</p>
+          <p class="who">作って、<wbr>ときどき更新する<wbr>基本の<wbr>プラン</p>
           <h3>スタンダード <span class="tag">おすすめ</span></h3>
           <dl>
-            <dt>サイト</dt><dd>スマホで見やすい縦長の1ページ</dd>
+            <dt>サイト</dt><dd>スマホで<wbr>見やすい<wbr>縦長の<wbr>1ページ</dd>
             <dt>更新</dt><dd>月2回まで</dd>
             <dt>契約期間</dt><dd>縛りなし</dd>
           </dl>
@@ -405,12 +408,12 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       </article>
       <article class="pass">
         <div class="main">
-          <p class="who">最初にまとまったお金をかけずに始めたい方に</p>
+          <p class="who">最初に<wbr>まとまった<wbr>お金を<wbr>かけずに<wbr>始めたい方に</p>
           <h3>初期0円プラン</h3>
           <dl>
-            <dt>中身</dt><dd>スタンダードと同じ（初期費用を月額に分けてお支払い）</dd>
+            <dt>中身</dt><dd>スタンダードと<wbr>同じ<wbr>（初期費用を<wbr>月額に<wbr>分けて<wbr>お支払い）</dd>
             <dt>更新</dt><dd>月2回まで</dd>
-            <dt>契約期間</dt><dd>12か月から</dd>
+            <dt>契約期間</dt><dd>12か<wbr>月から</dd>
           </dl>
         </div>
         <div class="stub">
@@ -421,13 +424,13 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       </article>
       <article class="pass">
         <div class="main">
-          <p class="who">ネットのことは、まるごと任せたい方に</p>
+          <p class="who">ネットの<wbr>ことは、<wbr>まる<wbr>ごと<wbr>任せたい方に</p>
           <h3>WEB担当者代行</h3>
           <dl>
-            <dt>サイト</dt><dd>スタンダードと同じ</dd>
+            <dt>サイト</dt><dd>スタンダードと<wbr>同じ</dd>
             <dt>更新</dt><dd>月4回まで</dd>
-            <dt>Googleマップ</dt><dd>お知らせの投稿 月4回、口コミへの返信文の下書き</dd>
-            <dt>報告</dt><dd>月1回、サイトの見られ方を簡単にお知らせ</dd>
+            <dt>Googleマップ</dt><dd>お知らせの<wbr>投稿 月4回、<wbr>口コミへの<wbr>返信文の<wbr>下書き</dd>
+            <dt>報告</dt><dd>月1回、<wbr>サイトの<wbr>見られ方を<wbr>簡単に<wbr>お知らせ</dd>
             <dt>契約期間</dt><dd>縛りなし</dd>
           </dl>
         </div>
@@ -440,22 +443,22 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
     </div>
     <div class="more">
     <div class="incl">
-      <h3>初期費用（98,000円）に含まれるもの</h3>
+      <h3>初期費用<wbr>（98,000円）に<wbr>含まれる<wbr>もの</h3>
       <ul>
-        <li>デザイン・文章の整え・ページづくり</li>
-        <li>スマホ・パソコンの両方で見やすく</li>
-        <li>お問い合わせフォームの設置</li>
-        <li>独自ドメインの取得と設定</li>
-        <li>Googleの検索に登録する設定</li>
-        <li>お店の地図をサイトに載せる</li>
+        <li>デザイン・文章の<wbr>整え・ページづくり</li>
+        <li>スマホ・パソコンの<wbr>両方で<wbr>見やすく</li>
+        <li>お問い合わせフォームの<wbr>設置</li>
+        <li>独自ドメインの<wbr>取得と<wbr>設定</li>
+        <li>Googleの<wbr>検索に<wbr>登録する<wbr>設定</li>
+        <li>お店の<wbr>地図を<wbr>サイトに<wbr>載せる</li>
       </ul>
-      <p class="note">ネット予約（RESERVA など）のつなぎこみもご相談ください。Googleマップのお店情報（説明文・写真・営業時間など）の最初の整備は、別料金でお見積もりします。</p>
+      <p class="note">ネット予約<wbr>（RESERVA など）の<wbr>つなぎこみも<wbr>ご相談ください。<wbr>Googleマップの<wbr>お店情報<wbr>（説明文・<wbr>写真・営業時間など）の<wbr>最初の<wbr>整備は、<wbr>別料金で<wbr>お見積もりします。</p>
     </div>
     <div class="total">
-      <h3>お支払いの合計の目安（税込）</h3>
-      <p>初期費用と、公開してからの月額を足した金額です。</p>
+      <h3>お支払いの<wbr>合計の<wbr>目安<wbr>（税込）</h3>
+      <p>初期費用と、<wbr>公開してからの<wbr>月額を<wbr>足した<wbr>金額です。</p>
       <table>
-        <thead><tr><th>プラン</th><th>1年使うと</th><th>2年使うと</th></tr></thead>
+        <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
         <tbody>
           <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
           <tr><td>初期0円プラン</td><td><b>117,600円</b></td><td><b>235,200円</b></td></tr>
@@ -466,14 +469,14 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
     </div>
     <div class="price-foot">
       <div class="extra">
-        <h3>追加でお願いする場合</h3>
+        <h3>追加で<wbr>お願いする<wbr>場合</h3>
         <dl>
-          <dt>回数をこえた更新</dt><dd>1回 3,300円</dd>
-          <dt>ページの追加</dt><dd>1ページ 22,000円</dd>
+          <dt>回数を<wbr>こえた<wbr>更新</dt><dd>1回 3,300円</dd>
+          <dt>ページの<wbr>追加</dt><dd>1ページ 22,000円</dd>
         </dl>
-        <p class="extra-note">更新は、1回のご依頼（LINEなら1通分）でまとめていただいた変更を「1回」と数えます。ページの作り直しや新しい項目の追加など大きな変更は、別にご相談させてください。</p>
+        <p class="extra-note">更新は、<wbr>1回の<wbr>ご依頼<wbr>（LINEなら<wbr>1通分）で<wbr>まとめていただいた<wbr>変更を<wbr>「1回」と<wbr>数えます。<wbr>ページの<wbr>作り直しや<wbr>新しい<wbr>項目の<wbr>追加など<wbr>大きな<wbr>変更は、<wbr>別に<wbr>ご相談させてください。</p>
       </div>
-      <p class="note">初期0円プランは、続けて使うほどお支払いの合計がスタンダードより多くなります（23か月目ごろに逆転します）。長く使う予定ならスタンダードがお得です。12か月より前に解約する場合は解約金（残りの月数×4,900円）がかかります。<br>初期費用は公開時にご請求し、月額は公開の翌月分から毎月末までのお振込みです。紹介料などの仕組みはありません。</p>
+      <p class="note">初期0円プランは、<wbr>続けて<wbr>使う<wbr>ほど<wbr>お支払いの<wbr>合計が<wbr>スタンダードより<wbr>多くなります<wbr>（23か<wbr>月目ごろに<wbr>逆転します）。<wbr>長く<wbr>使う<wbr>予定なら<wbr>スタンダードが<wbr>お得です。<wbr>12か<wbr>月より<wbr>前に<wbr>解約する<wbr>場合は<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。<br>初期費用は<wbr>公開時に<wbr>ご請求し、<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から<wbr>毎月<wbr>末までの<wbr>お振込みです。<wbr>紹介料などの<wbr>仕組みは<wbr>ありません。</p>
     </div>
   </div>
 </section>
@@ -481,21 +484,21 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <section id="data" class="sec">
   <div class="wrap">
     <div class="sec-head">
-      <h2>データの管理</h2>
-      <p>ホームページはお店の大事な財産です。やめるときに困らないよう、最初からお店のものとして持っていただきます。</p>
+      <h2>データの<wbr>管理</h2>
+      <p>ホームページは<wbr>お店の<wbr>大事な<wbr>財産です。<wbr>やめる<wbr>ときに<wbr>困らないよう、<wbr>最初から<wbr>お店の<wbr>ものとして<wbr>持っていただきます。</p>
     </div>
     <div class="data">
       <article>
         <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13" r="4.5"/><path d="M13.5 13H23M19 13v4M22 13v3"/></svg></span>
-        <h3>ドメインはお店の名義</h3><p>ホームページの住所（〇〇.jp など）は、お店の名義で取ります。</p>
+        <h3>ドメインは<wbr>お店の<wbr>名義</h3><p>ホームページの<wbr>住所<wbr>（〇〇.jp など）は、<wbr>お店の<wbr>名義で<wbr>取ります。</p>
       </article>
       <article>
         <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a9 9 0 1 0 3-6.7"/><path d="M4 4v4h4"/><path d="M13 8v5l3 2"/></svg></span>
-        <h3>変更の記録を残します</h3><p>いつ・どこを直したかを全部記録しているので、前の状態に戻すこともできます。</p>
+        <h3>変更の<wbr>記録を<wbr>残します</h3><p>いつ・どこを<wbr>直したかを<wbr>全部<wbr>記録しているので、<wbr>前の<wbr>状態に<wbr>戻すこともできます。</p>
       </article>
       <article>
         <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l9-5 9 5v10l-9 5-9-5z"/><path d="M4 9l9 5 9-5M13 14v10"/></svg></span>
-        <h3>やめるときはデータ一式をお渡し</h3><p>解約されるときは、サイトのデータをすべてお渡しします。ほかの会社に引き継ぐこともできます。解約後のドメインの更新費用はお店のご負担になります。</p>
+        <h3>やめる<wbr>ときは<wbr>データ一式を<wbr>お渡し</h3><p>解約される<wbr>ときは、<wbr>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ほかの<wbr>会社に<wbr>引き継ぐ<wbr>こともできます。<wbr>解約後の<wbr>ドメインの<wbr>更新費用は<wbr>お店の<wbr>ご負担に<wbr>なります。</p>
       </article>
     </div>
   </div>
@@ -504,15 +507,15 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <section id="flow" class="sec alt">
   <div class="wrap">
     <div class="sec-head">
-      <h2>作成の流れ</h2>
-      <p>打ち合わせは基本1回。あとはLINEや電話でのやりとりで進めます。写真や載せる内容がそろってから公開まで、目安は2〜3週間です。</p>
+      <h2>作成の<wbr>流れ</h2>
+      <p>打ち合わせは<wbr>基本1回。<wbr>あとは<wbr>LINEや<wbr>電話での<wbr>やりとりで<wbr>進めます。<wbr>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr>2〜3週間です。</p>
     </div>
     <ol class="flow">
-      <li><div><h3>お問い合わせ</h3><p>電話・メール・下のフォームからお気軽にどうぞ。相談だけでも大丈夫です。</p></div></li>
-      <li><div><h3>打ち合わせ</h3><p>お店にうかがって、載せたい内容やお好みのデザインをお聞きします。写真もこのときに。</p></div></li>
-      <li><div><h3>見本を作って確認</h3><p>実際にスマホで見られる見本をお送りします。気になるところは何度でもお伝えください。</p></div></li>
-      <li><div><h3>公開</h3><p>ドメインの取得やGoogleへの登録などの設定をして、ネットに公開します。</p></div></li>
-      <li><div><h3>毎月の更新</h3><p>公開後も、変更はひと言いただければこちらで直します。</p></div></li>
+      <li><div><h3>お問い合わせ</h3><p>電話・<wbr>メール・下の<wbr>フォームから<wbr>お気軽に<wbr>どうぞ。<wbr>相談だけでも<wbr>大丈夫です。</p></div></li>
+      <li><div><h3>打ち合わせ</h3><p>お店に<wbr>うかがって、<wbr>載せたい<wbr>内容や<wbr>お好みの<wbr>デザインを<wbr>お聞きします。<wbr>写真も<wbr>この<wbr>ときに。</p></div></li>
+      <li><div><h3>見本を<wbr>作って<wbr>確認</h3><p>実際に<wbr>スマホで<wbr>見られる<wbr>見本を<wbr>お送りします。<wbr>気に<wbr>なる<wbr>ところは<wbr>何度でも<wbr>お伝えください。</p></div></li>
+      <li><div><h3>公開</h3><p>ドメインの<wbr>取得や<wbr>Googleへの<wbr>登録などの<wbr>設定を<wbr>して、<wbr>ネットに<wbr>公開します。</p></div></li>
+      <li><div><h3>毎月の<wbr>更新</h3><p>公開後も、<wbr>変更は<wbr>ひと<wbr>言いただければ<wbr>こちらで<wbr>直します。</p></div></li>
     </ol>
   </div>
 </section>
@@ -522,25 +525,25 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <div class="wrap">
     <div class="sec-head">
       <h2>デザイン見本</h2>
-      <p>同じ架空のお店で、雰囲気だけを変えた見本です。色・文字・写真は、お店に合わせて変えられます。</p>
+      <p>同じ<wbr>架空の<wbr>お店で、<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
     </div>
     <div class="samples">
       <a class="sample" href="samples/homey/index.html">
         <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy"></div>
-        <h3>アットホーム</h3><p>やわらかく、親しみやすく</p>
+        <h3>アットホーム</h3><p>やわらかく、<wbr>親しみやすく</p>
       </a>
       <a class="sample" href="samples/luxury/index.html">
         <div class="shot"><img src="samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy"></div>
-        <h3>ラグジュアリー</h3><p>上品に、落ち着いて</p>
+        <h3>ラグジュアリー</h3><p>上品に、<wbr>落ち着いて</p>
       </a>
       <a class="sample" href="samples/pop/index.html">
         <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy"></div>
-        <h3>カラフル</h3><p>明るく、わかりやすく</p>
+        <h3>カラフル</h3><p>明るく、<wbr>わかりやすく</p>
       </a>
     </div>
     <div class="work-foot">
-      <p>実際にお作りしたお店のホームページは、打ち合わせのときにお見せします。</p>
-      <a class="btn" href="samples/index.html">見本の一覧を見る</a>
+      <p>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
+      <a class="btn" href="samples/index.html">見本の<wbr>一覧を<wbr>見る</a>
     </div>
   </div>
 </section>
@@ -548,19 +551,19 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 <section id="faq" class="sec alt">
   <div class="wrap">
     <div class="sec-head">
-      <h2>よくある質問</h2>
-      <p>ほかにも気になることがあれば、お気軽にお問い合わせください。</p>
+      <h2>よく<wbr>ある<wbr>質問</h2>
+      <p>ほかにも<wbr>気に<wbr>なることが<wbr>あれば、<wbr>お気軽に<wbr>お問い合わせ<wbr>ください。</p>
     </div>
     <div class="faq">
-      <details><summary>パソコンが使えなくても大丈夫ですか？</summary><p>大丈夫です。更新のご依頼はLINEや電話でひと言いただくだけで、作業はこちらで行います。</p></details>
-      <details><summary>どのくらいでできあがりますか？</summary><p>写真や載せる内容がそろってから公開まで、目安は2〜3週間です。見本を見ていただいてからの直しの回数などで前後します。</p></details>
-      <details><summary>写真がありません。</summary><p>スマホで撮った写真でも使えます。撮り方のコツもお伝えします。</p></details>
-      <details><summary>すでにホームページがあります。作り直しもできますか？</summary><p>できます。今のサイトの状態を見てからご提案しますので、まずはご相談ください。</p></details>
-      <details><summary>スタンダードと初期0円プラン、どちらがいいですか？</summary><p>2年以上使う予定なら、スタンダードのほうがお支払いの合計が少なくなります。最初にまとまったお金を出しにくい場合は、初期0円プランが向いています（12か月からのご契約です）。どちらも、できることは同じです。迷ったら打ち合わせで一緒に考えましょう。</p></details>
-      <details><summary>Googleマップのお店情報も整えてもらえますか？</summary><p>できます。説明文・写真・営業時間などの最初の整備は別料金で、内容に合わせてお見積もりします。WEB担当者代行プランでは、そのあとのお知らせの投稿（月4回）と、口コミへの返信文の下書きを毎月行います。</p></details>
-      <details><summary>やめるときはどうなりますか？</summary><p>サイトのデータをすべてお渡しします。ドメイン（ホームページの住所）もお店の名義なので、そのまま使い続けられます（解約後のドメインの更新費用はお店のご負担です）。初期0円プランを12か月より前にやめる場合は、解約金（残りの月数×4,900円）がかかります。</p></details>
-      <details><summary>支払いはどうすればいいですか？</summary><p>初期費用は公開のときにご請求します。月額は公開の翌月分から、毎月末までにお振込みください。</p></details>
-      <details><summary>防府市以外でもお願いできますか？</summary><p>防府市を中心に、近くの地域もご相談ください。打ち合わせにうかがえる範囲かどうかをお伝えします。</p></details>
+      <details><summary>パソコンが<wbr>使えなくても<wbr>大丈夫ですか？</summary><p>大丈夫です。<wbr>更新の<wbr>ご依頼は<wbr>LINEや<wbr>電話で<wbr>ひと<wbr>言いただくだけで、<wbr>作業は<wbr>こちらで<wbr>行います。</p></details>
+      <details><summary>どの<wbr>くらいでできあがりますか？</summary><p>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr>2〜3週間です。<wbr>見本を<wbr>見ていただいてからの<wbr>直しの<wbr>回数などで<wbr>前後します。</p></details>
+      <details><summary>写真が<wbr>ありません。</summary><p>スマホで<wbr>撮った<wbr>写真でも<wbr>使えます。<wbr>撮り方の<wbr>コツも<wbr>お伝えします。</p></details>
+      <details><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？</summary><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></details>
+      <details><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？</summary><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></details>
+      <details><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？</summary><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>内容に<wbr>合わせてお見積もりします。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></details>
+      <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（解約後の<wbr>ドメインの<wbr>更新費用は<wbr>お店の<wbr>ご負担です）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></details>
+      <details><summary>支払いは<wbr>どうすればいいですか？</summary><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。</p></details>
+      <details><summary>防府市以外でも<wbr>お願いできますか？</summary><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></details>
     </div>
   </div>
 </section>
@@ -571,10 +574,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <span class="ic" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4l-8 11h5l-7 9h20l-7-9h5z" stroke="#2F6F8F"/><path d="M18 24v8"/></svg></span>
       <div>
         <h3>伐採・伐木・抜根・草刈りも</h3>
-        <p>Lift-Off では、木の伐採や草刈りの仕事も行っています。防府市近郊の空き家・空き地のお手入れもご相談ください。</p>
+        <p>Lift-Off では、<wbr>木の<wbr>伐採や<wbr>草刈りの<wbr>仕事も<wbr>行っています。<wbr>防府市近郊の<wbr>空き家・<wbr>空き地の<wbr>お手入れも<wbr>ご相談ください。</p>
       </div>
       <!-- 伐採サイトのURLが決まったら href を差し替える -->
-      <a class="btn" href="#contact" data-topic="伐採・草刈りの相談">伐採・草刈りについて相談する</a>
+      <a class="btn" href="#contact" data-topic="伐採・草刈りの相談">伐採・草刈りに<wbr>ついて<wbr>相談する</a>
     </div>
   </div>
 </section>
@@ -583,33 +586,33 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
   <div class="wrap">
     <div class="sec-head">
       <h2>お問い合わせ</h2>
-      <p>ご相談・お見積もりは無料です。「こんなことできる？」だけでもお気軽にどうぞ。</p>
+      <p>ご相談・<wbr>お見積もりは<wbr>無料です。<wbr>「こんな<wbr>ことできる？」だけでも<wbr>お気軽に<wbr>どうぞ。</p>
     </div>
     <div class="contact-grid">
       <div>
         <a class="tel" href="tel:09011896726">090-1189-6726</a>
-        <p class="tel-note">作業中で出られないことがあります。その場合は、折り返しお電話します。</p>
+        <p class="tel-note">作業中で<wbr>出られない<wbr>ことがあります。<wbr>その<wbr>場合は、<wbr>折り返しお電話します。</p>
         <p>メール：<a class="mail" href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
         <dl>
-          <dt>屋号</dt><dd>Lift-Off（リフトオフ）</dd>
+          <dt>屋号</dt><dd>Lift-Off<wbr>（リフトオフ）</dd>
           <dt>所在地</dt><dd>山口県防府市</dd>
-          <dt>対応地域</dt><dd>防府市とその周辺</dd>
+          <dt>対応地域</dt><dd>防府市と<wbr>その<wbr>周辺</dd>
         </dl>
       </div>
       <div class="formbox">
         <form id="form" action="" method="POST">
           <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
-          <label>お店・会社の名前（任意）<input name="shop"></label>
-          <label><span>ご連絡先（電話またはメール）<span class="req">必須</span></span><input name="contact" required></label>
-          <label>ご相談の内容
+          <label>お店・会社の<wbr>名前<wbr>（任意）<input name="shop"></label>
+          <label><span>ご連絡先<wbr>（電話または<wbr>メール）<span class="req">必須</span></span><input name="contact" required></label>
+          <label>ご相談の<wbr>内容
             <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
           </label>
-          <label>くわしい内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
+          <label>くわしい<wbr>内容<textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
           <input type="hidden" name="_subject" value="【Lift-Off】ホームページからのお問い合わせ">
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-          <button class="btn signal" type="submit">この内容で送る</button>
-          <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
-          <p class="formnote">いただいた内容は、ご相談への返事のためだけに使います。</p>
+          <button class="btn signal" type="submit">この<wbr>内容で<wbr>送る</button>
+          <p class="formnote" id="formnote">送ると<wbr>メールの<wbr>画面が<wbr>開きます。<wbr>そのまま<wbr>送信してください。</p>
+          <p class="formnote">いただいた<wbr>内容は、<wbr>ご相談への<wbr>返事の<wbr>ためだけに<wbr>使います。</p>
         </form>
       </div>
     </div>
@@ -621,7 +624,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
 
 <div class="fixbar">
   <a class="btn primary" href="tel:09011896726">電話する</a>
-  <a class="btn" href="#contact">フォームで相談</a>
+  <a class="btn" href="#contact">フォームで<wbr>相談</a>
 </div>
 
 <script>
