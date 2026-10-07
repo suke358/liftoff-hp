@@ -86,7 +86,17 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .nav a{text-decoration:none;color:var(--ink)}
 .nav a:hover{color:var(--sea)}
 .top .btn{padding:9px 20px;font-size:14px}
-@media (max-width:900px){.nav{display:none}}
+.menu-btn{display:none;align-items:center;gap:6px;font:inherit;font-family:var(--head);font-weight:700;font-size:14px;background:none;border:2px solid var(--line);border-radius:999px;padding:7px 14px;color:var(--ink);cursor:pointer}
+.menu-btn i{display:block;width:16px;height:2px;background:var(--ink);box-shadow:0 -5px 0 var(--ink),0 5px 0 var(--ink)}
+.top-right{display:flex;align-items:center;gap:8px}
+@media (max-width:900px){
+  .nav{display:none;position:absolute;left:0;right:0;top:66px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(23,40,58,.12);flex-direction:column;gap:0;padding:6px 20px 14px}
+  .nav.open{display:flex}
+  .nav a{padding:13px 4px;border-bottom:1px solid var(--line);font-size:16px}
+  .nav a:last-child{border-bottom:none}
+  .menu-btn{display:inline-flex}
+}
+@media (max-width:760px){.top .top-right .btn{display:none}.hero-logo{display:none}}
 
 /* ---------- トップ ---------- */
 .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#F5F9FB 0%,var(--sky) 100%);padding:72px 0 0}
@@ -170,6 +180,24 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .extra dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;font-size:15px}
 .extra dt{color:var(--muted)}
 .note{font-size:14px;color:var(--muted)}
+.more{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;margin-top:36px;align-items:stretch}
+.total{background:var(--paper);border-radius:16px;padding:22px 24px;border:1px solid var(--line)}
+.total h3{font-size:17px;margin-bottom:4px}
+.total p{font-size:14px;color:var(--muted);margin-bottom:12px}
+.total table{width:100%;border-collapse:collapse;font-size:15px}
+.total th,.total td{padding:9px 8px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
+.total th:first-child,.total td:first-child{text-align:left;white-space:normal}
+.total thead th{font-size:13px;color:var(--muted);font-weight:400;border-top:none}
+.total td b{font-family:var(--head)}
+.incl{background:var(--paper);border-radius:16px;padding:22px 24px;border:1px solid var(--line)}
+.incl h3{font-size:17px;margin-bottom:8px}
+.incl ul{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;font-size:15px}
+.incl li{padding-left:1.4em;position:relative}
+.incl li::before{content:"";position:absolute;left:2px;top:.6em;width:.7em;height:.38em;border-left:2px solid var(--sea);border-bottom:2px solid var(--sea);transform:rotate(-45deg)}
+.incl .note{margin-top:10px}
+@media (max-width:1000px){.more{grid-template-columns:1fr}}
+.incl ul{grid-template-columns:1fr!important}
+@media (max-width:760px){.incl ul{grid-template-columns:1fr}.total{padding:18px 16px}.total table{font-size:14px}}
 @media (max-width:760px){
   .pass{grid-template-columns:1fr}
   .pass .main{padding:24px 22px}
@@ -249,6 +277,7 @@ input,textarea,select{font:inherit;font-weight:400;padding:12px 14px;border-radi
 input:focus,textarea:focus,select:focus{border-color:var(--signal);outline:none}
 textarea{min-height:130px;resize:vertical}
 .formnote{font-size:13px;color:#c3d2dd}
+.req{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;background:var(--signal);color:var(--ink);border-radius:4px;padding:0 6px;vertical-align:2px}
 @media (max-width:760px){.contact-grid{grid-template-columns:1fr;gap:36px}.formbox{padding:22px 18px}}
 footer{background:var(--ink);color:#8fa6b6;font-size:13px;padding:32px 0 96px;border-top:1px solid #2c4256}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
@@ -268,10 +297,13 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <img src="img/logo.svg" alt="Lift-Off" width="397" height="140">
       <small>ホームページ制作</small>
     </a>
-    <nav class="nav" aria-label="ページ内">
-      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">デザイン見本</a><a href="#faq">よくある質問</a>
+    <nav class="nav" id="nav" aria-label="ページ内">
+      <a href="#can">できること</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の流れ</a><a href="#work">デザイン見本</a><a href="#faq">よくある質問</a><a href="#contact">お問い合わせ</a>
     </nav>
-    <a class="btn primary" href="#contact">相談する</a>
+    <div class="top-right">
+      <a class="btn primary" href="#contact">相談する</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav"><i></i>メニュー</button>
+    </div>
   </div>
 </header>
 
@@ -328,7 +360,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       </article>
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 27s-8-7.5-8-14a8 8 0 0 1 16 0c0 6.5-8 14-8 14z"/><circle cx="15" cy="13" r="3" stroke="#2F6F8F"/></svg></span>
-        <h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、Googleマップとのつなぎこみなど、公開時の基本の設定はひととおり行います。</p>
+        <h3>見つけてもらう準備</h3><p>独自ドメイン、Googleの検索に登録する設定、お店の地図をサイトに載せるなど、公開時の基本の設定はひととおり行います。</p>
       </article>
       <article>
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="20" rx="3"/><path d="M4 12h22M10 3v6M20 3v6"/><path d="M10 18l3 3 6-6" stroke="#2F6F8F"/></svg></span>
@@ -403,6 +435,32 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
           <span class="price init">初期 98,000円</span>
         </div>
       </article>
+    </div>
+    <div class="more">
+    <div class="incl">
+      <h3>初期費用（98,000円）に含まれるもの</h3>
+      <ul>
+        <li>デザイン・文章の整え・ページづくり</li>
+        <li>スマホ・パソコンの両方で見やすく</li>
+        <li>お問い合わせフォームの設置</li>
+        <li>独自ドメインの取得と設定</li>
+        <li>Googleの検索に登録する設定</li>
+        <li>お店の地図をサイトに載せる</li>
+      </ul>
+      <p class="note">ネット予約（RESERVA など）のつなぎこみもご相談ください。Googleマップのお店情報（説明文・写真・営業時間など）の最初の整備は、別料金でお見積もりします。</p>
+    </div>
+    <div class="total">
+      <h3>お支払いの合計の目安（税込）</h3>
+      <p>初期費用と、公開してからの月額を足した金額です。</p>
+      <table>
+        <thead><tr><th>プラン</th><th>1年使うと</th><th>2年使うと</th></tr></thead>
+        <tbody>
+          <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
+          <tr><td>初期0円プラン</td><td><b>117,600円</b></td><td><b>235,200円</b></td></tr>
+          <tr><td>WEB担当者代行</td><td><b>335,600円</b></td><td><b>573,200円</b></td></tr>
+        </tbody>
+      </table>
+    </div>
     </div>
     <div class="price-foot">
       <div class="extra">
@@ -494,6 +552,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <details><summary>パソコンが使えなくても大丈夫ですか？</summary><p>大丈夫です。更新のご依頼はLINEや電話でひと言いただくだけで、作業はこちらで行います。</p></details>
       <details><summary>写真がありません。</summary><p>スマホで撮った写真でも使えます。撮り方のコツもお伝えします。</p></details>
       <details><summary>すでにホームページがあります。作り直しもできますか？</summary><p>できます。今のサイトの状態を見てからご提案しますので、まずはご相談ください。</p></details>
+      <details><summary>スタンダードと初期0円プラン、どちらがいいですか？</summary><p>2年以上使う予定なら、スタンダードのほうがお支払いの合計が少なくなります。最初にまとまったお金を出しにくい場合は、初期0円プランが向いています（12か月からのご契約です）。どちらも、できることは同じです。迷ったら打ち合わせで一緒に考えましょう。</p></details>
+      <details><summary>Googleマップのお店情報も整えてもらえますか？</summary><p>できます。説明文・写真・営業時間などの最初の整備は別料金で、内容に合わせてお見積もりします。WEB担当者代行プランでは、そのあとのお知らせの投稿（月4回）と、口コミへの返信文の下書きを毎月行います。</p></details>
+      <details><summary>やめるときはどうなりますか？</summary><p>サイトのデータをすべてお渡しします。ドメイン（ホームページの住所）もお店の名義なので、そのまま使い続けられます（解約後のドメインの更新費用はお店のご負担です）。初期0円プランを12か月より前にやめる場合は、解約金（残りの月数×4,900円）がかかります。</p></details>
+      <details><summary>支払いはどうすればいいですか？</summary><p>初期費用は公開のときにご請求します。月額は公開の翌月分から、毎月末までにお振込みください。</p></details>
       <details><summary>防府市以外でもお願いできますか？</summary><p>防府市を中心に、近くの地域もご相談ください。打ち合わせにうかがえる範囲かどうかをお伝えします。</p></details>
     </div>
   </div>
@@ -508,7 +570,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
         <p>Lift-off では、木の伐採や草刈りの仕事も行っています。防府市近郊の空き家・空き地のお手入れもご相談ください。</p>
       </div>
       <!-- 伐採サイトのURLが決まったら href を差し替える -->
-      <a class="btn" href="#contact">伐採・草刈りについて相談する</a>
+      <a class="btn" href="#contact" data-topic="伐採・草刈りの相談">伐採・草刈りについて相談する</a>
     </div>
   </div>
 </section>
@@ -531,9 +593,9 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       </div>
       <div class="formbox">
         <form id="form" action="" method="POST">
-          <label>お名前<input name="name" required autocomplete="name"></label>
+          <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
           <label>お店・会社の名前（任意）<input name="shop"></label>
-          <label>ご連絡先（電話またはメール）<input name="contact" required></label>
+          <label><span>ご連絡先（電話またはメール）<span class="req">必須</span></span><input name="contact" required></label>
           <label>ご相談の内容
             <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
           </label>
@@ -542,6 +604,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <button class="btn signal" type="submit">この内容で送る</button>
           <p class="formnote" id="formnote">送るとメールの画面が開きます。そのまま送信してください。</p>
+          <p class="formnote">いただいた内容は、ご相談への返事のためだけに使います。</p>
         </form>
       </div>
     </div>
@@ -570,6 +633,12 @@ function openMail(){
   const body = `お名前：${d.get('name')}\nお店・会社：${d.get('shop')}\nご連絡先：${d.get('contact')}\nご相談：${d.get('topic')}\n\n${d.get('message')}`;
   location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + d.get('name')) + '&body=' + encodeURIComponent(body);
 }
+// スマホのメニュー
+const menuBtn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+menuBtn.addEventListener('click', () => { const o = nav.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o); });
+nav.addEventListener('click', e => { if (e.target.tagName === 'A') { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', false); } });
+// 「伐採・草刈りについて相談する」からはご相談の内容を選んだ状態にする
+document.querySelectorAll('[data-topic]').forEach(a => a.addEventListener('click', () => { form.topic.value = a.dataset.topic; }));
 form.addEventListener('submit', async e => {
   e.preventDefault();
   btn.disabled = true; btn.textContent = '送信中…';
