@@ -1,0 +1,9 @@
+// Cloudflare（クラウドフレア）でこのサイトを公開するための設定ファイル
+// サイトのファイル（index.html・img・logo・samples など）をそのまま置くだけの設定
+{
+  "name": "liftoff-hp",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./"
+  }
+}

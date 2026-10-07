@@ -1,0 +1,8 @@
+# 公開しないファイル（設定ファイルや説明書き）
+.git
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+.wrangler
+.DS_Store
