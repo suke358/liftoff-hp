@@ -236,7 +236,8 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 }
 
 /* ---------- デザイン見本 ---------- */
-.samples{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.samples{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+@media (max-width:1100px){.samples{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .sample{text-decoration:none;color:var(--ink);display:block}
 .sample .shot{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--sky)}
 .sample img{width:100%;height:auto;transition:transform .35s}
@@ -540,6 +541,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-
       <a class="sample" href="samples/pop/index.html">
         <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy"></div>
         <h3>カラフル</h3><p>明るく、<wbr>わかりやすく</p>
+      </a>
+      <a class="sample" href="samples/chic/index.html">
+        <div class="shot"><img src="samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <h3>シック</h3><p>大人っぽく、<wbr>印象に残る</p>
       </a>
     </div>
     <div class="work-foot">
