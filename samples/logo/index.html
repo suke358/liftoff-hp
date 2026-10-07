@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="../../img/favicon.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ロゴの見本｜デザイン見本</title>
+<meta name="description" content="Lift-Off のロゴの見本です（架空のお店）。">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;900&family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Cormorant+SC:wght@500&family=Shippori+Mincho+B1:wght@500&display=swap" rel="stylesheet">
+<style>
+/* 自社サイト（Lift-Off）と同じ色・文字 */
+:root{
+  --ink:#1B2A38;
+  --sea:#2F6F8F;
+  --sky:#E8F1F5;
+  --paper:#FFFFFF;
+  --signal:#F2C230;
+  --line:#C9D9E2;
+  --muted:#52677A;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"BIZ UDPGothic",sans-serif;color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1080px,100% - 40px);margin-left:auto;margin-right:auto;margin-inline:auto}
+h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-weight:900;letter-spacing:.02em}
+
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{text-decoration:none;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{height:40px;width:auto}
+.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);padding-left:10px;border-left:1px solid var(--line)}
+@media (max-width:420px){.logo small{display:none}}
+.back{font-size:15px;text-decoration:none;color:var(--sea);font-weight:700}
+
+.intro{padding:64px 0 40px}
+.intro .place{font-size:14px;color:var(--muted);margin-bottom:8px}
+.intro h1{font-size:clamp(30px,5vw,44px);margin-bottom:16px}
+.intro p.lead{color:var(--muted);max-width:40em}
+.points{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding:0;list-style:none}
+.points li{background:var(--sky);border-radius:999px;padding:6px 16px;font-size:15px}
+
+.list{display:grid;gap:40px;padding:24px 0 80px}
+.card{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;border:2px solid var(--ink);border-radius:20px;padding:28px;background:#fff}
+.card .shot{border-radius:12px;overflow:hidden;display:block;border:1px solid var(--line)}
+.card .shot img{width:100%;height:auto;transition:transform .3s}
+.card .shot:hover img{transform:scale(1.02)}
+.num{display:inline-block;background:var(--signal);font-weight:700;font-size:13px;padding:2px 12px;border-radius:6px;margin-bottom:10px}
+.card h2{font-size:clamp(22px,3vw,28px);margin-bottom:12px}
+.chips{display:flex;gap:6px;margin-bottom:14px}
+.chips span{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin-bottom:22px}
+.card dt{color:var(--muted);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 26px;border:2px solid var(--ink);background:var(--ink);color:#fff;font-size:16px}
+.btn:hover{background:var(--sea);border-color:var(--sea)}
+@media (max-width:820px){.card{grid-template-columns:1fr;gap:22px;padding:18px}.btn{width:100%}}
+
+.howto{background:var(--sky);padding:64px 0}
+.howto .wrap{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.howto h2{font-size:clamp(22px,3vw,28px);margin-bottom:14px}
+.howto ul{padding-left:1.2em;color:var(--ink)}
+.howto li{margin-bottom:6px}
+.qr{background:#fff;border-radius:16px;padding:16px;text-align:center;font-size:13px;color:var(--muted)}
+.qr img{width:180px;height:180px;margin:0 auto 6px}
+@media (max-width:820px){.howto .wrap{grid-template-columns:1fr}.qr{justify-self:center}}
+
+.foot{padding:40px 0;text-align:center;font-size:14px;color:var(--muted)}
+.foot a{color:var(--sea)}
+
+
+.logos{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:8px 0 80px}
+@media (max-width:900px){.logos{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.logos{grid-template-columns:1fr}}
+.lg{border:2px solid var(--ink);border-radius:20px;padding:18px;background:#fff}
+.lg h2{font-size:18px;margin:6px 0 4px}
+.lg p{font-size:14px;color:var(--muted);margin-bottom:12px}
+.tile{position:relative;width:100%;padding-top:100%;border-radius:12px;overflow:hidden;container-type:inline-size}
+.tile>div{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.tile svg.fr{position:absolute;top:0;left:0;width:100%;height:100%}
+.wm{font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:500;line-height:1;position:relative;display:inline-block;font-size:72px;font-size:22cqw}
+.wm svg{position:absolute;width:.36em;height:.36em;right:-.3em;top:-.12em;fill:#e58ca0}
+.st{font-family:"Cormorant SC",serif;letter-spacing:.3em;font-size:11px;font-size:3.4cqw;margin-top:4%}
+.small{display:flex;gap:10px;align-items:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.small i{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-style:italic;font-size:17px;flex:none}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../../index.html" aria-label="Lift-Off トップへ"><img src="../../img/logo.svg" alt="Lift-Off" width="397" height="140"><small>ホームページ制作</small></a>
+    <a class="back" href="../index.html">← 見本帳にもどる</a>
+  </div>
+</header>
+<main>
+
+  <section class="intro">
+    <div class="wrap">
+      <h1>ロゴの見本</h1>
+      <p class="lead">同じ架空のお店の名前で、形と色を変えたロゴの見本です。実際には、いくつか案をお見せして、選んでいただいてから仕上げます。ロゴは「メインのロゴ」と「小さい場所用」の2つで1組です。</p>
+      <ul class="points"><li>看板や印刷にも使えるデータでお渡し</li><li>今お使いのロゴの形を生かして、色や飾りだけ変えることもできます</li></ul>
+    </div>
+  </section>
+  <div class="wrap logos">
+    <article class="lg"><span class="num">ロゴ 1</span><h2>文字と♡</h2><p>いちばんシンプル。どこに置いても使いやすい形。</p>
+      <div class="tile" style="background:#fbf7ef"><div><div style="position:relative"><span class="wm" style="color:#b98272">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#a8834f">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#fbf7ef;color:#b98272">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+    <article class="lg"><span class="num">ロゴ 2</span><h2>アーチの額</h2><p>窓のような形で、やさしく包む印象に。</p>
+      <div class="tile" style="background:#f6efe4"><div><svg class="fr" viewBox="0 0 100 100"><path d="M24 88V44A26 26 0 0 1 76 44V88Z" fill="#fffaf2" stroke="#c4a466" stroke-width=".8"/><path d="M27 86V45A23 23 0 0 1 73 45V86" fill="none" stroke="#c4a466" stroke-width=".3"/></svg><div style="position:relative"><span class="wm" style="color:#a8834f;font-size:51px;font-size:17cqw">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#8f7a5a">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#fffaf2;color:#a8834f">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+    <article class="lg"><span class="num">ロゴ 3</span><h2>楕円のメダル</h2><p>シールやスタンプにしやすい形。</p>
+      <div class="tile" style="background:#e8cfc3"><div><svg class="fr" viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="30" ry="38" fill="#fbf7ef" stroke="#b8924f" stroke-width=".8"/><ellipse cx="50" cy="50" rx="27.5" ry="35.5" fill="none" stroke="#b8924f" stroke-width=".25" stroke-dasharray=".4 1.2"/></svg><div style="position:relative"><span class="wm" style="color:#a8834f;font-size:48px;font-size:16cqw">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#8f7a5a">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#fbf7ef;color:#a8834f">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+    <article class="lg"><span class="num">ロゴ 4</span><h2>深い色×金</h2><p>看板や紙袋に映える、落ち着いた組み合わせ。</p>
+      <div class="tile" style="background:#1e2a24"><div><svg class="fr" viewBox="0 0 100 100"><rect x="12" y="12" width="76" height="76" fill="none" stroke="#c4a466" stroke-opacity=".6" stroke-width=".4"/><rect x="14" y="14" width="72" height="72" fill="none" stroke="#c4a466" stroke-opacity=".35" stroke-width=".25"/></svg><div style="position:relative"><span class="wm" style="color:#d9b673">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#c9b98f">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#1e2a24;color:#d9b673">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+    <article class="lg"><span class="num">ロゴ 5</span><h2>よもぎの葉</h2><p>お店の中身（よもぎ）が伝わる飾りを添えて。</p>
+      <div class="tile" style="background:#f4f1ea"><div><svg class="fr" viewBox="0 0 100 100"><g fill="#8fa77a" opacity=".85"><path d="M30 74c6-3 10-1 12 2-6 2-9 1-12-2z"/><path d="M36 78c5-5 9-4 11-1-5 3-8 3-11 1z"/><path d="M70 74c-6-3-10-1-12 2 6 2 9 1 12-2z"/><path d="M64 78c-5-5-9-4-11-1 5 3 8 3 11 1z"/></g><path d="M30 76C40 82 60 82 70 76" fill="none" stroke="#7d9568" stroke-width=".5"/></svg><div style="position:relative"><span class="wm" style="color:#5f7f68">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#7d8f6e">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#f4f1ea;color:#5f7f68">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+    <article class="lg"><span class="num">ロゴ 6</span><h2>♡から流れる線</h2><p>文字の下を線がすっと流れる、やわらかい形。</p>
+      <div class="tile" style="background:#e8cfc3"><div><svg class="fr" viewBox="0 0 100 100"><path d="M22 62C36 67 60 66 76 59" fill="none" stroke="#c9a96e" stroke-width=".6" stroke-linecap="round"/><circle cx="21" cy="61.6" r=".7" fill="#c9a96e"/></svg><div style="position:relative"><span class="wm" style="color:#fffaf3">hiyori<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 2.8 4.5 6.4 4.1c2.2-.2 4 .9 5.6 3 1.6-2.1 3.4-3.2 5.6-3 3.6.4 5.5 4.2 4 7.6C19.5 16.4 12 21 12 21z"/></svg></span><span class="st" style="color:#fffaf3">yomogi salon</span></div></div></div>
+      <div class="small"><i style="background:#e8cfc3;color:#fffaf3">hiyori</i>小さい場所用（SNSのアイコン・サイトの上の帯）</div>
+    </article>
+  </div>
+
+</main>
+<footer class="foot">
+  <p><a href="../../index.html#option">料金を見る（ロゴ・名刺・チラシなど）</a>　／　<a href="../index.html">見本帳にもどる</a></p>
+  <p>見本の店名・名前・住所・電話番号はすべて架空です。</p>
+</footer>
+</body>
+</html>

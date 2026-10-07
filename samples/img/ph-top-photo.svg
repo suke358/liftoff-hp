@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1200" viewBox="0 0 800 1200">
+<defs>
+<radialGradient id="a" cx=".25" cy=".75" r=".6"><stop offset="0" stop-color="#6b4a3a"/><stop offset="1" stop-color="#1a1314" stop-opacity="0"/></radialGradient>
+<radialGradient id="b" cx=".8" cy=".2" r=".5"><stop offset="0" stop-color="#4a3a2e"/><stop offset="1" stop-color="#1a1314" stop-opacity="0"/></radialGradient>
+<radialGradient id="c" cx=".18" cy=".82" r=".08"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></radialGradient>
+<linearGradient id="t" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a201d"/><stop offset="1" stop-color="#3c2d27"/></linearGradient>
+</defs>
+<rect width="800" height="1200" fill="#1a1314"/>
+<rect width="800" height="1200" fill="url(#a)"/><rect width="800" height="1200" fill="url(#b)"/>
+<rect x="0" y="930" width="800" height="270" fill="url(#t)" opacity=".85"/>
+<ellipse cx="610" cy="905" rx="150" ry="60" fill="#8a7468" opacity=".55"/>
+<rect x="100" y="860" width="80" height="80" rx="10" fill="#e9c9a0" opacity=".35"/>
+<rect width="800" height="1200" fill="url(#c)"/>
+<text x="400" y="1110" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#d9c6a6" fill-opacity=".75" letter-spacing="4">お店の雰囲気の写真が入ります</text>
+</svg>
