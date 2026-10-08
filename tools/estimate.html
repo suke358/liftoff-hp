@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>お見積もり（Lift-Off）</title>
+<!-- 2026/10/8 作成。打ち合わせで Mac を見せながら作る → 印刷 / PDF にして LINE で送る。料金は決定事項.md のとおり（変わったら下の PRICE を直す） -->
+<style>
+:root{--ink:#17283A;--sea:#2F6F8F;--sky:#EAF2F6;--line:#D2DEE6;--signal:#F2C230;--muted:#4A5F72}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP",sans-serif;color:var(--ink);background:#f3f6f8;font-size:15px;line-height:1.7}
+.app{display:grid;grid-template-columns:420px minmax(0,1fr);gap:24px;max-width:1280px;margin:0 auto;padding:24px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;align-self:start;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+.panel h1{font-size:18px;margin-bottom:4px}
+.panel .lead{font-size:13px;color:var(--muted);margin-bottom:14px}
+fieldset{border:none;border-top:1px solid var(--line);padding:14px 0 6px}
+legend{font-weight:700;font-size:14px;padding-right:8px}
+label.row{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer}
+label.row small{color:var(--muted);margin-left:auto;white-space:nowrap}
+input[type=text],input[type=number],input[type=date]{font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;width:100%}
+input[type=number]{width:110px;text-align:right}
+.opt{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;padding:6px 0}
+.opt .amt{grid-column:2 / 4;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.opt .amt input{width:120px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+button{font:inherit;font-weight:700;border-radius:999px;padding:9px 16px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer}
+button.main{background:var(--ink);color:#fff}
+.hint{font-size:12px;color:var(--muted);margin-top:8px}
+/* 見積書（A4） */
+.sheet{background:#fff;width:210mm;min-height:297mm;margin:0 auto;padding:16mm 16mm 14mm;box-shadow:0 6px 24px rgba(23,40,58,.12)}
+.s-top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--ink);padding-bottom:8px}
+.s-top h2{font-size:24px;letter-spacing:.3em}
+.s-meta{font-size:12px;text-align:right;line-height:1.8}
+.s-to{display:flex;justify-content:space-between;margin:14px 0 10px;gap:16px}
+.s-to .to{font-size:18px;font-weight:700;border-bottom:1.5px solid var(--ink);padding:0 4px 2px;min-width:90mm}
+.s-from{font-size:12px;text-align:right;line-height:1.75}
+.s-from b{font-size:15px}
+.s-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}
+.s-sum div{border:1.5px solid var(--ink);border-radius:8px;padding:8px 12px}
+.s-sum div:first-child{background:var(--ink);color:#fff}
+.s-sum span{display:block;font-size:11px;opacity:.85}
+.s-sum b{font-size:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+thead th{background:var(--sky);font-size:12px;border-bottom:1.5px solid var(--ink)}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr.sub td{background:#fafcfd;font-weight:700}
+.s-h{font-size:13px;font-weight:700;margin:14px 0 4px;padding-left:8px;border-left:4px solid var(--signal)}
+.s-total{margin-top:8px}
+.s-total td{border:none;padding:3px 6px}
+.s-notes{margin-top:14px;font-size:11.5px;line-height:1.75;color:#33475a}
+.s-notes li{margin-left:1.2em}
+.s-memo{margin-top:10px;border:1px solid var(--line);border-radius:6px;padding:6px 10px;font-size:12px;min-height:16mm;white-space:pre-wrap}
+.s-foot{margin-top:10px;font-size:11px;color:var(--muted);text-align:right}
+.empty{color:var(--muted)}
+@media (max-width:1100px){.app{grid-template-columns:1fr}.panel{position:static;max-height:none}.sheet{width:100%;min-height:0}}
+@page{size:A4;margin:0}
+@media print{
+  body{background:#fff}
+  .panel{display:none}
+  .app{display:block;padding:0;max-width:none}
+  .sheet{box-shadow:none;margin:0;width:210mm;min-height:0;padding:11mm 13mm 9mm}
+  th,td{padding:4px 6px;font-size:12px}
+  .s-h{margin:9px 0 3px}
+  .s-sum{margin:8px 0 8px}
+  .s-sum b{font-size:18px}
+  .s-to{margin:10px 0 6px}
+  .s-notes{margin-top:8px;font-size:10px;line-height:1.55;-webkit-column-count:2;column-count:2;-webkit-column-gap:8mm;column-gap:8mm}
+  .s-notes li{-webkit-column-break-inside:avoid;break-inside:avoid}
+  .s-foot{display:none}
+  td small{font-size:10px}
+  .sheet{padding-top:9mm;padding-bottom:7mm}
+  .s-from{line-height:1.55}
+  .s-memo{min-height:0;margin-top:8px}
+  .s-top h2{font-size:21px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <form class="panel" id="f" onsubmit="return false">
+    <h1>お見積もりを作る</h1>
+    <p class="lead">押すと右の見積書がすぐ変わります。入力は自動で残ります（いつも同じブラウザで開く）。</p>
+
+    <fieldset><legend>宛名と日付</legend>
+      <label class="row" style="display:block">お店の名前<input type="text" id="shop" placeholder="例：よもぎ蒸しサロン 〇〇"></label>
+      <label class="row" style="display:block">発行日<input type="date" id="date"></label>
+      <label class="row" style="display:block">その日の何枚目（見積番号の末尾）<input type="number" id="seq" min="1" max="99" value="1"></label>
+    </fieldset>
+
+    <fieldset><legend>ホームページのプラン</legend>
+      <label class="row"><input type="radio" name="plan" value="std" checked>スタンダード<small>初期98,000円＋月5,500円</small></label>
+      <label class="row"><input type="radio" name="plan" value="zero">初期0円プラン<small>月9,800円・12か月から</small></label>
+      <label class="row"><input type="radio" name="plan" value="web">WEB担当者代行<small>初期98,000円＋月19,800円</small></label>
+      <label class="row"><input type="radio" name="plan" value="none">ホームページなし<small>ロゴなどだけ</small></label>
+      <label class="row" style="display:block">ページの追加（1ページ 22,000円）<input type="number" id="pages" min="0" max="20" value="0"> ページ</label>
+    </fieldset>
+
+    <fieldset><legend>あわせてのご依頼（目安の金額から。内容が決まったら金額を直せます）</legend>
+      <div id="opts"></div>
+      <p class="hint">ホームページをご契約のお店は割引の金額になります（「ホームページなし」のときは通常の金額）。</p>
+    </fieldset>
+
+    <fieldset><legend>見積書に書くメモ（なくても可）</legend>
+      <textarea id="memo" rows="3" style="width:100%;font:inherit;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px" placeholder="例：ロゴはピンクと♡を使う。名刺は両面。"></textarea>
+    </fieldset>
+
+    <div class="btns">
+      <button type="button" class="main" id="print">印刷 / PDFにする</button>
+      <button type="button" id="copy">Claudeに渡す用にコピー</button>
+      <button type="button" id="reset">はじめから</button>
+    </div>
+    <p class="hint">PDFにするとき：「印刷 / PDFにする」→ 左下の「PDF」→「PDFとして保存」。用紙は A4・余白なし。<br>LINE で送るときは、保存した PDF をトークに送ります。</p>
+    <p class="hint" id="copied" role="status"></p>
+  </form>
+
+  <section class="sheet" id="sheet" aria-label="見積書">
+    <div class="s-top">
+      <h2>御見積書</h2>
+      <div class="s-meta">見積番号　<span id="no"></span><br>発行日　<span id="d1"></span><br>有効期限　<span id="d2"></span></div>
+    </div>
+    <div class="s-to">
+      <div><div class="to"><span id="to"></span>　様</div><p style="font-size:12px;margin-top:6px">下記のとおり、お見積もりいたします。（金額はすべて税込）</p></div>
+      <div class="s-from"><b>Lift-Off</b>（リフトオフ）<br>ホームページ制作・WEB担当者代行<br>山口県防府市<br>電話 090-1189-6726<br>liftoff.358@gmail.com</div>
+    </div>
+    <div class="s-sum">
+      <div><span>はじめにお支払い</span><b id="sumFirst"></b></div>
+      <div><span>毎月のお支払い</span><b id="sumMonth"></b></div>
+      <div><span id="sumYLabel">1年間の合計の目安</span><b id="sumYear"></b></div>
+    </div>
+
+    <p class="s-h">はじめにお支払いいただくもの</p>
+    <table><thead><tr><th>内容</th><th class="n">数量</th><th class="n">金額</th></tr></thead><tbody id="tFirst"></tbody></table>
+
+    <p class="s-h">毎月お支払いいただくもの</p>
+    <table><thead><tr><th>内容</th><th class="n">月額</th></tr></thead><tbody id="tMonth"></tbody></table>
+
+    <p class="s-h">お支払いの合計の目安</p>
+    <table><thead><tr><th>期間</th><th class="n">合計</th></tr></thead><tbody id="tTotal"></tbody></table>
+
+    <div class="s-memo" id="memoOut"></div>
+    <ul class="s-notes" id="notes"></ul>
+    <p class="s-foot">Lift-Off ／ このお見積もりの有効期限は、発行日から1か月です。</p>
+  </section>
+</div>
+
+<script>
+// 料金（税込）：決定事項.md「プラン」「ロゴ・名刺・チラシなど」のとおり
+var PRICE = {
+  plans: {
+    std:  { name: 'スタンダード', init: 98000, month: 5500, items: 'スマホで見やすい縦長の1ページ／更新 月2回まで／契約の縛りなし' },
+    zero: { name: '初期0円プラン', init: 0, month: 9800, items: 'スタンダードと同じ（初期費用を月額に分けてお支払い）／更新 月2回まで／12か月からのご契約' },
+    web:  { name: 'WEB担当者代行', init: 98000, month: 19800, items: 'スタンダードと同じ／更新 月4回まで／Googleマップの投稿 月4回・口コミ返信の下書き・月1回の報告／契約の縛りなし' },
+    none: null
+  },
+  page: 22000,
+  opts: [
+    { k: 'logo', name: 'ロゴ', normal: 33000, member: 22000, note: 'メインのロゴと小さい場所用の2つで1組' },
+    { k: 'card', name: '名刺（デザイン）', normal: 11000, member: 5500, note: '印刷用のデータでお渡し' },
+    { k: 'flyer', name: 'チラシ（A4片面）', normal: 22000, member: 16500, note: '印刷用のデータでお渡し' },
+    { k: 'menu', name: 'メニュー表（A4片面）', normal: 22000, member: 16500, note: '印刷用のデータでお渡し' },
+    { k: 'gmap', name: 'Googleマップの最初の整備', normal: 22000, member: 11000, note: '説明文・写真・営業時間など' }
+  ]
+};
+var KEY = 'liftoff-estimate-v1', $ = function(id){ return document.getElementById(id); };
+function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+// あわせてのご依頼の欄を作る
+var box = $('opts');
+PRICE.opts.forEach(function(o){
+  var d = document.createElement('div'); d.className = 'opt';
+  d.innerHTML = '<input type="checkbox" id="o-' + o.k + '"><label for="o-' + o.k + '">' + o.name + '</label><small id="b-' + o.k + '"></small>' +
+    '<div class="amt"><span style="white-space:nowrap">金額</span> <input type="number" id="a-' + o.k + '" min="0" step="500"> 円 <span>（' + o.note + '）</span></div>';
+  box.appendChild(d);
+});
+
+function plan(){ var r = document.querySelector('input[name=plan]:checked'); return r ? r.value : 'std'; }
+function member(){ return plan() !== 'none'; }
+function base(o){ return member() ? o.member : o.normal; }
+
+function addDays(d, m){ var x = new Date(d.getTime()); x.setMonth(x.getMonth() + m); x.setDate(x.getDate() - 1); return x; }
+function fmt(d){ return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
+
+function draw(){
+  var p = PRICE.plans[plan()], pages = Math.max(0, parseInt($('pages').value || '0', 10));
+  var dt = $('date').value ? new Date($('date').value + 'T00:00:00') : new Date();
+  $('d1').textContent = fmt(dt); $('d2').textContent = fmt(addDays(dt, 1));
+  $('no').textContent = dt.getFullYear() + ('0' + (dt.getMonth() + 1)).slice(-2) + ('0' + dt.getDate()).slice(-2) + '-' + ('0' + Math.max(1, parseInt($('seq').value || '1', 10))).slice(-2);
+  $('to').textContent = $('shop').value || '　　　　　　　　';
+  var first = [], firstSum = 0;
+  if (p) { first.push([p.name + ' 初期費用', '1式', p.init, p.init === 0 ? '初期費用は月額に分けてお支払い' : 'デザイン・ページづくり・フォームの設置・独自ドメインの取得と設定・Googleの検索に登録する設定・地図を載せる']); firstSum += p.init; }
+  if (pages > 0) { first.push(['ページの追加', pages + 'ページ', PRICE.page * pages, '']); firstSum += PRICE.page * pages; }
+  PRICE.opts.forEach(function(o){
+    $('b-' + o.k).textContent = (member() ? 'ご契約 ' : '通常 ') + yen(base(o)) + '〜';
+    var a = $('a-' + o.k); if (!a.value || a.getAttribute('data-auto') === '1') { a.value = base(o); a.setAttribute('data-auto', '1'); }
+    if ($('o-' + o.k).checked) { var v = Math.max(0, parseInt(a.value || '0', 10)); first.push([o.name + '（' + o.note + '・直し2回まで）', '1式', v, '']); firstSum += v; }
+  });
+  $('tFirst').innerHTML = first.length ? first.map(function(r){ return '<tr><td>' + esc(r[0]) + (r[3] ? '<br><small style="color:#4A5F72">' + esc(r[3]) + '</small>' : '') + '</td><td class="n">' + r[1] + '</td><td class="n">' + yen(r[2]) + '</td></tr>'; }).join('') + '<tr class="sub"><td>はじめにお支払い 合計</td><td></td><td class="n">' + yen(firstSum) + '</td></tr>' : '<tr><td class="empty" colspan="3">なし</td></tr>';
+  var month = p ? p.month : 0;
+  $('tMonth').innerHTML = p ? '<tr><td>' + esc(p.name) + ' 月額<br><small style="color:#4A5F72">' + esc(p.items) + '／ドメイン代・フォーム代込み</small></td><td class="n">' + yen(month) + '</td></tr>' : '<tr><td class="empty" colspan="2">なし</td></tr>';
+  function total(m){ var t = firstSum + month * m; return t; }
+  $('tTotal').innerHTML = p ? [12, 24].map(function(m){ return '<tr><td>公開から' + (m / 12) + '年（' + m + 'か月）使うと</td><td class="n">' + yen(total(m)) + '</td></tr>'; }).join('') : '<tr><td>合計</td><td class="n">' + yen(firstSum) + '</td></tr>';
+  $('sumFirst').textContent = yen(firstSum); $('sumMonth').textContent = p ? yen(month) : 'なし';
+  $('sumYLabel').textContent = p ? '1年間の合計の目安' : '合計'; $('sumYear').textContent = yen(p ? total(12) : firstSum);
+  var memo = $('memo').value; $('memoOut').style.display = memo ? '' : 'none'; $('memoOut').textContent = memo ? 'メモ：' + memo : '';
+  var n = ['金額はすべて税込です。', 'お支払いは銀行振込です。初期費用は公開のとき、あわせてのご依頼（ロゴなど）はお渡しのときにご請求します。月額は公開の翌月分から、毎月末までにお振込みください。振込手数料はお店のご負担です。'];
+  if (p) n.push('ドメイン（ホームページの住所）はお店の名義で取ります。やめるときはサイトのデータを一式お渡しします（解約後のドメインの更新費用はお店のご負担です）。');
+  if (plan() === 'zero') n.push('初期0円プランは12か月からのご契約です。12か月より前に解約される場合は、解約金（残りの月数×4,900円）がかかります。続けて使うほど、お支払いの合計はスタンダードより多くなります（23か月目ごろに逆転）。');
+  if (p) n.push('月の回数をこえた更新は1回3,300円、ページの追加は1ページ22,000円です。');
+  if (first.some(function(r){ return /ロゴ|名刺|チラシ|メニュー/.test(r[0]); })) n.push('ロゴ・名刺・チラシ・メニュー表は直し2回まで含みます。印刷代は実費でお店のご負担です。両面・載せるものが多い・撮影が要るときは、作る前に金額をお伝えします。');
+  $('notes').innerHTML = n.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
+  save();
+}
+
+// 入力を残す（ブラウザに）
+function save(){ try { var o = { shop: $('shop').value, date: $('date').value, seq: $('seq').value, plan: plan(), pages: $('pages').value, memo: $('memo').value, opts: {} };
+  PRICE.opts.forEach(function(x){ o.opts[x.k] = { on: $('o-' + x.k).checked, v: $('a-' + x.k).value, auto: $('a-' + x.k).getAttribute('data-auto') }; });
+  localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
+function load(){ try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (!o) return;
+  $('shop').value = o.shop || ''; $('date').value = o.date || ''; $('seq').value = o.seq || 1; $('pages').value = o.pages || 0; $('memo').value = o.memo || '';
+  var r = document.querySelector('input[name=plan][value="' + o.plan + '"]'); if (r) r.checked = true;
+  PRICE.opts.forEach(function(x){ var s = o.opts && o.opts[x.k]; if (!s) return; $('o-' + x.k).checked = s.on; $('a-' + x.k).value = s.v; $('a-' + x.k).setAttribute('data-auto', s.auto || ''); }); } catch (e) {} }
+
+load();
+if (!$('date').value) { var t = new Date(); $('date').value = t.getFullYear() + '-' + ('0' + (t.getMonth() + 1)).slice(-2) + '-' + ('0' + t.getDate()).slice(-2); }
+$('f').addEventListener('input', function(e){ if (e.target.id && e.target.id.indexOf('a-') === 0) e.target.setAttribute('data-auto', ''); draw(); });
+$('f').addEventListener('change', function(e){ if (e.target.name === 'plan') PRICE.opts.forEach(function(x){ var a = $('a-' + x.k); if (a.getAttribute('data-auto') === '1') a.value = ''; }); draw(); });
+$('print').addEventListener('click', function(){ window.print(); });
+$('reset').addEventListener('click', function(){ if (!window.confirm || window.confirm('入力を消して、はじめからにしますか？')) { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); } });
+$('copy').addEventListener('click', function(){
+  var t = '【お見積もり】' + $('to').textContent + ' 様（' + $('d1').textContent + '・見積番号 ' + $('no').textContent + '）\n' +
+    'はじめにお支払い：' + $('sumFirst').textContent + '／毎月：' + $('sumMonth').textContent + '／' + $('sumYLabel').textContent + '：' + $('sumYear').textContent + '\n' +
+    [].map.call(document.querySelectorAll('#tFirst tr, #tMonth tr'), function(tr){ return '・' + tr.innerText.replace(/\s+/g, ' ').trim(); }).join('\n') +
+    ($('memo').value ? '\nメモ：' + $('memo').value : '');
+  function done(){ $('copied').textContent = 'コピーしました。Claude のチャットに貼ってください。'; }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ prompt('この文をコピーしてください', t); });
+  else { prompt('この文をコピーしてください', t); }
+});
+draw();
+</script>
+</body>
+</html>

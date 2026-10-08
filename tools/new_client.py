@@ -40,7 +40,8 @@ def readme(root, shop, second):
              '   4 Googleマップに入れる文.txt ／ 5 Googleマップ用の写真 … Claude が作って入れる\n') if second else (
              '   1 初回の打ち合わせ_入力シート（Macで開く）.html … 話しながら入力 →「Claudeに渡す用にコピー」→ チャットに貼る\n'
              '   2 デザイン見本帳を開く.webloc … テイストを番号で選んでもらう\n'
-             '   3 料金表_A4.pdf … 印刷して持っていく（デスクトップにあれば自動でコピー）\n')
+             '   3 料金表_A4.pdf … 印刷して持っていく（デスクトップにあれば自動でコピー）\n'
+             '   4 お見積もり（Macで開く・印刷やPDFにできる）.html … その場で選ぶと金額が出る →「印刷 / PDFにする」（マニュアル 22）\n')
     txt = f'''【{shop}_今日の打ち合わせ フォルダの中身】{today} 作成（new_client.py）
 
 1 次の打ち合わせで使うもの … {"2回目" if second else "初回"}の打ち合わせで使うもの。使う順に番号
@@ -76,6 +77,9 @@ def main():
     else:
         out = [('first.html', '1 初回の打ち合わせ_入力シート（Macで開く）.html')]
         webloc(os.path.join(nxt, '2 デザイン見本帳を開く.webloc'), SAMPLES); made.append('2 デザイン見本帳を開く.webloc')
+        est = os.path.join(HERE, 'estimate.html')
+        if os.path.exists(est):
+            shutil.copy(est, os.path.join(nxt, '4 お見積もり（Macで開く・印刷やPDFにできる）.html')); made.append('4 お見積もり（Macで開く・印刷やPDFにできる）.html')
         price = os.path.join(base, 'HP制作_料金表_A4.pdf')
         if os.path.exists(price):
             shutil.copy(price, os.path.join(nxt, '3 料金表_A4.pdf')); made.append('3 料金表_A4.pdf')
