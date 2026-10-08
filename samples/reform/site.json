@@ -1,0 +1,123 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "morino",
+ "name": "森野工務店",
+ "short_name": "森野工務店",
+ "kind": "工務店・リフォーム｜〇〇市",
+ "catch_html": "<span class=\"nw\">水まわりから屋根まで、</span><br><span class=\"nw\">家のことを近くで。</span>",
+ "lead": "〇〇市の工務店です。リフォーム・修理・小さな困りごとまで、下見をしてからお見積もりします。",
+ "title_place": "〇〇市の工務店・リフォーム",
+ "description": "〇〇市の工務店「森野工務店」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#c0662b",
+  "primary_deep": "#a25422",
+  "accent": "#2b5d8a",
+  "accent_soft": "#c9d6e3",
+  "pale": "#f4ece4",
+  "dark": "#1d2a36",
+  "dark2": "#283846",
+  "bg": "#f6f4f0",
+  "bg2": "#ece8e1",
+  "ink": "#23282e",
+  "muted": "#646a70",
+  "line": "#dcd6cc"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "お仕事の内容",
+ "menu_word": "仕事",
+ "menu_lead": "小さな修理からお受けしています。",
+ "menu_note": "料金は家の状態で変わります。下見のうえでお見積もりをお出しします。",
+ "menus": [
+  {
+   "id": "mizu",
+   "name": "水まわり",
+   "text": "台所・お風呂・トイレ・洗面所の取りかえや修理。",
+   "image": "images/menu-mizu.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "水まわりの写真"
+  },
+  {
+   "id": "yane",
+   "name": "外壁・屋根",
+   "text": "ぬりかえ・雨もりの修理・とい の取りかえ。",
+   "image": "images/menu-yane.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "外壁・屋根の写真"
+  },
+  {
+   "id": "naisou",
+   "name": "内装",
+   "text": "壁紙・床・建具・手すりの取りつけなど。",
+   "image": "images/menu-naisou.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "内装の写真"
+  },
+  {
+   "id": "shuuri",
+   "name": "小さな修理",
+   "text": "戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。",
+   "image": "images/menu-shuuri.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "小さな修理の写真"
+  }
+ ],
+ "flow_title": "ご依頼の流れ",
+ "flow": [
+  {
+   "title": "ご相談",
+   "text": "困っていることをお知らせください。"
+  },
+  {
+   "title": "下見",
+   "text": "おうちに伺って、様子を見せていただきます。"
+  },
+  {
+   "title": "お見積もり",
+   "text": "内容と金額をお出しします。決めるのはそのあとで。"
+  },
+  {
+   "title": "工事",
+   "text": "日程を決めて工事します。終わったら一緒に確かめます。"
+  }
+ ],
+ "hours": "8:00〜18:00（見本）",
+ "holiday": "日曜日（見本）",
+ "service_area": "〇〇市とその周辺（見本）",
+ "reserve_title": "ご相談・お見積もり",
+ "info_title": "森野工務店について",
+ "reserve_lead": "下見とお見積もりは無料です（見本）。",
+ "faq": [
+  {
+   "q": "1か所だけの修理でも頼めますか？",
+   "a": "はい、お受けしています。"
+  },
+  {
+   "q": "見積もりのあとで断ってもいいですか？",
+   "a": "はい、大丈夫です（見本）。"
+  },
+  {
+   "q": "どこまで来てもらえますか？",
+   "a": "〇〇市とその周辺でお受けしています（見本）。"
+  }
+ ],
+ "schema_type": "HomeAndConstructionBusiness",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

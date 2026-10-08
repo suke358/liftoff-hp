@@ -1,0 +1,109 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "nagi",
+ "name": "hair salon nagi",
+ "short_name": "nagi",
+ "kind": "美容室｜〇〇市",
+ "catch_html": "<span class=\"nw\">いつもの髪を、</span><br><span class=\"nw\">少しだけ新しく。</span>",
+ "lead": "〇〇市の、席が2つだけの美容室です。ひとりのスタイリストが、最初から最後まで担当します。",
+ "title_place": "〇〇市の美容室",
+ "description": "〇〇市の美容室「nagi」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#8c7b6b",
+  "primary_deep": "#6f6052",
+  "accent": "#c9a27e",
+  "accent_soft": "#e3d1bd",
+  "pale": "#f1ece6",
+  "dark": "#232120",
+  "dark2": "#302d2b",
+  "bg": "#f5f3f0",
+  "bg2": "#ebe7e2",
+  "ink": "#2a2826",
+  "muted": "#6e6862",
+  "line": "#ddd6ce"
+ },
+ "mark": "dot",
+ "font": "mincho",
+ "menu_title": "メニュー・料金",
+ "menu_word": "メニュー",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "髪の長さや量で変わることがあります。",
+ "menus": [
+  {
+   "id": "cut",
+   "name": "カット",
+   "text": "顔まわりのくせや、ふだんの手入れをうかがってから切ります。",
+   "image": "images/menu-cut.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "カットの写真",
+   "price": "4,400円"
+  },
+  {
+   "id": "color",
+   "name": "カラー",
+   "text": "明るさ・色味を相談しながら決めます。",
+   "image": "images/menu-color.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "カラーの写真",
+   "price": "6,600円〜"
+  },
+  {
+   "id": "perm",
+   "name": "パーマ",
+   "text": "ゆるいくせづけから、しっかりしたカールまで。",
+   "image": "images/menu-perm.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "パーマの写真",
+   "price": "8,800円〜"
+  },
+  {
+   "id": "spa",
+   "name": "ヘッドスパ",
+   "text": "頭皮をていねいに洗い、ゆっくり過ごしていただく時間です。",
+   "image": "images/menu-spa.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "ヘッドスパの写真",
+   "price": "3,300円"
+  }
+ ],
+ "hours": "10:00〜19:00（見本）",
+ "holiday": "月曜日（見本）",
+ "parking": "2台（見本）",
+ "payment": "現金・クレジットカード（見本）",
+ "reserve_title": "ご予約",
+ "info_title": "お店のこと",
+ "reserve_lead": "ご予約はLINEかお電話でどうぞ。",
+ "faq": [
+  {
+   "q": "はじめてでも予約できますか？",
+   "a": "はい。はじめての方も、LINEかお電話でどうぞ。"
+  },
+  {
+   "q": "子どもも切ってもらえますか？",
+   "a": "はい。小学生から承っています（見本）。"
+  },
+  {
+   "q": "当日の予約はできますか？",
+   "a": "空いていればお受けします。お電話でお問い合わせください。"
+  }
+ ],
+ "schema_type": "HairSalon",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

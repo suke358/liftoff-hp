@@ -1,0 +1,126 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "hidamari",
+ "name": "こども英語教室 ひだまり",
+ "short_name": "ひだまり英語",
+ "kind": "こども英語教室｜〇〇市",
+ "catch_html": "<span class=\"nw\">「話してみたい」を、</span><br><span class=\"nw\">いっしょに育てます。</span>",
+ "lead": "〇〇市の、少人数のこども英語教室です。歌やゲームから始めて、読む・書くまで少しずつ。",
+ "title_place": "〇〇市のこども英語教室",
+ "description": "〇〇市のこども英語教室「ひだまり」のホームページです（デザイン見本・架空の教室）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#2f7fd1",
+  "primary_deep": "#2166ae",
+  "accent": "#f2b84b",
+  "accent_soft": "#f7d99a",
+  "pale": "#e8f1fb",
+  "dark": "#1f3550",
+  "dark2": "#2a4566",
+  "bg": "#f7fafd",
+  "bg2": "#eaf1f9",
+  "ink": "#22303e",
+  "muted": "#5d6b7a",
+  "line": "#d6e2ee"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "クラスと月謝",
+ "menu_word": "クラス",
+ "menu_lead": "月謝は見本です。",
+ "menu_note": "入会金・教材費はお問い合わせください。",
+ "menus": [
+  {
+   "id": "kids",
+   "name": "幼児クラス",
+   "text": "3〜6才。歌・絵本・ゲームで英語に親しみます。",
+   "image": "images/menu-kids.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "幼児クラスの写真",
+   "price": "月 6,000円",
+   "price_note": "週1回"
+  },
+  {
+   "id": "elementary",
+   "name": "小学生クラス",
+   "text": "聞く・話すに加えて、読む・書くも少しずつ。",
+   "image": "images/menu-elementary.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "小学生クラスの写真",
+   "price": "月 7,000円",
+   "price_note": "週1回"
+  },
+  {
+   "id": "junior",
+   "name": "中学生クラス",
+   "text": "学校の授業に合わせて、文法と会話をくり返します。",
+   "image": "images/menu-junior.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "中学生クラスの写真",
+   "price": "月 8,000円",
+   "price_note": "週1回"
+  },
+  {
+   "id": "trial",
+   "name": "体験レッスン",
+   "text": "まずは一度、教室の雰囲気を見に来てください。",
+   "image": "images/menu-trial.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "体験レッスンの写真",
+   "price": "無料"
+  }
+ ],
+ "flow_title": "入会までの流れ",
+ "flow": [
+  {
+   "title": "お問い合わせ",
+   "text": "LINEかお電話で、体験の日を決めます。"
+  },
+  {
+   "title": "体験レッスン",
+   "text": "実際のレッスンに参加していただきます。"
+  },
+  {
+   "title": "ご入会",
+   "text": "クラスと曜日を決めて、始めます。"
+  }
+ ],
+ "hours": "平日 15:00〜20:00（見本）",
+ "holiday": "土・日・祝日（見本）",
+ "parking": "2台（見本）",
+ "reserve_title": "体験・お問い合わせ",
+ "info_title": "教室のこと",
+ "reserve_lead": "体験レッスンは、保護者の方も一緒に見学できます。",
+ "faq": [
+  {
+   "q": "英語がはじめてでも大丈夫ですか？",
+   "a": "はい。はじめての子がほとんどです。"
+  },
+  {
+   "q": "振替はできますか？",
+   "a": "同じ月の中で、ほかのクラスに振り替えられます（見本）。"
+  },
+  {
+   "q": "送り迎えの駐車場はありますか？",
+   "a": "教室の前に2台分あります（見本）。"
+  }
+ ],
+ "schema_type": "EducationalOrganization",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

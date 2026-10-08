@@ -1,0 +1,1771 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【見比べ用】Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
+<meta name="description" content="山口県防府市で、お店・事業者のホームページを作り、毎月の更新まで引き受けます。料金は税込・お問い合わせフォームの費用は月額に込み。">
+<!-- 公開準備ができるまで検索に出さない。本公開時に外す -->
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Lift-Off｜防府のお店のホームページ制作・WEB担当者代行">
+<meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">
+<meta property="og:image" content="https://liftoff-hp.liftoff-358.workers.dev/img/og-20261008b.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#17283A">
+<link rel="icon" href="../img/favicon.png" type="image/png">
+<link rel="icon" href="../img/emblem.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&family=Michroma&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Lift-Off",
+  "description": "防府市のお店・事業者向けのホームページ制作と毎月の更新代行",
+  "telephone": "090-1189-6726",
+  "email": "liftoff.358@gmail.com",
+  "address": {"@type": "PostalAddress", "addressRegion": "山口県", "addressLocality": "防府市", "addressCountry": "JP"},
+  "areaServed": "山口県防府市",
+  "openingHours": "Mo-Fr 10:00-16:00"
+}
+</script>
+<style>
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れた。足した文は手で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
+/* =========================================================
+   Lift-Off ホームページ制作（2026/10/7 夜 作り直し。前の版は v1/・v2/・v3/）
+   紺（空の高いところ）× 黄色（滑走路の誘導灯）
+   いちばんの見せ場は、トップの「LINEでひと言 → サイトが直る」画面
+   古いスマホ対策：aspect-ratio / inset / svh は使わない。min()・clamp() の前に予備の指定（マニュアル 16）
+   ========================================================= */
+:root{
+  --ink:#17283A;      /* 紺：文字・濃い背景 */
+  --ink-2:#22384E;
+  --sea:#2F6F8F;      /* 青：リンク・線 */
+  --sky:#EAF2F6;      /* うすい空色：交互の背景 */
+  --paper:#FFFFFF;
+  --signal:#F2C230;   /* 黄色：大事なところだけ */
+  --line:#D2DEE6;
+  --muted:#4A5F72;
+  --chat:#06C755;     /* LINEの吹き出しの緑 */
+  --head:"Zen Kaku Gothic Antique","Hiragino Sans",sans-serif;
+  --body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.bubble,.notice{opacity:1!important;-webkit-transform:none!important;transform:none!important}}
+body{font-family:var(--body);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.9;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:var(--sea)}
+:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--signal);color:var(--ink);padding:8px 16px;z-index:50;font-weight:700}
+.skip:focus{left:12px;top:12px}
+.wrap{width:1120px;max-width:calc(100% - 40px);margin-left:auto;margin-right:auto}
+h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:.02em}
+.sec{padding:104px 0}
+.sec.alt{background:var(--sky)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px 64px;align-items:end;margin-bottom:52px}
+/* 見出しの上の黄色い線＝滑走路のセンターライン */
+.sec-head h2{font-size:34px;font-size:clamp(28px,4.2vw,42px);line-height:1.3;padding-top:22px;position:relative}
+.sec-head h2::before{content:"";position:absolute;left:0;top:0;width:64px;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 18px,transparent 18px 26px)}
+.sec-head p{color:var(--muted);max-width:34em}
+@media (max-width:860px){.sec{padding:72px 0}.sec-head{grid-template-columns:1fr;margin-bottom:32px;gap:12px}}
+
+/* ---------- ボタン ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--head);font-weight:700;text-decoration:none;border-radius:999px;padding:14px 28px;min-height:52px;border:2px solid var(--ink);color:var(--ink);background:var(--paper);font-size:16px;cursor:pointer;line-height:1.4;text-align:center;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{border-color:var(--sea);color:var(--sea)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--sea);border-color:var(--sea);color:#fff}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.btn.signal:hover{background:#ffd54a;border-color:#ffd54a;color:var(--ink)}
+.btn.ghost{background:transparent;border-color:rgba(255,255,255,.6);color:#fff}
+.btn.ghost:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.08)}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* ---------- ヘッダー ---------- */
+.top{position:-webkit-sticky;position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.top .wrap > * + *{margin-left:16px}
+.logo{display:flex;align-items:center;text-decoration:none;color:var(--ink);font-family:var(--head);font-weight:900;font-size:22px;letter-spacing:.03em;flex:none}
+.logo img{height:42px;width:auto}
+.logo small{font-family:var(--body);font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0;padding-left:12px;margin-left:10px;border-left:1px solid var(--line);line-height:1.4}
+@media (max-width:420px){.logo img{height:36px}.logo small{display:none}}
+.nav{display:flex;font-size:15px}
+.nav a{text-decoration:none;color:var(--ink);padding:6px 0;margin:0 12px;border-bottom:2px solid transparent;white-space:nowrap}
+.nav a:hover{color:var(--sea)}
+.nav a.now{border-bottom-color:var(--signal)}
+.top .btn{padding:9px 20px;min-height:0;font-size:14px}
+.menu-btn{display:none;align-items:center;font:inherit;font-family:var(--head);font-weight:700;font-size:14px;background:none;border:2px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink);cursor:pointer;min-height:44px}
+.menu-btn i{display:block;width:16px;height:2px;margin-right:7px;background:var(--ink);box-shadow:0 -5px 0 var(--ink),0 5px 0 var(--ink)}
+.menu-btn[aria-expanded="true"] i{background:transparent;box-shadow:none;position:relative}
+.menu-btn[aria-expanded="true"] i::before,.menu-btn[aria-expanded="true"] i::after{content:"";position:absolute;left:0;top:0;width:16px;height:2px;background:var(--ink);-webkit-transform:rotate(45deg);transform:rotate(45deg)}
+.menu-btn[aria-expanded="true"] i::after{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+.top-right{display:flex;align-items:center}
+@media (max-width:1060px){
+  .nav{display:none;position:absolute;left:0;right:0;top:66px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(23,40,58,.12);flex-direction:column;padding:6px 20px 14px;max-height:calc(100vh - 66px);overflow-y:auto}
+  .nav.open{display:flex}
+  .nav a{padding:14px 4px;margin:0;border-bottom:1px solid var(--line);font-size:16px}
+  .nav a:last-child{border-bottom:none}
+  .nav a.now{border-bottom-color:var(--line);color:var(--sea)}
+  .menu-btn{display:inline-flex;margin-left:8px}
+  .top .wrap > .nav{margin-left:0}
+}
+@media (max-width:760px){.top .top-right .btn{display:none}}
+
+/* ---------- トップ ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#F5F9FB 0%,var(--sky) 100%);padding:72px 0 0}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:40px;align-items:end}
+.place{display:inline-flex;align-items:center;font-family:var(--head);font-weight:700;color:var(--sea);margin-bottom:18px;font-size:15px}
+.place::before{content:"";width:10px;height:10px;margin-right:10px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(242,194,48,.25)}
+.hero h1{font-size:44px;font-size:clamp(30px,4.1vw,52px);line-height:1.3;margin-bottom:26px}
+.hero h1 span{display:block;white-space:nowrap}
+.hero .sub{max-width:30em;font-size:18px;margin-bottom:32px}
+.actions{display:flex;flex-wrap:wrap;margin:-6px}
+.actions .btn{margin:6px}
+.hero-copy{padding-bottom:96px}
+.facts{display:flex;flex-wrap:wrap;margin-top:30px;list-style:none;font-size:15px;color:var(--muted)}
+.facts li{display:flex;align-items:center;margin:4px 22px 4px 0}
+.facts svg{width:18px;height:18px;flex:none;margin-right:8px}
+
+/* 見せ場：スマホと吹き出し */
+.stage{position:relative;height:600px}
+.runway{position:absolute;left:-10%;right:-40%;bottom:0;height:120px;background:var(--ink)}
+.runway::before{content:"";position:absolute;left:0;right:0;top:56px;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.phone{position:absolute;right:2%;bottom:36px;width:260px;border-radius:40px;background:#0f1a26;padding:12px;box-shadow:0 30px 60px rgba(23,40,58,.28)}
+/* 画面の高さは画像そのものの縦横比で決める（aspect-ratio は使わない） */
+.phone .screen{position:relative;border-radius:30px;overflow:hidden;background:#24342b}
+.phone .screen img{width:100%;height:auto}
+.notice{position:absolute;left:10px;right:10px;top:62px;background:#fff;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.25);border-left:5px solid var(--signal);opacity:0;-webkit-transform:translateY(-8px);transform:translateY(-8px);-webkit-animation:pop .5s ease-out 2.6s forwards;animation:pop .5s ease-out 2.6s forwards}
+.notice b{display:block;font-family:var(--head);font-size:12px;color:var(--sea)}
+.chat{position:absolute;left:0;top:230px;width:290px;max-width:60%;z-index:2}
+.bubble{position:relative;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.6;box-shadow:0 10px 24px rgba(23,40,58,.14);opacity:0;-webkit-transform:translateY(10px);transform:translateY(10px);-webkit-animation:pop .5s ease-out forwards;animation:pop .5s ease-out forwards}
+.bubble + .bubble{margin-top:12px}
+.bubble small{display:block;font-size:11px;opacity:.8;margin-bottom:2px}
+.bubble.shop{background:#fff;border-bottom-left-radius:4px;-webkit-animation-delay:.4s;animation-delay:.4s}
+.bubble.us{background:var(--chat);color:#fff;border-bottom-right-radius:4px;margin-left:28px;-webkit-animation-delay:1.6s;animation-delay:1.6s}
+@-webkit-keyframes pop{to{opacity:1;-webkit-transform:none;transform:none}}
+@keyframes pop{to{opacity:1;-webkit-transform:none;transform:none}}
+.stage-note{position:absolute;left:0;bottom:14px;color:#c9d6e0;font-size:13px;z-index:1}
+@media (max-width:900px){
+  .hero{padding-top:44px}
+  .hero .wrap{grid-template-columns:1fr;gap:0}
+  .hero-copy{padding-bottom:12px}
+  .stage{height:540px;margin-left:-20px;margin-right:-20px}
+  .runway{left:0;right:0}
+  .phone{right:20px;width:236px}
+  .chat{left:20px;top:250px;width:250px;max-width:56%}
+  .stage-note{left:20px}
+}
+@media (max-width:420px){
+  .hero h1{font-size:30px}
+  .hero .sub{font-size:17px}
+  .actions .btn{flex:1 1 100%}
+  .phone{width:206px;right:16px}
+  .chat{width:56%;top:176px;left:16px}
+  .bubble{font-size:14px;padding:10px 13px}
+  .stage{height:444px}
+}
+@media (max-width:360px){.hero h1{font-size:27px}}
+
+/* ---------- こんなこと、ありませんか（お店の声の吹き出し） ---------- */
+.worry{padding:88px 0 96px}
+.worry h2{font-size:30px;font-size:clamp(26px,3.6vw,36px);text-align:center;margin-bottom:40px}
+.voices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;list-style:none}
+.voices li{position:relative;background:var(--sky);border-radius:20px 20px 20px 6px;padding:22px 24px;font-size:16px;line-height:1.75}
+.voices li::after{content:"";position:absolute;left:0;bottom:-10px;border-left:14px solid var(--sky);border-bottom:10px solid transparent}
+.answer{margin:52px auto 0;max-width:780px;display:flex;align-items:center;background:var(--ink);color:#fff;border-radius:20px;padding:26px 30px}
+.answer .mark{flex:none;width:56px;height:56px;border-radius:50%;background:var(--chat);display:flex;align-items:center;justify-content:center;margin-right:22px}
+.answer .mark svg{width:30px;height:30px}
+.answer p{font-size:17px;line-height:1.8}
+.answer b{font-family:var(--head);font-size:20px;display:block;color:var(--signal);margin-bottom:2px}
+@media (max-width:860px){
+  .worry{padding:64px 0 72px}
+  .worry h2{text-align:left;margin-bottom:28px}
+  .voices{grid-template-columns:1fr;gap:18px}
+  .voices li{max-width:88%}
+  .voices li:nth-child(2){margin-left:auto;border-radius:20px 20px 6px 20px}
+  .voices li:nth-child(2)::after{left:auto;right:0;border-left:none;border-right:14px solid var(--sky)}
+  .answer{margin-top:40px;padding:22px 20px;align-items:flex-start}
+  .answer .mark{width:46px;height:46px;margin-right:16px}
+  .answer .mark svg{width:26px;height:26px}
+  .answer b{font-size:18px}
+  .answer p{font-size:16px}
+}
+
+/* ---------- できること ---------- */
+.can{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.can article{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:30px 30px 28px;display:grid;grid-template-columns:56px 1fr;gap:6px 20px;align-items:start}
+.can .ic{grid-row:span 2;width:56px;height:56px;border-radius:16px;background:var(--sky);display:flex;align-items:center;justify-content:center}
+.can .ic svg{width:30px;height:30px}
+.can h3{font-size:21px}
+@media (max-width:760px){.can{grid-template-columns:1fr;gap:14px}.can article{grid-template-columns:48px 1fr;gap:4px 16px;padding:22px 20px}.can .ic{width:48px;height:48px;border-radius:14px}.can h3{font-size:19px}.can p{font-size:16px}}
+.promise{margin-top:28px;background:var(--ink);color:#fff;border-radius:20px;padding:32px 40px;display:grid;grid-template-columns:auto 1fr;gap:12px 40px;align-items:start}
+.promise h3{font-size:20px;color:var(--signal);white-space:nowrap}
+.promise ul{list-style:none}
+.promise li{padding-left:1.5em;position:relative;color:#dbe6ee}
+.promise li + li{margin-top:8px}
+.promise li::before{content:"";position:absolute;left:0;top:.62em;width:.75em;height:.4em;border-left:2px solid var(--signal);border-bottom:2px solid var(--signal);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+@media (max-width:760px){.promise{grid-template-columns:1fr;padding:26px 22px}.promise li{font-size:16px}}
+
+/* ---------- 料金：縦の搭乗券 ---------- */
+.passes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch}
+.pass{display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:20px;background:var(--paper);position:relative}
+.pass.rec{box-shadow:10px 10px 0 var(--signal)}
+.pass .main{padding:26px 26px 22px;flex:1 0 auto}
+.pass .who{color:var(--muted);font-size:15px;line-height:1.6;min-height:3.2em}
+.pass h3{font-size:26px;margin:6px 0 14px}
+.pass .tag{display:inline-block;background:var(--signal);font-family:var(--body);font-weight:700;font-size:13px;padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;color:var(--ink)}
+.pass dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;line-height:1.7}
+.pass dt{color:var(--muted);white-space:nowrap}
+/* 半券：上が切り取り線。左右の丸い切り込みは半券の上に付ける */
+.pass .stub{position:relative;border-top:2px dashed var(--ink);padding:20px 26px 22px;background:var(--sky);border-radius:0 0 18px 18px}
+.pass .stub::before,.pass .stub::after{content:"";position:absolute;top:-13px;width:22px;height:22px;border-radius:50%;background:var(--sky);border:2px solid var(--ink)}
+.pass .stub::before{left:-13px;clip-path:inset(0 0 0 50%);-webkit-clip-path:inset(0 0 0 50%)}
+.pass .stub::after{right:-13px;clip-path:inset(0 50% 0 0);-webkit-clip-path:inset(0 50% 0 0)}
+#price .pass .stub::before,#price .pass .stub::after{background:var(--paper)}
+.pass.rec .stub{background:var(--ink);color:#fff}
+.pass.rec .price-k,.pass.rec .price.init{color:#c9d6e0}
+.price-k{font-size:13px;color:var(--muted);display:block}
+.price{font-family:var(--head);font-weight:900;font-size:40px;line-height:1.15;display:block}
+.price small{font-size:16px;font-weight:700;margin-left:2px}
+.price.init{font-size:17px;font-weight:700;margin-top:6px;color:var(--muted)}
+@media (max-width:1000px){.passes{grid-template-columns:1fr;max-width:620px;gap:28px}.pass .who{min-height:0}}
+@media (max-width:760px){.pass.rec{box-shadow:6px 6px 0 var(--signal)}}
+@media (max-width:760px){
+  .pass .main{padding:22px 20px 18px}
+  .pass h3{font-size:24px}
+  .pass .stub{padding:16px 20px 18px;display:flex;flex-wrap:wrap;align-items:baseline}
+  .pass .stub .price-k{width:100%}
+  .pass .stub .price{font-size:36px;margin-right:14px}
+  .pass .stub .price.init{margin-top:0;font-size:16px}
+}
+.how{margin-top:40px;background:var(--paper);border-radius:16px;padding:20px 24px;border:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:10px 32px;align-items:center}
+.how h3{font-size:17px}
+.how ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 20px}
+.how li{border-left:4px solid var(--signal);padding-left:12px;line-height:1.5}
+.how li span{display:block;font-size:14px;color:var(--muted)}
+.how li b{font-family:var(--head);font-size:17px}
+@media (max-width:860px){.how{grid-template-columns:1fr;padding:18px}.how ul{grid-template-columns:1fr;gap:12px}}
+.more{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;margin-top:20px;align-items:stretch}
+.box{background:var(--paper);border-radius:16px;padding:22px 24px;border:1px solid var(--line)}
+.box h3{font-size:17px;margin-bottom:6px}
+.box > p{font-size:14px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+.box table{width:100%;border-collapse:collapse;font-size:15px}
+.box th,.box td{padding:9px 8px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
+.box th:first-child,.box td:first-child{text-align:left;white-space:normal}
+.box thead th{font-size:13px;color:var(--muted);font-weight:400;border-top:none;line-height:1.5;vertical-align:bottom}
+.box td b{font-family:var(--head)}
+.incl ul{list-style:none;font-size:15px}
+.incl li{padding-left:1.4em;position:relative;line-height:1.75}
+.incl li + li{margin-top:4px}
+.incl li::before{content:"";position:absolute;left:2px;top:.6em;width:.7em;height:.38em;border-left:2px solid var(--sea);border-bottom:2px solid var(--sea);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+.incl .note{margin-top:12px}
+.note{font-size:14px;color:var(--muted);line-height:1.75}
+.price-foot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:20px;margin-top:20px;align-items:start}
+.extra{border:2px dashed #b9cbd7}
+.extra dl{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;font-size:15px}
+.extra dd{white-space:nowrap}
+.extra dt{color:var(--muted)}
+.extra-note{font-size:13px;line-height:1.7;margin:10px 0 0;color:var(--muted)}
+.side > * + *{margin-top:20px}
+.pay dl{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;font-size:15px;line-height:1.7}
+.pay dt{color:var(--muted);white-space:nowrap}
+.pay dd b{font-family:var(--head)}
+.keep{background:#FFF8E1;border:1px solid #F0DC9A;border-radius:16px;padding:18px 22px}
+.keep .note{color:#4d4a3a}
+.keep .note + .note{margin-top:8px}
+.opt{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:0 40px;align-items:start}
+.opt > h3,.opt > p{grid-column:1 / -1}
+.opt .opt-note{margin-top:4px}
+@media (max-width:860px){.opt{display:block}.opt .opt-note{margin-top:12px}}
+.opt td b{font-size:1.1em}
+.opt-note{margin:12px 0 0;padding-left:1.2em;font-size:13px;line-height:1.7;color:var(--muted)}
+@media (max-width:1000px){.more,.price-foot{grid-template-columns:1fr}}
+@media (max-width:760px){.box{padding:18px 16px}.box table{font-size:14px}}
+@media (max-width:600px){.extra dl{grid-template-columns:1fr auto;gap:6px 16px}.opt table{font-size:13px;table-layout:fixed}.opt th,.opt td{padding:9px 4px}.opt th:first-child{width:40%}.opt th:nth-child(2),.opt th:nth-child(3){width:30%}.opt th{white-space:normal}}
+
+/* ---------- 途中の相談ボタン ---------- */
+.cta{background:var(--ink);color:#fff;border-radius:20px;padding:30px 36px;margin-top:48px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.cta::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.cta h3{font-size:22px;margin-bottom:6px;line-height:1.45}
+.cta p{color:#c9d6e0;font-size:15px}
+.cta .actions{margin:6px -6px -6px}
+@media (max-width:760px){.cta{padding:24px 20px 28px;display:block}.cta .actions{margin-top:14px}.cta .actions .btn{flex:1 1 100%}}
+
+/* ---------- データ管理 ---------- */
+.data{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.data article{background:var(--paper);border-radius:20px;padding:30px 28px;border:1px solid var(--line)}
+.data .key{width:48px;height:48px;border-radius:50%;background:var(--signal);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.data .key svg{width:26px;height:26px}
+.data h3{font-size:19px;margin-bottom:6px}
+.data p{font-size:16px}
+@media (max-width:860px){.data{grid-template-columns:1fr;gap:14px}.data article{padding:22px 20px;display:grid;grid-template-columns:48px 1fr;gap:4px 16px}.data .key{grid-row:span 2;margin-bottom:0}}
+
+/* ---------- 流れ ---------- */
+.flow{list-style:none;counter-reset:s;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px;position:relative}
+.flow::before{content:"";position:absolute;left:25px;right:calc((100% - 80px) / 5 - 25px);top:25px;border-top:2px dashed var(--sea)}
+.flow li{counter-increment:s;position:relative}
+.flow li::before{content:counter(s);width:50px;height:50px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:900;font-size:20px;position:relative;z-index:1;margin-bottom:16px;box-shadow:0 0 0 6px var(--paper)}
+.flow li:last-child::before{background:var(--signal);color:var(--ink)}
+.flow h3{font-size:18px;margin-bottom:4px}
+.flow p{font-size:15px}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr;gap:0}
+  .flow::before{left:25px;right:auto;top:25px;bottom:40px;border-top:none;border-left:2px dashed var(--sea)}
+  .flow li{display:grid;grid-template-columns:50px 1fr;gap:18px;padding-bottom:24px}
+  .flow li::before{margin:0}
+  .flow h3{margin-top:10px}
+  .flow p{font-size:16px}
+}
+
+/* ---------- デザイン見本 ---------- */
+.samples{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.sample{text-decoration:none;color:var(--ink);display:block;border-radius:18px}
+.sample .shot{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--sky)}
+.sample img{width:100%;height:auto;transition:transform .35s}
+.sample:hover img{-webkit-transform:scale(1.03);transform:scale(1.03)}
+.sample h3{font-size:18px;margin:12px 0 0;display:flex;align-items:center}
+.sample h3::after{content:"";width:8px;height:8px;margin-left:8px;border-top:2px solid var(--sea);border-right:2px solid var(--sea);-webkit-transform:rotate(45deg);transform:rotate(45deg)}
+.sample p{font-size:14px;color:var(--muted);line-height:1.6}
+.sub-h{font-size:20px;margin:48px 0 6px}
+.sub-p{color:var(--muted);font-size:15px;margin-bottom:20px}
+.samples.three{grid-template-columns:repeat(4,minmax(0,1fr))}
+.work-foot{margin-top:40px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:28px}
+.work-foot p{color:var(--muted);max-width:40em;font-size:15px;margin:6px 24px 6px 0}
+@media (max-width:1000px){.samples{grid-template-columns:repeat(2,minmax(0,1fr))}.samples.three{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:600px){
+  .samples,.samples.three{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
+  .sample .shot{border-radius:12px}
+  .sample h3{font-size:16px;margin-top:8px}
+  .sample p{font-size:13px}
+  .sub-h{margin-top:40px}
+  .work-foot .btn{width:100%}
+}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:860px}
+details{border-bottom:1px solid #c4d4de}
+details:first-child{border-top:1px solid #c4d4de}
+summary{cursor:pointer;font-family:var(--head);font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:20px 0;line-height:1.6}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;margin-left:16px;width:30px;height:30px;border-radius:50%;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath d='M10 15h10M15 10v10' stroke='%232F6F8F' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E") center/100% no-repeat;transition:transform .2s}
+summary:hover{color:var(--sea)}
+details[open] summary::after{-webkit-transform:rotate(45deg);transform:rotate(45deg)}
+details p{padding:0 0 22px;max-width:44em}
+@media (max-width:760px){summary{font-size:17px;padding:18px 0}details p{font-size:16px}}
+
+/* ---------- 他サービス ---------- */
+.other{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:20px 32px;border:2px solid var(--ink);border-radius:20px;padding:30px 32px;background:var(--paper)}
+.other .ic{width:64px;height:64px;border-radius:18px;background:var(--sky);display:flex;align-items:center;justify-content:center}
+.other .ic svg{width:36px;height:36px}
+.other h3{font-size:22px;margin-bottom:4px}
+@media (max-width:760px){.other{grid-template-columns:1fr;padding:24px 20px}.other p{font-size:16px}}
+
+/* ---------- お問い合わせ ---------- */
+.contact{background:var(--ink);color:#fff;position:relative}
+.contact::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.contact .sec-head h2{color:#fff}
+.contact .sec-head p{color:#c3d2dd}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:56px}
+.nw{white-space:nowrap}
+.contact .tel-label{font-size:14px;color:#c3d2dd}
+.contact .tel-note{font-size:13px;margin:4px 0 14px;color:#c3d2dd}
+.contact .tel{font-family:var(--head);font-weight:900;font-size:38px;font-size:clamp(30px,5vw,44px);color:#fff;text-decoration:none;display:inline-flex;align-items:center;letter-spacing:.02em}
+.contact .tel svg{width:.8em;height:.8em;margin-right:.3em}
+.contact .mail{color:var(--signal);word-break:break-all}
+.contact dl{margin-top:28px;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:15px;color:#c3d2dd}
+.formbox{background:var(--ink-2);border-radius:20px;padding:28px}
+form{display:grid;gap:18px}
+label{font-weight:700;font-size:15px;display:grid;gap:6px}
+input,textarea,select{font:inherit;font-size:16px;font-weight:400;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink);width:100%;min-height:50px}
+input:focus,textarea:focus,select:focus{border-color:var(--signal);outline:none}
+textarea{min-height:130px;resize:vertical}
+.formnote{font-size:13px;color:#c3d2dd;line-height:1.7}
+.req{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;background:var(--signal);color:var(--ink);border-radius:4px;padding:0 6px;vertical-align:2px}
+.opt-label{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;border:1px solid #7f95a6;color:#c3d2dd;border-radius:4px;padding:0 5px;vertical-align:2px}
+form .btn{width:100%;font-size:17px}
+@media (max-width:760px){.contact-grid{grid-template-columns:1fr;gap:36px}.formbox{padding:22px 18px}}
+footer{background:#101d2b;color:#9fb3c2;font-size:14px;padding:44px 0 36px}
+footer .wrap{display:grid;grid-template-columns:auto 1fr;gap:24px 56px;align-items:start}
+.foot-logo{height:44px;width:auto;margin-bottom:12px}
+footer a{color:#dbe6ee;text-decoration:none}
+footer a:hover{color:var(--signal)}
+.foot-nav{display:flex;flex-wrap:wrap;list-style:none;justify-content:flex-end}
+.foot-nav li{margin:0 0 10px 26px}
+.copy{grid-column:1 / -1;border-top:1px solid #2c4256;padding-top:18px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap}
+@media (max-width:760px){footer{padding-bottom:110px}footer .wrap{grid-template-columns:1fr}.foot-nav{justify-content:flex-start;display:grid;grid-template-columns:1fr 1fr}.foot-nav li{margin:0 0 12px}}
+
+/* ---------- スマホ固定ボタン ---------- */
+.fixbar{position:fixed;left:0;right:0;bottom:0;display:none;padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid var(--line);z-index:30;transition:transform .25s}
+.fixbar .btn{flex:1;padding:12px 8px;min-height:48px}
+.fixbar .btn + .btn{margin-left:8px}
+.fixbar.hide{-webkit-transform:translateY(110%);transform:translateY(110%)}
+@media (max-width:760px){.fixbar{display:flex}}
+
+/* ---------- お支払いの合計（何か月使うかで計算。2026/10/8） ---------- */
+.sim[hidden]{display:none}
+.sim-q{display:flex;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.sim-q label{font-family:var(--head);font-weight:700;font-size:15px;margin-right:12px}
+.sim-q output{font-family:var(--head);font-weight:900;font-size:26px;color:var(--ink);line-height:1.2}
+.sim-q output small{font-size:15px;margin-left:2px}
+.sim input[type=range]{width:100%;height:36px;margin:2px 0 4px;accent-color:#17283A;cursor:pointer}
+.sim-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:10px}
+.sim-quick{display:flex;flex-wrap:wrap;margin:-4px -4px 10px}
+.sim-quick button{margin:4px;font:inherit;font-size:14px;border:1px solid var(--line);background:var(--sky);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.sim-quick button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-rows{list-style:none}
+.sim-rows li{padding:10px 0;border-top:1px solid var(--line)}
+.sim-rows .row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.sim-rows .row b{font-family:var(--head);font-size:19px;white-space:nowrap}
+.sim-rows .bar{height:8px;border-radius:4px;background:var(--sky);margin-top:6px;overflow:hidden}
+.sim-rows .bar i{display:block;height:100%;width:0;background:#9fb6c6;border-radius:4px;-webkit-transition:width .3s;transition:width .3s}
+.sim-rows li.low .bar i{background:var(--signal)}
+.sim-rows li.low .row span::after{content:"いちばん少ない";font-size:11px;font-family:var(--head);font-weight:700;background:var(--signal);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.sim-rows .fee{display:block;font-size:12px;color:#7a5b00;margin-top:2px}
+.sim-note{font-size:13px;color:var(--muted);line-height:1.7;margin-top:8px}
+@media (max-width:340px){.sim-rows .row{display:block}.sim-rows .row b{display:block}}
+
+/* ---------- このページも同じ作り（2026/10/8） ---------- */
+.same{background:var(--ink);color:#fff;position:relative}
+.same::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.same .sec-head p{color:#c9d6e0}
+.same-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;list-style:none}
+.same-list li{background:var(--ink-2);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:26px 24px}
+.same-list .ic{width:44px;height:44px;border-radius:12px;background:rgba(242,194,48,.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.same-list .ic svg{width:26px;height:26px}
+.same-list h3{font-size:18px;margin-bottom:6px;color:#fff}
+.same-list p{font-size:15px;line-height:1.8;color:#dbe5ec}
+.same-list .try{display:block;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.2);font-size:13px;color:var(--signal);line-height:1.7}
+.same a{color:var(--signal)}
+.same-foot{margin-top:28px;font-size:14px;color:#c9d6e0}
+@media (max-width:1000px){.same-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.same-list{grid-template-columns:1fr;gap:14px}.same-list li{padding:22px 20px}}
+
+/* ---------- ご相談のあと（2026/10/8。売り込みをしない約束） ---------- */
+.next{margin-top:32px;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:22px 24px;background:rgba(255,255,255,.04)}
+.next h3{font-size:18px;margin-bottom:10px;color:#fff}
+.next ol{list-style:none;counter-reset:n}
+.next ol li{counter-increment:n;position:relative;padding-left:40px;font-size:14px;line-height:1.75;color:#c3d2dd}
+.next ol li + li{margin-top:12px}
+.next ol li::before{content:counter(n);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:14px;line-height:28px;text-align:center}
+.next ol b{display:block;font-family:var(--head);font-size:16px;color:#fff}
+.nopush{list-style:none;margin-top:16px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.2)}
+.nopush li{position:relative;padding-left:26px;font-size:15px;line-height:1.7;color:#fff}
+.nopush li + li{margin-top:4px}
+.nopush li::before{content:"";position:absolute;left:4px;top:.45em;width:.8em;height:.42em;border-left:2px solid var(--signal);border-bottom:2px solid var(--signal);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+@media (max-width:760px){.next{padding:18px 16px}}
+.contact .tel-hours{font-size:15px;color:#fff;margin-top:2px}
+.contact .tel-hours b{font-family:var(--head);font-size:18px;color:var(--signal);letter-spacing:.03em}
+.contact .meet-note{font-size:14px;line-height:1.75;color:#c3d2dd;margin:14px 0 6px;padding:12px 14px;border-left:4px solid var(--signal);background:rgba(255,255,255,.05);border-radius:0 10px 10px 0}
+.contact .meet-note b{display:block;font-family:var(--head);font-size:16px;color:#fff}
+.meet{display:grid;gap:18px;padding:16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.22)}
+.meet[hidden]{display:none}
+.form-lead{font-size:14px;color:#fff;background:rgba(242,194,48,.14);border-radius:10px;padding:10px 14px;line-height:1.7}
+fieldset{border:none;margin:0;padding:0;min-width:0}
+legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
+.chips{display:flex;flex-wrap:wrap;margin:-4px}
+.chip{display:block;position:relative;margin:4px;font-weight:400;font-size:15px;cursor:pointer}
+.chip input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;min-height:0;padding:0}
+.chip span{display:block;padding:9px 14px;border-radius:999px;border:2px solid rgba(255,255,255,.35);color:#fff;line-height:1.4;min-height:44px;-webkit-transition:background .15s;transition:background .15s}
+.chip input:checked + span{background:var(--signal);border-color:var(--signal);color:var(--ink);font-weight:700}
+.chip input:checked + span::before{content:"✓ "}
+.chip input:focus-visible + span{outline:3px solid #fff;outline-offset:2px}
+.chips.days .chip span{min-width:52px;text-align:center}
+.can article.wide{grid-column:1 / -1}
+
+/* ---------- トップの作り込み（2026/10/8 v3。前の版は v2/） ---------- */
+.hero > .wrap{position:relative;z-index:1}
+/* 飛行機雲：紙飛行機が左下から右上へ飛び、うしろに2本の線が残る（JS で描く。JS がないときは出さない） */
+.contrail{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none}
+.contrail.on{display:block}
+.contrail path{fill:none;stroke:#2F6F8F;stroke-linecap:round}
+.contrail .c1{stroke-width:3;opacity:.22}
+.contrail .c2{stroke-width:2;opacity:.12}
+.contrail .plane .body{fill:#17283A;stroke:none}
+.contrail .plane .fold{fill:none;stroke:#F2C230;stroke-width:2.2;opacity:1}
+@media (max-width:900px){.contrail .c1{opacity:.14}.contrail .c2{opacity:.08}}
+
+/* ---------- できること：ホームページの一生を「航路」で（作る → 見つけてもらう → 問い合わせ → 直す、をくり返す） ---------- */
+.route{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;position:relative;margin-top:8px}
+.route::before{content:"";position:absolute;left:12%;right:12%;top:56px;height:0;border-top:3px dashed var(--signal)}
+.route li{position:relative;text-align:center}
+.route .stop{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:112px;height:112px;margin:0 auto 18px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);box-shadow:0 0 0 8px var(--sky)}
+.route .stop svg{width:64px;height:64px}
+.route h3{font-size:20px;margin-bottom:8px}
+.route p{font-size:15px;line-height:1.85;text-align:left;color:var(--ink)}
+/* 4つめ：ずっとくり返す印 */
+.route li.again .stop{background:var(--ink);border-color:var(--ink)}
+.route li.again .stop::after{content:"";position:absolute;left:-12px;top:-12px;right:-12px;bottom:-12px;border-radius:50%;border:2px dashed var(--signal)}
+.route li.again .tag{position:absolute;left:50%;top:-16px;z-index:2;-webkit-transform:translateX(-50%);transform:translateX(-50%);white-space:nowrap}
+.route .tag{display:inline-block;font-family:var(--head);font-weight:700;font-size:13px;background:var(--signal);color:var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:8px}
+.route-loop{margin:30px auto 0;max-width:640px;text-align:center;font-family:var(--head);font-weight:700;font-size:17px;line-height:1.7;color:var(--ink)}
+.route-loop svg{display:inline-block;width:22px;height:22px;vertical-align:-5px;margin-right:8px}
+.can.extra-row{margin-top:36px;grid-template-columns:1fr}
+@media (max-width:980px){
+  .route{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 28px}
+  .route::before{display:none}
+}
+@media (max-width:640px){
+  .route{grid-template-columns:1fr;gap:26px}
+  .route::before{display:block;left:43px;right:auto;top:20px;bottom:20px;height:auto;border-top:none;border-left:3px dashed var(--signal)}
+  .route li{display:grid;grid-template-columns:88px 1fr;gap:4px 16px;text-align:left;align-items:start}
+  .route .stop{width:88px;height:88px;margin:0;grid-row:span 3;box-shadow:0 0 0 6px var(--sky)}
+  .route .stop svg{width:50px;height:50px}
+  .route h3{font-size:19px;margin:6px 0 2px}
+  .route li.again .tag{position:static;-webkit-transform:none;transform:none;justify-self:start;margin:6px 0 0}
+  .route li.again .stop::after{left:-9px;top:-9px;right:-9px;bottom:-9px}
+  .route-loop{text-align:left;font-size:16px}
+}
+
+/* ---------- 料金の搭乗券を作り込み（2026/10/8） ---------- */
+.pass-top{display:flex;justify-content:space-between;align-items:center;margin:-26px -26px 18px;padding:10px 26px;border-bottom:2px solid var(--ink);border-radius:18px 18px 0 0;background:var(--sky);font-size:13px;color:var(--ink)}
+.pass.rec .pass-top{background:var(--signal)}
+.pass-top .flight{font-family:"Michroma",var(--head);font-size:13px;letter-spacing:.08em}
+.pass-top .leg{display:flex;align-items:center;font-family:var(--head);font-weight:700}
+.pass-top .leg svg{width:16px;height:16px;margin:0 8px;color:var(--sea);-webkit-transform:rotate(28deg);transform:rotate(28deg)}
+.pass.rec .pass-top .leg svg{color:var(--ink)}
+.price{font-family:"Michroma",var(--head);font-weight:400;letter-spacing:.01em}
+.price small{font-family:var(--head);font-weight:700}
+.price.init{font-family:var(--head);font-weight:700}
+.pass .stub{padding-right:84px}
+.barcode{position:absolute;right:22px;top:20px;bottom:22px;width:44px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 8px,var(--ink) 8px 11px,transparent 11px 12px);opacity:.75;border-radius:2px}
+.pass.rec .barcode{background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 8px,#fff 8px 11px,transparent 11px 12px);opacity:.55}
+@media (max-width:760px){
+  .pass-top{margin:-22px -20px 16px;padding:9px 20px}
+  .pass .stub{padding-right:76px}
+  .barcode{right:18px;top:16px;bottom:18px;width:40px}
+  .pass .stub .price{font-size:30px}
+}
+@media (max-width:360px){.pass .stub .price{font-size:26px}}
+
+/* ---------- 作成の流れ：滑走路と誘導灯（2026/10/8） ---------- */
+.flow{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;padding-top:0}
+.flow::before{left:0;right:0;top:0;height:64px;border:none;border-radius:14px;background:var(--ink)}
+.flow::after{content:"";position:absolute;left:24px;right:24px;top:30px;height:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 22px,transparent 22px 40px)}
+.flow li::before{width:44px;height:44px;margin:10px 0 22px 10px;background:var(--signal);color:var(--ink);font-family:"Michroma",var(--head);font-weight:400;font-size:16px;box-shadow:0 0 0 5px rgba(242,194,48,.25),0 0 18px rgba(242,194,48,.55)}
+.flow li:last-child::before{background:#fff;color:var(--ink);box-shadow:0 0 0 5px rgba(255,255,255,.22),0 0 18px rgba(255,255,255,.5)}
+.flow li.up h3::after{content:"";display:inline-block;width:18px;height:18px;margin-left:6px;vertical-align:-2px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 11 L18 3 L13 18 L9.5 12 Z' fill='%232F6F8F'/%3E%3C/svg%3E") no-repeat center/contain}
+.flow h3{font-size:17px}
+.flow p{font-size:14px;line-height:1.8}
+@media (max-width:1100px) and (min-width:901px){.flow{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:8px}.flow::before,.flow::after{display:none}.flow li::before{box-shadow:0 0 0 5px rgba(242,194,48,.25);margin-left:0}.flow li:last-child::before{background:var(--ink);color:#fff;box-shadow:0 0 0 5px rgba(23,40,58,.15)}}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr}
+  .flow::before{left:0;right:auto;top:0;bottom:0;width:64px;height:auto;border-radius:14px}
+  .flow::after{left:30px;right:auto;top:20px;bottom:20px;width:4px;height:auto;background:repeating-linear-gradient(180deg,rgba(255,255,255,.55) 0 22px,transparent 22px 40px)}
+  .flow li{grid-template-columns:64px 1fr;gap:18px;padding:12px 0 18px}
+  .flow li::before{margin:0 0 0 10px}
+  .flow h3{margin-top:8px}
+  .flow p{font-size:15px}
+}
+
+/* ---------- デザイン見本の切りかえ（2026/10/8） ---------- */
+.viewer[hidden]{display:none}
+.has-viewer #samples-grid{display:none}
+.has-viewer .samples.three .sample.photo-card{display:none}
+.has-viewer .samples.three .sample.wa-card{display:none}
+.v-tabs{display:flex;flex-wrap:wrap;margin:-5px -5px 18px}
+.v-tabs button{display:flex;align-items:center;margin:5px;font:inherit;font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:8px 16px 8px 10px;cursor:pointer;min-height:44px}
+.v-tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.v-tabs .sw{width:22px;height:22px;border-radius:50%;margin-right:8px;border:2px solid rgba(255,255,255,.8);box-shadow:0 0 0 1px var(--line)}
+.sw-homey{background:linear-gradient(135deg,#24342b 50%,#f4a3b8 50%)}
+.sw-luxury{background:linear-gradient(135deg,#22302a 50%,#e8e1d3 50%)}
+.sw-pop{background:linear-gradient(135deg,#ef8fa8 50%,#f2d14b 50%)}
+.sw-chic{background:linear-gradient(135deg,#1d1714 50%,#c9a35f 50%)}
+.sw-photo{background:linear-gradient(135deg,#2a221c 50%,#b98a4b 50%)}
+.sw-wa{background:linear-gradient(135deg,#23221f 50%,#a8432a 50%)}
+.sw-cafe{background:linear-gradient(135deg,#2e2620 50%,#d6a35c 50%)}
+.sw-school{background:linear-gradient(135deg,#1f3550 50%,#f2b84b 50%)}
+.sw-reform{background:linear-gradient(135deg,#1d2a36 50%,#c0662b 50%)}
+.sw-hair{background:linear-gradient(135deg,#232120 50%,#c9a27e 50%)}
+.sw-relax{background:linear-gradient(135deg,#22393a 50%,#4f8f86 50%)}
+.v-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px;align-items:center;background:var(--paper);border:2px solid var(--ink);border-radius:24px;padding:22px;box-shadow:10px 10px 0 var(--signal)}
+.v-shot{display:block;border-radius:16px;overflow:hidden;background:var(--sky)}
+.v-shot img{width:100%;height:auto;-webkit-transition:opacity .25s;transition:opacity .25s}
+.v-shot img.fade{opacity:0}
+.v-sub{font-size:14px;color:var(--sea);font-family:var(--head);font-weight:700}
+.v-info h3{font-size:30px;margin:2px 0 10px}
+.v-info #v-text{font-size:16px;line-height:1.85;margin-bottom:20px}
+.v-note{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.7}
+@media (max-width:860px){
+  .v-body{grid-template-columns:1fr;gap:18px;padding:14px 14px 20px;box-shadow:6px 6px 0 var(--signal)}
+  .v-info{padding:0 6px}
+  .v-info h3{font-size:24px}
+  .v-info .btn{width:100%}
+  .v-tabs{margin-bottom:12px}
+  .v-tabs button{font-size:14px;padding:6px 12px 6px 8px}
+}
+
+/* ---------- データの管理：お店のもの／預かるもの（2026/10/8） ---------- */
+.keys{display:grid;grid-template-columns:minmax(0,1fr) 132px minmax(0,1fr);align-items:stretch}
+.k-own,.k-keep{border-radius:22px;padding:28px 28px 24px}
+.k-own{background:var(--paper);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--signal)}
+.k-keep{background:var(--ink);color:#fff}
+.keys h3{font-size:21px;display:flex;align-items:center;margin-bottom:4px}
+.k-keep h3{color:#fff}
+.k-badge{width:40px;height:40px;border-radius:50%;background:var(--signal);display:inline-flex;align-items:center;justify-content:center;margin-right:12px;flex:none;color:var(--ink)}
+.k-badge svg{width:22px;height:22px}
+.k-lead{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.7}
+.k-keep .k-lead{color:#c3d2dd}
+.keys ul{list-style:none}
+.keys li{display:grid;grid-template-columns:28px 1fr;column-gap:12px;padding:12px 0;border-top:1px solid var(--line);line-height:1.6}
+.k-keep li{border-top-color:rgba(255,255,255,.15)}
+.keys li svg{width:24px;height:24px;color:var(--sea);grid-row:span 2;margin-top:1px}
+.k-keep li svg{color:var(--signal)}
+.keys li b{font-family:var(--head);font-size:16px}
+.keys li > span{grid-column:2;font-size:13px;color:var(--muted)}
+.k-keep li > span{color:#c3d2dd}
+/* まん中：右から左へ「お渡し」の矢印 */
+.k-pass{position:relative;display:flex;align-items:center;justify-content:center}
+.k-pass::before{content:"";position:absolute;left:14px;right:14px;top:50%;border-top:3px dashed var(--signal)}
+.k-pass::after{content:"";position:absolute;left:10px;top:50%;margin-top:-8px;border-right:14px solid var(--signal);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-top:-7.5px}
+.k-pass span{position:relative;margin-bottom:62px;font-family:var(--head);font-weight:700;font-size:13px;line-height:1.5;text-align:center;color:var(--ink)}
+.k-note{margin-top:24px;font-size:14px;color:var(--muted)}
+@media (max-width:900px){
+  .keys{grid-template-columns:1fr}
+  .k-pass{height:84px;justify-content:flex-start}
+  .k-pass span{margin:0 0 0 calc(50% + 18px);text-align:left}
+  .k-pass::before{left:50%;right:auto;top:10px;bottom:10px;border-top:none;border-left:3px dashed var(--signal)}
+  .k-pass::after{left:50%;top:6px;margin:0 0 0 -8px;border-right:9px solid transparent;border-left:9px solid transparent;border-bottom:14px solid var(--signal);border-top:none}
+  .k-own,.k-keep{padding:22px 20px 18px}
+  .k-own{box-shadow:6px 6px 0 var(--signal)}
+}
+
+/* ---------- よくある質問：分類つき（2026/10/8） ---------- */
+.faq-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:56px;align-items:start}
+.faq-side{position:-webkit-sticky;position:sticky;top:96px}
+.faq-nav{display:grid;gap:6px;margin-bottom:22px}
+.faq-nav a{display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:var(--ink);font-family:var(--head);font-weight:700;padding:12px 16px;border-radius:12px;background:var(--sky)}
+.faq-nav a:hover{background:#dde9f0}
+.faq-nav span{font-family:"Michroma",var(--head);font-size:12px;color:var(--sea)}
+.faq-ask{border:2px solid var(--ink);border-radius:18px;padding:20px;box-shadow:6px 6px 0 var(--signal)}
+.faq-ask b{display:block;font-family:var(--head);font-size:17px}
+.faq-ask p{font-size:14px;color:var(--muted);margin:4px 0 14px;line-height:1.7}
+.faq-ask .btn{width:100%;min-height:46px;padding:10px 16px}
+.faq{max-width:none}
+.faq-h{font-size:15px;color:var(--sea);margin:36px 0 6px;scroll-margin-top:90px}
+.faq-h:first-child{margin-top:0}
+.faq details:first-of-type,.faq .faq-h + details{border-top:1px solid #c4d4de}
+.faq summary{-webkit-justify-content:flex-start;justify-content:flex-start}
+.faq summary::before{content:"Q";flex:none;width:34px;height:34px;margin-right:14px;border-radius:50%;background:var(--ink);color:var(--signal);font-family:var(--head);font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.faq summary::after{margin-left:auto}
+.faq details p{position:relative;padding:0 0 22px 48px}
+.faq details p::before{content:"A";position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.faq details[open]{background:linear-gradient(90deg,rgba(234,242,246,.6),rgba(234,242,246,0))}
+@media (max-width:900px){
+  .faq-wrap{grid-template-columns:1fr;gap:24px}
+  .faq-side{position:static;order:2}
+  .faq-nav{display:none}
+  .faq summary::before{width:30px;height:30px;font-size:12px;margin-right:12px}
+  .faq details p{padding-left:42px}
+  .faq details p::before{width:30px;height:30px;font-size:12px}
+}
+/* ---------- ほかのサービス（伐採）：線画を大きく ---------- */
+.other .ic{width:88px;height:88px;border-radius:50%;background:var(--sky)}
+.other .ic svg{width:56px;height:56px}
+/* ---------- 相談フォームの上に「相談票」の帯（搭乗券とそろえる） ---------- */
+.formbox{padding-top:0;overflow:hidden}
+.form-top{display:flex;justify-content:space-between;align-items:center;margin:0 -28px 20px;padding:12px 28px;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px}
+.form-top .flight{font-family:"Michroma",var(--head);font-weight:400;font-size:13px;letter-spacing:.08em}
+@media (max-width:760px){.formbox{padding-top:0}.form-top{margin:0 -18px 18px;padding:11px 18px}}
+
+/* =========================================================
+   2026/10/8 夜 作り込み（前の版は v3/）
+   ========================================================= */
+/* トップ：料金の目安と、事実の数字 */
+.from{display:flex;flex-wrap:wrap;align-items:baseline;margin:-6px 0 26px;font-family:var(--head);font-weight:700;color:var(--ink)}
+.from .from-k{font-size:15px;background:var(--ink);color:#fff;border-radius:6px;padding:2px 10px;margin-right:10px;-webkit-align-self:center;align-self:center}
+.from b{font-family:"Michroma",var(--head);font-size:40px;line-height:1;letter-spacing:-.01em}
+.from .from-u{font-size:18px;margin-left:4px}
+.from .from-u small{font-size:13px;color:var(--muted);font-weight:500}
+.from a{font-size:14px;margin-left:16px;color:var(--sea)}
+.stats{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:34px;border-top:1px solid var(--line);max-width:560px}
+.stats li{padding:16px 14px 0 0;line-height:1.5}
+.stats li + li{padding-left:16px;border-left:1px solid var(--line)}
+.stats b{display:block;font-family:"Michroma",var(--head);font-size:26px;letter-spacing:-.02em;color:var(--ink);line-height:1.3;white-space:nowrap}
+.stats b small{font-family:var(--head);font-size:13px;font-weight:700;margin-left:3px;letter-spacing:0}
+.stats span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+.hero .facts{display:block;margin-top:14px;font-size:13px;color:var(--muted)}
+.hero .facts i{font-style:normal;margin:0 .5em;color:var(--line)}
+@media (max-width:420px){.from b{font-size:34px}.from a{margin-left:0;margin-top:6px;width:100%}.stats b{font-size:20px}.stats li + li{padding-left:10px}.stats li{padding-right:8px}}
+/* トップ：パソコンの画面（スマホの後ろ） */
+.laptop{position:absolute;right:150px;bottom:190px;width:440px;z-index:0}
+.lt-screen{background:#0f1a26;border-radius:14px 14px 0 0;padding:10px 10px 12px;box-shadow:0 24px 50px rgba(23,40,58,.22)}
+.lt-screen img{width:100%;height:auto;border-radius:4px}
+.lt-base{height:12px;margin:0 -28px;background:linear-gradient(#d9e2e9,#b8c6d1);border-radius:0 0 14px 14px;box-shadow:0 10px 18px rgba(23,40,58,.18)}
+.phone{z-index:1}
+@media (min-width:901px){.stage{height:640px}.chat{top:auto;bottom:40px;left:-10px;width:300px}}
+@media (max-width:1100px) and (min-width:901px){.laptop{right:100px;width:360px}.chat{width:250px}}
+@media (max-width:900px){.laptop{display:none}}
+
+/* 見本の帯 */
+.showcase{padding:84px 0 72px;background:var(--paper);overflow:hidden}
+.sc-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px}
+.sc-head > * + *{margin-left:40px}
+.sc-head h2{font-size:30px;font-size:clamp(24px,3.4vw,36px)}
+.sc-head h2 span{display:inline-block}
+.sc-head p{color:var(--muted);font-size:15px;max-width:30em}
+.belt{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 0 18px}
+.belt::-webkit-scrollbar{display:none}
+.belt-track{list-style:none;display:flex;width:-webkit-max-content;width:max-content;padding:0 20px}
+.belt-track li{width:340px;flex:none;margin-right:22px}
+.belt-track a{display:block;text-decoration:none;color:var(--ink)}
+.b-shot{display:block;border-radius:16px;overflow:hidden;background:var(--sky);box-shadow:0 10px 26px rgba(23,40,58,.12);-webkit-transition:-webkit-transform .3s,box-shadow .3s;transition:transform .3s,box-shadow .3s}
+.b-shot img{width:100%;height:auto}
+.belt-track a:hover .b-shot,.belt-track a:focus-visible .b-shot{-webkit-transform:translateY(-4px);transform:translateY(-4px);box-shadow:0 16px 32px rgba(23,40,58,.18)}
+.b-cap{display:flex;align-items:baseline;margin-top:12px}
+.b-cap b{font-family:var(--head);font-size:16px}
+.b-cap small{font-size:13px;color:var(--muted);margin-left:10px}
+@media (max-width:760px){.showcase{padding:60px 0 48px}.sc-head{display:block}.sc-head > * + *{margin-left:0;margin-top:10px}.belt-track li{width:260px;margin-right:16px}}
+
+/* 更新の見本 */
+.update{background:var(--paper);border-top:1px solid var(--line)}
+.up-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:56px;align-items:center}
+.up-chat{background:#8cabd8;background:linear-gradient(180deg,#9bb7de,#87a6d2);border-radius:28px;padding:26px 24px 30px;max-width:440px}
+.up-day{font-family:var(--head);font-weight:700;color:#fff;font-size:14px;text-align:center;margin-bottom:14px}
+.up-day span{font-weight:500;opacity:.85}
+.bubble2{position:relative;max-width:86%;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.65;background:#fff;color:var(--ink)}
+.bubble2 small{display:block;font-size:11px;color:var(--muted);margin-bottom:2px}
+.bubble2.shop{border-bottom-left-radius:4px}
+.bubble2.us{margin-left:auto;background:var(--chat);color:#fff;border-bottom-right-radius:4px;margin-top:12px}
+.bubble2.us small{color:rgba(255,255,255,.85)}
+.photo-msg{width:120px;height:86px;border-radius:14px;margin-top:8px;background:linear-gradient(135deg,#efe3d6,#d8c3ad);display:flex;align-items:flex-end;padding:8px 10px;font-size:11px;color:#7a6650}
+.compare{text-align:center}
+.cmp-frame{position:relative;display:inline-block;width:300px;max-width:100%;border-radius:42px;background:#0f1a26;padding:12px;box-shadow:0 30px 60px rgba(23,40,58,.25);text-align:left}
+.cmp-layer{border-radius:30px;overflow:hidden;background:#fbf7f2}
+.cmp-layer.after{position:absolute;left:12px;top:12px;right:12px;bottom:12px;clip-path:inset(0 0 0 50%);-webkit-clip-path:inset(0 0 0 50%)}
+.cmp-line{position:absolute;top:12px;bottom:12px;left:50%;width:3px;margin-left:-1px;background:var(--signal);pointer-events:none}
+.cmp-line i{position:absolute;top:50%;left:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:var(--signal);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.cmp-line i::before,.cmp-line i::after{content:"";position:absolute;top:50%;margin-top:-6px;border:6px solid transparent}
+.cmp-line i::before{left:5px;border-right-color:var(--ink)}
+.cmp-line i::after{right:5px;border-left-color:var(--ink)}
+.cmp-tag{position:absolute;top:-14px;z-index:2;font-family:var(--head);font-weight:700;font-size:12px;background:rgba(23,40,58,.85);color:#fff;padding:3px 10px;border-radius:999px}
+.cmp-tag.l{left:22px}
+.cmp-tag.r{right:22px;background:var(--signal);color:var(--ink)}
+.cmp-range{display:block;max-width:300px;margin:20px auto 0;font-size:14px;color:var(--muted)}
+.cmp-range span{display:block;margin-bottom:6px}
+.cmp-range input{width:100%;accent-color:#17283A;min-height:32px}
+.cmp-note{font-size:13px;color:var(--muted);margin-top:8px}
+/* 架空のお店の小さな画面 */
+.m-site{font-family:var(--body);color:#3a3330;font-size:11px;line-height:1.5;height:520px}
+.m-top{display:flex;justify-content:space-between;align-items:center;padding:30px 14px 10px;background:#24342b;color:#fff}
+.m-logo{font-family:"Cormorant Garamond",serif;font-size:18px;letter-spacing:.06em}
+.m-btn{background:#fe97b2;border-radius:999px;padding:2px 10px;font-size:10px}
+.m-hero{height:150px;background:#24342b;background:linear-gradient(180deg,#24342b,#2d4136);color:#f3efe6;padding:16px 14px;font-size:14px;letter-spacing:.08em;line-height:1.8}
+.m-notice{margin:14px 12px;border-radius:10px;padding:10px 12px;background:#fff;border-left:5px solid #c9c2b8;font-size:12px}
+.m-notice b{display:block;font-size:11px;color:#8a8077}
+.m-notice.new{border-left-color:var(--signal);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+.m-notice.new b{color:var(--sea)}
+.m-notice.old{color:#8a8077}
+.m-h{font-size:13px;font-weight:700;margin:16px 14px 6px;letter-spacing:.1em}
+.m-menu{list-style:none;margin:0 12px}
+.m-menu li{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:10px;padding:12px;margin-bottom:8px;font-size:12px}
+.m-menu li::before{content:"";width:34px;height:34px;border-radius:8px;background:#efe6da;margin-right:10px;flex:none}
+.m-menu li span{flex:1}
+.m-menu li.new{box-shadow:0 0 0 2px var(--signal)}
+.m-menu em{font-style:normal;font-size:10px;font-weight:700;background:var(--signal);border-radius:4px;padding:1px 6px}
+@media (max-width:860px){.up-grid{grid-template-columns:1fr;gap:36px}.up-chat{max-width:none}.cmp-frame{width:280px}}
+
+/* 担当する人 */
+.person{padding-top:0}
+.p-card{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;align-items:center;background:var(--sky);border-radius:28px;padding:48px 56px;position:relative;overflow:hidden}
+.p-card::after{content:"";position:absolute;right:-60px;bottom:-60px;width:240px;height:240px;border-radius:50%;border:2px dashed rgba(47,111,143,.25)}
+.p-mark{width:200px;height:200px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 10px var(--sky),0 0 0 2px var(--line)}
+.p-mark img{width:120px;height:120px}
+.p-eyebrow{font-family:var(--head);font-weight:700;color:var(--sea);font-size:14px;letter-spacing:.08em;margin-bottom:6px}
+.p-body h2{font-size:26px;font-size:clamp(21px,2.6vw,30px);margin-bottom:16px}
+.p-body > p{color:var(--ink-2);max-width:40em}
+.p-points{list-style:none;display:flex;flex-wrap:wrap;margin:18px -8px 0}
+.p-points li{display:flex;align-items:center;background:var(--paper);border-radius:999px;padding:6px 16px 6px 10px;margin:5px 8px;font-size:15px;font-family:var(--head);font-weight:700}
+.p-points svg{width:18px;height:18px;margin-right:8px;flex:none}
+@media (max-width:860px){.p-card{grid-template-columns:1fr;gap:20px;padding:30px 22px}.p-mark{width:110px;height:110px;box-shadow:inset 0 0 0 6px var(--sky),0 0 0 2px var(--line)}.p-mark img{width:66px;height:66px}.p-points li{font-size:14px}}
+
+/* デザイン見本：テイストと業種の2つの並び */
+@media (min-width:761px){.has-viewer .samples.three{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}}
+.v-group{font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink);margin:0 0 8px}
+.v-group small{font-weight:500;color:var(--muted);margin-left:6px;font-size:13px}
+.v-tabs + .v-group{margin-top:4px}
+@media (max-width:760px){
+  .v-tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:-20px;margin-right:-20px;padding:0 15px}
+  .v-tabs::-webkit-scrollbar{display:none}
+  .v-tabs button{flex:none;white-space:nowrap}
+  .v-group small{display:block;margin:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Lift-Off ホームページ制作 トップへ">
+      <img src="../img/logo.svg" alt="Lift-Off" width="397" height="140">
+      <small>ホームページ制作</small>
+    </a>
+    <nav class="nav" id="nav" aria-label="ページ内">
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">お問い合わせ</a>
+    </nav>
+    <div class="top-right">
+      <a class="btn primary" href="#contact">相談する</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav"><i></i>メニュー</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <svg class="contrail" aria-hidden="true" focusable="false"><path class="c1"/><path class="c2"/><g class="plane"><g transform="scale(1.25)"><path class="body" d="M-14 -2 L16 -10 L6 14 L1 4 Z"/><path class="fold" d="M1 4 L16 -10"/></g></g></svg>
+  <div class="wrap">
+    <div class="hero-copy">
+      <h1><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
+      <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr>パソコンが<wbr>苦手でも<wbr>大丈夫です。</p>
+      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込）</small></span><a href="#price">初期0円の<wbr>プランも<wbr>あります</a></p>
+      <div class="actions">
+        <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料）</a>
+        <a class="btn" href="#price">料金を<wbr>見る</a>
+      </div>
+      <ul class="stats" aria-label="目安">
+        <li><b>2〜3<small>週間</small></b><span>写真が<wbr>そろってから<wbr>公開までの<wbr>目安</span></li>
+        <li><b>3<small>営業日以内</small></b><span>更新の<wbr>ご依頼への<wbr>対応<wbr>（原則）</span></li>
+        <li><b>2<small>回</small></b><span>お会いしての<wbr>打ち合わせ</span></li>
+      </ul>
+      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>フォーム代は<wbr>月額に<wbr>込み<i>／</i>スタンダードは<wbr>契約の<wbr>縛りなし</p>
+    </div>
+
+    <!-- 見せ場：お店からLINEでひと言 → サイトにお知らせが出る（画面は架空のお店の見本） -->
+    <div class="stage" role="img" aria-label="更新のイメージ：お店がLINEで「来週の水曜はお休みにします」と送ると、サイトにお知らせが出ます">
+      <div class="runway"></div>
+      <div class="chat">
+        <p class="bubble shop"><small>お店から</small>来週の<wbr>水曜、<wbr>臨時で<wbr>お休みにします！</p>
+        <p class="bubble us"><small>Lift-Off</small>了解です。<wbr>サイトに<wbr>お知らせを<wbr>出しました。</p>
+      </div>
+      <div class="laptop" aria-hidden="true"><div class="lt-screen"><img src="../img/hero-pc.jpg" alt="" width="960" height="600" decoding="async"></div><div class="lt-base"></div></div>
+      <div class="phone">
+        <div class="screen">
+          <img src="../img/hero-phone.jpg" alt="" width="500" height="1013" fetchpriority="high">
+          <p class="notice"><b>お知らせ</b>来週の<wbr>水曜日は、<wbr>臨時休業とさせていただきます。</p>
+        </div>
+      </div>
+      <p class="stage-note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
+    </div>
+  </div>
+</section>
+
+<!-- 見本の帯：架空のお店の見本が横にゆっくり流れる（2026/10/8 夜）。指で横に動かせる。動きを減らす設定の人には止めて見せる -->
+<section class="showcase" aria-labelledby="sc-h">
+  <div class="wrap sc-head">
+    <h2 id="sc-h"><span class="nw">お店に合わせて、</span><span class="nw">いろいろ作れます</span></h2>
+    <p>喫茶店・教室・工務店・美容室・整体・造園・サロン。<wbr>どれも<wbr>架空の<wbr>お店の<wbr>見本です<wbr>（<a href="#work">くわしく<wbr>見る</a>）。</p>
+  </div>
+  <div class="belt" id="belt">
+    <ul class="belt-track" aria-label="デザイン見本の一覧"><li><a href="../samples/cafe/index.html"><span class="b-shot"><img src="../samples/thumbs/cafe.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>喫茶・カフェ</b><small>落ち着いた木の色</small></span></a></li><li><a href="../samples/school/index.html"><span class="b-shot"><img src="../samples/thumbs/school.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>こども英語教室</b><small>明るい青と黄色</small></span></a></li><li><a href="../samples/reform/index.html"><span class="b-shot"><img src="../samples/thumbs/reform.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>工務店・リフォーム</b><small>紺とオレンジ</small></span></a></li><li><a href="../samples/hair/index.html"><span class="b-shot"><img src="../samples/thumbs/hair.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>美容室</b><small>グレージュで静かに</small></span></a></li><li><a href="../samples/relax/index.html"><span class="b-shot"><img src="../samples/thumbs/relax.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>整体</b><small>やさしい緑</small></span></a></li><li><a href="../samples/wa/index.html"><span class="b-shot"><img src="../samples/thumbs/wa.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>造園・職人</b><small>和風・墨と朱</small></span></a></li><li><a href="../samples/homey/index.html"><span class="b-shot"><img src="../samples/thumbs/homey.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>サロン</b><small>アットホーム</small></span></a></li><li><a href="../samples/luxury/index.html"><span class="b-shot"><img src="../samples/thumbs/luxury.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>サロン</b><small>ラグジュアリー</small></span></a></li><li><a href="../samples/pop/index.html"><span class="b-shot"><img src="../samples/thumbs/pop.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>サロン</b><small>カラフル</small></span></a></li><li><a href="../samples/chic/index.html"><span class="b-shot"><img src="../samples/thumbs/chic.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>サロン</b><small>シック</small></span></a></li><li><a href="../samples/photo/index.html"><span class="b-shot"><img src="../samples/thumbs/photo.jpg" alt="" width="1200" height="780" loading="lazy" decoding="async"></span><span class="b-cap"><b>サロン</b><small>写真を大きく</small></span></a></li></ul>
+  </div>
+</section>
+
+<!-- お店の人がよく言うこと（吹き出し）→ 答え -->
+<section class="worry" aria-labelledby="worry-h">
+  <div class="wrap">
+    <h2 id="worry-h">こんなこと、<wbr>ありませんか？</h2>
+    <ul class="voices">
+      <li>ホームページは<wbr>あるけれど、<wbr>何年も前の<wbr>情報の<wbr>ままに<wbr>なっている。</li>
+      <li>お休みや<wbr>メニューを<wbr>変えたいけれど、<wbr>直し方が<wbr>わからない。</li>
+      <li>お店の<wbr>仕事で<wbr>手いっぱいで、<wbr>ネットの<wbr>ことまで<wbr>手が<wbr>回らない。</li>
+    </ul>
+    <div class="answer">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h20v12H13l-6 5v-5H5z"/><path d="M10 14h10"/></svg></span>
+      <p><b>変えたいことは、<wbr>LINEで<wbr>ひと言だけ。</b>あとは<wbr>こちらで<wbr>直して、<wbr>直した<wbr>ことを<wbr>お知らせします。<wbr>作るところから、<wbr>そのあとの<wbr>更新まで<wbr>引き受けます。</p>
+    </div>
+  </div>
+</section>
+
+<section id="can" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>できる<wbr>こと</h2>
+      <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
+    </div>
+    <ol class="route" aria-label="ホームページを作ってから、ずっと続く流れ">
+      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
+      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
+      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="18" width="34" height="26" rx="4" stroke="#17283A" stroke-width="2.6"/><path d="M7 20l16 12 16-12" stroke="#17283A" stroke-width="2.6"/><rect x="34" y="30" width="24" height="24" rx="4" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M34 37h24M41 27v6M51 27v6" stroke="#17283A" stroke-width="2.6"/><path d="M40 45l4 4 8-8" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p></li>
+      <li class="again"><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h30v20H22l-8 7v-7H8z" fill="#06C755" stroke="#fff" stroke-width="2.4"/><path d="M15 22h16" stroke="#fff" stroke-width="2.4"/><path d="M50 30a12 12 0 01-20 12" stroke="#F2C230" stroke-width="2.8"/><path d="M30 42v-6h6" stroke="#F2C230" stroke-width="2.8"/><path d="M30 46a12 12 0 0120-12" stroke="#fff" stroke-width="2.8" opacity=".9"/><path d="M50 34v6h-6" stroke="#fff" stroke-width="2.8" opacity=".9"/></svg></span><span class="tag">公開したあとも</span><h3>直す・<wbr>更新する</h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p></li>
+    </ol>
+    <p class="route-loop"><svg viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a8 8 0 00-14.5-2M4 4v4h4"/><path d="M4 16a8 8 0 0014.5 2M20 20v-4h-4"/></svg>作って<wbr>終わりではなく、<wbr>お店が<wbr>続くかぎり、<wbr>直す・<wbr>更新するを<wbr>くり返します。</p>
+    <div class="can extra-row">
+      <article class="wide">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="18" height="24" rx="2.5"/><path d="M10 9h10M10 14h10M10 19h6" stroke="#2F6F8F"/></svg></span>
+        <h3>メニュー表・<wbr>チラシ・<wbr>名刺・ロゴも</h3><p>ホームページと<wbr>同じ<wbr>色・言葉で、<wbr>お店に<wbr>置く<wbr>メニュー表や<wbr>チラシ、<wbr>名刺、<wbr>ロゴも<wbr>作れます。<wbr>印刷用の<wbr>データで<wbr>お渡しします<wbr>（<a href="#option">料金</a>）。</p>
+      </article>
+    </div>
+    <div class="promise">
+      <h3>お約束している<wbr>こと</h3>
+      <ul>
+        <li>「検索で<wbr>1位」<wbr>「必ず<wbr>お客さんが<wbr>増える」などの<wbr>約束は<wbr>しません。<wbr>できる<wbr>ことを<wbr>正直に<wbr>お伝えします。</li>
+        <li>お店の<wbr>サイトに、<wbr>効果を<wbr>言い切る<wbr>表現や<wbr>大げさな<wbr>言葉は<wbr>使いません。</li>
+        <li>写真や<wbr>お名前は、<wbr>了承を<wbr>いただいてから<wbr>載せます。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 更新の見本：LINEでひと言 → 直す前と直したあとを、つまみで見比べる（2026/10/8 夜）。画面は架空のお店 -->
+<section id="update" class="sec update" aria-labelledby="up-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="up-h">更新は、<wbr><span class="nw">こんなふうに</span></h2>
+      <p>変えたい<wbr>ことを<wbr>LINEで<wbr>送るだけ。<wbr>こちらで<wbr>直して、<wbr>直した<wbr>ことを<wbr>お知らせします。<wbr>ご依頼には<wbr>原則<wbr>3営業日以内に<wbr>対応します。</p>
+    </div>
+    <div class="up-grid">
+      <div class="up-chat" aria-label="LINEのやりとりの例">
+        <p class="up-day">LINE<span>（例）</span></p>
+        <p class="bubble2 shop"><small>お店から</small>年末年始の<wbr>お休みを<wbr>のせてください。<wbr>あと、<wbr>季節の<wbr>メニューを<wbr>足したいです。<wbr>写真を<wbr>送ります！</p>
+        <p class="photo-msg" aria-hidden="true"><span>写真</span></p>
+        <p class="bubble2 us"><small>Lift-Off</small>受け取りました。<wbr>直したら<wbr>お知らせしますね。</p>
+        <p class="bubble2 us"><small>Lift-Off</small>直しました。<wbr>サイトを<wbr>見てみてください。</p>
+      </div>
+      <div class="compare" id="compare">
+        <div class="cmp-frame" aria-hidden="true">
+          <div class="cmp-layer before"><div class="m-site">
+            <div class="m-top"><span class="m-logo">hiyori</span><span class="m-btn">予約</span></div>
+            <div class="m-hero"><span>よもぎの湯気に<br>包まれる、<br>ほっとひと息の時間</span></div>
+            <p class="m-notice old"><b>お知らせ</b>8月13日〜15日は<wbr>お休みします</p>
+            <p class="m-h">メニュー</p>
+            <ul class="m-menu"><li><span>よもぎ蒸し</span></li><li><span>脱毛</span></li></ul>
+          </div></div>
+          <div class="cmp-layer after" id="cmp-after"><div class="m-site">
+            <div class="m-top"><span class="m-logo">hiyori</span><span class="m-btn">予約</span></div>
+            <div class="m-hero"><span>よもぎの湯気に<br>包まれる、<br>ほっとひと息の時間</span></div>
+            <p class="m-notice new"><b>お知らせ</b>12月29日〜1月3日は<wbr>お休みします</p>
+            <p class="m-h">メニュー</p>
+            <ul class="m-menu"><li><span>よもぎ蒸し</span></li><li><span>脱毛</span></li><li class="new"><span>季節の<wbr>メニュー</span><em>NEW</em></li></ul>
+          </div></div>
+          <span class="cmp-line" id="cmp-line"><i></i></span>
+          <span class="cmp-tag l">直す前</span><span class="cmp-tag r">直したあと</span>
+        </div>
+        <label class="cmp-range"><span>つまみを<wbr>動かして<wbr>見比べる</span><input type="range" id="cmp-range" min="0" max="100" value="50" aria-label="直す前と直したあとを見比べる（左が直す前、右が直したあと）"></label>
+        <p class="cmp-note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="price" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>料金プラン</h2>
+      <p>すべて<wbr>税込です。<wbr>お問い合わせフォームの<wbr>費用は、<wbr>どのプランも<wbr>月額に<wbr>含まれています。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）の<wbr>代金は、<wbr>お店から<wbr>ドメインの<wbr>会社へ<wbr>直接<wbr>お支払い<wbr>いただきます<wbr><span class="nw">（年2,000円前後〜）。</span></p>
+    </div>
+    <div class="passes">
+      <article class="pass rec">
+        <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 01</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
+          <p class="who">作って、<wbr>ときどき更新する<wbr>基本の<wbr>プラン</p>
+          <h3>スタンダード <span class="tag">おすすめ</span></h3>
+          <dl>
+            <dt>サイト</dt><dd>スマホで<wbr>見やすい<wbr>縦長の<wbr>1ページ</dd>
+            <dt>更新</dt><dd>月2回まで</dd>
+            <dt>契約期間</dt><dd>縛りなし</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">5,500<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
+          <span class="price init">初期 98,000円</span>
+        </div>
+      </article>
+      <article class="pass">
+        <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 02</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
+          <p class="who">最初に<wbr>まとまった<wbr>お金を<wbr>かけずに<wbr>始めたい方に</p>
+          <h3>初期0円プラン</h3>
+          <dl>
+            <dt>中身</dt><dd>スタンダードと<wbr>同じ<wbr>（初期費用を<wbr>月額に<wbr>分けて<wbr>お支払い）</dd>
+            <dt>更新</dt><dd>月2回まで</dd>
+            <dt>契約期間</dt><dd>12か<wbr>月から</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">9,800<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
+          <span class="price init">初期 0円</span>
+        </div>
+      </article>
+      <article class="pass">
+        <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 03</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
+          <p class="who">ネットの<wbr>ことは、<wbr>まる<wbr>ごと<wbr>任せたい方に</p>
+          <h3>WEB担当者代行</h3>
+          <dl>
+            <dt>サイト</dt><dd>スタンダードと<wbr>同じ</dd>
+            <dt>更新</dt><dd>月4回まで</dd>
+            <dt>Googleマップ</dt><dd>お知らせの<wbr>投稿 月4回、<wbr>口コミへの<wbr>返信文の<wbr>下書き</dd>
+            <dt>報告</dt><dd>月1回、<wbr>サイトの<wbr>見られ方を<wbr>簡単に<wbr>お知らせ</dd>
+            <dt>契約期間</dt><dd>縛りなし</dd>
+          </dl>
+        </div>
+        <div class="stub">
+          <span class="price-k">月額</span>
+          <span class="price">19,800<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
+          <span class="price init">初期 98,000円</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="how">
+      <h3>選び方の<wbr>目安</h3>
+      <ul>
+        <li><span>長く<wbr>使う<wbr>予定なら</span><b>スタンダード</b></li>
+        <li><span>最初の<wbr>負担を<wbr>軽くしたいなら</span><b>初期0円プラン</b></li>
+        <li><span>Googleマップも<wbr>任せたいなら</span><b>WEB担当者代行</b></li>
+      </ul>
+    </div>
+
+    <div class="more">
+      <div class="box incl">
+        <h3>初期費用<wbr>（98,000円）に<wbr>含まれる<wbr>もの</h3>
+        <ul>
+          <li>デザイン・文章の<wbr>整え・ページづくり</li>
+          <li>スマホ・パソコンの<wbr>両方で<wbr>見やすく</li>
+          <li>お問い合わせフォームの<wbr>設置</li>
+          <li>独自ドメインの<wbr>取得と<wbr>設定</li>
+          <li>Googleの<wbr>検索に<wbr>登録する<wbr>設定</li>
+          <li>お店の<wbr>地図を<wbr>サイトに<wbr>載せる</li>
+        </ul>
+        <p class="note">ネット予約<wbr>（RESERVA など）の<wbr>つなぎこみも<wbr>ご相談ください。<wbr>Googleマップの<wbr>お店情報<wbr>（説明文・<wbr>写真・営業時間など）の<wbr>最初の<wbr>整備は<wbr>別料金です<wbr>（<a href="#option">下の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>）。</p>
+      </div>
+      <div class="box total">
+        <h3>お支払いの<wbr>合計の<wbr>目安<wbr>（税込）</h3>
+        <p>初期費用と、<wbr>公開してからの<wbr>月額を<wbr>足した<wbr>金額です。</p>
+        <div class="sim" id="sim" hidden>
+          <div class="sim-q"><label for="sim-m">使う<wbr>期間</label><output id="sim-out" for="sim-m">12<small>か月</small></output></div>
+          <input type="range" id="sim-m" min="1" max="36" step="1" value="12" aria-describedby="sim-note">
+          <div class="sim-scale" aria-hidden="true"><span>1か月</span><span>1年</span><span>2年</span><span>3年</span></div>
+          <div class="sim-quick" role="group" aria-label="よく聞かれる期間"><button type="button" data-m="6">半年</button><button type="button" data-m="12" aria-pressed="true">1年</button><button type="button" data-m="24">2年</button><button type="button" data-m="36">3年</button></div>
+          <ul class="sim-rows" aria-live="polite">
+            <li data-plan="std"><div class="row"><span>スタンダード</span><b>164,000円</b></div><div class="bar"><i></i></div></li>
+            <li data-plan="zero"><div class="row"><span>初期0円プラン</span><b>117,600円</b></div><div class="bar"><i></i></div><em class="fee"></em></li>
+            <li data-plan="web"><div class="row"><span>WEB担当者代行</span><b>335,600円</b></div><div class="bar"><i></i></div></li>
+          </ul>
+          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。<wbr>初期0円プランを<wbr>12か月より<wbr>前に<wbr>やめた<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）を<wbr>含めた<wbr>金額です。</p>
+        </div>
+        <table id="sim-table">
+          <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
+          <tbody>
+            <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
+            <tr><td>初期0円プラン</td><td><b>117,600円</b></td><td><b>235,200円</b></td></tr>
+            <tr><td>WEB担当者代行</td><td><b>335,600円</b></td><td><b>573,200円</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="price-foot">
+      <div class="box extra">
+        <h3>追加で<wbr>お願いする<wbr>場合</h3>
+        <dl>
+          <dt>回数を<wbr>こえた<wbr>更新</dt><dd>1回 3,300円</dd>
+          <dt>ページの<wbr>追加</dt><dd>1ページ 22,000円</dd>
+        </dl>
+        <p class="extra-note">更新は、<wbr>1回の<wbr>ご依頼<wbr>（LINEなら<wbr>1通分）で<wbr>まとめていただいた<wbr>変更を<wbr>「1回」と<wbr>数えます。<wbr>ページの<wbr>作り直しや<wbr>新しい<wbr>項目の<wbr>追加など<wbr>大きな<wbr>変更は、<wbr>別に<wbr>ご相談させてください。</p>
+      </div>
+      <div class="side">
+        <div class="box pay">
+          <h3>お支払い方法</h3>
+          <dl>
+            <dt>方法</dt><dd>お振込み<wbr>（振込手数料は<wbr>お店の<wbr>ご負担です）</dd>
+            <dt>初期費用</dt><dd>公開の<wbr>ときに<wbr>ご請求します</dd>
+            <dt>月額</dt><dd>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください</dd>
+            <dt>請求書</dt><dd>インボイス<wbr>（適格請求書）に<wbr>対応しています</dd>
+          </dl>
+        </div>
+        <div class="keep">
+          <p class="note">初期0円プランは、<wbr>続けて<wbr>使う<wbr>ほど<wbr>お支払いの<wbr>合計が<wbr>スタンダードより<wbr>多くなります<wbr>（23か<wbr>月目ごろに<wbr>逆転します）。<wbr>長く<wbr>使う<wbr>予定なら<wbr>スタンダードが<wbr>お得です。<wbr>12か<wbr>月より<wbr>前に<wbr>解約する<wbr>場合は<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p>
+          <p class="note">紹介料などの<wbr>仕組みは<wbr>ありません。</p>
+        </div>
+      </div>
+    </div>
+    <div class="box opt" id="option">
+      <h3>ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします<wbr>（税込）</h3>
+      <p>ホームページと<wbr>同じ<wbr>ロゴ・<wbr>色・<wbr>言葉で<wbr>そろえて<wbr>作ります。<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引に<wbr>なります<wbr>（右の<wbr>列の<wbr>金額）。</p>
+      <table>
+        <thead><tr><th>内容</th><th>通常</th><th>ご契約の<br>お店</th></tr></thead>
+        <tbody>
+          <tr><td>ロゴ</td><td>33,000円〜</td><td><b>22,000円〜</b></td></tr>
+          <tr><td>名刺</td><td>11,000円〜</td><td><b>5,500円〜</b></td></tr>
+          <tr><td>チラシ<wbr><span class="nw">（A4片面）</span></td><td>22,000円〜</td><td><b>16,500円〜</b></td></tr>
+          <tr><td><span class="nw">メニュー表</span><wbr><span class="nw">（A4片面）</span></td><td>22,000円〜</td><td><b>16,500円〜</b></td></tr>
+          <tr><td>Googleマップの<wbr>最初の<wbr>整備</td><td>22,000円〜</td><td><b>11,000円〜</b></td></tr>
+          <tr><td>ホームページの<wbr>動きの<wbr>演出<wbr><span class="nw">（1か所）</span></td><td>—</td><td><b>16,500円〜</b></td></tr>
+        </tbody>
+      </table>
+      <ul class="opt-note">
+        <li>どれも<wbr>直しは<wbr>2回まで<wbr>含みます。</li>
+        <li>ロゴは<wbr>「メインの<wbr>ロゴ」と<wbr>「小さい<wbr>場所用」の<wbr>2つで<wbr>1組です。<wbr>看板や<wbr>印刷にも<wbr>使える<wbr>データで<wbr>お渡しします。</li>
+        <li>名刺・<wbr>チラシ・<wbr>メニュー表は<wbr>印刷用の<wbr>データで<wbr>お渡しします。<wbr>印刷代は<wbr>実費で<wbr>お店の<wbr>ご負担です。</li>
+        <li>動きの<wbr>演出は、<wbr>お店の<wbr>ロゴや<wbr>絵に<wbr>合わせた<wbr>オリジナルの<wbr>動き<wbr>（例：<wbr>♡が<wbr>光る）です。<wbr>ホームページを<wbr>ご契約の<wbr>お店だけの<wbr>メニューです。<wbr>ふつうの<wbr>動き<wbr>（ふわっと<wbr>表示されるなど）は<wbr>初期費用に<wbr>含みます。</li>
+        <li>両面に<wbr>するときや、<wbr>載せる<wbr>ものが<wbr>多いとき、<wbr>写真の<wbr>撮影が<wbr>いるときは、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</li>
+      </ul>
+    </div>
+
+    <div class="cta">
+      <div>
+        <h3>どの<wbr>プランが<wbr>合うか、<wbr><span class="nw">一緒に考えます</span></h3>
+        <p>ご相談・<wbr>お見積もりは<wbr>無料です。<wbr>決めて<wbr>いなくても<wbr>大丈夫です。</p>
+      </div>
+      <div class="actions">
+        <a class="btn signal" href="tel:09011896726"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3L13 11.5l4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C8.6 17 3 11.4 2.5 4.6A1.5 1.5 0 0 1 4 3z"/></svg>電話で<wbr>相談</a>
+        <a class="btn ghost" href="#contact">フォームで<wbr>相談</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="data" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>データの<wbr>管理</h2>
+      <p>ホームページは<wbr>お店の大事な財産です。<wbr>やめるときに<wbr>困らないよう、<wbr>最初からお店のものとして<wbr>持っていただきます。</p>
+    </div>
+    <div class="keys">
+      <div class="k-own">
+        <h3><span class="k-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg></span>お店の<wbr>名義で<wbr>作るもの</h3>
+        <p class="k-lead">最初から<wbr>お店の<wbr>ものです。<wbr>やめても<wbr>そのまま<wbr>使えます。</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><b>ドメイン</b><span>ホームページの<wbr>住所<wbr><span class="nw">（〇〇.jp など）。</span><wbr>代金も<wbr>お店から<wbr>直接<wbr>お支払い</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><b>Googleマップの<wbr>お店情報</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><b>ネット予約</b><span>RESERVA など</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg><b>お問い合わせの<wbr>メール</b><span>お店の<wbr>メールに<wbr>直接<wbr>届きます</span></li>
+        </ul>
+      </div>
+      <div class="k-pass" aria-hidden="true"><span>やめる<wbr>ときは<br>すべて<wbr>お渡し</span></div>
+      <div class="k-keep">
+        <h3>こちらで<wbr>預かって<wbr>管理するもの</h3>
+        <p class="k-lead">やめる<wbr>ときは<wbr>一式を<wbr>お渡しします。<wbr>ほかの<wbr>会社にも<wbr>引き継げます。</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg><b>ホームページの<wbr>ファイル</b><span>2か所に<wbr>保管。<wbr>変更の<wbr>記録も<wbr>すべて<wbr>残すので、<wbr>前の<wbr>状態にも<wbr>戻せます</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 4"/></svg><b>いただいた<wbr>写真</b><span>やめる<wbr>ときに<wbr>お返しして、<wbr>こちらの<wbr>分は<wbr>消します</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="k-note">お店の<wbr>お客さんの<wbr>個人情報<wbr>（お問い合わせ・<wbr>予約）は、<wbr>こちらでは<wbr>持ちません。</p>
+  </div>
+</section>
+
+<section id="flow" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>作成の<wbr>流れ</h2>
+      <p>お会いする<wbr>打ち合わせは<wbr>2回です。<wbr>あいだは<wbr>LINEや<wbr>電話での<wbr>やりとりで<wbr>進めます。<wbr>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<span class="nw">2〜3週間</span>です。</p>
+    </div>
+    <ol class="flow">
+      <li><div><h3>お問い合わせ</h3><p>フォーム・<wbr>電話・<wbr>メールから。<wbr>選んで<wbr>送るだけでも<wbr>大丈夫です。</p></div></li>
+      <li><div><h3>1回目の<wbr>打ち合わせ</h3><p>ご都合の<wbr>よい<wbr>場所で、<wbr>載せたい<wbr>内容や<wbr>お好みの<wbr>デザインを<wbr>お聞きします。<wbr>写真は<wbr>お店で<wbr>撮って<wbr>いただきます<wbr>（撮り方は<wbr>お伝えします）。</p></div></li>
+      <li><div><h3>見本を作って<wbr>確認</h3><p>スマホで<wbr>見られる<wbr>見本を<wbr>お送りします。<wbr>気になる<wbr>ところを<wbr>お伝えください。</p></div></li>
+      <li><div><h3>2回目の<wbr>打ち合わせ</h3><p>ドメインや<wbr>Googleマップ、<wbr>ネット予約など、<wbr>お店の<wbr>名義で<wbr>作るものを<wbr>一緒に<wbr>作ります。</p></div></li>
+      <li><div><h3>公開</h3><p>Googleへの<wbr>登録などの<wbr>設定をして、<wbr>ネットに<wbr>公開します。</p></div></li>
+      <li class="up"><div><h3>毎月の<wbr>更新</h3><p>公開後も、<wbr>変えたい<wbr>ことは<wbr>ひと言<wbr>いただければ<wbr>こちらで<wbr>直します。</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 担当する人（2026/10/8 夜 ユーザー了承：名前と顔は出さず、経歴の一文） -->
+<section id="person" class="sec person" aria-labelledby="person-h">
+  <div class="wrap">
+    <div class="p-card">
+      <div class="p-mark" aria-hidden="true"><img src="../img/emblem.svg" alt="" width="120" height="120"></div>
+      <div class="p-body">
+        <p class="p-eyebrow">担当する人</p>
+        <h2 id="person-h">最初の<wbr>ご相談から<wbr>毎月の<wbr>更新まで、<wbr><span class="nw">同じ1人が担当します。</span></h2>
+        <p>防府市を<wbr>拠点に<wbr>している<wbr>個人の<wbr>事業者です。<wbr>会社勤めを<wbr>25年<wbr>続けた<wbr>あと<wbr>独立し、<wbr>ホームページの<wbr>仕事と、<wbr>伐採・<wbr>草刈りの<wbr>仕事を<wbr>しています。<wbr>話した<wbr>ことが<wbr>担当者の<wbr>あいだで<wbr>伝わらない、<wbr>ということは<wbr>ありません。</p>
+        <ul class="p-points">
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>窓口は<wbr>最後まで<wbr>同じ人</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>打ち合わせは<wbr>お会いして<wbr>2回</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>インボイス<wbr>登録済み</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 実在のお店は載せず、架空のお店の見本だけを見せる（実際のサイトは打ち合わせで直接見せる） -->
+<section id="work" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>デザイン見本</h2>
+      <p>業種ごとの<wbr>見本と、<wbr>同じ<wbr>お店で<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
+    </div>
+
+    <!-- 見本の切りかえ（JS があるときだけ出す。ないときは下の一覧が出る） -->
+    <div class="viewer" id="viewer" hidden>
+      <p class="v-group">業種で<wbr>選ぶ<small>（ひな形から<wbr>作った<wbr>見本）</small></p>
+      <div class="v-tabs" role="tablist" aria-label="見本の業種">
+        <button type="button" role="tab" id="vt-cafe" aria-controls="v-panel" aria-selected="true" data-k="cafe" data-name="喫茶・カフェ" data-sub="落ち着いた、木の色で" data-text="モーニング・ランチ・ケーキを、メニューごとに写真つきで。営業時間と定休日がすぐ分かります。"><span class="sw sw-cafe" aria-hidden="true"></span>喫茶・カフェ</button>
+        <button type="button" role="tab" id="vt-school" aria-controls="v-panel" aria-selected="false" data-k="school" data-name="教室・習いごと" data-sub="明るく、わかりやすく" data-text="クラスと月謝を並べて、体験レッスンへの入口を大きく。入会までの流れも1目で。" tabindex="-1"><span class="sw sw-school" aria-hidden="true"></span>教室・習いごと</button>
+        <button type="button" role="tab" id="vt-reform" aria-controls="v-panel" aria-selected="false" data-k="reform" data-name="工務店・リフォーム" data-sub="頼りになる感じを" data-text="仕事の内容と、下見からの流れ。料金は「下見のうえでお見積もり」と正直に。" tabindex="-1"><span class="sw sw-reform" aria-hidden="true"></span>工務店・リフォーム</button>
+        <button type="button" role="tab" id="vt-hair" aria-controls="v-panel" aria-selected="false" data-k="hair" data-name="美容室" data-sub="静かに、上品に" data-text="メニューと料金を見やすく。予約はLINEかお電話へすぐつながります。" tabindex="-1"><span class="sw sw-hair" aria-hidden="true"></span>美容室</button>
+        <button type="button" role="tab" id="vt-relax" aria-controls="v-panel" aria-selected="false" data-k="relax" data-name="整体" data-sub="やさしく、安心して" data-text="はじめての方の不安に答えるよくある質問と、持病・妊娠中の方への案内を入れています。" tabindex="-1"><span class="sw sw-relax" aria-hidden="true"></span>整体</button>
+      </div>
+      <p class="v-group">テイストで<wbr>選ぶ<small>（同じ<wbr>サロンで<wbr>雰囲気を<wbr>変えた<wbr>見本）</small></p>
+      <div class="v-tabs" role="tablist" aria-label="見本のテイスト">
+        <button type="button" role="tab" id="vt-homey" aria-controls="v-panel" aria-selected="false" data-k="homey" data-name="アットホーム" data-sub="やわらかく、親しみやすく" data-text="やわらかい言葉と、押しやすい大きなボタン。近所の常連さんが多いお店に。" tabindex="-1"><span class="sw sw-homey" aria-hidden="true"></span>アットホーム</button>
+        <button type="button" role="tab" id="vt-luxury" aria-controls="v-panel" aria-selected="false" data-k="luxury" data-name="ラグジュアリー" data-sub="上品に、落ち着いて" data-text="縦書きの見出しと、深い色。落ち着いた時間を売りにするお店に。" tabindex="-1"><span class="sw sw-luxury" aria-hidden="true"></span>ラグジュアリー</button>
+        <button type="button" role="tab" id="vt-pop" aria-controls="v-panel" aria-selected="false" data-k="pop" data-name="カラフル" data-sub="明るく、わかりやすく" data-text="白い地に、はっきりした色。家族連れや若いお客さんが多いお店に。" tabindex="-1"><span class="sw sw-pop" aria-hidden="true"></span>カラフル</button>
+        <button type="button" role="tab" id="vt-chic" aria-controls="v-panel" aria-selected="false" data-k="chic" data-name="シック" data-sub="大人っぽく、印象に残る" data-text="黒と金で、夜のような落ち着き。こだわりを伝えたいお店に。" tabindex="-1"><span class="sw sw-chic" aria-hidden="true"></span>シック</button>
+        <button type="button" role="tab" id="vt-photo" aria-controls="v-panel" aria-selected="false" data-k="photo" data-name="写真を大きく" data-sub="トップに写真や絵を大きく" data-text="画面いっぱいの写真や絵で、お店の空気をそのまま伝えます。" tabindex="-1"><span class="sw sw-photo" aria-hidden="true"></span>写真を大きく</button>
+        <button type="button" role="tab" id="vt-wa" aria-controls="v-panel" aria-selected="false" data-k="wa" data-name="和風・職人" data-sub="落ち着いて、確かな手仕事を" data-text="縦書きの見出しと朱色の印。作業の前と後を並べて見せます。造園・大工・畳など、手仕事のお店に。" tabindex="-1"><span class="sw sw-wa" aria-hidden="true"></span>和風・職人</button>
+      </div>
+      <div class="v-body" id="v-panel" role="tabpanel" aria-labelledby="vt-cafe">
+        <a class="v-shot" id="v-link" href="../samples/cafe/index.html"><img id="v-img" src="../samples/thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面" width="1200" height="780"></a>
+        <div class="v-info">
+          <p class="v-sub" id="v-sub">落ち着いた、木の色で</p>
+          <h3 id="v-name">喫茶・カフェ</h3>
+          <p id="v-text">モーニング・ランチ・ケーキを、メニューごとに写真つきで。営業時間と定休日がすぐ分かります。</p>
+          <a class="btn primary" id="v-open" href="../samples/cafe/index.html">この見本を開く</a>
+          <p class="v-note">どれも<wbr>架空の<wbr>お店です。<wbr>写真の<wbr>ところには、<wbr>お店で<wbr>撮った<wbr>写真が<wbr>入ります。</p>
+        </div>
+      </div>
+    </div>
+    <div class="samples" id="samples-grid">
+      <a class="sample" href="../samples/cafe/index.html">
+        <div class="shot"><img src="../samples/thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>喫茶・カフェ</h3><p>落ち着いた、木の色で</p>
+      </a>
+      <a class="sample" href="../samples/school/index.html">
+        <div class="shot"><img src="../samples/thumbs/school.jpg" alt="教室・習いごとの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>教室・習いごと</h3><p>明るく、わかりやすく</p>
+      </a>
+      <a class="sample" href="../samples/reform/index.html">
+        <div class="shot"><img src="../samples/thumbs/reform.jpg" alt="工務店・リフォームの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>工務店・リフォーム</h3><p>頼りになる感じを</p>
+      </a>
+      <a class="sample" href="../samples/hair/index.html">
+        <div class="shot"><img src="../samples/thumbs/hair.jpg" alt="美容室の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>美容室</h3><p>静かに、上品に</p>
+      </a>
+      <a class="sample" href="../samples/relax/index.html">
+        <div class="shot"><img src="../samples/thumbs/relax.jpg" alt="整体の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>整体</h3><p>やさしく、安心して</p>
+      </a>
+      <a class="sample" href="../samples/homey/index.html">
+        <div class="shot"><img src="../samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>アットホーム</h3><p>やわらかく、<wbr>親しみやすく</p>
+      </a>
+      <a class="sample" href="../samples/luxury/index.html">
+        <div class="shot"><img src="../samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>ラグジュアリー</h3><p>上品に、<wbr>落ち着いて</p>
+      </a>
+      <a class="sample" href="../samples/pop/index.html">
+        <div class="shot"><img src="../samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>カラフル</h3><p>明るく、<wbr>わかりやすく</p>
+      </a>
+      <a class="sample" href="../samples/chic/index.html">
+        <div class="shot"><img src="../samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>シック</h3><p>大人っぽく、<wbr>印象に残る</p>
+      </a>
+    </div>
+
+    <h3 class="sub-h">ホームページと<wbr><span class="nw">一緒に作れるもの</span></h3>
+    <p class="sub-p">ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
+    <div class="samples three">
+      <a class="sample photo-card" href="../samples/photo/index.html">
+        <div class="shot"><img src="../samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>写真を<wbr>大きく</h3><p>トップに<wbr>写真や<wbr>絵を<wbr>大きく</p>
+      </a>
+      <a class="sample wa-card" href="../samples/wa/index.html">
+        <div class="shot"><img src="../samples/thumbs/wa.jpg" alt="和風・職人の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>和風・職人</h3><p>落ち着いて、<wbr>確かな<wbr>手仕事を</p>
+      </a>
+      <a class="sample" href="../samples/logo/index.html">
+        <div class="shot"><img src="../samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>ロゴ</h3><p>6つの<wbr>見本</p>
+      </a>
+      <a class="sample" href="../samples/card/index.html">
+        <div class="shot"><img src="../samples/thumbs/card.jpg" alt="名刺の見本" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>名刺</h3><p>表と<wbr>うらの<wbr>見本</p>
+      </a>
+    </div>
+
+    <div class="work-foot">
+      <p>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
+      <a class="btn" href="../samples/index.html">見本の<wbr>一覧を<wbr>見る</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- このページ自体が「見本」：お店のサイトに最初から入れていること（決定事項・マニュアル 16・06） -->
+<section id="same" class="sec same" aria-labelledby="same-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="same-h"><span class="nw">このページも、</span><wbr><span class="nw">同じ作りです</span></h2>
+      <p>見えにくい<wbr>ところですが、<wbr>お店の<wbr>ホームページには、<wbr>はじめから<wbr>次のことを<wbr>入れています。<wbr>このページで<wbr>そのまま<wbr>試せます。</p>
+    </div>
+    <ul class="same-list">
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="12" height="21" rx="2.5"/><path d="M11 19.5h4"/></svg></span><h3>古いスマホでも<wbr>崩れない</h3><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h18M4 12.5h13M4 18h16"/></svg></span><h3>言葉の<wbr>途中で<wbr>切れない</h3><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6L4 12l6 6"/><path d="M4 12h11a7 7 0 010 14"/></svg></span><h3>「戻る」で、<wbr>見ていた<wbr>場所へ</h3><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="../samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="20" height="16" rx="2.5"/><path d="M3 15l5-4 4 3 4-5 7 6"/></svg></span><h3>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h3><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h4l2 5-2.5 1.5a11 11 0 006.5 6.5L17.5 14l5 2v4a2 2 0 01-2 2A17.5 17.5 0 014 5.5a2 2 0 012-2z"/></svg></span><h3>押すと<wbr>そのまま<wbr>電話・予約</h3><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="20" height="14" rx="2"/><path d="M3.5 7l9.5 7 9.5-7"/></svg></span><h3>お問い合わせは<wbr>お店の<wbr>メールへ</h3><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
+    </ul>
+    <p class="same-foot">ほかにも、<wbr>画像は<wbr>見る<wbr>ところまで<wbr>来てから<wbr>読み込むなど、<wbr>表示が<wbr>重く<wbr>ならないように<wbr>しています。</p>
+  </div>
+</section>
+
+<section id="faq" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>よく<wbr>ある<wbr>質問</h2>
+      <p>質問を<wbr>押すと<wbr>答えが<wbr>開きます。<wbr>ほかにも<wbr>気に<wbr>なることが<wbr>あれば、<wbr>お気軽に<wbr>お問い合わせ<wbr>ください。</p>
+    </div>
+    <div class="faq-wrap">
+      <aside class="faq-side">
+        <nav class="faq-nav" aria-label="質問の分類">
+          <a href="#faq-start">はじめる前に<span>5</span></a>
+          <a href="#faq-money">お金と契約のこと<span>5</span></a>
+          <a href="#faq-more">あわせて頼めること<span>2</span></a>
+        </nav>
+        <div class="faq-ask"><b>ここにない<wbr>質問は</b><p>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</p><a class="btn primary" href="#contact">相談する</a></div>
+      </aside>
+      <div class="faq">
+        <h3 class="faq-h" id="faq-start">はじめる前に</h3>
+        <details><summary>パソコンが<wbr>使えなくても<wbr>大丈夫ですか？</summary><p>大丈夫です。<wbr>更新の<wbr>ご依頼は<wbr>LINEや<wbr>電話で<wbr>ひと言いただくだけで、<wbr>作業は<wbr>こちらで<wbr>行います。</p></details>
+        <details><summary>どの<wbr>くらいでできあがりますか？</summary><p>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr><span class="nw">2〜3週間</span>です。<wbr>見本を<wbr>見ていただいてからの<wbr>直しの<wbr>回数などで<wbr>前後します。</p></details>
+        <details><summary>写真が<wbr>ありません。<wbr>撮って<wbr>もらえますか？</summary><p>こちらでの<wbr>撮影は<wbr>していませんが、<wbr>スマホで<wbr>撮った<wbr>写真でも<wbr>使えます。<wbr>「横向きで<wbr>多めに」など、<wbr>撮り方の<wbr>コツを<wbr>お伝えします。</p></details>
+        <details><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？</summary><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></details>
+        <details><summary>防府市以外でも<wbr>お願いできますか？</summary><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></details>
+        <h3 class="faq-h" id="faq-money">お金と契約のこと</h3>
+        <details><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？</summary><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></details>
+        <details><summary>途中で<wbr>プランを<wbr>変えられますか？</summary><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>初期0円プランは、<wbr>12か<wbr>月の<wbr>ご契約期間が<wbr>終わってからの<wbr>変更に<wbr>なります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></details>
+        <details><summary>ドメイン代は<wbr>いくらですか？</summary><p>年2,000円前後からです<wbr>（.com や .jp など、<wbr>種類で<wbr>変わります）。<wbr>お店の<wbr>名義で<wbr>取り、<wbr>ドメインの<wbr>会社へ<wbr>お店から<wbr>直接<wbr>お支払い<wbr>いただきます。<wbr>取る<wbr>手続きは、<wbr>2回目の<wbr>打ち合わせで<wbr>一緒に<wbr>します。<wbr>更新の<wbr>時期が<wbr>近づいたら、<wbr>こちらから<wbr>お知らせします。</p></details>
+        <details><summary>支払いは<wbr>どうすればいいですか？</summary><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></details>
+        <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></details>
+        <h3 class="faq-h" id="faq-more">あわせて頼めること</h3>
+        <details><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？</summary><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>11,000円〜<wbr>（通常<wbr>22,000円〜）です。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></details>
+        <details><summary>ロゴや<wbr>名刺、<wbr>チラシも<wbr>作って<wbr>もらえますか？</summary><p>できます。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>を<wbr>ご覧ください<wbr>（ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引が<wbr>あります）。<wbr>メニュー表も<wbr>作れます。<wbr>ロゴは<wbr>いくつか<wbr>案を<wbr>お見せして、<wbr>選んで<wbr>いただいてから<wbr>仕上げます。<wbr>ホームページ・<wbr>Instagram・<wbr>Googleマップ・<wbr>名刺の<wbr>ロゴを<wbr>同じ日に<wbr>そろえて<wbr>切りかえると、<wbr>お店の<wbr>印象が<wbr>ばらばらに<wbr>なりません。</p></details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="other" class="sec alt">
+  <div class="wrap">
+    <div class="other">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 46h44" stroke="#17283A" stroke-width="2.4"/><path d="M20 46V34" stroke="#17283A" stroke-width="2.6"/><path d="M20 8l-10 14h5l-8 12h26l-8-12h5z" fill="#fff" stroke="#2F6F8F" stroke-width="2.4"/><circle cx="41" cy="14" r="5" fill="#F2C230" stroke="none"/><path d="M34 46v-5h10v5" stroke="#17283A" stroke-width="2.4"/><path d="M33 41c2-4 10-4 12 0" stroke="#17283A" stroke-width="2.2"/></svg></span>
+      <div>
+        <h3>伐採・伐木・抜根・草刈りも</h3>
+        <p>Lift-Off では、<wbr>木の<wbr>伐採や<wbr>草刈りの<wbr>仕事も<wbr>行っています。<wbr>防府市近郊の<wbr>空き家・<wbr>空き地の<wbr>お手入れも<wbr>ご相談ください。</p>
+      </div>
+      <!-- 伐採サイトのURLが決まったら href を差し替える -->
+      <a class="btn" href="#contact" data-topic="伐採・草刈りの相談">伐採・草刈りに<wbr>ついて<wbr>相談する</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="sec contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>お問い合わせ</h2>
+      <p>ご相談・<wbr>お見積もりは<wbr>無料です。<wbr>「こんなことできる？」だけでも<wbr>お気軽に<wbr>どうぞ。</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <p class="tel-label">お電話</p>
+        <a class="tel" href="tel:09011896726"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3L13 11.5l4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C8.6 17 3 11.4 2.5 4.6A1.5 1.5 0 0 1 4 3z"/></svg>090-1189-6726</a>
+        <p class="tel-hours">受付時間　<b>平日 10:00〜16:00</b></p>
+        <p class="meet-note"><b>打ち合わせは、<wbr>お会いして</b>ご都合の<wbr>よい<wbr>場所へ<wbr>うかがいます<wbr>（お店・<wbr>カフェなど）。<wbr>フォームで<wbr>ご都合を<wbr>選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>日にちは<wbr>こちらから<wbr>折り返して<wbr>決めます。</p>
+        <p class="tel-note">フォーム・<wbr>メールは<wbr>いつでも<wbr>送れます。<wbr>お電話は<wbr>作業中で<wbr>出られない<wbr>ことがあります。<wbr>その<wbr>場合は、<wbr>折り返しお電話します。</p>
+        <p>メール：<a class="mail" href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
+        <dl>
+          <dt>屋号</dt><dd>Lift-Off<wbr>（リフトオフ）</dd>
+          <dt>所在地</dt><dd>山口県防府市</dd>
+          <dt>対応地域</dt><dd>防府市と<wbr>その<wbr>周辺</dd>
+        </dl>
+        <div class="next">
+          <h3>ご相談の<wbr>あとは</h3>
+          <ol>
+            <li><b>ご連絡</b>フォーム・<wbr>お電話・<wbr>メールの<wbr>どれでも。<wbr>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</li>
+            <li><b>お会いする<wbr>日を<wbr>決めて、<wbr>うかがいます</b>こちらから<wbr>折り返して<wbr>日と<wbr>場所を<wbr>決めます。<wbr>お店の<wbr>ことを<wbr>うかがって、<wbr>合いそうな<wbr>プランと<wbr>金額を<wbr>お伝えします。</li>
+            <li><b>決めるのは<wbr>そのあとで</b>ご家族と<wbr>相談してからでも<wbr>かまいません。</li>
+          </ol>
+          <ul class="nopush">
+            <li>その場で<wbr>決めなくて<wbr>大丈夫です</li>
+            <li>無理に<wbr>おすすめしません</li>
+            <li>お断りいただいても、<wbr>こちらから<wbr>何度も<wbr>連絡しません</li>
+          </ul>
+        </div>
+      </div>
+      <div class="formbox">
+        <div class="form-top" aria-hidden="true"><span>ご相談票</span><span class="flight">LO 00</span></div>
+        <form id="form" action="" method="POST">
+          <p class="form-lead">選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>文を<wbr>考えなくても、<wbr>こちらから<wbr>うかがいます。</p>
+          <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
+          <label><span>お店・会社の<wbr>名前<span class="opt-label">なくても可</span></span><input name="shop" autocomplete="organization"></label>
+          <label><span>ご連絡先<wbr>（電話番号か<wbr>メール）<span class="req">必須</span></span><input name="contact" required autocomplete="tel" placeholder="例：090-0000-0000"></label>
+          <fieldset><legend>ご相談の<wbr>しかた</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="how" value="会って話したい" checked><span>会って話したい</span></label>
+              <label class="chip"><input type="radio" name="how" value="まずは連絡のやりとりで"><span>まずは連絡のやりとりで</span></label>
+              <label class="chip"><input type="radio" name="how" value="電話で話したい"><span>電話で話したい</span></label>
+            </div>
+          </fieldset>
+          <div class="meet" id="meet">
+            <fieldset><legend>いつごろが<wbr>よいですか<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="when" value="今週"><span>今週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="来週"><span>来週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="再来週より先"><span>再来週より先</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="いつでも"><span>いつでも</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>曜日<span class="opt-label">いくつでも</span></legend>
+              <div class="chips days">
+              <label class="chip"><input type="checkbox" name="day" value="月"><span>月</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="火"><span>火</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="水"><span>水</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="木"><span>木</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="金"><span>金</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>時間<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="time" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+              <label class="chip"><input type="checkbox" name="time" value="午後（13〜16時）"><span>午後（13〜16時）</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>会う<wbr>場所</legend>
+              <div class="chips">
+              <label class="chip"><input type="radio" name="place" value="お店に来てほしい"><span>お店に来てほしい</span></label>
+              <label class="chip"><input type="radio" name="place" value="お店の近くのカフェなど"><span>お店の近くのカフェなど</span></label>
+              <label class="chip"><input type="radio" name="place" value="どこでもよい"><span>どこでもよい</span></label>
+              </div>
+            </fieldset>
+            <p class="formnote">日にちと<wbr>場所は、<wbr>こちらから<wbr>折り返して<wbr>決めます。<wbr>うかがえるのは、<wbr>防府市と<wbr>その<wbr>周辺の<wbr>平日 10:00〜16:00 です。</p>
+          </div>
+          <fieldset><legend>気に<wbr>なること<span class="opt-label">いくつでも</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="about" value="ホームページを新しく作りたい"><span>ホームページを新しく作りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="今のホームページを直したい"><span>今のホームページを直したい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="更新をまかせたい"><span>更新をまかせたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ネット予約をつけたい"><span>ネット予約をつけたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="Googleマップを整えたい"><span>Googleマップを整えたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ロゴ・名刺・チラシ・メニュー表"><span>ロゴ・名刺・チラシ・メニュー表</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="料金を知りたい"><span>料金を知りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="伐採・草刈りの相談"><span>伐採・草刈りの相談</span></label>
+            </div>
+          </fieldset>
+          <label><span>ほかに<wbr>伝えたいこと<span class="opt-label">なくても可</span></span><textarea name="message" placeholder="なければ空のままで大丈夫です"></textarea></label>
+          <input type="hidden" name="_subject" value="【Lift-Off】ホームページからのお問い合わせ">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <button class="btn signal" type="submit">この<wbr>内容で<wbr>送る</button>
+          <p class="formnote" id="formnote" role="status">送ると<wbr>メールの<wbr>画面が<wbr>開きます。<wbr>そのまま<wbr>送信してください。</p>
+          <p class="formnote">いただいた<wbr>内容は、<wbr>ご相談への<wbr>返事の<wbr>ためだけに<wbr>使います。</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <img class="foot-logo" src="../img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy" decoding="async">
+      <p>防府のお店の<wbr>ホームページ制作・<wbr>WEB担当者代行</p>
+      <p><a href="tel:09011896726">090-1189-6726</a>（受付 平日 10:00〜16:00）　<a href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
+    </div>
+    <ul class="foot-nav">
+      <li><a href="#can">できること</a></li><li><a href="#price">料金</a></li><li><a href="#data">データ管理</a></li><li><a href="#flow">作成の流れ</a></li><li><a href="#work">デザイン見本</a></li><li><a href="#faq">よくある質問</a></li><li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+    <p class="copy"><span>© Lift-Off　山口県防府市</span><a href="#">ページの上へ ↑</a></p>
+  </div>
+</footer>
+
+<div class="fixbar" id="fixbar">
+  <a class="btn primary" href="#contact" data-topic="会って話したい">会って<wbr>相談する</a>
+  <a class="btn" href="tel:09011896726">電話する</a>
+</div>
+
+<script>
+// 問い合わせフォーム：Formspree（https://formspree.io/f/xrpeekdb）に送り、liftoff.358@gmail.com に届く
+// 送ったあともこのページのまま「送りました」と出す。送れなかったときはメールの画面を開く
+var FORMSPREE = "https://formspree.io/f/xrpeekdb";
+var form = document.getElementById('form');
+var note = document.getElementById('formnote');
+var btn = form.querySelector('button[type=submit]');
+form.action = FORMSPREE;
+note.textContent = '送信後、こちらから折り返しご連絡します。';
+// 選んだものをまとめる（同じ名前の欄は「、」でつなぐ）
+var LABEL = {name:'お名前', shop:'お店・会社', contact:'ご連絡先', how:'ご相談のしかた', when:'いつごろ', day:'曜日', time:'時間', place:'会う場所', about:'気になること', message:'ほかに伝えたいこと'};
+function collect(){
+  var v = {}, order = [];
+  for (var i = 0; i < form.elements.length; i++) {
+    var el = form.elements[i]; if (!el.name || el.name === '_gotcha') continue;
+    if ((el.type === 'checkbox' || el.type === 'radio') && !el.checked) { if (!(el.name in v)) { v[el.name] = []; order.push(el.name); } continue; }
+    if (el.type === 'submit') continue;
+    if (!(el.name in v)) { v[el.name] = []; order.push(el.name); }
+    if (el.value) v[el.name].push(el.value);
+  }
+  if (!v.how || v.how.join('') !== '会って話したい') { delete v.when; delete v.day; delete v.time; delete v.place; }
+  var fd = new FormData(), text = [];
+  for (var j = 0; j < order.length; j++) { var k = order[j]; if (!(k in v)) continue; var val = v[k].join('、'); fd.append(LABEL[k] || k, val); if (LABEL[k]) text.push(LABEL[k] + '：' + (val || '（なし）')); }
+  fd.append('_gotcha', form._gotcha.value);
+  return { fd: fd, text: text.join('\n') };
+}
+function openMail(){
+  var c = collect();
+  location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + form.name.value) + '&body=' + encodeURIComponent(c.text);
+}
+// スマホのメニュー
+var menuBtn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+function closeMenu(){ nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+menuBtn.addEventListener('click', function(){ var o = nav.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+nav.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('a')) closeMenu(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+document.addEventListener('click', function(e){ if (nav.classList.contains('open') && !nav.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
+// 「伐採・草刈りについて相談する」からはご相談の内容を選んだ状態にする
+var meet = document.getElementById('meet');
+function showMeet(){ var h = form.querySelector('input[name=how]:checked'); meet.hidden = !h || h.value !== '会って話したい'; }
+[].forEach.call(form.querySelectorAll('input[name=how]'), function(r){ r.addEventListener('change', showMeet); });
+// ページの中のボタンから来たときは、選んだ状態にする
+[].forEach.call(document.querySelectorAll('[data-topic]'), function(a){ a.addEventListener('click', function(){
+  var t = a.getAttribute('data-topic');
+  [].forEach.call(form.querySelectorAll('input[value="' + t + '"]'), function(i){ i.checked = true; });
+  showMeet();
+}); });
+showMeet();
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  btn.disabled = true; btn.textContent = '送信中…';
+  fetch(FORMSPREE, { method: 'POST', body: collect().fd, headers: { 'Accept': 'application/json' } })
+    .then(function(r){ if (!r.ok) throw new Error('send failed');
+      form.reset(); showMeet();
+      btn.textContent = '送信しました';
+      note.textContent = 'ありがとうございます。内容を確認して、こちらから折り返しご連絡します。';
+    })
+    .catch(function(){
+      btn.disabled = false; btn.textContent = 'この内容で送る';
+      note.textContent = 'うまく送れませんでした。メールの画面を開きます。そのまま送信してください（お電話でも受け付けています）。';
+      openMail();
+    });
+});
+// 今見ているところをメニューで示す・お問い合わせ欄ではスマホの固定ボタンを隠す（古いブラウザでは何もしない）
+if ('IntersectionObserver' in window) {
+  var links = {};
+  [].forEach.call(nav.querySelectorAll('a'), function(a){ links[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if (en.isIntersecting && links[en.target.id]) {
+        for (var k in links) links[k].classList.remove('now');
+        links[en.target.id].classList.add('now');
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  Object.keys(links).forEach(function(id){ var s = document.getElementById(id); if (s) io.observe(s); });
+  var fix = document.getElementById('fixbar');
+  new IntersectionObserver(function(es){ fix.classList.toggle('hide', es[0].isIntersecting); }, { rootMargin: '0px 0px -30% 0px' }).observe(document.getElementById('contact'));
+}
+</script>
+<script>
+// 戻ったときに、見ていた場所に戻す（2026/10/7。押すと一番上に戻ってしまうため）
+(function(){
+  var key = 'y:' + location.pathname;
+  // 「もどる」リンク：同じサイトから来たときは、ブラウザの「戻る」と同じ動きにする（見ていた場所に戻る）
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || a.textContent.indexOf('もどる') < 0) return;
+    try {
+      if (document.referrer && document.referrer.indexOf(location.protocol + '//' + location.host) === 0 && history.length > 1) {
+        e.preventDefault(); history.back();
+      }
+    } catch (err) {}
+  });
+  // ブラウザの「戻る」で戻ってきたのに一番上に出たときは、前に見ていた場所へ
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) {
+      window.addEventListener('load', function(){
+        var y = parseInt(sessionStorage.getItem(key) || '0', 10);
+        if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y);
+      });
+    }
+  } catch (err) {}
+})();
+</script>
+<script>
+// お支払いの合計の目安：何か月使うかで計算（2026/10/8）。金額は決定事項のプランどおり。JS がない時は下の表だけ出る
+(function(){
+  var sim = document.getElementById('sim'); if (!sim) return;
+  var range = document.getElementById('sim-m'), out = document.getElementById('sim-out');
+  var table = document.getElementById('sim-table');
+  sim.hidden = false; if (table) table.style.display = 'none';
+  function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+  function calc(m){
+    var zeroFee = m < 12 ? (12 - m) * 4900 : 0;
+    return { std: 98000 + 5500 * m, zero: 9800 * m + zeroFee, web: 98000 + 19800 * m, zeroFee: zeroFee };
+  }
+  var rows = {}; [].forEach.call(sim.querySelectorAll('[data-plan]'), function(li){ rows[li.getAttribute('data-plan')] = li; });
+  var btns = sim.querySelectorAll('.sim-quick button');
+  function draw(){
+    var m = parseInt(range.value, 10), c = calc(m);
+    out.innerHTML = (m >= 12 && m % 12 === 0 ? (m / 12) + '<small>年（' + m + 'か月）</small>' : m + '<small>か月</small>');
+    var max = c.web, low = c.std <= c.zero ? 'std' : 'zero';
+    ['std', 'zero', 'web'].forEach(function(k){
+      rows[k].querySelector('b').textContent = yen(c[k]);
+      rows[k].querySelector('.bar i').style.width = Math.max(3, Math.round(c[k] / max * 100)) + '%';
+      rows[k].className = (k === low ? 'low' : '');
+    });
+    rows.zero.querySelector('.fee').textContent = c.zeroFee ? '（うち解約金 ' + yen(c.zeroFee) + '）' : '';
+    [].forEach.call(btns, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-m') === String(m) ? 'true' : 'false'); });
+  }
+  range.addEventListener('input', draw); range.addEventListener('change', draw);
+  [].forEach.call(btns, function(b){ b.addEventListener('click', function(){ range.value = b.getAttribute('data-m'); draw(); }); });
+  draw();
+})();
+</script>
+<script>
+// トップの紙飛行機：ページを開いたときに1回だけ、左下から右上へ飛ぶ（2026/10/8）。動きを減らす設定のときは、飛んだあとの絵だけ出す
+(function(){
+  var hero = document.querySelector('.hero'), svg = hero && hero.querySelector('.contrail');
+  if (!svg || !svg.getBoundingClientRect || !window.requestAnimationFrame) return;
+  var c1 = svg.querySelector('.c1'), c2 = svg.querySelector('.c2'), plane = svg.querySelector('.plane');
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mob = false;
+  function d(W, H, o){
+    // 左下（画面の外）→ 見出しの下を通って → 右上へ。o は2本目のずらし
+    var x0 = -0.05 * W, y0 = H * 1.02 + o, x3 = W * (mob ? 0.92 : 0.965), y3 = H * (mob ? 0.035 : 0.07) + o;
+    return 'M' + x0 + ' ' + y0 + ' C ' + (W * 0.3) + ' ' + (H * 0.98 + o) + ', ' + (W * 0.42) + ' ' + (H * 0.5 + o) + ', ' + (W * 0.55) + ' ' + (H * 0.38 + o) + ' S ' + (W * 0.8) + ' ' + (H * 0.12 + o) + ', ' + x3 + ' ' + y3;
+  }
+  function setup(){
+    var r = hero.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height);
+    mob = W < 900;
+    if (mob) H = Math.round(H * 0.58); // スマホは上の文の部分だけを飛ぶ
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px';
+    c1.setAttribute('d', d(W, H, 0)); c2.setAttribute('d', d(W, H, 14));
+    return c1.getTotalLength();
+  }
+  function place(t, L1, L2){
+    var e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ゆっくり出て、ゆっくり着く
+    var len = L1 * e, p = c1.getPointAtLength(len), q = c1.getPointAtLength(Math.min(L1, len + 2));
+    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+    plane.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + (ang + 12) + ')');
+    c1.style.strokeDashoffset = L1 - len;
+    c2.style.strokeDashoffset = L2 - L2 * Math.max(0, e - .04);
+  }
+  var L1 = setup(), L2 = c2.getTotalLength();
+  c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
+  svg.setAttribute('class', 'contrail on');
+  if (still) { place(1, L1, L2); return; }
+  var start = null, dur = 2600;
+  place(0, L1, L2);
+  var done = false;
+  function step(ts){ if (start === null) start = ts + 300; var t = Math.max(0, Math.min(1, (ts - start) / dur)); place(t, L1, L2); if (t < 1) requestAnimationFrame(step); else done = true; }
+  function go(){ requestAnimationFrame(step); }
+  // ページが見えてから飛ばす（裏で開いたときや、読み込み中に終わってしまわないように）
+  if (document.hidden) document.addEventListener('visibilitychange', function v(){ if (!document.hidden) { document.removeEventListener('visibilitychange', v); go(); } });
+  else if (document.readyState === 'complete') go();
+  else window.addEventListener('load', go);
+  // 画面の大きさが変わったら、飛んだあとの形に描き直す
+  // スマホは、画面を動かすと上下のバーが出入りして「大きさが変わった」ことになるので、横幅が変わったときだけ描き直す（飛んでいる途中ならそのまま続ける）
+  var lastW = Math.round(hero.getBoundingClientRect().width), tm;
+  window.addEventListener('resize', function(){ clearTimeout(tm); tm = setTimeout(function(){
+    var w = Math.round(hero.getBoundingClientRect().width); if (w === lastW) return; lastW = w;
+    L1 = setup(); L2 = c2.getTotalLength(); c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
+    if (done) place(1, L1, L2);
+  }, 200); });
+})();
+</script>
+<script>
+// デザイン見本の切りかえ（2026/10/8）。押すと大きい画面とボタンの行き先が変わる。矢印キーでも動く
+(function(){
+  var v = document.getElementById('viewer'); if (!v) return;
+  var tabs = v.querySelectorAll('[role=tab]'), img = document.getElementById('v-img');
+  var link = document.getElementById('v-link'), open = document.getElementById('v-open');
+  v.hidden = false; document.getElementById('work').className += ' has-viewer';
+  // 画像を先に読んでおく（押したときにすぐ出るように）
+  [].forEach.call(tabs, function(t){ var i = new Image(); i.src = '../samples/thumbs/' + t.getAttribute('data-k') + '.jpg'; });
+  function pick(t, focus){
+    [].forEach.call(tabs, function(x){ var on = x === t; x.setAttribute('aria-selected', on ? 'true' : 'false'); x.tabIndex = on ? 0 : -1; });
+    var k = t.getAttribute('data-k'), url = '../samples/' + k + '/index.html';
+    document.getElementById('v-panel').setAttribute('aria-labelledby', t.id);
+    img.className = 'fade';
+    setTimeout(function(){ img.src = '../samples/thumbs/' + k + '.jpg'; img.alt = t.getAttribute('data-name') + 'の見本の画面'; img.className = ''; }, 180);
+    link.href = url; open.href = url;
+    document.getElementById('v-name').textContent = t.getAttribute('data-name');
+    document.getElementById('v-sub').textContent = t.getAttribute('data-sub');
+    document.getElementById('v-text').textContent = t.getAttribute('data-text');
+    if (focus) t.focus();
+  }
+  [].forEach.call(tabs, function(t, i){
+    t.addEventListener('click', function(){ pick(t); });
+    t.addEventListener('keydown', function(e){
+      var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null; if (n === null) return;
+      e.preventDefault(); pick(tabs[(n + tabs.length) % tabs.length], true);
+    });
+  });
+})();
+</script>
+<script>
+// 見本の帯：横にゆっくり流れる（2026/10/8 夜）。さわっている間・マウスを乗せている間は止まる。指で横に動かせる
+// 動きを減らす設定の人には流さない（横に動かして見られる）。古いスマホでも動くよう scrollLeft を requestAnimationFrame で動かす
+(function(){
+  var belt = document.getElementById('belt'); if (!belt || !window.requestAnimationFrame) return;
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (still) return;
+  var track = belt.querySelector('.belt-track');
+  var orig = track.innerHTML;
+  track.innerHTML = orig + orig; // 2つ並べて、半分まで来たら最初に戻す（つなぎ目が見えない）
+  var copies = track.querySelectorAll('li');
+  for (var i = copies.length / 2; i < copies.length; i++) { copies[i].setAttribute('aria-hidden', 'true'); var a = copies[i].querySelector('a'); if (a) a.tabIndex = -1; }
+  var x = 0, hold = false, until = 0, last = null, speed = 0.03; // 1ミリ秒あたりの点数（約30点/秒）
+  function half(){ return track.scrollWidth / 2; }
+  function stop(){ hold = true; }
+  function later(){ hold = false; until = Date.now() + 2500; }
+  belt.addEventListener('mouseenter', stop); belt.addEventListener('mouseleave', later);
+  belt.addEventListener('touchstart', stop, {passive:true}); belt.addEventListener('touchend', later);
+  belt.addEventListener('focusin', stop); belt.addEventListener('focusout', later);
+  var seen = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(e){ seen = e[0].isIntersecting; }).observe(belt);
+  function step(ts){
+    var dt = last === null ? 16 : Math.min(64, ts - last); last = ts;
+    if (!hold && seen && !document.hidden && Date.now() > until) {
+      if (Math.abs(belt.scrollLeft - Math.round(x)) > 2) x = belt.scrollLeft; // 指で動かしたら、そこから続ける
+      x += speed * dt;
+      var h = half(); if (x >= h) x -= h;
+      belt.scrollLeft = Math.round(x);
+    } else { x = belt.scrollLeft; var h2 = half(); if (x >= h2) { x -= h2; belt.scrollLeft = x; } }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+<script>
+// 更新の見本：つまみで「直す前」と「直したあと」を見比べる（2026/10/8 夜）
+(function(){
+  var r = document.getElementById('cmp-range'), a = document.getElementById('cmp-after'), line = document.getElementById('cmp-line');
+  if (!r || !a) return;
+  function set(){ var v = r.value; var c = 'inset(0 0 0 ' + v + '%)'; a.style.webkitClipPath = c; a.style.clipPath = c; line.style.left = 'calc(12px + (100% - 24px) * ' + (v / 100) + ')'; }
+  r.addEventListener('input', set); r.addEventListener('change', set); set();
+  // 画面の上を指やマウスで動かしても変わる
+  var f = a.parentNode, down = false;
+  function at(e){ var p = e.touches ? e.touches[0] : e, b = f.getBoundingClientRect(); var v = Math.max(0, Math.min(100, (p.clientX - b.left - 12) / (b.width - 24) * 100)); r.value = Math.round(v); set(); }
+  f.addEventListener('mousedown', function(e){ down = true; at(e); });
+  window.addEventListener('mousemove', function(e){ if (down) at(e); });
+  window.addEventListener('mouseup', function(){ down = false; });
+  f.addEventListener('touchstart', at, {passive:true});
+  f.addEventListener('touchmove', at, {passive:true});
+})();
+</script>
+<div style="position:fixed;left:12px;bottom:80px;z-index:40;background:#F2C230;color:#17283A;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25)">見比べ用（新しい案）</div>
+</body>
+</html>

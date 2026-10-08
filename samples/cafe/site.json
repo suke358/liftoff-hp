@@ -1,0 +1,110 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "komorebi",
+ "name": "喫茶 こもれび",
+ "short_name": "こもれび",
+ "kind": "喫茶・軽食｜〇〇市",
+ "catch_html": "<span class=\"nw\">朝のコーヒーから、</span><br><span class=\"nw\">昼のひと休みまで。</span>",
+ "lead": "〇〇市の小さな喫茶店です。モーニング・日替わりランチ・自家製のケーキをご用意しています。",
+ "title_place": "〇〇市の喫茶店",
+ "description": "〇〇市の喫茶店「こもれび」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#b5683b",
+  "primary_deep": "#97522b",
+  "accent": "#d6a35c",
+  "accent_soft": "#ead2a8",
+  "pale": "#f6ebdf",
+  "dark": "#2e2620",
+  "dark2": "#3a3029",
+  "bg": "#f8f3ec",
+  "bg2": "#efe6da",
+  "ink": "#3a302a",
+  "muted": "#7a6b5f",
+  "line": "#e5d8c8"
+ },
+ "mark": "leaf",
+ "font": "mincho",
+ "menu_title": "メニュー",
+ "menu_word": "メニュー",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "季節によって内容が変わります。くわしくはお問い合わせください。",
+ "menus": [
+  {
+   "id": "morning",
+   "name": "モーニング",
+   "text": "トースト・ゆで卵・サラダに、お好きな飲みものを。",
+   "image": "images/menu-morning.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "モーニングの写真",
+   "price": "550円",
+   "price_note": "飲みもの代＋"
+  },
+  {
+   "id": "lunch",
+   "name": "日替わりランチ",
+   "text": "週ごとに変わる、ごはんとおかずの定食です。",
+   "image": "images/menu-lunch.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "日替わりランチの写真",
+   "price": "900円"
+  },
+  {
+   "id": "coffee",
+   "name": "コーヒー",
+   "text": "注文を受けてから一杯ずつ淹れています。",
+   "image": "images/menu-coffee.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "コーヒーの写真",
+   "price": "450円"
+  },
+  {
+   "id": "cake",
+   "name": "ケーキ",
+   "text": "店で焼いたケーキを、日によって2〜3種類。",
+   "image": "images/menu-cake.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "ケーキの写真",
+   "price": "400円"
+  }
+ ],
+ "hours": "8:00〜17:00（見本）",
+ "holiday": "水曜日（見本）",
+ "parking": "3台（見本）",
+ "payment": "現金・QRコード決済（見本）",
+ "reserve_title": "ご予約・お問い合わせ",
+ "info_title": "お店のこと",
+ "reserve_lead": "貸し切りや、ケーキのお取り置きもご相談ください。",
+ "faq": [
+  {
+   "q": "予約はできますか？",
+   "a": "ランチのみ、前日までにお電話でお受けしています（見本）。"
+  },
+  {
+   "q": "子ども連れでも大丈夫ですか？",
+   "a": "はい。子ども用のいすをご用意しています（見本）。"
+  },
+  {
+   "q": "ケーキの持ち帰りはできますか？",
+   "a": "はい、できます。数に限りがあるので、お取り置きはお電話でどうぞ（見本）。"
+  }
+ ],
+ "schema_type": "CafeOrCoffeeShop",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}
