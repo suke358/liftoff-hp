@@ -162,7 +162,7 @@ function add(kind){
   var p = $('plan').value, P = PRICE.plans[p], dt = day($('date').value), r = { kind: kind, when: jp(dt), qty: 1 };
   var member = p !== 'none';
   if (kind === 'init') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 初期費用（ホームページ制作・公開の設定）'; r.price = P.init; }
-  else if (kind === 'month') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 月額（ドメイン代・フォーム代込み）'; r.price = P.month; r.when = ym(dt); }
+  else if (kind === 'month') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 月額（お問い合わせフォーム代込み）'; r.price = P.month; r.when = ym(dt); }
   else if (kind === 'over') { r.name = '回数をこえた更新'; r.price = PRICE.over; }
   else if (kind === 'page') { r.name = 'ページの追加'; r.price = PRICE.page; }
   else if (kind === 'free') { r.name = ''; r.price = 0; }
