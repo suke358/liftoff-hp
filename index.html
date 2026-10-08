@@ -629,6 +629,44 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   .k-own,.k-keep{padding:22px 20px 18px}
   .k-own{box-shadow:6px 6px 0 var(--signal)}
 }
+
+/* ---------- よくある質問：分類つき（2026/10/8） ---------- */
+.faq-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:56px;align-items:start}
+.faq-side{position:-webkit-sticky;position:sticky;top:96px}
+.faq-nav{display:grid;gap:6px;margin-bottom:22px}
+.faq-nav a{display:flex;justify-content:space-between;align-items:center;text-decoration:none;color:var(--ink);font-family:var(--head);font-weight:700;padding:12px 16px;border-radius:12px;background:var(--sky)}
+.faq-nav a:hover{background:#dde9f0}
+.faq-nav span{font-family:"Michroma",var(--head);font-size:12px;color:var(--sea)}
+.faq-ask{border:2px solid var(--ink);border-radius:18px;padding:20px;box-shadow:6px 6px 0 var(--signal)}
+.faq-ask b{display:block;font-family:var(--head);font-size:17px}
+.faq-ask p{font-size:14px;color:var(--muted);margin:4px 0 14px;line-height:1.7}
+.faq-ask .btn{width:100%;min-height:46px;padding:10px 16px}
+.faq{max-width:none}
+.faq-h{font-size:15px;color:var(--sea);margin:36px 0 6px;scroll-margin-top:90px}
+.faq-h:first-child{margin-top:0}
+.faq details:first-of-type,.faq .faq-h + details{border-top:1px solid #c4d4de}
+.faq summary{-webkit-justify-content:flex-start;justify-content:flex-start}
+.faq summary::before{content:"Q";flex:none;width:34px;height:34px;margin-right:14px;border-radius:50%;background:var(--ink);color:var(--signal);font-family:var(--head);font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.faq summary::after{margin-left:auto}
+.faq details p{position:relative;padding:0 0 22px 48px}
+.faq details p::before{content:"A";position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center}
+.faq details[open]{background:linear-gradient(90deg,rgba(234,242,246,.6),rgba(234,242,246,0))}
+@media (max-width:900px){
+  .faq-wrap{grid-template-columns:1fr;gap:24px}
+  .faq-side{position:static;order:2}
+  .faq-nav{display:none}
+  .faq summary::before{width:30px;height:30px;font-size:12px;margin-right:12px}
+  .faq details p{padding-left:42px}
+  .faq details p::before{width:30px;height:30px;font-size:12px}
+}
+/* ---------- ほかのサービス（伐採）：線画を大きく ---------- */
+.other .ic{width:88px;height:88px;border-radius:50%;background:var(--sky)}
+.other .ic svg{width:56px;height:56px}
+/* ---------- 相談フォームの上に「相談票」の帯（搭乗券とそろえる） ---------- */
+.formbox{padding-top:0;overflow:hidden}
+.form-top{display:flex;justify-content:space-between;align-items:center;margin:0 -28px 20px;padding:12px 28px;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px}
+.form-top .flight{font-family:"Michroma",var(--head);font-weight:400;font-size:13px;letter-spacing:.08em}
+@media (max-width:760px){.formbox{padding-top:0}.form-top{margin:0 -18px 18px;padding:11px 18px}}
 </style>
 </head>
 <body>
@@ -1047,18 +1085,31 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <h2>よく<wbr>ある<wbr>質問</h2>
       <p>質問を<wbr>押すと<wbr>答えが<wbr>開きます。<wbr>ほかにも<wbr>気に<wbr>なることが<wbr>あれば、<wbr>お気軽に<wbr>お問い合わせ<wbr>ください。</p>
     </div>
-    <div class="faq">
-      <details><summary>パソコンが<wbr>使えなくても<wbr>大丈夫ですか？</summary><p>大丈夫です。<wbr>更新の<wbr>ご依頼は<wbr>LINEや<wbr>電話で<wbr>ひと言いただくだけで、<wbr>作業は<wbr>こちらで<wbr>行います。</p></details>
-      <details><summary>どの<wbr>くらいでできあがりますか？</summary><p>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr><span class="nw">2〜3週間</span>です。<wbr>見本を<wbr>見ていただいてからの<wbr>直しの<wbr>回数などで<wbr>前後します。</p></details>
-      <details><summary>写真が<wbr>ありません。<wbr>撮って<wbr>もらえますか？</summary><p>こちらでの<wbr>撮影は<wbr>していませんが、<wbr>スマホで<wbr>撮った<wbr>写真でも<wbr>使えます。<wbr>「横向きで<wbr>多めに」など、<wbr>撮り方の<wbr>コツを<wbr>お伝えします。</p></details>
-      <details><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？</summary><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></details>
-      <details><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？</summary><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></details>
-      <details><summary>途中で<wbr>プランを<wbr>変えられますか？</summary><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>初期0円プランは、<wbr>12か<wbr>月の<wbr>ご契約期間が<wbr>終わってからの<wbr>変更に<wbr>なります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></details>
-      <details><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？</summary><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>11,000円〜<wbr>（通常<wbr>22,000円〜）です。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></details>
-      <details><summary>ロゴや<wbr>名刺、<wbr>チラシも<wbr>作って<wbr>もらえますか？</summary><p>できます。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>を<wbr>ご覧ください<wbr>（ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引が<wbr>あります）。<wbr>メニュー表も<wbr>作れます。<wbr>ロゴは<wbr>いくつか<wbr>案を<wbr>お見せして、<wbr>選んで<wbr>いただいてから<wbr>仕上げます。<wbr>ホームページ・<wbr>Instagram・<wbr>Googleマップ・<wbr>名刺の<wbr>ロゴを<wbr>同じ日に<wbr>そろえて<wbr>切りかえると、<wbr>お店の<wbr>印象が<wbr>ばらばらに<wbr>なりません。</p></details>
-      <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（解約後の<wbr>ドメインの<wbr>更新費用は<wbr>お店の<wbr>ご負担です）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></details>
-      <details><summary>支払いは<wbr>どうすればいいですか？</summary><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></details>
-      <details><summary>防府市以外でも<wbr>お願いできますか？</summary><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></details>
+    <div class="faq-wrap">
+      <aside class="faq-side">
+        <nav class="faq-nav" aria-label="質問の分類">
+          <a href="#faq-start">はじめる前に<span>5</span></a>
+          <a href="#faq-money">お金と契約のこと<span>4</span></a>
+          <a href="#faq-more">あわせて頼めること<span>2</span></a>
+        </nav>
+        <div class="faq-ask"><b>ここにない<wbr>質問は</b><p>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</p><a class="btn primary" href="#contact">相談する</a></div>
+      </aside>
+      <div class="faq">
+        <h3 class="faq-h" id="faq-start">はじめる前に</h3>
+        <details><summary>パソコンが<wbr>使えなくても<wbr>大丈夫ですか？</summary><p>大丈夫です。<wbr>更新の<wbr>ご依頼は<wbr>LINEや<wbr>電話で<wbr>ひと言いただくだけで、<wbr>作業は<wbr>こちらで<wbr>行います。</p></details>
+        <details><summary>どの<wbr>くらいでできあがりますか？</summary><p>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr><span class="nw">2〜3週間</span>です。<wbr>見本を<wbr>見ていただいてからの<wbr>直しの<wbr>回数などで<wbr>前後します。</p></details>
+        <details><summary>写真が<wbr>ありません。<wbr>撮って<wbr>もらえますか？</summary><p>こちらでの<wbr>撮影は<wbr>していませんが、<wbr>スマホで<wbr>撮った<wbr>写真でも<wbr>使えます。<wbr>「横向きで<wbr>多めに」など、<wbr>撮り方の<wbr>コツを<wbr>お伝えします。</p></details>
+        <details><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？</summary><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></details>
+        <details><summary>防府市以外でも<wbr>お願いできますか？</summary><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></details>
+        <h3 class="faq-h" id="faq-money">お金と契約のこと</h3>
+        <details><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？</summary><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></details>
+        <details><summary>途中で<wbr>プランを<wbr>変えられますか？</summary><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>初期0円プランは、<wbr>12か<wbr>月の<wbr>ご契約期間が<wbr>終わってからの<wbr>変更に<wbr>なります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></details>
+        <details><summary>支払いは<wbr>どうすればいいですか？</summary><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></details>
+        <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（解約後の<wbr>ドメインの<wbr>更新費用は<wbr>お店の<wbr>ご負担です）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></details>
+        <h3 class="faq-h" id="faq-more">あわせて頼めること</h3>
+        <details><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？</summary><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>11,000円〜<wbr>（通常<wbr>22,000円〜）です。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></details>
+        <details><summary>ロゴや<wbr>名刺、<wbr>チラシも<wbr>作って<wbr>もらえますか？</summary><p>できます。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>を<wbr>ご覧ください<wbr>（ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引が<wbr>あります）。<wbr>メニュー表も<wbr>作れます。<wbr>ロゴは<wbr>いくつか<wbr>案を<wbr>お見せして、<wbr>選んで<wbr>いただいてから<wbr>仕上げます。<wbr>ホームページ・<wbr>Instagram・<wbr>Googleマップ・<wbr>名刺の<wbr>ロゴを<wbr>同じ日に<wbr>そろえて<wbr>切りかえると、<wbr>お店の<wbr>印象が<wbr>ばらばらに<wbr>なりません。</p></details>
+      </div>
     </div>
   </div>
 </section>
@@ -1066,7 +1117,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 <section id="other" class="sec alt">
   <div class="wrap">
     <div class="other">
-      <span class="ic" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4l-8 11h5l-7 9h20l-7-9h5z" stroke="#2F6F8F"/><path d="M18 24v8"/></svg></span>
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 46h44" stroke="#17283A" stroke-width="2.4"/><path d="M20 46V34" stroke="#17283A" stroke-width="2.6"/><path d="M20 8l-10 14h5l-8 12h26l-8-12h5z" fill="#fff" stroke="#2F6F8F" stroke-width="2.4"/><circle cx="41" cy="14" r="5" fill="#F2C230" stroke="none"/><path d="M34 46v-5h10v5" stroke="#17283A" stroke-width="2.4"/><path d="M33 41c2-4 10-4 12 0" stroke="#17283A" stroke-width="2.2"/></svg></span>
       <div>
         <h3>伐採・伐木・抜根・草刈りも</h3>
         <p>Lift-Off では、<wbr>木の<wbr>伐採や<wbr>草刈りの<wbr>仕事も<wbr>行っています。<wbr>防府市近郊の<wbr>空き家・<wbr>空き地の<wbr>お手入れも<wbr>ご相談ください。</p>
@@ -1111,6 +1162,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         </div>
       </div>
       <div class="formbox">
+        <div class="form-top" aria-hidden="true"><span>ご相談票</span><span class="flight">LO 00</span></div>
         <form id="form" action="" method="POST">
           <p class="form-lead">選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>文を<wbr>考えなくても、<wbr>こちらから<wbr>うかがいます。</p>
           <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
