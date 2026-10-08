@@ -787,6 +787,8 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 .p-orbit .wing{fill:#fff;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
 .p-orbit .keel{fill:#C9D6E0;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
 .p-orbit .fold{fill:none;stroke:#F2C230;stroke-width:1.6;stroke-linecap:round}
+.p-mark[role=button]{cursor:pointer}
+.p-mark[role=button]:focus{outline:3px solid #2F6F8F;outline-offset:6px}
 .p-eyebrow{font-family:var(--head);font-weight:700;color:var(--sea);font-size:14px;letter-spacing:.08em;margin-bottom:6px}
 .p-body h2{font-size:26px;font-size:clamp(21px,2.6vw,30px);margin-bottom:16px}
 .p-body > p{color:var(--ink-2);max-width:40em}
@@ -1867,26 +1869,49 @@ if ('IntersectionObserver' in window) {
 })();
 </script>
 <script>
-// 担当する人：印のまわりの点線の輪にそって、紙飛行機が1周飛び、真上で止まる（2026/10/9 見比べ用）
-// 欄が画面に入ったとき1回だけ・約2秒。動きを減らす設定や IntersectionObserver がないときは、真上に止まった絵のまま（HTML の最初の形）
+// 担当する人：印のまわりの点線の輪にそって、紙飛行機が1周飛び（約2.5秒）、真上で約6秒休む、をくり返す（2026/10/9 見比べ用）
+// 欄が画面に見えている間だけ動かす。見えなくなったとき・タブが裏のときは止める
+// 丸い印を押す（Enter・スペースでも）と止まり、もう一度押すと動く。止まっているときは真上の絵
+// 動きを減らす設定や IntersectionObserver がないときは、真上に止まった絵のまま（HTML の最初の形。印はただの飾り）
 (function(){
   var mark = document.querySelector('#person .p-mark'), pl = mark && mark.querySelector('.orbit-plane');
   if (!pl || !window.requestAnimationFrame || !('IntersectionObserver' in window)) return;
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var R = 118, DUR = 2000, start = null;
+  var R = 118, FLY = 2500, REST = 6000, t = 0, last = null, seen = false, paused = false, raf = 0;
   function put(a){ // a：角度（度）。-90 が真上で、時計回りに進む。機首は進む向き
     var r = a * Math.PI / 180;
     pl.setAttribute('transform', 'translate(' + (R * Math.cos(r)).toFixed(1) + ' ' + (R * Math.sin(r)).toFixed(1) + ') rotate(' + (a + 90).toFixed(1) + ') scale(1.3)');
   }
-  function step(ts){
-    if (start === null) start = ts;
-    var t = Math.min(1, (ts - start) / DUR), e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ゆっくり出て、ゆっくり止まる
-    put(-90 + 360 * e);
-    if (t < 1) requestAnimationFrame(step);
+  function running(){ return seen && !paused && !document.hidden; }
+  function frame(ts){
+    raf = 0;
+    if (!running()) { last = null; return; }
+    if (last !== null) t += Math.min(100, ts - last); // 止まっていたあいだの時間は数えない
+    last = ts; t = t % (FLY + REST);
+    if (t < FLY) { var u = t / FLY, e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; put(-90 + 360 * e); } // ゆっくり出て、ゆっくり止まる
+    else put(-90);
+    raf = requestAnimationFrame(frame);
   }
+  function kick(){ if (running() && !raf) { last = null; raf = requestAnimationFrame(frame); } }
+  // 印を、止める・動かすボタンにする
+  mark.removeAttribute('aria-hidden');
+  mark.setAttribute('role', 'button'); mark.setAttribute('tabindex', '0');
+  mark.setAttribute('aria-label', '紙飛行機の動きを止める'); mark.setAttribute('aria-pressed', 'false');
+  function toggle(){
+    paused = !paused; mark.setAttribute('aria-pressed', paused ? 'true' : 'false');
+    t = 0; put(-90); // 止めたら真上の絵。また動かすときは、すぐ1周目から
+    kick();
+  }
+  mark.addEventListener('click', toggle);
+  mark.addEventListener('keydown', function(ev){
+    var k = ev.key || ev.keyCode;
+    if (k === 'Enter' || k === ' ' || k === 'Spacebar' || k === 13 || k === 32) { ev.preventDefault(); toggle(); }
+  });
+  document.addEventListener('visibilitychange', kick);
   var io = new IntersectionObserver(function(es){
-    for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { io.disconnect(); requestAnimationFrame(step); return; }
-  }, { threshold: .6 });
+    for (var i = 0; i < es.length; i++) seen = es[i].isIntersecting;
+    kick();
+  });
   io.observe(mark);
 })();
 </script>
