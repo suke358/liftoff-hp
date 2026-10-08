@@ -123,7 +123,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
     </div>
     <div class="s-to">
       <div><div class="to"><span id="to"></span>　様</div><p style="font-size:12px;margin-top:6px">下記のとおり、ご請求申し上げます。</p></div>
-      <div class="s-from" style="position:relative"><img id="stamp" alt="" style="position:absolute;right:1mm;top:-2mm;width:20mm;height:auto;opacity:.92;display:none;pointer-events:none"><b>Lift-Off</b>（リフトオフ）<br>登録番号　<span id="regOut"></span><br>山口県防府市<br>電話 090-1189-6726<br>liftoff.358@gmail.com</div>
+      <div class="s-from" id="from" style="position:relative"><img id="stamp" alt="" style="position:absolute;right:0;top:1mm;width:19mm;height:auto;opacity:.92;display:none;pointer-events:none"><b>Lift-Off</b>（リフトオフ）<br>登録番号　<span id="regOut"></span><br>山口県防府市<br>電話 090-1189-6726<br>liftoff.358@gmail.com</div>
     </div>
     <div class="s-sum">
       <div><span>ご請求金額（税込）</span><b id="total"></b></div>
@@ -259,7 +259,7 @@ $('copy').addEventListener('click', function(){
 // 角印：写真から赤いところだけ残して、背景を透明にする（2026/10/8）。見積もり・請求書で同じものを使う
 (function(){
   var KEY = 'liftoff-stamp', img = document.getElementById('stamp'), f = document.getElementById('stampFile');
-  function show(){ var d = null; try { d = localStorage.getItem(KEY); } catch (e) {} img.src = d || ''; img.style.display = d ? 'block' : 'none'; }
+  function show(){ var d = null; try { d = localStorage.getItem(KEY); } catch (e) {} img.src = d || ''; img.style.display = d ? 'block' : 'none'; document.getElementById('from').style.paddingRight = d ? '22mm' : ''; }
   f.addEventListener('change', function(){
     var file = f.files && f.files[0]; if (!file) return;
     var r = new FileReader();
@@ -268,14 +268,18 @@ $('copy').addEventListener('click', function(){
       im.onload = function(){
         var max = 600, k = Math.min(1, max / Math.max(im.width, im.height)), w = Math.round(im.width * k), h = Math.round(im.height * k);
         var c = document.createElement('canvas'); c.width = w; c.height = h; var x = c.getContext('2d'); x.drawImage(im, 0, 0, w, h);
-        var d = x.getImageData(0, 0, w, h), p = d.data, minX = w, minY = h, maxX = 0, maxY = 0;
+        var d = x.getImageData(0, 0, w, h), p = d.data, minX = w, minY = h, maxX = 0, maxY = 0, cols = [], rws = [], q;
+        for (q = 0; q < w; q++) cols[q] = 0; for (q = 0; q < h; q++) rws[q] = 0;
         for (var i = 0; i < p.length; i += 4) {
-          var R = p[i], G = p[i + 1], B = p[i + 2], red = R - Math.max(G, B);
-          if (red > 40 && R > 90) { var a = Math.min(255, red * 3); p[i] = 200; p[i + 1] = 30; p[i + 2] = 40; p[i + 3] = a;
-            var px = (i / 4) % w, py = Math.floor(i / 4 / w); if (px < minX) minX = px; if (px > maxX) maxX = px; if (py < minY) minY = py; if (py > maxY) maxY = py; }
+          var R = p[i], G = p[i + 1], B = p[i + 2], A = p[i + 3], red = R - (G + B) / 2;
+          if (A > 20 && red > 14 && R > 80) { var a = Math.min(255, (red - 14) * 9) * A / 255; p[i] = 196; p[i + 1] = 32; p[i + 2] = 42; p[i + 3] = a;
+            if (a > 100) { var px = (i / 4) % w, py = Math.floor(i / 4 / w); cols[px]++; rws[py]++; } }
           else p[i + 3] = 0;
         }
-        if (maxX <= minX) { alert('赤いところが見つかりませんでした。白い紙に押した角印を、明るい場所で撮り直してください。'); return; }
+        // 赤い点が多い行・列だけで範囲を決める（写真の中のほかの赤い点に引っぱられないように）
+        function span(arr){ var m = 0, k, lo = -1, hi = -1; for (k = 0; k < arr.length; k++) if (arr[k] > m) m = arr[k]; for (k = 0; k < arr.length; k++) if (arr[k] >= m * 0.08) { if (lo < 0) lo = k; hi = k; } return [lo, hi]; }
+        var sx = span(cols), sy = span(rws); minX = sx[0]; maxX = sx[1]; minY = sy[0]; maxY = sy[1];
+        if (minX < 0 || maxX <= minX) { alert('赤いところが見つかりませんでした。白い紙に押した角印を、明るい場所で撮り直してください。'); return; }
         x.putImageData(d, 0, 0);
         var s = Math.max(maxX - minX, maxY - minY) + 8, o = document.createElement('canvas'); o.width = s; o.height = s;
         o.getContext('2d').drawImage(c, minX - 4, minY - 4, s, s, 0, 0, s, s);
