@@ -66,6 +66,7 @@ td:first-child{white-space:nowrap;font-size:12.5px}
     <div class="btns">
       <button type="button" id="fromEst">見積もりから新しく作る</button>
       <button type="button" id="newShop">何もないところから作る</button>
+      <button type="button" id="delShop" style="border-width:1px;font-size:12px">このお店を消す</button>
     </div>
     <p class="hint">見積もりの道具（同じブラウザ）で最後に作った内容から、範囲を作ります。</p>
   </fieldset>
@@ -151,6 +152,7 @@ $('newShop').addEventListener('click', function(){
   var p = prompt('プラン（std＝スタンダード／zero＝初期0円／web＝代行／none＝ホームページなし）', 'std'); if (!PRICE.plans[p]) { alert('std・zero・web・none のどれかで入れてください'); return; }
   db.shops[n] = makeShop(n, p, 0, {}); db.cur = n; save(); all();
 });
+$('delShop').addEventListener('click', function(){ var s = shop(); if (!s) return; if (!confirm('「' + s.name + '」と、その依頼の記録をすべて消しますか？（元に戻せません）')) return; delete db.shops[db.cur]; db.cur = ''; save(); all(); });
 $('shopSel').addEventListener('change', function(){ db.cur = this.value; save(); all(); });
 
 // 依頼の種類

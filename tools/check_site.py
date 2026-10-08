@@ -36,6 +36,7 @@ OLD_CSS = [  # (正規表現, 名前, 予備の書き方)
     (r'margin-inline\s*:|margin-block\s*:|padding-inline\s*:|padding-block\s*:', 'margin-inline など（まとめ書き）', '先に margin-left / margin-right などを書く'),
     (r':has\(', ':has()（新しい選び方）', '使わない（JavaScript かクラスで代わりに）'),
     (r'text-wrap\s*:', 'text-wrap', '効かなくても崩れないか確かめる'),
+    (r'mix-blend-mode\s*:', 'mix-blend-mode（重ねて色を混ぜる）', '使わない。iPhone の Safari で動きが止まって見えた（2026/10/8 colore の♡）。半透明の色で重ねる'),
 ]
 FALLBACK = {  # 同じ { } の中にこれがあれば「予備あり」とみなす
     'inset': r'\btop\s*:', 'margin-inline': r'margin-left\s*:', 'padding-inline': r'padding-left\s*:',
