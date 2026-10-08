@@ -482,15 +482,17 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 
 /* ---------- トップの作り込み（2026/10/8 v3。前の版は v2/） ---------- */
 .hero > .wrap{position:relative;z-index:1}
-/* 飛行機雲：紙飛行機が左下から右上へ飛び、うしろに2本の線が残る（JS で描く。JS がないときは出さない） */
-.contrail{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none}
+/* 飛行機雲：紙飛行機が滑走路を走って離陸し、右上へ飛び去る。うしろに2本の線が残る（JS で描く。JS がないときは出さない）（2026/10/8 夜 A＋B）
+   線は文や画面の絵のうしろ。機体はパソコンでは一番前（滑走路の上を走るので）、スマホでは文のうしろ */
+.contrail{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none;z-index:0}
 .contrail.on{display:block}
-.contrail path{fill:none;stroke:#2F6F8F;stroke-linecap:round}
-.contrail .c1{stroke-width:3;opacity:.22}
-.contrail .c2{stroke-width:2;opacity:.12}
-.contrail .plane .body{fill:#17283A;stroke:none}
-.contrail .plane .fold{fill:none;stroke:#F2C230;stroke-width:2.2;opacity:1}
-@media (max-width:900px){.contrail .c1{opacity:.14}.contrail .c2{opacity:.08}}
+.contrail .route{fill:none;stroke:none}
+.contrail .trail path{fill:none;stroke:#2F6F8F;stroke-linecap:butt}
+.contrail.jet{z-index:2}
+.contrail .plane .wing{fill:#fff;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
+.contrail .plane .keel{fill:#C9D6E0;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
+.contrail .plane .fold{fill:none;stroke:#F2C230;stroke-width:1.6;stroke-linecap:round}
+@media (max-width:900px){.contrail.jet{z-index:0}}
 
 /* ---------- できること：ホームページの一生を「航路」で（作る → 見つけてもらう → 問い合わせ → 直す、をくり返す） ---------- */
 .route{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;position:relative;margin-top:8px}
@@ -821,7 +823,8 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 
 <main id="main">
 <section class="hero">
-  <svg class="contrail" aria-hidden="true" focusable="false"><path class="c1"/><path class="c2"/><g class="plane"><g transform="scale(1.25)"><path class="body" d="M-14 -2 L16 -10 L6 14 L1 4 Z"/><path class="fold" d="M1 4 L16 -10"/></g></g></svg>
+  <svg class="contrail" aria-hidden="true" focusable="false"><path class="route"/><g class="trail"></g></svg>
+  <svg class="contrail jet" aria-hidden="true" focusable="false"><g class="plane"><path class="wing" d="M17 0 L-13 -9 L-6 -1 Z"/><path class="keel" d="M17 0 L-6 -1 L-11 6 Z"/><path class="fold" d="M16 0 L-6 -1"/></g></svg>
   <div class="wrap">
     <div class="hero-copy">
       <h1><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
@@ -1635,54 +1638,145 @@ if ('IntersectionObserver' in window) {
 })();
 </script>
 <script>
-// トップの紙飛行機：ページを開いたときに1回だけ、左下から右上へ飛ぶ（2026/10/8）。動きを減らす設定のときは、飛んだあとの絵だけ出す
+// トップの紙飛行機（2026/10/8 夜 A＋B）：ページを開いたときに1回だけ、全部で約3秒
+// パソコン：滑走路の帯の左の端から点線の上を走り出し（0.8秒）→ 機首を上げて離陸（0.4秒）→ 曲がりながら上昇して右上の画面の外へ（1.8秒）
+// スマホ：滑走路が遠いので、文の下のすき間を左の外から低い角度で入ってきて離陸し、右上へ抜ける（機体と線は文のうしろ）
+// 飛行機雲は2本。細かく分けた線の濃さを変えて、うしろほど薄くする。動きを減らす設定のときは、飛び去ったあとの線だけ出す
 (function(){
-  var hero = document.querySelector('.hero'), svg = hero && hero.querySelector('.contrail');
-  if (!svg || !svg.getBoundingClientRect || !window.requestAnimationFrame) return;
-  var c1 = svg.querySelector('.c1'), c2 = svg.querySelector('.c2'), plane = svg.querySelector('.plane');
+  var hero = document.querySelector('.hero'), svg = hero && hero.querySelector('.contrail'), jet = hero && hero.querySelector('.contrail.jet');
+  if (!svg || !jet || !svg.getBoundingClientRect || !window.requestAnimationFrame) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var route = svg.querySelector('.route'), trail = svg.querySelector('.trail'), plane = jet.querySelector('.plane');
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var mob = false;
-  function d(W, H, o){
-    // 左下（画面の外）→ 見出しの下を通って → 右上へ。o は2本目のずらし
-    var x0 = -0.05 * W, y0 = H * 1.02 + o, x3 = W * (mob ? 0.92 : 0.965), y3 = H * (mob ? 0.035 : 0.07) + o;
-    return 'M' + x0 + ' ' + y0 + ' C ' + (W * 0.3) + ' ' + (H * 0.98 + o) + ', ' + (W * 0.42) + ' ' + (H * 0.5 + o) + ', ' + (W * 0.55) + ' ' + (H * 0.38 + o) + ' S ' + (W * 0.8) + ' ' + (H * 0.12 + o) + ', ' + x3 + ' ' + y3;
-  }
+  var TG = 800, TA = 2200, STEP = 10; // 走る時間・離陸から飛び去るまでの時間（ミリ秒）・雲を分ける長さ（px）
+  var g = null, bank = 0;
+
+  function box(sel){ var e = hero.querySelector(sel); return e ? e.getBoundingClientRect() : null; }
   function setup(){
     var r = hero.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height);
-    mob = W < 900;
-    if (mob) H = Math.round(H * 0.58); // スマホは上の文の部分だけを飛ぶ
+    var mob = window.matchMedia ? window.matchMedia('(max-width:900px)').matches : W < 900;
+    var rw = box('.runway'), x0, y0, x1, y1, ex, ey, d, dx, dy;
+    if (!mob && rw) {
+      // 滑走路の黄色い点線（帯の上から 56〜62px）の上を、帯の左の端（画面の外なら画面の左の端）から右へ走る。
+      // 帯が画面の下の外にあるときは、走り出しが見えるように「画面の下から 60px 上」を走る（高い方）
+      var xr = Math.max(rw.left - r.left, 0);
+      x0 = xr + 26; y0 = Math.min(rw.top - r.top + 59 - 5, (window.innerHeight || H) - r.top - 60);
+      x1 = x0 + Math.max(140, Math.min(180, (W - xr) * .25)); y1 = y0;
+      ex = W + 80; ey = Math.max(40, y1 * .12); dx = ex - x1; dy = y1 - ey;
+      // 機首を上げて上昇（左へ曲がる）→ 右へ曲がり直して、右上の画面の外へ。見出しのある左側には行かない
+      d = 'M' + x1 + ' ' + y1 + ' C ' + (x1 + dx * .3) + ' ' + y1 + ', ' + (x1 + dx * .42) + ' ' + (y1 - dy * .3) + ', ' + (x1 + dx * .55) + ' ' + (y1 - dy * .62) +
+          ' S ' + (ex - dx * .22) + ' ' + (ey + dy * .02) + ', ' + ex + ' ' + ey;
+    } else if (W <= 360) {
+      // せまい画面（幅320 など）：右の端に空きがないので、説明文と「月額」のあいだのすき間を、
+      // 左の外から低い角度で入って離陸し、少しずつ上がりながら右の外へ抜ける（文字にもボタンにも重ならない）
+      var sb = box('.hero .sub'), fr = box('.hero .from');
+      var yc = sb && fr ? (sb.bottom + fr.top) / 2 - r.top : H * .4;
+      x0 = -60; y0 = yc + 6; x1 = W * .3; y1 = yc + 2;
+      ex = W + 60; ey = yc - 16;
+      d = 'M' + x1 + ' ' + y1 + ' C ' + (x1 + (x1 - x0) * .5) + ' ' + (y1 - 2) + ', ' + (W * .85) + ' ' + (yc - 4) + ', ' + ex + ' ' + ey;
+    } else {
+      // ボタンの下のすき間（最初の画面に入る高さ）を、左の外から少しずつ上がりながら入ってくる。
+      // そのあと右の端（文の行の終わりの空いた所）に沿って上がり、右上へ抜ける
+      var ac = box('.hero .actions'), st = box('.hero .stats');
+      var yb = ac && st ? (ac.bottom + st.top) / 2 - r.top : H * .5;
+      x0 = -50; y0 = yb + 10; x1 = W * .2; y1 = yb;
+      ex = W + 20; ey = -60;
+      var k = W * .4 / (x1 - x0);
+      d = 'M' + x1 + ' ' + y1 + ' C ' + (x1 + (x1 - x0) * k) + ' ' + (y1 - 10 * k) + ', ' + (W * .98) + ' ' + (yb * .62) + ', ' + ex + ' ' + ey;
+    }
+    route.setAttribute('d', d);
     svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px';
-    c1.setAttribute('d', d(W, H, 0)); c2.setAttribute('d', d(W, H, 14));
-    return c1.getTotalLength();
+    jet.setAttribute('viewBox', '0 0 ' + W + ' ' + H); jet.style.height = H + 'px';
+    var L = route.getTotalLength(), n = Math.max(2, Math.ceil(L / STEP)), pts = [], nm = [], i, p, q, a, b;
+    for (i = 0; i <= n; i++) { p = route.getPointAtLength(L * i / n); pts.push([p.x, p.y]); }
+    // 2本の線は、進む向きに対して左右へ少しずらす
+    for (i = 0; i <= n; i++) {
+      a = pts[Math.max(0, i - 1)]; b = pts[Math.min(n, i + 1)];
+      q = Math.sqrt((b[0] - a[0]) * (b[0] - a[0]) + (b[1] - a[1]) * (b[1] - a[1])) || 1;
+      nm.push([-(b[1] - a[1]) / q, (b[0] - a[0]) / q]);
+    }
+    while (trail.firstChild) trail.removeChild(trail.firstChild);
+    var segs = [], off = mob ? 6 : 5, s, el;
+    for (i = 0; i < n; i++) for (s = -1; s <= 1; s += 2) {
+      el = document.createElementNS(NS, 'path');
+      el.setAttribute('d', 'M' + (pts[i][0] + nm[i][0] * off * s).toFixed(1) + ' ' + (pts[i][1] + nm[i][1] * off * s).toFixed(1) + ' L' + (pts[i + 1][0] + nm[i + 1][0] * off * s).toFixed(1) + ' ' + (pts[i + 1][1] + nm[i + 1][1] * off * s).toFixed(1));
+      el.style.display = 'none';
+      trail.appendChild(el);
+      segs.push({ el: el, at: L * (i + 1) / n, main: s < 0, on: false });
+    }
+    // 速さの表：走り終わりの速さから始めて、上昇でいったんゆるみ、最後にぐっと速くなる
+    var Lg = Math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)), v1 = 1.7 * Lg / TG, N = 120, A = 0, B = 0, x, bl, h, tab = [0], ta = [0], tb = [0];
+    for (i = 1; i <= N; i++) {
+      x = (i - .5) / N; bl = x < .18 ? (x / .18) * (x / .18) * (3 - 2 * x / .18) : 1;
+      h = 1 - .4 * Math.sin(Math.PI * Math.min(1, x / .7)) + 3.2 * Math.pow(Math.max(0, (x - .6) / .4), 2);
+      A += v1 * (1 - bl) * TA / N; B += h * bl * TA / N; ta.push(A); tb.push(B);
+    }
+    var kk = Math.max(.0001, (L - A) / B);
+    for (i = 1; i <= N; i++) tab.push(ta[i] + kk * tb[i]);
+    for (i = 1; i <= N; i++) tab[i] = tab[i] * L / tab[N];
+    return { mob: mob, x0: x0, y0: y0, x1: x1, y1: y1, ga: Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI, L: L, segs: segs, tab: tab, N: N,
+      sc: mob ? 1.6 : 1.35, w1: mob ? 2.8 : 2.6, w2: mob ? 2 : 1.8, o1: mob ? .24 : .3, o2: mob ? .15 : .18 };
   }
-  function place(t, L1, L2){
-    var e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ゆっくり出て、ゆっくり着く
-    var len = L1 * e, p = c1.getPointAtLength(len), q = c1.getPointAtLength(Math.min(L1, len + 2));
-    var ang = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
-    plane.setAttribute('transform', 'translate(' + p.x + ' ' + p.y + ') rotate(' + (ang + 12) + ')');
-    c1.style.strokeDashoffset = L1 - len;
-    c2.style.strokeDashoffset = L2 - L2 * Math.max(0, e - .04);
+  // 雲：機体のうしろ（head まで）を出す。機体に近いほど濃く太く、うしろほど薄く細く
+  function clouds(head){
+    var i, sg, a, e, fl = g.L * .5;
+    for (i = 0; i < g.segs.length; i++) {
+      sg = g.segs[i];
+      if (sg.at > head) { if (sg.on) { sg.el.style.display = 'none'; sg.on = false; } continue; }
+      if (!sg.on) { sg.el.style.display = ''; sg.on = true; }
+      a = head - sg.at; e = Math.exp(-a / fl);
+      sg.el.style.opacity = ((sg.main ? g.o1 : g.o2) * (.22 + .78 * e)).toFixed(3);
+      sg.el.style.strokeWidth = ((sg.main ? g.w1 : g.w2) * (.45 + .55 * e)).toFixed(2);
+    }
   }
-  var L1 = setup(), L2 = c2.getTotalLength();
-  c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
-  svg.setAttribute('class', 'contrail on');
-  if (still) { place(1, L1, L2); return; }
-  var start = null, dur = 2600;
-  place(0, L1, L2);
-  var done = false;
-  function step(ts){ if (start === null) start = ts + 300; var t = Math.max(0, Math.min(1, (ts - start) / dur)); place(t, L1, L2); if (t < 1) requestAnimationFrame(step); else done = true; }
-  function go(){ requestAnimationFrame(step); }
+  function airAt(ms){
+    var f = Math.max(0, Math.min(1, ms / TA)) * g.N, i = Math.min(g.N - 1, Math.floor(f));
+    return g.tab[i] + (g.tab[i + 1] - g.tab[i]) * (f - i);
+  }
+  function angAt(s){
+    var p = route.getPointAtLength(Math.max(0, Math.min(g.L - 2, s))), q = route.getPointAtLength(Math.max(2, Math.min(g.L, s + 2)));
+    return Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+  }
+  // t：走り出してからのミリ秒
+  function draw(t){
+    var x, y, a, s = -1, sc = g.sc, u, p, turn, want;
+    if (t >= TG + TA) { plane.style.display = 'none'; clouds(g.L); return; }
+    plane.style.display = '';
+    if (t < TG) {
+      u = Math.pow(Math.max(0, t) / TG, 1.7); // だんだん速くなる
+      x = g.x0 + (g.x1 - g.x0) * u; y = g.y0 + (g.y1 - g.y0) * u; a = g.ga; want = 0;
+    } else {
+      s = airAt(t - TG); p = route.getPointAtLength(s); x = p.x; y = p.y; a = angAt(s);
+      turn = angAt(s + 30) - a; if (turn > 180) turn -= 360; if (turn < -180) turn += 360;
+      want = Math.max(-1, Math.min(1, turn / 22)); // 曲がる強さに合わせて傾ける
+      sc *= 1 - .3 * Math.max(0, (s / g.L - .65) / .35); // 遠ざかるほど小さく
+    }
+    // 離陸：走り終わりの少し前から、機首を少しずつ上げる
+    u = (t - (TG - 150)) / 550; if (u > 0 && u < 1) a -= 9 * Math.sin(Math.PI * u);
+    bank += (want - bank) * .2;
+    plane.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + a.toFixed(1) + ') scale(' + sc.toFixed(3) + ' ' + (sc * (1 - .45 * Math.abs(bank))).toFixed(3) + ')');
+    clouds(s - 10 * sc);
+  }
+  g = setup();
+  svg.setAttribute('class', 'contrail on'); jet.setAttribute('class', 'contrail jet on');
+  var start = null, done = false;
+  function step(ts){ if (start === null) start = ts + 300; var t = Math.max(0, ts - start); draw(t); if (t < TG + TA) requestAnimationFrame(step); else done = true; }
+  function go(){ g = setup(); bank = 0; draw(0); requestAnimationFrame(step); }
   // ページが見えてから飛ばす（裏で開いたときや、読み込み中に終わってしまわないように）
-  if (document.hidden) document.addEventListener('visibilitychange', function v(){ if (!document.hidden) { document.removeEventListener('visibilitychange', v); go(); } });
-  else if (document.readyState === 'complete') go();
-  else window.addEventListener('load', go);
-  // 画面の大きさが変わったら、飛んだあとの形に描き直す
+  if (still) draw(TG + TA);
+  else {
+    draw(0);
+    if (document.hidden) document.addEventListener('visibilitychange', function v(){ if (!document.hidden) { document.removeEventListener('visibilitychange', v); go(); } });
+    else if (document.readyState === 'complete') go();
+    else window.addEventListener('load', go);
+  }
+  // 画面の大きさが変わったら、道を作り直す（飛んだあとなら、飛び去ったあとの形に描き直す）
   // スマホは、画面を動かすと上下のバーが出入りして「大きさが変わった」ことになるので、横幅が変わったときだけ描き直す（飛んでいる途中ならそのまま続ける）
   var lastW = Math.round(hero.getBoundingClientRect().width), tm;
   window.addEventListener('resize', function(){ clearTimeout(tm); tm = setTimeout(function(){
     var w = Math.round(hero.getBoundingClientRect().width); if (w === lastW) return; lastW = w;
-    L1 = setup(); L2 = c2.getTotalLength(); c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
-    if (done) place(1, L1, L2);
+    g = setup();
+    if (done || still) draw(TG + TA); else if (start === null) draw(0);
   }, 200); });
 })();
 </script>
