@@ -594,6 +594,41 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   .v-tabs{margin-bottom:12px}
   .v-tabs button{font-size:14px;padding:6px 12px 6px 8px}
 }
+
+/* ---------- データの管理：お店のもの／預かるもの（2026/10/8） ---------- */
+.keys{display:grid;grid-template-columns:minmax(0,1fr) 132px minmax(0,1fr);align-items:stretch}
+.k-own,.k-keep{border-radius:22px;padding:28px 28px 24px}
+.k-own{background:var(--paper);border:2px solid var(--ink);box-shadow:8px 8px 0 var(--signal)}
+.k-keep{background:var(--ink);color:#fff}
+.keys h3{font-size:21px;display:flex;align-items:center;margin-bottom:4px}
+.k-keep h3{color:#fff}
+.k-badge{width:40px;height:40px;border-radius:50%;background:var(--signal);display:inline-flex;align-items:center;justify-content:center;margin-right:12px;flex:none;color:var(--ink)}
+.k-badge svg{width:22px;height:22px}
+.k-lead{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.7}
+.k-keep .k-lead{color:#c3d2dd}
+.keys ul{list-style:none}
+.keys li{display:grid;grid-template-columns:28px 1fr;column-gap:12px;padding:12px 0;border-top:1px solid var(--line);line-height:1.6}
+.k-keep li{border-top-color:rgba(255,255,255,.15)}
+.keys li svg{width:24px;height:24px;color:var(--sea);grid-row:span 2;margin-top:1px}
+.k-keep li svg{color:var(--signal)}
+.keys li b{font-family:var(--head);font-size:16px}
+.keys li > span{grid-column:2;font-size:13px;color:var(--muted)}
+.k-keep li > span{color:#c3d2dd}
+/* まん中：右から左へ「お渡し」の矢印 */
+.k-pass{position:relative;display:flex;align-items:center;justify-content:center}
+.k-pass::before{content:"";position:absolute;left:14px;right:14px;top:50%;border-top:3px dashed var(--signal)}
+.k-pass::after{content:"";position:absolute;left:10px;top:50%;margin-top:-8px;border-right:14px solid var(--signal);border-top:9px solid transparent;border-bottom:9px solid transparent;margin-top:-7.5px}
+.k-pass span{position:relative;margin-bottom:62px;font-family:var(--head);font-weight:700;font-size:13px;line-height:1.5;text-align:center;color:var(--ink)}
+.k-note{margin-top:24px;font-size:14px;color:var(--muted)}
+@media (max-width:900px){
+  .keys{grid-template-columns:1fr}
+  .k-pass{height:84px;justify-content:flex-start}
+  .k-pass span{margin:0 0 0 calc(50% + 18px);text-align:left}
+  .k-pass::before{left:50%;right:auto;top:10px;bottom:10px;border-top:none;border-left:3px dashed var(--signal)}
+  .k-pass::after{left:50%;top:6px;margin:0 0 0 -8px;border-right:9px solid transparent;border-left:9px solid transparent;border-bottom:14px solid var(--signal);border-top:none}
+  .k-own,.k-keep{padding:22px 20px 18px}
+  .k-own{box-shadow:6px 6px 0 var(--signal)}
+}
 </style>
 </head>
 <body>
@@ -873,20 +908,28 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <h2>データの<wbr>管理</h2>
       <p>ホームページは<wbr>お店の大事な財産です。<wbr>やめるときに<wbr>困らないよう、<wbr>最初からお店のものとして<wbr>持っていただきます。</p>
     </div>
-    <div class="data">
-      <article>
-        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="13" r="4.5"/><path d="M13.5 13H23M19 13v4M22 13v3"/></svg></span>
-        <h3>ドメインは<wbr>お店の名義</h3><p>ホームページの住所<wbr><span class="nw">（〇〇.jp&nbsp;など）は、</span><wbr>お店の名義で取ります。</p>
-      </article>
-      <article>
-        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a9 9 0 1 0 3-6.7"/><path d="M4 4v4h4"/><path d="M13 8v5l3 2"/></svg></span>
-        <h3>変更の記録を<wbr>残します</h3><p>いつ・どこを直したかを<wbr>全部記録しているので、<wbr>前の状態に<wbr>戻すこともできます。</p>
-      </article>
-      <article>
-        <span class="key" aria-hidden="true"><svg viewBox="0 0 26 26" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l9-5 9 5v10l-9 5-9-5z"/><path d="M4 9l9 5 9-5M13 14v10"/></svg></span>
-        <h3>やめるときは<wbr>データ一式を<wbr>お渡し</h3><p>解約されるときは、<wbr>サイトのデータを<wbr>すべてお渡しします。<wbr>ほかの会社に<wbr>引き継ぐこともできます。<wbr>解約後のドメインの更新費用は、<wbr>お店のご負担になります。</p>
-      </article>
+    <div class="keys">
+      <div class="k-own">
+        <h3><span class="k-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg></span>お店の<wbr>名義で<wbr>作るもの</h3>
+        <p class="k-lead">最初から<wbr>お店の<wbr>ものです。<wbr>やめても<wbr>そのまま<wbr>使えます。</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><b>ドメイン</b><span>ホームページの<wbr>住所<wbr><span class="nw">（〇〇.jp など）</span></span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.5-7-12a7 7 0 0114 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><b>Googleマップの<wbr>お店情報</b></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><b>ネット予約</b><span>RESERVA など</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg><b>お問い合わせの<wbr>メール</b><span>お店の<wbr>メールに<wbr>直接<wbr>届きます</span></li>
+        </ul>
+      </div>
+      <div class="k-pass" aria-hidden="true"><span>やめる<wbr>ときは<br>すべて<wbr>お渡し</span></div>
+      <div class="k-keep">
+        <h3>こちらで<wbr>預かって<wbr>管理するもの</h3>
+        <p class="k-lead">やめる<wbr>ときは<wbr>一式を<wbr>お渡しします。<wbr>ほかの<wbr>会社にも<wbr>引き継げます。</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg><b>ホームページの<wbr>ファイル</b><span>2か所に<wbr>保管。<wbr>変更の<wbr>記録も<wbr>すべて<wbr>残すので、<wbr>前の<wbr>状態にも<wbr>戻せます</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M3 17l5-4 4 3 3-2 6 4"/></svg><b>いただいた<wbr>写真</b><span>やめる<wbr>ときに<wbr>お返しして、<wbr>こちらの<wbr>分は<wbr>消します</span></li>
+        </ul>
+      </div>
     </div>
+    <p class="k-note">お店の<wbr>お客さんの<wbr>個人情報<wbr>（お問い合わせ・<wbr>予約）は、<wbr>こちらでは<wbr>持ちません。<wbr>解約後の<wbr>ドメインの<wbr>更新費用は、<wbr>お店の<wbr>ご負担です。</p>
   </div>
 </section>
 
