@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
+<title>【前の版】Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
 <meta name="description" content="山口県防府市で、小さなお店・事業者のホームページを作り、毎月の更新まで引き受けます。料金は税込・月額にドメインとフォームの費用込み。">
 <!-- 公開準備ができるまで検索に出さない。本公開時に外す -->
 <meta name="robots" content="noindex">
@@ -16,9 +16,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#17283A">
-<link rel="icon" href="img/favicon.png" type="image/png">
-<link rel="icon" href="img/emblem.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="icon" href="../img/favicon.png" type="image/png">
+<link rel="icon" href="../img/emblem.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&display=swap" rel="stylesheet">
@@ -479,60 +479,6 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 .chip input:focus-visible + span{outline:3px solid #fff;outline-offset:2px}
 .chips.days .chip span{min-width:52px;text-align:center}
 .can article.wide{grid-column:1 / -1}
-
-/* ---------- トップの作り込み（2026/10/8 v3。前の版は v2/） ---------- */
-/* 航空図のような薄い格子 */
-.hero{background:linear-gradient(180deg,#F5F9FB 0%,var(--sky) 100%)}
-.hero::before{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background-image:linear-gradient(rgba(47,111,143,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(47,111,143,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 60%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.5) 60%,transparent 100%)}
-.hero > .wrap{position:relative;z-index:1}
-/* 飛行機雲：2本の線。開いたときに一度だけ伸びる */
-.contrail{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-.contrail path{fill:none;stroke:#2F6F8F;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1800;stroke-dashoffset:0}
-.contrail .c1{stroke-width:3;opacity:.22}
-.contrail .c2{stroke-width:2;opacity:.12}
-.plane{position:absolute;right:2.2%;top:3.2%;width:44px;height:44px;-webkit-transform:rotate(-8deg);transform:rotate(-8deg)}
-@media (prefers-reduced-motion:no-preference){
-  .contrail path{stroke-dashoffset:1800;-webkit-animation:fly 1.9s cubic-bezier(.45,.05,.25,1) .2s forwards;animation:fly 1.9s cubic-bezier(.45,.05,.25,1) .2s forwards}
-  .contrail .c2{-webkit-animation-delay:.32s;animation-delay:.32s}
-  .plane{opacity:0;-webkit-animation:planein .5s ease-out 1.85s forwards;animation:planein .5s ease-out 1.85s forwards}
-}
-@-webkit-keyframes fly{to{stroke-dashoffset:0}}
-@keyframes fly{to{stroke-dashoffset:0}}
-@-webkit-keyframes planein{from{opacity:0;-webkit-transform:translate(-14px,10px) rotate(-8deg);transform:translate(-14px,10px) rotate(-8deg)}to{opacity:1;-webkit-transform:rotate(-8deg);transform:rotate(-8deg)}}
-@keyframes planein{from{opacity:0;-webkit-transform:translate(-14px,10px) rotate(-8deg);transform:translate(-14px,10px) rotate(-8deg)}to{opacity:1;-webkit-transform:rotate(-8deg);transform:rotate(-8deg)}}
-@media (max-width:900px){.plane,.contrail{display:none}}
-
-/* ---------- できること：ホームページの一生を「航路」で（作る → 見つけてもらう → 問い合わせ → 直す、をくり返す） ---------- */
-.route{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;position:relative;margin-top:8px}
-.route::before{content:"";position:absolute;left:12%;right:12%;top:56px;height:0;border-top:3px dashed var(--signal)}
-.route li{position:relative;text-align:center}
-.route .stop{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;width:112px;height:112px;margin:0 auto 18px;border-radius:50%;background:var(--paper);border:2px solid var(--ink);box-shadow:0 0 0 8px var(--sky)}
-.route .stop svg{width:64px;height:64px}
-.route h3{font-size:20px;margin-bottom:8px}
-.route p{font-size:15px;line-height:1.85;text-align:left;color:var(--ink)}
-/* 4つめ：ずっとくり返す印 */
-.route li.again .stop{background:var(--ink);border-color:var(--ink)}
-.route li.again .stop::after{content:"";position:absolute;left:-12px;top:-12px;right:-12px;bottom:-12px;border-radius:50%;border:2px dashed var(--signal)}
-.route li.again .tag{position:absolute;left:50%;top:-16px;z-index:2;-webkit-transform:translateX(-50%);transform:translateX(-50%);white-space:nowrap}
-.route .tag{display:inline-block;font-family:var(--head);font-weight:700;font-size:13px;background:var(--signal);color:var(--ink);border-radius:999px;padding:2px 12px;margin-bottom:8px}
-.route-loop{margin:30px auto 0;max-width:640px;text-align:center;font-family:var(--head);font-weight:700;font-size:17px;line-height:1.7;color:var(--ink)}
-.route-loop svg{display:inline-block;width:22px;height:22px;vertical-align:-5px;margin-right:8px}
-.can.extra-row{margin-top:36px;grid-template-columns:1fr}
-@media (max-width:980px){
-  .route{grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 28px}
-  .route::before{display:none}
-}
-@media (max-width:640px){
-  .route{grid-template-columns:1fr;gap:26px}
-  .route::before{display:block;left:43px;right:auto;top:20px;bottom:20px;height:auto;border-top:none;border-left:3px dashed var(--signal)}
-  .route li{display:grid;grid-template-columns:88px 1fr;gap:4px 16px;text-align:left;align-items:start}
-  .route .stop{width:88px;height:88px;margin:0;grid-row:span 3;box-shadow:0 0 0 6px var(--sky)}
-  .route .stop svg{width:50px;height:50px}
-  .route h3{font-size:19px;margin:6px 0 2px}
-  .route li.again .tag{position:static;-webkit-transform:none;transform:none;justify-self:start;margin:6px 0 0}
-  .route li.again .stop::after{left:-9px;top:-9px;right:-9px;bottom:-9px}
-  .route-loop{text-align:left;font-size:16px}
-}
 </style>
 </head>
 <body>
@@ -541,7 +487,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#" aria-label="Lift-Off ホームページ制作 トップへ">
-      <img src="img/logo.svg" alt="Lift-Off" width="397" height="140">
+      <img src="../img/logo.svg" alt="Lift-Off" width="397" height="140">
       <small>ホームページ制作</small>
     </a>
     <nav class="nav" id="nav" aria-label="ページ内">
@@ -556,11 +502,6 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 
 <main id="main">
 <section class="hero">
-  <svg class="contrail" viewBox="0 0 1440 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path class="c1" d="M-40 800 C 280 770, 480 610, 650 430 S 1020 120, 1400 46"/>
-    <path class="c2" d="M-40 816 C 280 786, 480 626, 652 446 S 1022 136, 1402 62"/>
-  </svg>
-  <svg class="plane" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><path d="M4 21 L36 6 L26 35 L19 24 Z" fill="#17283A"/><path d="M19 24 L36 6" stroke="#F2C230" stroke-width="2.2" stroke-linecap="round"/></svg>
   <div class="wrap">
     <div class="hero-copy">
       <p class="place">山口県防府市の<wbr>小さなお店・<wbr>事業者さんへ</p>
@@ -586,7 +527,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       </div>
       <div class="phone">
         <div class="screen">
-          <img src="img/hero-phone.jpg" alt="" width="500" height="1013" fetchpriority="high">
+          <img src="../img/hero-phone.jpg" alt="" width="500" height="1013" fetchpriority="high">
           <p class="notice"><b>お知らせ</b>来週の<wbr>水曜日は、<wbr>臨時休業とさせていただきます。</p>
         </div>
       </div>
@@ -617,14 +558,23 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <h2>できる<wbr>こと</h2>
       <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
     </div>
-    <ol class="route" aria-label="ホームページを作ってから、ずっと続く流れ">
-      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
-      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
-      <li><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="18" width="34" height="26" rx="4" stroke="#17283A" stroke-width="2.6"/><path d="M7 20l16 12 16-12" stroke="#17283A" stroke-width="2.6"/><rect x="34" y="30" width="24" height="24" rx="4" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M34 37h24M41 27v6M51 27v6" stroke="#17283A" stroke-width="2.6"/><path d="M40 45l4 4 8-8" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p></li>
-      <li class="again"><span class="stop" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h30v20H22l-8 7v-7H8z" fill="#06C755" stroke="#fff" stroke-width="2.4"/><path d="M15 22h16" stroke="#fff" stroke-width="2.4"/><path d="M50 30a12 12 0 01-20 12" stroke="#F2C230" stroke-width="2.8"/><path d="M30 42v-6h6" stroke="#F2C230" stroke-width="2.8"/><path d="M30 46a12 12 0 0120-12" stroke="#fff" stroke-width="2.8" opacity=".9"/><path d="M50 34v6h-6" stroke="#fff" stroke-width="2.8" opacity=".9"/></svg></span><span class="tag">公開したあとも</span><h3>直す・<wbr>更新する</h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p></li>
-    </ol>
-    <p class="route-loop"><svg viewBox="0 0 24 24" fill="none" stroke="#F2C230" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 8a8 8 0 00-14.5-2M4 4v4h4"/><path d="M4 16a8 8 0 0014.5 2M20 20v-4h-4"/></svg>作って<wbr>終わりではなく、<wbr>お店が<wbr>続くかぎり、<wbr>直す・<wbr>更新するを<wbr>くり返します。</p>
-    <div class="can extra-row">
+    <div class="can">
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="14" height="24" rx="3"/><path d="M13 23h4"/><path d="M11 9h8M11 13h8M11 17h5" stroke="#2F6F8F"/></svg></span>
+        <h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h15a3 3 0 0 1 3 3v5a3 3 0 0 1-3 3h-7l-5 4v-4H4z"/><path d="M19 25l6-6 2 2-6 6h-2z" stroke="#2F6F8F"/></svg></span>
+        <h3>直す・更新する</h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 27s-8-7.5-8-14a8 8 0 0 1 16 0c0 6.5-8 14-8 14z"/><circle cx="15" cy="13" r="3" stroke="#2F6F8F"/></svg></span>
+        <h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p>
+      </article>
+      <article>
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="22" height="20" rx="3"/><path d="M4 12h22M10 3v6M20 3v6"/><path d="M10 18l3 3 6-6" stroke="#2F6F8F"/></svg></span>
+        <h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p>
+      </article>
       <article class="wide">
         <span class="ic" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#17283A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="18" height="24" rx="2.5"/><path d="M10 9h10M10 14h10M10 19h6" stroke="#2F6F8F"/></svg></span>
         <h3>メニュー表・<wbr>チラシ・<wbr>名刺・ロゴも</h3><p>ホームページと<wbr>同じ<wbr>色・言葉で、<wbr>お店に<wbr>置く<wbr>メニュー表や<wbr>チラシ、<wbr>名刺、<wbr>ロゴも<wbr>作れます。<wbr>印刷用の<wbr>データで<wbr>お渡しします<wbr>（<a href="#option">料金</a>）。</p>
@@ -852,20 +802,20 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <p>同じ<wbr>架空の<wbr>お店で、<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。<wbr>押すと<wbr>見本の<wbr>ページが<wbr>開きます。</p>
     </div>
     <div class="samples">
-      <a class="sample" href="samples/homey/index.html">
-        <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/homey/index.html">
+        <div class="shot"><img src="../samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>アットホーム</h3><p>やわらかく、<wbr>親しみやすく</p>
       </a>
-      <a class="sample" href="samples/luxury/index.html">
-        <div class="shot"><img src="samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/luxury/index.html">
+        <div class="shot"><img src="../samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>ラグジュアリー</h3><p>上品に、<wbr>落ち着いて</p>
       </a>
-      <a class="sample" href="samples/pop/index.html">
-        <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/pop/index.html">
+        <div class="shot"><img src="../samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>カラフル</h3><p>明るく、<wbr>わかりやすく</p>
       </a>
-      <a class="sample" href="samples/chic/index.html">
-        <div class="shot"><img src="samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/chic/index.html">
+        <div class="shot"><img src="../samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>シック</h3><p>大人っぽく、<wbr>印象に残る</p>
       </a>
     </div>
@@ -873,23 +823,23 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
     <h3 class="sub-h">写真を<wbr>大きく<wbr>使った<wbr>見本と、<wbr><span class="nw">一緒に作れるもの</span></h3>
     <p class="sub-p">ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
     <div class="samples three">
-      <a class="sample" href="samples/photo/index.html">
-        <div class="shot"><img src="samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/photo/index.html">
+        <div class="shot"><img src="../samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>写真を<wbr>大きく</h3><p>トップに<wbr>写真や<wbr>絵を<wbr>大きく</p>
       </a>
-      <a class="sample" href="samples/logo/index.html">
-        <div class="shot"><img src="samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/logo/index.html">
+        <div class="shot"><img src="../samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>ロゴ</h3><p>6つの<wbr>見本</p>
       </a>
-      <a class="sample" href="samples/card/index.html">
-        <div class="shot"><img src="samples/thumbs/card.jpg" alt="名刺の見本" width="1200" height="780" loading="lazy" decoding="async"></div>
+      <a class="sample" href="../samples/card/index.html">
+        <div class="shot"><img src="../samples/thumbs/card.jpg" alt="名刺の見本" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>名刺</h3><p>表と<wbr>うらの<wbr>見本</p>
       </a>
     </div>
 
     <div class="work-foot">
       <p>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
-      <a class="btn" href="samples/index.html">見本の<wbr>一覧を<wbr>見る</a>
+      <a class="btn" href="../samples/index.html">見本の<wbr>一覧を<wbr>見る</a>
     </div>
   </div>
 </section>
@@ -905,7 +855,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
     <ul class="same-list">
       <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="12" height="21" rx="2.5"/><path d="M11 19.5h4"/></svg></span><h3>古いスマホでも<wbr>崩れない</h3><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
       <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h18M4 12.5h13M4 18h16"/></svg></span><h3>言葉の<wbr>途中で<wbr>切れない</h3><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
-      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6L4 12l6 6"/><path d="M4 12h11a7 7 0 010 14"/></svg></span><h3>「戻る」で、<wbr>見ていた<wbr>場所へ</h3><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6L4 12l6 6"/><path d="M4 12h11a7 7 0 010 14"/></svg></span><h3>「戻る」で、<wbr>見ていた<wbr>場所へ</h3><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="../samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
       <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="20" height="16" rx="2.5"/><path d="M3 15l5-4 4 3 4-5 7 6"/></svg></span><h3>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h3><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
       <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h4l2 5-2.5 1.5a11 11 0 006.5 6.5L17.5 14l5 2v4a2 2 0 01-2 2A17.5 17.5 0 014 5.5a2 2 0 012-2z"/></svg></span><h3>押すと<wbr>そのまま<wbr>電話・予約</h3><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
       <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="20" height="14" rx="2"/><path d="M3.5 7l9.5 7 9.5-7"/></svg></span><h3>お問い合わせは<wbr>お店の<wbr>メールへ</h3><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
@@ -1057,7 +1007,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 <footer>
   <div class="wrap">
     <div>
-      <img class="foot-logo" src="img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy" decoding="async">
+      <img class="foot-logo" src="../img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy" decoding="async">
       <p>防府のお店の<wbr>ホームページ制作・<wbr>WEB担当者代行</p>
       <p><a href="tel:09011896726">090-1189-6726</a>（受付 平日 10:00〜16:00）　<a href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
     </div>
@@ -1212,5 +1162,6 @@ if ('IntersectionObserver' in window) {
   draw();
 })();
 </script>
+<div style="position:fixed;left:12px;bottom:80px;z-index:40;background:#17283A;color:#fff;font-size:13px;padding:6px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.25)">前の版（2026/10/8）</div>
 </body>
 </html>
