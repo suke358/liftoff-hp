@@ -463,6 +463,21 @@ footer a:hover{color:var(--signal)}
 @media (max-width:760px){.next{padding:18px 16px}}
 .contact .tel-hours{font-size:15px;color:#fff;margin-top:2px}
 .contact .tel-hours b{font-family:var(--head);font-size:18px;color:var(--signal);letter-spacing:.03em}
+.contact .meet-note{font-size:14px;line-height:1.75;color:#c3d2dd;margin:14px 0 6px;padding:12px 14px;border-left:4px solid var(--signal);background:rgba(255,255,255,.05);border-radius:0 10px 10px 0}
+.contact .meet-note b{display:block;font-family:var(--head);font-size:16px;color:#fff}
+.meet{display:grid;gap:18px;padding:16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.22)}
+.meet[hidden]{display:none}
+.form-lead{font-size:14px;color:#fff;background:rgba(242,194,48,.14);border-radius:10px;padding:10px 14px;line-height:1.7}
+fieldset{border:none;margin:0;padding:0;min-width:0}
+legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
+.chips{display:flex;flex-wrap:wrap;margin:-4px}
+.chip{display:block;position:relative;margin:4px;font-weight:400;font-size:15px;cursor:pointer}
+.chip input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;min-height:0;padding:0}
+.chip span{display:block;padding:9px 14px;border-radius:999px;border:2px solid rgba(255,255,255,.35);color:#fff;line-height:1.4;min-height:44px;-webkit-transition:background .15s;transition:background .15s}
+.chip input:checked + span{background:var(--signal);border-color:var(--signal);color:var(--ink);font-weight:700}
+.chip input:checked + span::before{content:"✓ "}
+.chip input:focus-visible + span{outline:3px solid #fff;outline-offset:2px}
+.chips.days .chip span{min-width:52px;text-align:center}
 </style>
 </head>
 <body>
@@ -891,6 +906,7 @@ footer a:hover{color:var(--signal)}
         <p class="tel-label">お電話</p>
         <a class="tel" href="tel:09011896726"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3L13 11.5l4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C8.6 17 3 11.4 2.5 4.6A1.5 1.5 0 0 1 4 3z"/></svg>090-1189-6726</a>
         <p class="tel-hours">受付時間　<b>平日 10:00〜16:00</b></p>
+        <p class="meet-note"><b>打ち合わせは、<wbr>お会いして</b>ご都合の<wbr>よい<wbr>場所へ<wbr>うかがいます<wbr>（お店・<wbr>カフェなど）。<wbr>フォームで<wbr>ご都合を<wbr>選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>日にちは<wbr>こちらから<wbr>折り返して<wbr>決めます。</p>
         <p class="tel-note">フォーム・<wbr>メールは<wbr>いつでも<wbr>送れます。<wbr>お電話は<wbr>作業中で<wbr>出られない<wbr>ことがあります。<wbr>その<wbr>場合は、<wbr>折り返しお電話します。</p>
         <p>メール：<a class="mail" href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
         <dl>
@@ -902,7 +918,7 @@ footer a:hover{color:var(--signal)}
           <h3>ご相談の<wbr>あとは</h3>
           <ol>
             <li><b>ご連絡</b>フォーム・<wbr>お電話・<wbr>メールの<wbr>どれでも。<wbr>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</li>
-            <li><b>こちらから<wbr>折り返し</b>お店の<wbr>ことを<wbr>うかがって、<wbr>合いそうな<wbr>プランと<wbr>金額を<wbr>お伝えします。</li>
+            <li><b>お会いする<wbr>日を<wbr>決めて、<wbr>うかがいます</b>こちらから<wbr>折り返して<wbr>日と<wbr>場所を<wbr>決めます。<wbr>お店の<wbr>ことを<wbr>うかがって、<wbr>合いそうな<wbr>プランと<wbr>金額を<wbr>お伝えします。</li>
             <li><b>決めるのは<wbr>そのあとで</b>ご家族と<wbr>相談してからでも<wbr>かまいません。</li>
           </ol>
           <ul class="nopush">
@@ -914,13 +930,63 @@ footer a:hover{color:var(--signal)}
       </div>
       <div class="formbox">
         <form id="form" action="" method="POST">
+          <p class="form-lead">選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>文を<wbr>考えなくても、<wbr>こちらから<wbr>うかがいます。</p>
           <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
           <label><span>お店・会社の<wbr>名前<span class="opt-label">なくても可</span></span><input name="shop" autocomplete="organization"></label>
-          <label><span>ご連絡先<wbr>（電話または<wbr>メール）<span class="req">必須</span></span><input name="contact" required></label>
-          <label>ご相談の<wbr>内容
-            <select name="topic"><option>ホームページの相談</option><option>料金・プランについて</option><option>伐採・草刈りの相談</option><option>その他</option></select>
-          </label>
-          <label><span>くわしい<wbr>内容<span class="opt-label">なくても可</span></span><textarea name="message" placeholder="例：お店のホームページを作りたい。予約もネットで受けたい。"></textarea></label>
+          <label><span>ご連絡先<wbr>（電話番号か<wbr>メール）<span class="req">必須</span></span><input name="contact" required autocomplete="tel" placeholder="例：090-0000-0000"></label>
+          <fieldset><legend>ご相談の<wbr>しかた</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="how" value="会って話したい" checked><span>会って話したい</span></label>
+              <label class="chip"><input type="radio" name="how" value="まずは連絡のやりとりで"><span>まずは連絡のやりとりで</span></label>
+              <label class="chip"><input type="radio" name="how" value="電話で話したい"><span>電話で話したい</span></label>
+            </div>
+          </fieldset>
+          <div class="meet" id="meet">
+            <fieldset><legend>いつごろが<wbr>よいですか<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="when" value="今週"><span>今週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="来週"><span>来週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="再来週より先"><span>再来週より先</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="いつでも"><span>いつでも</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>曜日<span class="opt-label">いくつでも</span></legend>
+              <div class="chips days">
+              <label class="chip"><input type="checkbox" name="day" value="月"><span>月</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="火"><span>火</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="水"><span>水</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="木"><span>木</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="金"><span>金</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>時間<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="time" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+              <label class="chip"><input type="checkbox" name="time" value="午後（13〜16時）"><span>午後（13〜16時）</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>会う<wbr>場所</legend>
+              <div class="chips">
+              <label class="chip"><input type="radio" name="place" value="お店に来てほしい"><span>お店に来てほしい</span></label>
+              <label class="chip"><input type="radio" name="place" value="お店の近くのカフェなど"><span>お店の近くのカフェなど</span></label>
+              <label class="chip"><input type="radio" name="place" value="どこでもよい"><span>どこでもよい</span></label>
+              </div>
+            </fieldset>
+            <p class="formnote">日にちと<wbr>場所は、<wbr>こちらから<wbr>折り返して<wbr>決めます。<wbr>うかがえるのは、<wbr>防府市と<wbr>その<wbr>周辺の<wbr>平日 10:00〜16:00 です。</p>
+          </div>
+          <fieldset><legend>気に<wbr>なること<span class="opt-label">いくつでも</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="about" value="ホームページを新しく作りたい"><span>ホームページを新しく作りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="今のホームページを直したい"><span>今のホームページを直したい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="更新をまかせたい"><span>更新をまかせたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ネット予約をつけたい"><span>ネット予約をつけたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="Googleマップを整えたい"><span>Googleマップを整えたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ロゴ・名刺・チラシ"><span>ロゴ・名刺・チラシ</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="料金を知りたい"><span>料金を知りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="伐採・草刈りの相談"><span>伐採・草刈りの相談</span></label>
+            </div>
+          </fieldset>
+          <label><span>ほかに<wbr>伝えたいこと<span class="opt-label">なくても可</span></span><textarea name="message" placeholder="なければ空のままで大丈夫です"></textarea></label>
           <input type="hidden" name="_subject" value="【Lift-Off】ホームページからのお問い合わせ">
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <button class="btn signal" type="submit">この<wbr>内容で<wbr>送る</button>
@@ -948,8 +1014,8 @@ footer a:hover{color:var(--signal)}
 </footer>
 
 <div class="fixbar" id="fixbar">
-  <a class="btn primary" href="tel:09011896726">電話する</a>
-  <a class="btn" href="#contact">フォームで<wbr>相談</a>
+  <a class="btn primary" href="#contact" data-topic="会って話したい">会って<wbr>相談する</a>
+  <a class="btn" href="tel:09011896726">電話する</a>
 </div>
 
 <script>
@@ -961,10 +1027,26 @@ var note = document.getElementById('formnote');
 var btn = form.querySelector('button[type=submit]');
 form.action = FORMSPREE;
 note.textContent = '送信後、こちらから折り返しご連絡します。';
+// 選んだものをまとめる（同じ名前の欄は「、」でつなぐ）
+var LABEL = {name:'お名前', shop:'お店・会社', contact:'ご連絡先', how:'ご相談のしかた', when:'いつごろ', day:'曜日', time:'時間', place:'会う場所', about:'気になること', message:'ほかに伝えたいこと'};
+function collect(){
+  var v = {}, order = [];
+  for (var i = 0; i < form.elements.length; i++) {
+    var el = form.elements[i]; if (!el.name || el.name === '_gotcha') continue;
+    if ((el.type === 'checkbox' || el.type === 'radio') && !el.checked) { if (!(el.name in v)) { v[el.name] = []; order.push(el.name); } continue; }
+    if (el.type === 'submit') continue;
+    if (!(el.name in v)) { v[el.name] = []; order.push(el.name); }
+    if (el.value) v[el.name].push(el.value);
+  }
+  if (!v.how || v.how.join('') !== '会って話したい') { delete v.when; delete v.day; delete v.time; delete v.place; }
+  var fd = new FormData(), text = [];
+  for (var j = 0; j < order.length; j++) { var k = order[j]; if (!(k in v)) continue; var val = v[k].join('、'); fd.append(LABEL[k] || k, val); if (LABEL[k]) text.push(LABEL[k] + '：' + (val || '（なし）')); }
+  fd.append('_gotcha', form._gotcha.value);
+  return { fd: fd, text: text.join('\n') };
+}
 function openMail(){
-  var d = new FormData(form);
-  var body = 'お名前：' + d.get('name') + '\nお店・会社：' + d.get('shop') + '\nご連絡先：' + d.get('contact') + '\nご相談：' + d.get('topic') + '\n\n' + d.get('message');
-  location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + d.get('name')) + '&body=' + encodeURIComponent(body);
+  var c = collect();
+  location.href = 'mailto:liftoff.358@gmail.com?subject=' + encodeURIComponent('【ホームページの相談】' + form.name.value) + '&body=' + encodeURIComponent(c.text);
 }
 // スマホのメニュー
 var menuBtn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
@@ -974,13 +1056,22 @@ nav.addEventListener('click', function(e){ if (e.target.closest && e.target.clos
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
 document.addEventListener('click', function(e){ if (nav.classList.contains('open') && !nav.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
 // 「伐採・草刈りについて相談する」からはご相談の内容を選んだ状態にする
-[].forEach.call(document.querySelectorAll('[data-topic]'), function(a){ a.addEventListener('click', function(){ form.topic.value = a.getAttribute('data-topic'); }); });
+var meet = document.getElementById('meet');
+function showMeet(){ var h = form.querySelector('input[name=how]:checked'); meet.hidden = !h || h.value !== '会って話したい'; }
+[].forEach.call(form.querySelectorAll('input[name=how]'), function(r){ r.addEventListener('change', showMeet); });
+// ページの中のボタンから来たときは、選んだ状態にする
+[].forEach.call(document.querySelectorAll('[data-topic]'), function(a){ a.addEventListener('click', function(){
+  var t = a.getAttribute('data-topic');
+  [].forEach.call(form.querySelectorAll('input[value="' + t + '"]'), function(i){ i.checked = true; });
+  showMeet();
+}); });
+showMeet();
 form.addEventListener('submit', function(e){
   e.preventDefault();
   btn.disabled = true; btn.textContent = '送信中…';
-  fetch(FORMSPREE, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+  fetch(FORMSPREE, { method: 'POST', body: collect().fd, headers: { 'Accept': 'application/json' } })
     .then(function(r){ if (!r.ok) throw new Error('send failed');
-      form.reset();
+      form.reset(); showMeet();
       btn.textContent = '送信しました';
       note.textContent = 'ありがとうございます。内容を確認して、こちらから折り返しご連絡します。';
     })
