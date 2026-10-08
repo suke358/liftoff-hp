@@ -6,3 +6,4 @@ wrangler.jsonc
 README.md
 .wrangler
 .DS_Store
+tools
