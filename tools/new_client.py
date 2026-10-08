@@ -77,7 +77,7 @@ def main():
     else:
         out = [('first.html', '1 初回の打ち合わせ_入力シート（Macで開く）.html')]
         webloc(os.path.join(nxt, '2 デザイン見本帳を開く.webloc'), SAMPLES); made.append('2 デザイン見本帳を開く.webloc')
-        est = os.path.join(HERE, 'estimate.html')
+        est = os.path.join(HERE, 'お見積もりを作る.html')
         if os.path.exists(est):
             shutil.copy(est, os.path.join(nxt, '4 お見積もり（Macで開く・印刷やPDFにできる）.html')); made.append('4 お見積もり（Macで開く・印刷やPDFにできる）.html')
         price = os.path.join(base, 'HP制作_料金表_A4.pdf')
