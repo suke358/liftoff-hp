@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>和風・職人（造園）｜デザイン見本</title>
+<meta name="description" content="Lift-Off ホームページ制作のデザイン見本です（架空のお店）。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#23221f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 言葉の切れ目で折り返す（ は BudouX で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
+/* =========================================================
+   見本6：和風・職人（2026/10/8）
+   和紙のような地に、墨の文字。縦書きの見出しと、朱色の印。
+   造園・大工・畳・左官・和菓子など、手仕事のお店に
+   ========================================================= */
+:root{
+  --washi:#f3eee3;     /* 和紙（背景） */
+  --washi-2:#e9e2d3;
+  --sumi:#23221f;      /* 墨（文字・暗い帯） */
+  --sumi-2:#3a3833;
+  --matsu:#3e5640;     /* 松葉の緑 */
+  --shu:#a8432a;       /* 朱（印・大事なところだけ） */
+  --stone:#6d675c;
+  --line:#cfc6b4;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--washi);color:var(--sumi);font-family:var(--gothic);font-size:16px;line-height:2;letter-spacing:.06em}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--shu);outline-offset:3px}
+.wrap{width:min(1120px,100% - 48px);margin-left:auto;margin-right:auto}
+h1,h2,h3{font-family:var(--mincho);font-weight:700;margin:0;line-height:1.6}
+p{margin:0 0 1.1em}
+/* 縦書き（古いスマホのために -webkit- も書く） */
+.tate{-webkit-writing-mode:vertical-rl;-ms-writing-mode:tb-rl;writing-mode:vertical-rl}
+
+/* ---------- 印（屋号の判子） ---------- */
+.inkan{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--shu);color:#f6ecdf;font-family:var(--mincho);font-weight:800;font-size:15px;line-height:1.05;letter-spacing:0;border-radius:4px;text-align:center;flex:none}
+
+/* ---------- ヘッダー ---------- */
+.head{background:var(--washi);border-bottom:1px solid var(--line);position:-webkit-sticky;position:sticky;top:0;z-index:30}
+.head .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand .inkan{margin-right:14px}
+.brand b{font-family:var(--mincho);font-weight:800;font-size:1.45rem;letter-spacing:.14em;display:block;line-height:1.3}
+.brand small{display:block;font-size:.72rem;color:var(--stone);letter-spacing:.18em;line-height:1.4}
+.nav{display:flex;align-items:center}
+.nav a{text-decoration:none;font-size:.9rem;margin-left:28px}
+.nav a:hover{color:var(--shu)}
+.nav .call{background:var(--sumi);color:var(--washi);padding:.55em 1.3em;border-radius:3px;font-weight:700}
+.nav .call:hover{background:var(--matsu);color:var(--washi)}
+@media (max-width:860px){.nav a:not(.call){display:none}.brand small{display:none}.head .wrap{height:64px}.brand b{font-size:1.2rem}.brand .inkan{width:38px;height:38px;font-size:13px}}
+
+/* ---------- トップ（写真を右に大きく、縦書きの言葉を左に） ---------- */
+.hero{padding:56px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:auto 1fr;grid-gap:56px;gap:56px;align-items:stretch}
+.hero-copy{display:flex;flex-direction:row-reverse;align-items:flex-start}
+.hero h1{font-size:clamp(2rem,3.6vw,2.9rem);letter-spacing:.24em;line-height:1.75;font-weight:800;margin-left:18px}
+.hero h1 em{font-style:normal;color:var(--matsu)}
+.hero .sub{font-family:var(--mincho);font-size:1rem;letter-spacing:.3em;color:var(--stone);margin:3.2em 0 0;line-height:2}
+.hero-photo{position:relative}
+.hero-photo img{width:100%;height:100%;min-height:420px;object-fit:cover;border-radius:2px}
+.hero-photo .tag{position:absolute;left:-22px;bottom:28px;background:var(--sumi);color:var(--washi);padding:18px 26px;font-size:.92rem;line-height:1.9;letter-spacing:.1em;max-width:26em}
+.hero-photo .tag b{font-family:var(--mincho);font-size:1.05rem;display:block;letter-spacing:.16em}
+@media (max-width:860px){
+  .hero{padding:24px 0 48px}
+  .hero .wrap{grid-template-columns:1fr;grid-gap:28px;gap:28px}
+  .hero-copy{justify-content:center}
+  .hero h1{font-size:1.9rem}
+  .hero-photo img{min-height:0;height:auto}
+  .hero-photo .tag{position:static;max-width:none;padding:16px 20px}
+}
+
+/* ---------- 見出し（縦の線と、小さな漢数字） ---------- */
+.sec{padding:110px 0}
+.sec.dark{background:var(--sumi);color:#ece6da}
+.sec.dark .muted{color:#b8b1a4}
+.sec.tint{background:var(--washi-2)}
+.sec-head{display:flex;align-items:flex-end;margin-bottom:56px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.dark .sec-head{border-color:#4a473f}
+.sec-head .no{font-family:var(--mincho);color:var(--shu);font-size:.95rem;letter-spacing:.3em;margin-right:22px;white-space:nowrap}
+.dark .sec-head .no{color:#d98a6f}
+.sec-head h2{font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:.2em}
+.sec-head p{margin:0 0 .3em auto;color:var(--stone);font-size:.9rem;text-align:right;padding-left:24px}
+.muted{color:var(--stone)}
+@media (max-width:860px){.sec{padding:76px 0}.sec-head{display:block;margin-bottom:36px}.sec-head .no{display:block;margin-bottom:4px}.sec-head p{text-align:left;padding-left:0;margin:10px 0 0}}
+
+/* ---------- 仕事 ---------- */
+.works{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-left:1px solid var(--line)}
+.works li{border-right:1px solid var(--line);padding:6px 26px 10px;display:flex;flex-direction:row-reverse}
+.works h3{font-size:1.5rem;letter-spacing:.3em;margin-left:18px;line-height:1.4;white-space:nowrap}
+.works h3 span{color:var(--shu);font-size:1rem;display:block;margin-bottom:.6em}
+.works p{font-size:.93rem;margin:0;line-height:2}
+.works .ex{display:block;font-size:.82rem;color:var(--stone);margin-top:.8em}
+.ask{margin:56px 0 0;padding:28px 34px;background:var(--washi-2);border-left:4px solid var(--matsu)}
+.ask b{font-family:var(--mincho);font-size:1.1rem;letter-spacing:.14em;display:block;margin-bottom:8px}
+.ask ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-gap:2px 28px;gap:2px 28px}
+.ask li{padding-left:1em;text-indent:-1em}
+.ask li::before{content:"・";color:var(--matsu)}
+@media (max-width:980px){.works{grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line)}.works li{border-bottom:1px solid var(--line);padding:24px 22px}}
+@media (max-width:600px){
+  .works{grid-template-columns:1fr;border-left:none;border-top:none}
+  .works li{border-right:none;border-bottom:1px solid var(--line);padding:22px 0;flex-direction:column}
+  .works h3{-webkit-writing-mode:horizontal-tb;-ms-writing-mode:lr-tb;writing-mode:horizontal-tb;margin:0 0 8px;font-size:1.3rem;letter-spacing:.16em}
+  .works h3 span{display:inline;margin:0 .8em 0 0}
+  .ask{padding:22px 20px}.ask ul{grid-template-columns:1fr}
+}
+
+/* ---------- 施工例（作業前・作業後） ---------- */
+.cases{display:grid;grid-gap:64px;gap:64px}
+.case{display:grid;grid-template-columns:1fr 1fr;grid-gap:18px;gap:18px}
+.case figure{margin:0;position:relative}
+.case figure img{width:100%;border-radius:2px}
+.case figcaption{position:absolute;left:0;top:0;background:var(--washi);color:var(--sumi);font-family:var(--mincho);font-weight:700;font-size:.85rem;letter-spacing:.2em;padding:.35em 1em}
+.case figure.after figcaption{background:var(--shu);color:#f6ecdf}
+.case .txt{grid-column:1 / -1;display:grid;grid-template-columns:16em 1fr;grid-gap:28px;gap:28px;border-top:1px solid #4a473f;padding-top:18px}
+.case h3{font-size:1.15rem;letter-spacing:.14em}
+.case .txt p{margin:0;font-size:.93rem}
+.case .meta{display:block;font-size:.8rem;color:#b8b1a4;font-family:var(--gothic);font-weight:400;letter-spacing:.1em;margin-top:4px}
+@media (max-width:760px){.case{grid-template-columns:1fr}.case .txt{grid-template-columns:1fr;grid-gap:6px;gap:6px}.cases{grid-gap:48px;gap:48px}}
+
+/* ---------- 職人 ---------- */
+.owner .wrap{display:grid;grid-template-columns:300px 1fr;grid-gap:72px;gap:72px;align-items:start}
+.owner-photo{position:relative}
+.owner-photo img{width:100%;border-radius:2px}
+.owner-photo .name{position:absolute;right:-20px;top:24px;background:var(--washi);border:1px solid var(--line);padding:18px 10px;font-family:var(--mincho);font-weight:700;letter-spacing:.3em;font-size:1.05rem;line-height:1.5}
+.owner-photo .name small{font-size:.75rem;color:var(--stone);letter-spacing:.2em;margin-bottom:.8em;display:block}
+.owner h3{font-size:clamp(1.3rem,2.4vw,1.7rem);letter-spacing:.16em;margin-bottom:26px;line-height:1.9}
+.facts{margin:32px 0 0;padding:0;border-top:1px solid var(--line)}
+.facts div{display:grid;grid-template-columns:8em 1fr;padding:12px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.facts dt{color:var(--stone)}
+.facts dd{margin:0}
+@media (max-width:860px){.owner .wrap{grid-template-columns:1fr;grid-gap:40px;gap:40px}.owner-photo{max-width:260px}.facts div{grid-template-columns:6.5em 1fr}}
+
+/* ---------- ご依頼の流れ ---------- */
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));counter-reset:f}
+.flow li{position:relative;padding:0 18px 0 0;counter-increment:f}
+.flow li::before{content:counter(f);display:flex;align-items:center;justify-content:center;width:46px;height:46px;border:1px solid var(--sumi);border-radius:50%;font-family:var(--mincho);font-weight:700;font-size:1.1rem;margin-bottom:16px;background:var(--washi)}
+.flow li::after{content:"";position:absolute;left:46px;right:0;top:23px;border-top:1px dashed var(--line)}
+.flow li:last-child::after{display:none}
+.flow h3{font-size:1.08rem;letter-spacing:.12em;margin-bottom:6px}
+.flow p{font-size:.88rem;margin:0;color:var(--stone);line-height:1.9}
+.price{margin:56px 0 0;display:grid;grid-template-columns:auto 1fr;grid-gap:30px;gap:30px;align-items:center;border:1px solid var(--sumi);padding:26px 32px;background:var(--washi)}
+.price b{font-family:var(--mincho);font-size:1.15rem;letter-spacing:.2em}
+.price p{margin:0;font-size:.93rem}
+@media (max-width:860px){
+  .flow{grid-template-columns:1fr}
+  .flow li{display:grid;grid-template-columns:46px 1fr;grid-gap:0 18px;gap:0 18px;padding:0 0 26px}
+  .flow li::before{grid-row:span 2;margin:0}
+  .flow li::after{left:23px;right:auto;top:46px;bottom:0;border-top:none;border-left:1px dashed var(--line)}
+  .price{grid-template-columns:1fr;grid-gap:6px;gap:6px;padding:22px 20px}
+}
+
+/* ---------- 概要とお問い合わせ ---------- */
+.contact .wrap{display:grid;grid-template-columns:1fr 1.1fr;grid-gap:72px;gap:72px}
+.info{margin:0;border-top:1px solid #4a473f}
+.info div{display:grid;grid-template-columns:7.5em 1fr;padding:14px 0;border-bottom:1px solid #4a473f;font-size:.93rem}
+.info dt{color:#b8b1a4}
+.info dd{margin:0}
+.telbox{margin:0 0 30px}
+.telbox small{display:block;color:#b8b1a4;font-size:.85rem}
+.tel{font-family:var(--mincho);font-weight:700;font-size:clamp(2rem,4.4vw,2.8rem);letter-spacing:.08em;color:#f3eee3;text-decoration:none;line-height:1.4}
+.form label{display:block;font-size:.88rem;margin:0 0 18px;letter-spacing:.08em}
+.form label span{color:#d98a6f;font-size:.75rem;margin-left:.6em}
+.form input,.form select,.form textarea{display:block;width:100%;margin-top:6px;font:inherit;font-size:16px;color:var(--sumi);background:var(--washi);border:1px solid #6b665c;border-radius:2px;padding:.7em .9em}
+.form textarea{min-height:140px;resize:vertical}
+.form .hint{font-size:.8rem;color:#b8b1a4;margin:-8px 0 20px}
+.btn{display:inline-block;background:var(--shu);color:#f6ecdf;border:0;font:inherit;font-weight:700;letter-spacing:.2em;padding:1em 2.6em;border-radius:2px;cursor:pointer;text-decoration:none}
+.btn:hover{background:#8f3822}
+.demo-msg{margin-top:16px;background:var(--washi);color:var(--sumi);padding:12px 16px;font-size:.88rem}
+@media (max-width:860px){.contact .wrap{grid-template-columns:1fr;grid-gap:56px;gap:56px}.info div{grid-template-columns:6.5em 1fr}.btn{width:100%;text-align:center}}
+
+/* ---------- 下 ---------- */
+.foot{padding:36px 0 120px;text-align:center;font-size:.8rem;color:var(--stone)}
+.foot .inkan{width:34px;height:34px;font-size:11px;margin-bottom:10px}
+
+/* スマホの下に出る、電話とお問い合わせのボタン */
+.bar{display:none}
+@media (max-width:860px){
+  .bar{display:grid;grid-template-columns:1fr 1fr;position:fixed;left:0;right:0;bottom:0;z-index:40;font-weight:700;font-size:.92rem;letter-spacing:.12em}
+  .bar a{display:flex;align-items:center;justify-content:center;height:58px;text-decoration:none;color:#f6ecdf}
+  .bar a:first-child{background:var(--sumi)}
+  .bar a:last-child{background:var(--shu)}
+}
+
+/* 見本帳にもどる（見本だけに出す） */
+.mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.mihon:hover{background:#000}
+@media (max-width:860px){.mihon{bottom:72px}}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="松葉造園 トップへ"><span class="inkan" aria-hidden="true">松葉</span><span><b>松葉造園</b><small>剪定・庭づくり・外構</small></span></a>
+    <nav class="nav" aria-label="ページ内の案内">
+      <a href="#work">仕事</a>
+      <a href="#cases">施工例</a>
+      <a href="#flow">ご依頼の流れ</a>
+      <a href="#contact">お問い合わせ</a>
+      <a class="call" href="tel:0000000000">電話する</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1 class="tate">庭は、<br><em>手入れ</em>で育つ。</h1>
+        <p class="sub tate">〇〇市の<wbr>植木屋です</p>
+      </div>
+      <div class="hero-photo">
+        <img src="../img/ph-wa-hero.svg" alt="手入れをしたお庭の写真（見本）" width="1600" height="1000">
+        <p class="tag"><b>一本の<wbr>木から、<wbr>お庭まる<wbr>ごとまで。</b>剪定・庭づくり・外構の<wbr>ご相談を、<wbr>〇〇市と<wbr>その<wbr>周辺で<wbr>お受けしています。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">其の一</span><h2>仕事</h2><p>小さな<wbr>お庭も、<br>お気軽に<wbr>ご相談ください。</p></div>
+      <ul class="works">
+        <li><h3 class="tate"><span>一</span>剪定</h3><p>松や<wbr>庭木を、<wbr>木の<wbr>形と<wbr>季節に<wbr>合わせて<wbr>切り<wbr>そろえます。<wbr>伸びすぎた<wbr>生け垣の<wbr>刈り込みも。<span class="ex">松・槙・生け垣・果樹など</span></p></li>
+        <li><h3 class="tate"><span>二</span>庭づくり</h3><p>植栽や<wbr>石組み、<wbr>坪庭まで。<wbr>暮らし方や<wbr>手入れの<wbr>しやすさを<wbr>うかがってから<wbr>形にします。<span class="ex">新しい<wbr>お庭・つくり直し</span></p></li>
+        <li><h3 class="tate"><span>三</span>外構</h3><p>玄関まわり、<wbr>塀、<wbr>砂利敷き、<wbr>駐車場まわりなど。<wbr>家と<wbr>お庭の<wbr>つながりを<wbr>整えます。<span class="ex">塀・<wbr>砂利・<wbr>飛び石・目隠し</span></p></li>
+        <li><h3 class="tate"><span>四</span>伐採・草刈り</h3><p>大きくなりすぎた<wbr>木の<wbr>伐採や、<wbr>空き家・<wbr>空き地の<wbr>草刈りも<wbr>お受けします。<span class="ex">伐採・抜根・草刈り・処分</span></p></li>
+      </ul>
+      <div class="ask">
+        <b>こんな<wbr>ご相談を<wbr>いただきます</b>
+        <ul>
+          <li>庭木が<wbr>伸びて、<wbr>隣の<wbr>家に<wbr>かかってしまった</li>
+          <li>親の<wbr>家の<wbr>庭を、<wbr>手入れしやすく<wbr>したい</li>
+          <li>年に<wbr>一度、<wbr>決まった<wbr>時期に<wbr>剪定してほしい</li>
+          <li>会社や<wbr>店舗の<wbr>植え込みを<wbr>任せたい</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec dark" id="cases">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">其の二</span><h2>施工例</h2><p class="muted">作業の<wbr>前と<wbr>後を、<br>並べて<wbr>ご覧いただけます。</p></div>
+      <div class="cases">
+        <article class="case">
+          <figure><img src="../img/ph-wa-before.svg" alt="作業前のお庭（見本）" width="1000" height="750" loading="lazy"><figcaption>作業前</figcaption></figure>
+          <figure class="after"><img src="../img/ph-wa-after.svg" alt="作業後のお庭（見本）" width="1000" height="750" loading="lazy"><figcaption>作業後</figcaption></figure>
+          <div class="txt"><h3>黒松の<wbr>剪定と、<wbr>生け垣の<wbr>刈り込み<span class="meta">〇〇市　個人の<wbr>お宅</span></h3><p>何年か<wbr>手が<wbr>入っていなかった<wbr>黒松を、<wbr>枝ぶりが<wbr>見えるように<wbr>整えました。<wbr>生け垣は<wbr>道には<wbr>み出していた<wbr>分を<wbr>刈り込み、<wbr>通りやすくしています。</p></div>
+        </article>
+        <article class="case">
+          <figure><img src="../img/ph-wa-before.svg" alt="作業前の玄関まわり（見本）" width="1000" height="750" loading="lazy"><figcaption>作業前</figcaption></figure>
+          <figure class="after"><img src="../img/ph-wa-after2.svg" alt="作業後の玄関まわり（見本）" width="1000" height="750" loading="lazy"><figcaption>作業後</figcaption></figure>
+          <div class="txt"><h3>玄関まわりの<wbr>砂利敷きと<wbr>飛び石<span class="meta">〇〇市　店舗</span></h3><p>雨の<wbr>日に<wbr>ぬかるんでいた<wbr>通路に、<wbr>砂利と<wbr>飛び石を<wbr>入れました。<wbr>草が<wbr>生えに<wbr>くいよう、<wbr>下に<wbr>防草シートを<wbr>敷いています。</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec owner" id="owner">
+    <div class="wrap">
+      <div class="owner-photo">
+        <img src="../img/ph-wa-owner.svg" alt="代表の写真（見本）" width="800" height="1000" loading="lazy">
+        <p class="name tate"><small>代表</small>松葉 一郎</p>
+      </div>
+      <div>
+        <div class="sec-head"><span class="no">其の三</span><h2>職人</h2></div>
+        <h3>木の<wbr>形を<wbr>見て、<wbr>来年の<wbr>姿を<br>考えながら<wbr>切ります。</h3>
+        <p>植木屋に<wbr>入って<wbr>〇年。<wbr>剪定は、<wbr>今<wbr>日きれいに<wbr>見える<wbr>ことよりも、<wbr>一年後、<wbr>三年後に<wbr>どう<wbr>伸びるかが<wbr>大事だと<wbr>思っています。</p>
+        <p>お庭の<wbr>ことは、<wbr>どんな<wbr>小さな<wbr>ことでもかまいません。<wbr>まずは<wbr>見に<wbr>行って、<wbr>できる<wbr>こととかかる<wbr>費用を<wbr>ご説明します。</p>
+        <dl class="facts">
+          <div><dt>資格</dt><dd>〇〇<wbr>（確認できた<wbr>ものだけ載せます）</dd></div>
+          <div><dt>受賞歴</dt><dd>〇〇<wbr>（正式な<wbr>大会名と<wbr>年で<wbr>載せます）</dd></div>
+          <div><dt>対応エリア</dt><dd>〇〇市と<wbr>その<wbr>周辺</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tint" id="flow">
+    <div class="wrap">
+      <div class="sec-head"><span class="no">其の四</span><h2>ご依頼の流れ</h2></div>
+      <ol class="flow">
+        <li><h3>お問い合わせ</h3><p>お電話か、<wbr>下の<wbr>フォームから<wbr>どうぞ。<wbr>お庭の<wbr>写真が<wbr>あると<wbr>話が<wbr>早いです。</p></li>
+        <li><h3>下見</h3><p>お庭を<wbr>見せていただき、<wbr>ご希望を<wbr>うかが<wbr>います。</p></li>
+        <li><h3>お見積もり</h3><p>作業の<wbr>内容と<wbr>金額を、<wbr>書面で<wbr>お出しします。</p></li>
+        <li><h3>作業</h3><p>日にちを<wbr>決めて<wbr>作業します。<wbr>ゴミの<wbr>片付けまで<wbr>行います。</p></li>
+        <li><h3>お支払い</h3><p>作業の<wbr>あとに、<wbr>現金か<wbr>お振込みで<wbr>お支払いください。</p></li>
+      </ol>
+      <div class="price"><b>料金について</b><p>お庭の<wbr>広さや<wbr>木の<wbr>本数・高さで<wbr>変わる<wbr>ため、<wbr>下見の<wbr>あとに<wbr>お見積もりします。<wbr>くわしくは<wbr>お問い合わせ<wbr>ください。</p></div>
+    </div>
+  </section>
+
+  <section class="sec dark contact" id="contact">
+    <div class="wrap">
+      <div>
+        <div class="sec-head"><span class="no">其の五</span><h2>お問い合わせ</h2></div>
+        <div class="telbox"><small>お電話での<wbr>ご相談</small><a class="tel" href="tel:0000000000">0000-00-0000</a><small>受付 8:00〜17:00<wbr>（日曜休み）<wbr>／作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しお電話します。</small></div>
+        <dl class="info">
+          <div><dt>屋号</dt><dd>松葉造園</dd></div>
+          <div><dt>代表</dt><dd>松葉 一郎</dd></div>
+          <div><dt>所在地</dt><dd>〇〇県〇〇市〇〇町 0-0</dd></div>
+          <div><dt>電話</dt><dd>0000-00-0000</dd></div>
+          <div><dt>対応エリア</dt><dd>〇〇市と<wbr>その<wbr>周辺</dd></div>
+          <div><dt>お仕事</dt><dd>剪定・庭づくり・外構・伐採・草刈り</dd></div>
+        </dl>
+      </div>
+      <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <label>お名前<span>必須</span><input type="text" name="name" autocomplete="name" required></label>
+        <label>電話番号<span>必須</span><input type="tel" name="tel" autocomplete="tel" required></label>
+        <label>作業する<wbr>場所<wbr>（町名まで）<input type="text" name="place" placeholder="例：〇〇市〇〇町"></label>
+        <label>ご相談の内容
+          <select name="kind"><option>剪定・刈り込み</option><option>庭づくり</option><option>外構</option><option>伐採・草刈り</option><option>その他・まだ決まっていない</option></select>
+        </label>
+        <label>くわしい内容<textarea name="message" placeholder="例：玄関横の松が伸びて、道にかかっています"></textarea></label>
+        <p class="hint">お見積もりは、<wbr>下見の<wbr>あとに<wbr>お出しします。</p>
+        <button class="btn" type="submit">この<wbr>内容で<wbr>送る</button>
+        <p class="demo-msg" hidden>これは<wbr>見本なので、<wbr>送信は<wbr>されません。</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><span class="inkan" aria-hidden="true">松葉</span><br>松葉造園　〇〇県〇〇市</footer>
+
+<nav class="bar" aria-label="電話とお問い合わせ">
+  <a href="tel:0000000000">電話する</a>
+  <a href="#contact">フォームで<wbr>相談</a>
+</nav>
+
+<script>
+  var form=document.querySelector('.form');
+  if(form && form.action.indexOf('YOUR_FORM_ID')!==-1){
+    form.addEventListener('submit',function(e){e.preventDefault();var m=form.querySelector('.demo-msg');m.hidden=false;m.scrollIntoView({block:'center'});});
+  }
+</script>
+<a class="mihon" href="../index.html">デザイン見本<wbr>（架空の<wbr>お店）<wbr>｜見本帳にも<wbr>どる</a>
+<script>
+// 戻ったときに、見ていた場所に戻す（2026/10/7。押すと一番上に戻ってしまうため）
+(function(){
+  var key = 'y:' + location.pathname;
+  // 「もどる」リンク：同じサイトから来たときは、ブラウザの「戻る」と同じ動きにする（見ていた場所に戻る）
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || a.textContent.indexOf('もどる') < 0) return;
+    try {
+      if (document.referrer && document.referrer.indexOf(location.protocol + '//' + location.host) === 0 && history.length > 1) {
+        e.preventDefault(); history.back();
+      }
+    } catch (err) {}
+  });
+  // ブラウザの「戻る」で戻ってきたのに一番上に出たときは、前に見ていた場所へ
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) {
+      window.addEventListener('load', function(){
+        var y = parseInt(sessionStorage.getItem(key) || '0', 10);
+        if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y);
+      });
+    }
+  } catch (err) {}
+})();
+</script>
+</body>
+</html>

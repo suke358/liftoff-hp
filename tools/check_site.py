@@ -78,6 +78,8 @@ def check_css(path, css, base_line=0):
             if key.startswith('svh') or key.startswith('cqw'):
                 prop = re.search(r'([\w-]+)\s*:[^;{}]*$', css[a+1:m.end()])
                 if prop and re.search(re.escape(prop.group(1)) + r'\s*:[^;]*\b\d*\.?\d+(vh|vw|px|rem|em|%)', before): ok = True
+            # @supports not (aspect-ratio…) で古いスマホ用の書き方を別に用意してあれば OK
+            if key.startswith('aspect-ratio') and re.search(r'@supports\s+not\s*\(\s*aspect-ratio', css): ok = True
             if ok: continue
             found = True
             OLD_HITS.setdefault((path, name, fb), []).append(line)

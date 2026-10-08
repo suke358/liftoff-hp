@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+/* 言葉の切れ目で折り返す（ は BudouX で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
 /* ========== 色と文字（ロゴの3色が主役） ========== */
 :root{
   --pink:#ee8aa2;      /* ロゴのピンク */
@@ -218,13 +221,13 @@ p{margin:0 0 1em}
   <section class="hero">
     <div class="wrap">
       <div>
-        <p class="hero-kind"><span class="sq"></span>〇〇市のよもぎ蒸しサロン</p>
-                <h1>よもぎの湯気に<br>包まれる、<br>ほっとひと息。</h1>
-        <p class="nurse"><span class="sq" style="--c1:var(--yomogi);--c2:var(--lemon)"></span>女性オーナーのサロンです</p>
-        <p class="hero-lead">体調やお悩みをうかがいながら、ひとりひとりに合わせてメニューをご提案します。完全プライベート空間のサロンです。</p>
+        <p class="hero-kind"><span class="sq"></span>〇〇市の<wbr>よもぎ蒸しサロン</p>
+                <h1>よもぎの<wbr>湯気に<br>包まれる、<br>ほっと<wbr>ひと息。</h1>
+        <p class="nurse"><span class="sq" style="--c1:var(--yomogi);--c2:var(--lemon)"></span>女性オーナーの<wbr>サロンです</p>
+        <p class="hero-lead">体調や<wbr>お悩みを<wbr>うかが<wbr>いながら、<wbr>ひとりひとりに<wbr>合わせて<wbr>メニューを<wbr>ご提案します。<wbr>完全プライベート空間の<wbr>サロンです。</p>
         <div class="actions">
           <a class="btn btn-solid" href="#reserve">予約・相談する</a>
-          <a class="btn btn-line" href="#menu">メニューを見る</a>
+          <a class="btn btn-line" href="#menu">メニューを<wbr>見る</a>
         </div>
       </div>
             <div class="blocks" aria-hidden="false">
@@ -258,18 +261,18 @@ p{margin:0 0 1em}
           <rect x="132" y="178" width="36" height="22" fill="#ee8aa2"/>
           <path d="M40 232h220" stroke="#7fae6a" stroke-width="6" stroke-linecap="round"/>
         </svg>
-        <p>座椅子の下で薬草を温め、マントの中で蒸気を浴びます</p>
+        <p>座椅子の<wbr>下で<wbr>薬草を<wbr>温め、<wbr>マントの<wbr>中で<wbr>蒸気を<wbr>浴びます</p>
       </figure>
       <div class="about-text">
         <h2 class="sec-title"><span class="sq" style="--c1:var(--yomogi);--c2:var(--lemon)"></span>よもぎ蒸しとは</h2>
-        <p>よもぎ蒸しは、韓国で古くから親しまれてきた温活の習慣です。よもぎなどの薬草を煮出した蒸気を、専用の椅子に座ってマントの中で下半身からじっくりと浴びていただきます。</p>
-        <p>ぽかぽかとした温かさに包まれて、じんわり汗をかく心地よさを味わえます。忙しい毎日の、ほっとひと息つく時間におすすめです。</p>
+        <p>よもぎ蒸しは、<wbr>韓国で<wbr>古くから<wbr>親しまれてきた<wbr>温活の<wbr>習慣です。<wbr>よもぎなどの<wbr>薬草を<wbr>煮出した<wbr>蒸気を、<wbr>専用の<wbr>椅子に<wbr>座って<wbr>マントの<wbr>中で<wbr>下半身から<wbr>じっくりと<wbr>浴びていただきます。</p>
+        <p>ぽか<wbr>ぽかとした<wbr>温かさに<wbr>包まれて、<wbr>じんわり汗を<wbr>かく<wbr>心地よさを<wbr>味わえます。<wbr>忙しい<wbr>毎日の、<wbr>ほっと<wbr>ひと<wbr>息つく<wbr>時間に<wbr>おすすめです。</p>
         <ul class="for">
-          <li style="--c:var(--pink)"><div><b>冷えが気になる方に</b><span>ぽかぽかの温かさで、冷えやすい季節も心地よく。</span></div></li>
-          <li style="--c:var(--lemon)"><div><b>じんわり汗をかきたい方に</b><span>ふだん汗をかく機会が少ない方にも。</span></div></li>
-          <li style="--c:var(--yomogi)"><div><b>ひと息つきたい方に</b><span>よもぎのやさしい香りに包まれて、自分をいたわる時間を。</span></div></li>
+          <li style="--c:var(--pink)"><div><b>冷えが<wbr>気に<wbr>なる方に</b><span>ぽか<wbr>ぽかの<wbr>温かさで、<wbr>冷えやすい<wbr>季節も<wbr>心地よく。</span></div></li>
+          <li style="--c:var(--lemon)"><div><b>じんわり汗を<wbr>かきたい方に</b><span>ふだん<wbr>汗を<wbr>かく<wbr>機会が<wbr>少ない<wbr>方にも。</span></div></li>
+          <li style="--c:var(--yomogi)"><div><b>ひと<wbr>息つきたい方に</b><span>よもぎの<wbr>やさしい<wbr>香りに<wbr>包まれて、<wbr>自分を<wbr>いたわる<wbr>時間を。</span></div></li>
         </ul>
-        <p class="note">※感じ方には個人差があります。よもぎ蒸しは医療行為ではなく、病気の治療を目的としたものではありません。妊娠中の方・持病のある方は事前にご相談ください。</p>
+        <p class="note">※感じ方には<wbr>個人差が<wbr>あります。<wbr>よもぎ蒸しは<wbr>医療行為ではなく、<wbr>病気の<wbr>治療を<wbr>目的とした<wbr>ものではありません。<wbr>妊娠中の<wbr>方・持病の<wbr>ある方は<wbr>事前に<wbr>ご相談ください。</p>
       </div>
     </div>
   </section>
@@ -280,9 +283,9 @@ p{margin:0 0 1em}
       <div class="owner-photo"><img src="../img/ph-owner.svg" alt="オーナーの写真が入ります" width="230" height="230"></div>
       <div>
         <span class="owner-role">セラピスト・サロンオーナー</span>
-        <h2>ひだまりのように、ほっとできる場所を。</h2>
-        <p>hiyoriのホームページをご覧いただき、ありがとうございます。心地よいと感じるケアは、人それぞれ。おひとりおひとりのお話をうかがいながら、その日の体調にあわせた時間をご用意します。</p>
-        <p>家でも職場でもない、もうひとつの居場所のように。はじめての方も、どうぞ気軽にお越しください。</p>
+        <h2>ひだまりのように、<wbr>ほっと<wbr>できる<wbr>場所を。</h2>
+        <p>hiyoriの<wbr>ホームページを<wbr>ご覧いただき、<wbr>ありがとう<wbr>ございます。<wbr>心地よいと<wbr>感じる<wbr>ケアは、<wbr>人それぞれ。<wbr>おひとりおひとりの<wbr>お話を<wbr>うかが<wbr>いながら、<wbr>その<wbr>日の<wbr>体調に<wbr>あわせた<wbr>時間を<wbr>ご用意します。</p>
+        <p>家でも<wbr>職場でもない、<wbr>もう<wbr>ひとつの<wbr>居場所のように。<wbr>はじめての<wbr>方も、<wbr>どうぞ気軽に<wbr>お越しください。</p>
       </div>
     </div>
   </section>
@@ -291,13 +294,13 @@ p{margin:0 0 1em}
   <section id="menu" class="sec menu">
     <div class="wrap">
       <h2 class="sec-title"><span class="sq"></span>メニュー</h2>
-      <p class="sec-lead">体調やご希望をうかがって、メニューをご提案します。組み合わせてのご利用もできます。</p>
+      <p class="sec-lead">体調や<wbr>ご希望を<wbr>うかがって、<wbr>メニューを<wbr>ご提案します。<wbr>組み合わせての<wbr>ご利用も<wbr>できます。</p>
       <ul class="menu-list">
         <li class="menu-item">
           <img src="../img/ph-menu1.svg" alt="メニューの写真が入ります">
           <div>
             <h3><span class="sq" style="--c1:var(--yomogi);--c2:var(--lemon)"></span>よもぎ蒸し</h3>
-            <p>よもぎなどの薬草を煮出した蒸気を、専用の座椅子に座ってマントの中でじっくり浴びる温活メニューです。</p>
+            <p>よもぎなどの<wbr>薬草を<wbr>煮出した<wbr>蒸気を、<wbr>専用の<wbr>座椅子に<wbr>座って<wbr>マントの<wbr>中で<wbr>じっくり浴びる<wbr>温活メニューです。</p>
             <p class="pr">40分　4,400円</p>
           </div>
         </li>
@@ -305,7 +308,7 @@ p{margin:0 0 1em}
           <img src="../img/ph-menu2.svg" alt="メニューの写真が入ります">
           <div>
             <h3><span class="sq" style="--c1:var(--pink);--c2:var(--lemon)"></span>フェイシャル</h3>
-            <p>お顔のお手入れの時間。よもぎ蒸しと組み合わせてのご利用もおすすめです。</p>
+            <p>お顔の<wbr>お手入れの<wbr>時間。<wbr>よもぎ蒸しと<wbr>組み合わせての<wbr>ご利用も<wbr>おすすめです。</p>
             <p class="pr">60分　6,600円</p>
           </div>
         </li>
@@ -316,12 +319,12 @@ p{margin:0 0 1em}
           <div>
             <h3><span class="sq" style="--c1:var(--lemon);--c2:var(--pink)"></span>ボディケア</h3>
             <ul class="tags"><li>ヘッドマッサージ</li><li>ハンドケア</li><li>フットケア</li></ul>
-            <p>お時間にあわせて、気になるところをゆっくりと。</p>
+            <p>お時間に<wbr>あわせて、<wbr>気に<wbr>なる<wbr>ところを<wbr>ゆっくりと。</p>
             <p class="pr">30分　3,300円〜</p>
           </div>
         </li>
       </ul>
-            <p class="price-note">料金はすべて税込です。</p>
+            <p class="price-note">料金は<wbr>すべて<wbr>税込です。</p>
     </div>
   </section>
 
@@ -329,17 +332,17 @@ p{margin:0 0 1em}
   <section id="reserve" class="sec reserve">
     <div class="wrap">
       <h2 class="sec-title"><span class="sq" style="--c1:var(--pink);--c2:var(--lemon)"></span>ご予約・ご相談</h2>
-      <p class="sec-lead">ご予約は、お電話または Instagram の DM で承ります。メニュー選びや体調のことも、お気軽にご相談ください。</p>
+      <p class="sec-lead">ご予約は、<wbr>お電話または<wbr> Instagram の<wbr> DM で<wbr>承ります。<wbr>メニュー選びや<wbr>体調の<wbr>ことも、<wbr>お気軽に<wbr>ご相談ください。</p>
       <div class="ways">
         <div class="way">
           <h3>お電話で</h3>
           <a class="tel" href="#">0000-00-0000</a>
-          <small>施術中はお電話に出られないことがあります。折り返しご連絡いたします。</small>
+          <small>施術中は<wbr>お電話に<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</small>
         </div>
         <div class="way">
-          <h3>Instagram の DM で</h3>
-          <a class="btn btn-white" href="#">DMで予約・相談する</a>
-          <small>最新の空き状況やお知らせも Instagram に載せています。</small>
+          <h3>Instagram の<wbr> DM で</h3>
+          <a class="btn btn-white" href="#">DMで<wbr>予約・相談する</a>
+          <small>最新の<wbr>空き状況や<wbr>お知らせも<wbr> Instagram に<wbr>載せています。</small>
         </div>
       </div>
     </div>
@@ -351,9 +354,9 @@ p{margin:0 0 1em}
       <div>
         <h2 class="sec-title"><span class="sq" style="--c1:var(--yomogi);--c2:var(--pink)"></span>店舗情報・アクセス</h2>
         <dl class="info">
-          <div><dt>店名</dt><dd>よもぎ蒸しサロン hiyori（ひより）</dd></div>
-                    <div><dt>住所</dt><dd>〒000-0000<br>山口県〇〇市〇〇町1丁目2-3<br>ひよりビル2階</dd></div>
-          <div><dt>アクセス</dt><dd>〇〇駅から徒歩5分</dd></div>
+          <div><dt>店名</dt><dd>よもぎ蒸しサロン hiyori<wbr>（ひより）</dd></div>
+                    <div><dt>住所</dt><dd>〒000-0000<br>山口県〇〇市〇〇町1丁目2-3<br>ひより<wbr>ビル2階</dd></div>
+          <div><dt>アクセス</dt><dd>〇〇駅から<wbr>徒歩5分</dd></div>
           <div><dt>営業時間</dt><dd>10:00〜18:00</dd></div>
           <div><dt>定休日</dt><dd>日曜日</dd></div>
           <div><dt>駐車場</dt><dd>あり（2台）</dd></div>
@@ -362,7 +365,7 @@ p{margin:0 0 1em}
         </dl>
       </div>
       <div class="map">
-        <div class="mapph">Googleマップが入ります</div>
+        <div class="mapph">Googleマップが<wbr>入ります</div>
       </div>
     </div>
   </section>
@@ -371,9 +374,9 @@ p{margin:0 0 1em}
   <section id="contact" class="sec contact">
     <div class="wrap">
       <h2 class="sec-title"><span class="sq"></span>お問い合わせ</h2>
-      <p class="sec-lead">メニューのこと、体調のことなど、お気軽にご相談ください。</p>
+      <p class="sec-lead">メニューの<wbr>こと、<wbr>体調の<wbr>ことなど、<wbr>お気軽に<wbr>ご相談ください。</p>
             <form class="form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <p class="demo-msg" hidden>デザイン見本なので、送信はされません。実際のサイトでは、このフォームからお店にメールが届きます。</p>
+        <p class="demo-msg" hidden>デザイン見本なので、<wbr>送信は<wbr>されません。<wbr>実際の<wbr>サイトでは、<wbr>この<wbr>フォームから<wbr>お店に<wbr>メールが<wbr>届きます。</p>
         <label for="name">お名前<span class="req">必須</span></label>
         <input id="name" name="name" type="text" autocomplete="name" placeholder="例）山田 花子" required>
         <label for="email">メールアドレス<span class="req">必須</span></label>
@@ -390,7 +393,7 @@ p{margin:0 0 1em}
 <footer class="foot">
   <div class="wrap">
     <div>
-      <p style="font-family:var(--hand);font-weight:600;font-size:1.1rem;margin-bottom:.4em">よもぎ蒸しサロン hiyori（ひより）</p>
+      <p style="font-family:var(--hand);font-weight:600;font-size:1.1rem;margin-bottom:.4em">よもぎ蒸しサロン hiyori<wbr>（ひより）</p>
       <p style="margin:0;color:var(--ink-soft)">〒000-0000 山口県〇〇市〇〇町1丁目2-3<br>TEL <a href="#">0000-00-0000</a></p>
     </div>
     <nav aria-label="フッター">
@@ -413,7 +416,7 @@ p{margin:0 0 1em}
     form.addEventListener('submit',function(e){e.preventDefault();var m=form.querySelector('.demo-msg');m.hidden=false;m.scrollIntoView({block:'center'});});
   }
 </script>
-<a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
+<a class="mihon" href="../index.html">デザイン見本<wbr>（架空の<wbr>お店）<wbr>｜見本帳にも<wbr>どる</a>
 <script>
 // 戻ったときに、見ていた場所に戻す（2026/10/7。押すと一番上に戻ってしまうため）
 (function(){

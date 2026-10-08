@@ -569,6 +569,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 .viewer[hidden]{display:none}
 .has-viewer #samples-grid{display:none}
 .has-viewer .samples.three .sample.photo-card{display:none}
+.has-viewer .samples.three .sample.wa-card{display:none}
 .v-tabs{display:flex;flex-wrap:wrap;margin:-5px -5px 18px}
 .v-tabs button{display:flex;align-items:center;margin:5px;font:inherit;font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:8px 16px 8px 10px;cursor:pointer;min-height:44px}
 .v-tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -578,6 +579,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 .sw-pop{background:linear-gradient(135deg,#ef8fa8 50%,#f2d14b 50%)}
 .sw-chic{background:linear-gradient(135deg,#1d1714 50%,#c9a35f 50%)}
 .sw-photo{background:linear-gradient(135deg,#2a221c 50%,#b98a4b 50%)}
+.sw-wa{background:linear-gradient(135deg,#23221f 50%,#a8432a 50%)}
 .v-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px;align-items:center;background:var(--paper);border:2px solid var(--ink);border-radius:24px;padding:22px;box-shadow:10px 10px 0 var(--signal)}
 .v-shot{display:block;border-radius:16px;overflow:hidden;background:var(--sky)}
 .v-shot img{width:100%;height:auto;-webkit-transition:opacity .25s;transition:opacity .25s}
@@ -1004,6 +1006,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <button type="button" role="tab" id="vt-pop" aria-controls="v-panel" aria-selected="false" data-k="pop" data-name="カラフル" data-sub="明るく、わかりやすく" data-text="白い地に、はっきりした色。家族連れや若いお客さんが多いお店に。" tabindex="-1"><span class="sw sw-pop" aria-hidden="true"></span>カラフル</button>
         <button type="button" role="tab" id="vt-chic" aria-controls="v-panel" aria-selected="false" data-k="chic" data-name="シック" data-sub="大人っぽく、印象に残る" data-text="黒と金で、夜のような落ち着き。こだわりを伝えたいお店に。" tabindex="-1"><span class="sw sw-chic" aria-hidden="true"></span>シック</button>
         <button type="button" role="tab" id="vt-photo" aria-controls="v-panel" aria-selected="false" data-k="photo" data-name="写真を大きく" data-sub="トップに写真や絵を大きく" data-text="画面いっぱいの写真や絵で、お店の空気をそのまま伝えます。" tabindex="-1"><span class="sw sw-photo" aria-hidden="true"></span>写真を大きく</button>
+        <button type="button" role="tab" id="vt-wa" aria-controls="v-panel" aria-selected="false" data-k="wa" data-name="和風・職人" data-sub="落ち着いて、確かな手仕事を" data-text="縦書きの見出しと朱色の印。作業の前と後を並べて見せます。造園・大工・畳など、手仕事のお店に。" tabindex="-1"><span class="sw sw-wa" aria-hidden="true"></span>和風・職人</button>
       </div>
       <div class="v-body" id="v-panel" role="tabpanel" aria-labelledby="vt-homey">
         <a class="v-shot" id="v-link" href="samples/homey/index.html"><img id="v-img" src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780"></a>
@@ -1012,7 +1015,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
           <h3 id="v-name">アットホーム</h3>
           <p id="v-text">やわらかい言葉と、押しやすい大きなボタン。近所の常連さんが多いお店に。</p>
           <a class="btn primary" id="v-open" href="samples/homey/index.html">この見本を開く</a>
-          <p class="v-note">どれも同じ架空のお店<wbr>（よもぎ蒸しサロン hiyori）で、<wbr>雰囲気だけを<wbr>変えています。</p>
+          <p class="v-note">どれも架空のお店です。<wbr>和風・職人は<wbr>造園屋さん、<wbr>ほかは<wbr>同じ<wbr>サロン<wbr>（hiyori）で<wbr>雰囲気だけを<wbr>変えています。</p>
         </div>
       </div>
     </div>
@@ -1041,6 +1044,10 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <a class="sample photo-card" href="samples/photo/index.html">
         <div class="shot"><img src="samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>写真を<wbr>大きく</h3><p>トップに<wbr>写真や<wbr>絵を<wbr>大きく</p>
+      </a>
+      <a class="sample wa-card" href="samples/wa/index.html">
+        <div class="shot"><img src="samples/thumbs/wa.jpg" alt="和風・職人の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
+        <h3>和風・職人</h3><p>落ち着いて、<wbr>確かな<wbr>手仕事を</p>
       </a>
       <a class="sample" href="samples/logo/index.html">
         <div class="shot"><img src="samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy" decoding="async"></div>
