@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{SHOP}} 予約メニュー入力シート</title>
+<style>
+/* 2回目の打ち合わせで、オーナーさんに聞きながら Mac で入力する。入力は自動で保存（このMacのこのブラウザだけ） */
+:root{
+  --ink:#17283A; --muted:#566A7C; --line:#D3DEE6; --bg:#F4F7F9; --paper:#fff;
+  --signal:#F2C230; --todo:#FFF6D6; --ok:#2E7D57; --sea:#2F6F8F; --pink:#C9727F;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","BIZ UDPGothic","Yu Gothic",sans-serif;font-size:15px;line-height:1.7}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:26px;margin:0 0 6px}
+h2{font-size:18px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;flex:none}
+p{margin:0}
+.lead{color:var(--muted)}
+.bar{position:sticky;top:0;z-index:5;background:rgba(244,247,249,.96);border-bottom:1px solid var(--line);padding:10px 20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.bar .state{font-size:13px;color:var(--muted)}
+.bar .count b{color:var(--pink)}
+button{font:inherit;font-weight:700;font-size:14px;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+button.main{background:var(--ink);color:#fff}
+button.small{font-size:12px;padding:3px 10px;border-width:1px}
+.sec{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px}
+table{width:100%;border-collapse:collapse}
+th,td{border-bottom:1px solid var(--line);padding:6px 6px;vertical-align:top;text-align:left}
+th{font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+input[type=text],textarea,select{width:100%;font:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+textarea{min-height:52px;resize:vertical}
+input.need,textarea.need{background:var(--todo);border-color:#E8D27C}
+.name{font-weight:700}
+.hint{font-size:12px;color:var(--muted);margin-top:2px}
+.chk{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:13px}
+.chk input{width:18px;height:18px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid #E8D27C;background:var(--todo)}
+.rule{display:grid;grid-template-columns:200px 1fr;gap:6px 14px;align-items:start}
+.rule label{font-weight:700;font-size:14px;padding-top:6px}
+ul.note{margin:8px 0 0;padding-left:1.2em;font-size:13px;color:var(--muted)}
+.add{margin-top:10px}
+#out{display:none}
+@media (max-width:700px){.rule{grid-template-columns:1fr}.rule label{padding-top:0}table,thead,tbody,tr,td,th{display:block}thead{display:none}tr{border-bottom:2px solid var(--line);padding:8px 0}td{border:none;padding:3px 0}}
+@media print{
+  .bar,button{display:none!important}
+  body{background:#fff;font-size:12px}
+  .sec{break-inside:avoid;border-color:#bbb}
+  input.need,textarea.need{background:#fff}
+}
+</style>
+</head>
+<body>
+<div class="bar">
+  <span class="state" id="state">入力は自動で保存されます（このMacのこのブラウザだけ）</span>
+  <span class="count" id="count"></span>
+  <span>
+    <button type="button" class="main" id="copy">Claudeに渡す用にコピー</button>
+    <button type="button" id="print">印刷</button>
+  </span>
+</div>
+<div class="wrap">
+  <h1>{{SHOP}} 予約メニュー入力シート</h1>
+  <p class="lead">2回目の打ち合わせで、オーナーさんに聞きながら埋めていきます。RESERVA（ネット予約）に入れるメニューと、予約の受け方を決めるためのシートです。<b>黄色の欄</b>がまだ決まっていない所です。終わったら「Claudeに渡す用にコピー」を押して、チャットに貼ってください。</p>
+  <div class="legend"><span><span class="sw"></span>まだ決まっていない（聞く）</span><span>白い欄：分かっている（違っていたら直す）</span></div>
+
+  <section class="sec">
+    <h2><span class="n">1</span>最初に確かめること</h2>
+    <div class="rule">
+      <label>料金は税込か</label><div><select data-k="tax"><option value="">（選ぶ）</option><option>すべて税込</option><option>税抜（税込に直して載せる）</option><option>メニューによる</option></select></div>
+      <label>お支払い方法</label><div><input type="text" data-k="pay" class="need" placeholder="例：現金・PayPay"><p class="hint">PayPay・カードなどを始める予定があれば書く</p></div>
+      <label>女性専用か</label><div><select data-k="women"><option value="">（選ぶ）</option><option>女性専用</option><option>男性も可</option><option>メニューによる</option></select></div>
+      <label>予約のお知らせを受けるメール</label><div><input type="text" data-k="mail" class="need" placeholder="お店用のメール（パスワードはここに書かない）"></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="n">2</span>メニュー（予約で選んでもらうもの）</h2>
+    <p class="hint" style="margin-bottom:8px">「時間」は施術の時間（着替え・カウンセリングを含めるかも聞く）。「ネットで予約」のチェックを外したメニューは、予約ページに出さず「LINEかお電話で」にします。</p>
+    <table id="menu">
+      <thead><tr><th style="width:24%">メニュー名</th><th style="width:13%">時間</th><th style="width:15%">料金（円）</th><th>予約ページに出す説明・メモ</th><th style="width:96px">ネットで予約</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button type="button" class="small add" id="addMenu">＋ メニューを足す</button>
+    <ul class="note">
+      <li>部位や回数で料金が変わるメニューは、分け方（部位ごと・〇か所・全身など）を聞く。「永久」などの言い切りは書かない</li>
+      <li>説明には効果を言い切る言葉（デトックス・むくみ解消・痩せる など）を使わない</li>
+      <li>はじめての方向けの料金・回数券などがあれば「メニューを足す」で書く（サイトにはふだんの料金だけ載せる方針）</li>
+    </ul>
+  </section>
+
+  <section class="sec">
+    <h2><span class="n">3</span>追加できるもの（オプション）</h2>
+    <table id="opt">
+      <thead><tr><th style="width:24%">オプション名</th><th style="width:13%">時間</th><th style="width:15%">料金（円）</th><th>つけられるメニュー・メモ</th><th style="width:96px">ネットで予約</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button type="button" class="small add" id="addOpt">＋ オプションを足す</button>
+  </section>
+
+  <section class="sec">
+    <h2><span class="n">4</span>予約の受け方</h2>
+    <div class="rule">
+      <label>同じ時間に受ける人数</label><div><input type="text" data-k="seats" value="1人"><p class="hint">オーナーさん1人のため</p></div>
+      <label>施術と施術のあいだ</label><div><input type="text" data-k="gap" class="need" placeholder="例：30分（片付け・準備）"></div>
+      <label>受け付ける時間帯</label><div><input type="text" data-k="hours" class="need" placeholder="例：10:00〜18:00"><p class="hint">最後の受付は何時か（例：〇〇は17:00まで）も聞く</p></div>
+      <label>当日の予約</label><div><input type="text" data-k="sameday" class="need" placeholder="例：開始の2時間前まで受ける"></div>
+      <label>何日先まで受けるか</label><div><input type="text" data-k="ahead" class="need" placeholder="例：2か月先まで"></div>
+      <label>ネットでの取り消し</label><div><input type="text" data-k="cancelnet" class="need" placeholder="例：前日まで。当日はお電話かLINEで"></div>
+      <label>キャンセル料</label><div><input type="text" data-k="fee" class="need" placeholder="例：前日＝半額／当日＝全額"><p class="hint">連絡なしのキャンセルも全額か、も聞く</p></div>
+      <label>連絡なしのキャンセル</label><div><input type="text" data-k="noshow" class="need" placeholder="例：全額"></div>
+      <label>休みの日</label><div><textarea data-k="holidays" class="need" placeholder="直近1か月の休みの日（カレンダーで閉じる）"></textarea></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="n">5</span>予約のときにお客さんに聞くこと</h2>
+    <div class="rule">
+      <label>必ず聞く</label><div><input type="text" data-k="ask" value="お名前／電話番号／メールアドレス／はじめてかどうか"></div>
+      <label>自由に書ける欄</label><div><input type="text" data-k="ask2" value="ご要望（なくても可）"></div>
+    </div>
+    <ul class="note"><li>病気や妊娠のことは予約の欄では聞かない。予約ページに「妊娠中の方・持病のある方は事前にご相談ください」とだけ書く</li></ul>
+  </section>
+
+  <section class="sec">
+    <h2><span class="n">6</span>そのほかメモ</h2>
+    <textarea data-k="memo" style="min-height:90px" placeholder="打ち合わせで出た話・あとでやること"></textarea>
+  </section>
+
+  <textarea id="out" readonly></textarea>
+</div>
+
+<script>
+// はじめに入れておくメニュー（10/6 の打ち合わせ・メニュー表・サイトから。空欄はまだ分からない所）
+var MENU0 = [
+  {n:'', t:'', p:'', d:'', on:true},
+  {n:'', t:'', p:'', d:'', on:true},
+  {n:'', t:'', p:'', d:'', on:true}
+];
+var OPT0 = [];
+var KEY = '{{SLUG}}-reserva-menu-v1';
+var store = null;
+try { store = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e) { store = null; }
+
+function rowHTML(r){
+  function cell(k,v,ph){ return '<input type="text" data-c="'+k+'" value="'+esc(v)+'"'+(v===''?' class="need"':'')+(ph?' placeholder="'+ph+'"':'')+'>'; }
+  return '<td>'+cell('n',r.n,'メニュー名')+'</td><td>'+cell('t',r.t,'聞く')+'</td><td>'+cell('p',r.p,'聞く')+'</td>'+
+    '<td><textarea data-c="d"'+(r.d===''?' class="need"':'')+'>'+esc(r.d)+'</textarea></td>'+
+    '<td><label class="chk"><input type="checkbox" data-c="on"'+(r.on?' checked':'')+'>出す</label> <button type="button" class="small del" title="この行を消す">消す</button></td>';
+}
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function fill(id, rows){
+  var tb = document.querySelector('#'+id+' tbody'); tb.innerHTML='';
+  rows.forEach(function(r){ var tr=document.createElement('tr'); tr.innerHTML=rowHTML(r); tb.appendChild(tr); });
+}
+function readRows(id){
+  return [].map.call(document.querySelectorAll('#'+id+' tbody tr'), function(tr){
+    var g=function(c){ var el=tr.querySelector('[data-c="'+c+'"]'); return el.type==='checkbox'?el.checked:el.value.trim(); };
+    return {n:g('n'),t:g('t'),p:g('p'),d:g('d'),on:g('on')};
+  });
+}
+fill('menu', store && store.menu ? store.menu : MENU0);
+fill('opt', store && store.opt ? store.opt : OPT0);
+[].forEach.call(document.querySelectorAll('[data-k]'), function(el){
+  if (store && store.f && store.f[el.getAttribute('data-k')] != null) el.value = store.f[el.getAttribute('data-k')];
+});
+
+function mark(){
+  var n=0;
+  [].forEach.call(document.querySelectorAll('[data-c],[data-k]'), function(el){
+    if (el.type==='checkbox') return;
+    var c=el.getAttribute('data-c'), k=el.getAttribute('data-k');
+    var watch = (c && c!=='d') || (k && k!=='memo' && k!=='ask2');
+    var empty = !el.value.trim();
+    el.classList.toggle('need', watch && empty);
+    if (watch && empty) n++;
+  });
+  document.getElementById('count').innerHTML = n ? 'まだ決まっていない欄：<b>'+n+'</b>' : '全部埋まりました';
+}
+function save(){
+  var f={}; [].forEach.call(document.querySelectorAll('[data-k]'), function(el){ f[el.getAttribute('data-k')]=el.value; });
+  var data={menu:readRows('menu'), opt:readRows('opt'), f:f};
+  try { localStorage.setItem(KEY, JSON.stringify(data)); document.getElementById('state').textContent='保存しました（'+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'})+'）'; }
+  catch(e){ document.getElementById('state').textContent='自動保存できない環境です。終わったら必ずコピーしてください'; }
+  mark();
+}
+document.addEventListener('input', save);
+document.addEventListener('change', save);
+document.addEventListener('click', function(e){
+  if (e.target.classList.contains('del')) { if (confirmRow(e.target)) { e.target.closest('tr').remove(); save(); } }
+});
+function confirmRow(btn){ var nm = btn.closest('tr').querySelector('[data-c="n"]').value || 'この行'; return window.confirm('「'+nm+'」を消しますか？'); }
+document.getElementById('addMenu').onclick=function(){ var tr=document.createElement('tr'); tr.innerHTML=rowHTML({n:'',t:'',p:'',d:'',on:true}); document.querySelector('#menu tbody').appendChild(tr); tr.querySelector('input').focus(); save(); };
+document.getElementById('addOpt').onclick=function(){ var tr=document.createElement('tr'); tr.innerHTML=rowHTML({n:'',t:'',p:'',d:'',on:true}); document.querySelector('#opt tbody').appendChild(tr); tr.querySelector('input').focus(); save(); };
+document.getElementById('print').onclick=function(){ window.print(); };
+
+function text(){
+  var f={}; [].forEach.call(document.querySelectorAll('[data-k]'), function(el){ f[el.getAttribute('data-k')]=el.value.trim()||'（未定）'; });
+  var line=function(r){ return '・'+(r.n||'（名前なし）')+'｜'+(r.t||'時間未定')+'｜'+(r.p?r.p+'円':'料金未定')+'｜'+(r.on?'ネット予約に出す':'出さない（LINE・電話で）')+(r.d?'｜'+r.d:''); };
+  return ['【{{SHOP}} 予約メニュー入力シート】'+new Date().toLocaleDateString('ja-JP'),
+    '■最初に確かめること','税込：'+f.tax,'支払い：'+f.pay,'女性専用：'+f.women,'お知らせのメール：'+f.mail,
+    '■メニュー'].concat(readRows('menu').map(line)).concat(['■オプション']).concat(readRows('opt').map(line)).concat([
+    '■予約の受け方','人数：'+f.seats,'あいだ：'+f.gap,'時間帯：'+f.hours,'当日：'+f.sameday,'何日先まで：'+f.ahead,'ネットでの取り消し：'+f.cancelnet,'キャンセル料：'+f.fee,'連絡なし：'+f.noshow,'休み：'+f.holidays,
+    '■聞くこと',f.ask,f.ask2,'■メモ',f.memo]).join('\n');
+}
+document.getElementById('copy').onclick=function(){
+  var t=text(), b=this, done=function(){ b.textContent='コピーしました'; setTimeout(function(){ b.textContent='Claudeに渡す用にコピー'; },1800); };
+  var fallback=function(){ var o=document.getElementById('out'); o.style.display='block'; o.value=t; o.style.minHeight='240px'; o.focus(); o.select(); try{ document.execCommand('copy'); done(); }catch(e){ b.textContent='下の文を選んでコピーしてください'; } };
+  try { navigator.clipboard.writeText(t).then(done, fallback); } catch(e){ fallback(); }
+};
+mark();
+</script>
+</body>
+</html>
