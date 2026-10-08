@@ -564,6 +564,36 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   .flow h3{margin-top:8px}
   .flow p{font-size:15px}
 }
+
+/* ---------- デザイン見本の切りかえ（2026/10/8） ---------- */
+.viewer[hidden]{display:none}
+.has-viewer #samples-grid{display:none}
+.has-viewer .samples.three .sample.photo-card{display:none}
+.v-tabs{display:flex;flex-wrap:wrap;margin:-5px -5px 18px}
+.v-tabs button{display:flex;align-items:center;margin:5px;font:inherit;font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:8px 16px 8px 10px;cursor:pointer;min-height:44px}
+.v-tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.v-tabs .sw{width:22px;height:22px;border-radius:50%;margin-right:8px;border:2px solid rgba(255,255,255,.8);box-shadow:0 0 0 1px var(--line)}
+.sw-homey{background:linear-gradient(135deg,#24342b 50%,#f4a3b8 50%)}
+.sw-luxury{background:linear-gradient(135deg,#22302a 50%,#e8e1d3 50%)}
+.sw-pop{background:linear-gradient(135deg,#ef8fa8 50%,#f2d14b 50%)}
+.sw-chic{background:linear-gradient(135deg,#1d1714 50%,#c9a35f 50%)}
+.sw-photo{background:linear-gradient(135deg,#2a221c 50%,#b98a4b 50%)}
+.v-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:36px;align-items:center;background:var(--paper);border:2px solid var(--ink);border-radius:24px;padding:22px;box-shadow:10px 10px 0 var(--signal)}
+.v-shot{display:block;border-radius:16px;overflow:hidden;background:var(--sky)}
+.v-shot img{width:100%;height:auto;-webkit-transition:opacity .25s;transition:opacity .25s}
+.v-shot img.fade{opacity:0}
+.v-sub{font-size:14px;color:var(--sea);font-family:var(--head);font-weight:700}
+.v-info h3{font-size:30px;margin:2px 0 10px}
+.v-info #v-text{font-size:16px;line-height:1.85;margin-bottom:20px}
+.v-note{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.7}
+@media (max-width:860px){
+  .v-body{grid-template-columns:1fr;gap:18px;padding:14px 14px 20px;box-shadow:6px 6px 0 var(--signal)}
+  .v-info{padding:0 6px}
+  .v-info h3{font-size:24px}
+  .v-info .btn{width:100%}
+  .v-tabs{margin-bottom:12px}
+  .v-tabs button{font-size:14px;padding:6px 12px 6px 8px}
+}
 </style>
 </head>
 <body>
@@ -883,9 +913,30 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   <div class="wrap">
     <div class="sec-head">
       <h2>デザイン見本</h2>
-      <p>同じ<wbr>架空の<wbr>お店で、<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。<wbr>押すと<wbr>見本の<wbr>ページが<wbr>開きます。</p>
+      <p>同じ<wbr>架空の<wbr>お店で、<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
     </div>
-    <div class="samples">
+
+    <!-- 見本の切りかえ（JS があるときだけ出す。ないときは下の一覧が出る） -->
+    <div class="viewer" id="viewer" hidden>
+      <div class="v-tabs" role="tablist" aria-label="見本のテイスト">
+        <button type="button" role="tab" id="vt-homey" aria-controls="v-panel" aria-selected="true" data-k="homey" data-name="アットホーム" data-sub="やわらかく、親しみやすく" data-text="やわらかい言葉と、押しやすい大きなボタン。近所の常連さんが多いお店に。"><span class="sw sw-homey" aria-hidden="true"></span>アットホーム</button>
+        <button type="button" role="tab" id="vt-luxury" aria-controls="v-panel" aria-selected="false" data-k="luxury" data-name="ラグジュアリー" data-sub="上品に、落ち着いて" data-text="縦書きの見出しと、深い色。落ち着いた時間を売りにするお店に。" tabindex="-1"><span class="sw sw-luxury" aria-hidden="true"></span>ラグジュアリー</button>
+        <button type="button" role="tab" id="vt-pop" aria-controls="v-panel" aria-selected="false" data-k="pop" data-name="カラフル" data-sub="明るく、わかりやすく" data-text="白い地に、はっきりした色。家族連れや若いお客さんが多いお店に。" tabindex="-1"><span class="sw sw-pop" aria-hidden="true"></span>カラフル</button>
+        <button type="button" role="tab" id="vt-chic" aria-controls="v-panel" aria-selected="false" data-k="chic" data-name="シック" data-sub="大人っぽく、印象に残る" data-text="黒と金で、夜のような落ち着き。こだわりを伝えたいお店に。" tabindex="-1"><span class="sw sw-chic" aria-hidden="true"></span>シック</button>
+        <button type="button" role="tab" id="vt-photo" aria-controls="v-panel" aria-selected="false" data-k="photo" data-name="写真を大きく" data-sub="トップに写真や絵を大きく" data-text="画面いっぱいの写真や絵で、お店の空気をそのまま伝えます。" tabindex="-1"><span class="sw sw-photo" aria-hidden="true"></span>写真を大きく</button>
+      </div>
+      <div class="v-body" id="v-panel" role="tabpanel" aria-labelledby="vt-homey">
+        <a class="v-shot" id="v-link" href="samples/homey/index.html"><img id="v-img" src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780"></a>
+        <div class="v-info">
+          <p class="v-sub" id="v-sub">やわらかく、親しみやすく</p>
+          <h3 id="v-name">アットホーム</h3>
+          <p id="v-text">やわらかい言葉と、押しやすい大きなボタン。近所の常連さんが多いお店に。</p>
+          <a class="btn primary" id="v-open" href="samples/homey/index.html">この見本を開く</a>
+          <p class="v-note">どれも同じ架空のお店<wbr>（よもぎ蒸しサロン hiyori）で、<wbr>雰囲気だけを<wbr>変えています。</p>
+        </div>
+      </div>
+    </div>
+    <div class="samples" id="samples-grid">
       <a class="sample" href="samples/homey/index.html">
         <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>アットホーム</h3><p>やわらかく、<wbr>親しみやすく</p>
@@ -904,10 +955,10 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       </a>
     </div>
 
-    <h3 class="sub-h">写真を<wbr>大きく<wbr>使った<wbr>見本と、<wbr><span class="nw">一緒に作れるもの</span></h3>
+    <h3 class="sub-h">ホームページと<wbr><span class="nw">一緒に作れるもの</span></h3>
     <p class="sub-p">ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
     <div class="samples three">
-      <a class="sample" href="samples/photo/index.html">
+      <a class="sample photo-card" href="samples/photo/index.html">
         <div class="shot"><img src="samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>写真を<wbr>大きく</h3><p>トップに<wbr>写真や<wbr>絵を<wbr>大きく</p>
       </a>
@@ -1296,6 +1347,36 @@ if ('IntersectionObserver' in window) {
     L1 = setup(); L2 = c2.getTotalLength(); c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
     if (done) place(1, L1, L2);
   }, 200); });
+})();
+</script>
+<script>
+// デザイン見本の切りかえ（2026/10/8）。押すと大きい画面とボタンの行き先が変わる。矢印キーでも動く
+(function(){
+  var v = document.getElementById('viewer'); if (!v) return;
+  var tabs = v.querySelectorAll('[role=tab]'), img = document.getElementById('v-img');
+  var link = document.getElementById('v-link'), open = document.getElementById('v-open');
+  v.hidden = false; document.getElementById('work').className += ' has-viewer';
+  // 画像を先に読んでおく（押したときにすぐ出るように）
+  [].forEach.call(tabs, function(t){ var i = new Image(); i.src = 'samples/thumbs/' + t.getAttribute('data-k') + '.jpg'; });
+  function pick(t, focus){
+    [].forEach.call(tabs, function(x){ var on = x === t; x.setAttribute('aria-selected', on ? 'true' : 'false'); x.tabIndex = on ? 0 : -1; });
+    var k = t.getAttribute('data-k'), url = 'samples/' + k + '/index.html';
+    document.getElementById('v-panel').setAttribute('aria-labelledby', t.id);
+    img.className = 'fade';
+    setTimeout(function(){ img.src = 'samples/thumbs/' + k + '.jpg'; img.alt = t.getAttribute('data-name') + 'な見本の画面'; img.className = ''; }, 180);
+    link.href = url; open.href = url;
+    document.getElementById('v-name').textContent = t.getAttribute('data-name');
+    document.getElementById('v-sub').textContent = t.getAttribute('data-sub');
+    document.getElementById('v-text').textContent = t.getAttribute('data-text');
+    if (focus) t.focus();
+  }
+  [].forEach.call(tabs, function(t, i){
+    t.addEventListener('click', function(){ pick(t); });
+    t.addEventListener('keydown', function(e){
+      var n = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1 : null; if (n === null) return;
+      e.preventDefault(); pick(tabs[(n + tabs.length) % tabs.length], true);
+    });
+  });
 })();
 </script>
 </body>
