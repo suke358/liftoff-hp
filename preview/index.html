@@ -1657,14 +1657,23 @@ if ('IntersectionObserver' in window) {
     var mob = window.matchMedia ? window.matchMedia('(max-width:900px)').matches : W < 900;
     var rw = box('.runway'), x0, y0, x1, y1, ex, ey, d, dx, dy;
     if (!mob && rw) {
-      // 滑走路の黄色い点線（帯の上から 56〜62px）の上を、左の端から右へ走る
+      // 滑走路の黄色い点線（帯の上から 56〜62px）の上を、帯の左の端（画面の外なら画面の左の端）から右へ走る。
+      // 帯が画面の下の外にあるときは、走り出しが見えるように「画面の下から 60px 上」を走る（高い方）
       var xr = Math.max(rw.left - r.left, 0);
-      x0 = xr + 26; y0 = rw.top - r.top + 59 - 5;
+      x0 = xr + 26; y0 = Math.min(rw.top - r.top + 59 - 5, (window.innerHeight || H) - r.top - 60);
       x1 = x0 + Math.max(140, Math.min(180, (W - xr) * .25)); y1 = y0;
       ex = W + 80; ey = Math.max(40, y1 * .12); dx = ex - x1; dy = y1 - ey;
       // 機首を上げて上昇（左へ曲がる）→ 右へ曲がり直して、右上の画面の外へ。見出しのある左側には行かない
       d = 'M' + x1 + ' ' + y1 + ' C ' + (x1 + dx * .3) + ' ' + y1 + ', ' + (x1 + dx * .42) + ' ' + (y1 - dy * .3) + ', ' + (x1 + dx * .55) + ' ' + (y1 - dy * .62) +
           ' S ' + (ex - dx * .22) + ' ' + (ey + dy * .02) + ', ' + ex + ' ' + ey;
+    } else if (W <= 360) {
+      // せまい画面（幅320 など）：右の端に空きがないので、説明文と「月額」のあいだのすき間を、
+      // 左の外から低い角度で入って離陸し、少しずつ上がりながら右の外へ抜ける（文字にもボタンにも重ならない）
+      var sb = box('.hero .sub'), fr = box('.hero .from');
+      var yc = sb && fr ? (sb.bottom + fr.top) / 2 - r.top : H * .4;
+      x0 = -60; y0 = yc + 6; x1 = W * .3; y1 = yc + 2;
+      ex = W + 60; ey = yc - 16;
+      d = 'M' + x1 + ' ' + y1 + ' C ' + (x1 + (x1 - x0) * .5) + ' ' + (y1 - 2) + ', ' + (W * .85) + ' ' + (yc - 4) + ', ' + ex + ' ' + ey;
     } else {
       // ボタンの下のすき間（最初の画面に入る高さ）を、左の外から少しずつ上がりながら入ってくる。
       // そのあと右の端（文の行の終わりの空いた所）に沿って上がり、右上へ抜ける
@@ -1687,7 +1696,7 @@ if ('IntersectionObserver' in window) {
       nm.push([-(b[1] - a[1]) / q, (b[0] - a[0]) / q]);
     }
     while (trail.firstChild) trail.removeChild(trail.firstChild);
-    var segs = [], off = mob ? 4 : 5, s, el;
+    var segs = [], off = mob ? 6 : 5, s, el;
     for (i = 0; i < n; i++) for (s = -1; s <= 1; s += 2) {
       el = document.createElementNS(NS, 'path');
       el.setAttribute('d', 'M' + (pts[i][0] + nm[i][0] * off * s).toFixed(1) + ' ' + (pts[i][1] + nm[i][1] * off * s).toFixed(1) + ' L' + (pts[i + 1][0] + nm[i + 1][0] * off * s).toFixed(1) + ' ' + (pts[i + 1][1] + nm[i + 1][1] * off * s).toFixed(1));
@@ -1706,7 +1715,7 @@ if ('IntersectionObserver' in window) {
     for (i = 1; i <= N; i++) tab.push(ta[i] + kk * tb[i]);
     for (i = 1; i <= N; i++) tab[i] = tab[i] * L / tab[N];
     return { mob: mob, x0: x0, y0: y0, x1: x1, y1: y1, ga: Math.atan2(y1 - y0, x1 - x0) * 180 / Math.PI, L: L, segs: segs, tab: tab, N: N,
-      sc: mob ? 1.05 : 1.35, w1: mob ? 2 : 2.6, w2: mob ? 1.4 : 1.8, o1: mob ? .16 : .3, o2: mob ? .1 : .18 };
+      sc: mob ? 1.6 : 1.35, w1: mob ? 2.8 : 2.6, w2: mob ? 2 : 1.8, o1: mob ? .24 : .3, o2: mob ? .15 : .18 };
   }
   // 雲：機体のうしろ（head まで）を出す。機体に近いほど濃く太く、うしろほど薄く細く
   function clouds(head){
