@@ -1233,10 +1233,21 @@ if ('IntersectionObserver' in window) {
   if (still) { place(1, L1, L2); return; }
   var start = null, dur = 2600;
   place(0, L1, L2);
-  function step(ts){ if (start === null) start = ts + 300; var t = Math.max(0, Math.min(1, (ts - start) / dur)); place(t, L1, L2); if (t < 1) requestAnimationFrame(step); }
-  requestAnimationFrame(step);
+  var done = false;
+  function step(ts){ if (start === null) start = ts + 300; var t = Math.max(0, Math.min(1, (ts - start) / dur)); place(t, L1, L2); if (t < 1) requestAnimationFrame(step); else done = true; }
+  function go(){ requestAnimationFrame(step); }
+  // ページが見えてから飛ばす（裏で開いたときや、読み込み中に終わってしまわないように）
+  if (document.hidden) document.addEventListener('visibilitychange', function v(){ if (!document.hidden) { document.removeEventListener('visibilitychange', v); go(); } });
+  else if (document.readyState === 'complete') go();
+  else window.addEventListener('load', go);
   // 画面の大きさが変わったら、飛んだあとの形に描き直す
-  var tm; window.addEventListener('resize', function(){ clearTimeout(tm); tm = setTimeout(function(){ L1 = setup(); L2 = c2.getTotalLength(); c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2; start = -1e9; place(1, L1, L2); }, 200); });
+  // スマホは、画面を動かすと上下のバーが出入りして「大きさが変わった」ことになるので、横幅が変わったときだけ描き直す（飛んでいる途中ならそのまま続ける）
+  var lastW = Math.round(hero.getBoundingClientRect().width), tm;
+  window.addEventListener('resize', function(){ clearTimeout(tm); tm = setTimeout(function(){
+    var w = Math.round(hero.getBoundingClientRect().width); if (w === lastW) return; lastW = w;
+    L1 = setup(); L2 = c2.getTotalLength(); c1.style.strokeDasharray = L1; c2.style.strokeDasharray = L2;
+    if (done) place(1, L1, L2);
+  }, 200); });
 })();
 </script>
 </body>
