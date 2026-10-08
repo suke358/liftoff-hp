@@ -446,6 +446,20 @@ footer a:hover{color:var(--signal)}
 .same-foot{margin-top:28px;font-size:14px;color:#c9d6e0}
 @media (max-width:1000px){.same-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.same-list{grid-template-columns:1fr;gap:14px}.same-list li{padding:22px 20px}}
+
+/* ---------- ご相談のあと（2026/10/8。売り込みをしない約束） ---------- */
+.next{margin-top:32px;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:22px 24px;background:rgba(255,255,255,.04)}
+.next h3{font-size:18px;margin-bottom:10px;color:#fff}
+.next ol{list-style:none;counter-reset:n}
+.next ol li{counter-increment:n;position:relative;padding-left:40px;font-size:14px;line-height:1.75;color:#c3d2dd}
+.next ol li + li{margin-top:12px}
+.next ol li::before{content:counter(n);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:14px;line-height:28px;text-align:center}
+.next ol b{display:block;font-family:var(--head);font-size:16px;color:#fff}
+.nopush{list-style:none;margin-top:16px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.2)}
+.nopush li{position:relative;padding-left:26px;font-size:15px;line-height:1.7;color:#fff}
+.nopush li + li{margin-top:4px}
+.nopush li::before{content:"";position:absolute;left:4px;top:.45em;width:.8em;height:.42em;border-left:2px solid var(--signal);border-bottom:2px solid var(--signal);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+@media (max-width:760px){.next{padding:18px 16px}}
 </style>
 </head>
 <body>
@@ -494,7 +508,7 @@ footer a:hover{color:var(--signal)}
       </div>
       <div class="phone">
         <div class="screen">
-          <img src="img/hero-phone.jpg" alt="" width="500" height="1013">
+          <img src="img/hero-phone.jpg" alt="" width="500" height="1013" fetchpriority="high">
           <p class="notice"><b>お知らせ</b>来週の<wbr>水曜日は、<wbr>臨時休業とさせていただきます。</p>
         </div>
       </div>
@@ -766,19 +780,19 @@ footer a:hover{color:var(--signal)}
     </div>
     <div class="samples">
       <a class="sample" href="samples/homey/index.html">
-        <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>アットホーム</h3><p>やわらかく、<wbr>親しみやすく</p>
       </a>
       <a class="sample" href="samples/luxury/index.html">
-        <div class="shot"><img src="samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>ラグジュアリー</h3><p>上品に、<wbr>落ち着いて</p>
       </a>
       <a class="sample" href="samples/pop/index.html">
-        <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>カラフル</h3><p>明るく、<wbr>わかりやすく</p>
       </a>
       <a class="sample" href="samples/chic/index.html">
-        <div class="shot"><img src="samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>シック</h3><p>大人っぽく、<wbr>印象に残る</p>
       </a>
     </div>
@@ -787,15 +801,15 @@ footer a:hover{color:var(--signal)}
     <p class="sub-p">ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
     <div class="samples three">
       <a class="sample" href="samples/photo/index.html">
-        <div class="shot"><img src="samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>写真を<wbr>大きく</h3><p>トップに<wbr>写真や<wbr>絵を<wbr>大きく</p>
       </a>
       <a class="sample" href="samples/logo/index.html">
-        <div class="shot"><img src="samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/logo.jpg" alt="ロゴの見本" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>ロゴ</h3><p>6つの<wbr>見本</p>
       </a>
       <a class="sample" href="samples/card/index.html">
-        <div class="shot"><img src="samples/thumbs/card.jpg" alt="名刺の見本" width="1200" height="780" loading="lazy"></div>
+        <div class="shot"><img src="samples/thumbs/card.jpg" alt="名刺の見本" width="1200" height="780" loading="lazy" decoding="async"></div>
         <h3>名刺</h3><p>表と<wbr>うらの<wbr>見本</p>
       </a>
     </div>
@@ -879,6 +893,19 @@ footer a:hover{color:var(--signal)}
           <dt>所在地</dt><dd>山口県防府市</dd>
           <dt>対応地域</dt><dd>防府市と<wbr>その<wbr>周辺</dd>
         </dl>
+        <div class="next">
+          <h3>ご相談の<wbr>あとは</h3>
+          <ol>
+            <li><b>ご連絡</b>フォーム・<wbr>お電話・<wbr>メールの<wbr>どれでも。<wbr>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</li>
+            <li><b>こちらから<wbr>折り返し</b>お店の<wbr>ことを<wbr>うかがって、<wbr>合いそうな<wbr>プランと<wbr>金額を<wbr>お伝えします。</li>
+            <li><b>決めるのは<wbr>そのあとで</b>ご家族と<wbr>相談してからでも<wbr>かまいません。</li>
+          </ol>
+          <ul class="nopush">
+            <li>その場で<wbr>決めなくて<wbr>大丈夫です</li>
+            <li>無理に<wbr>おすすめしません</li>
+            <li>お断りいただいても、<wbr>こちらから<wbr>何度も<wbr>連絡しません</li>
+          </ul>
+        </div>
       </div>
       <div class="formbox">
         <form id="form" action="" method="POST">
@@ -904,7 +931,7 @@ footer a:hover{color:var(--signal)}
 <footer>
   <div class="wrap">
     <div>
-      <img class="foot-logo" src="img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy">
+      <img class="foot-logo" src="img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy" decoding="async">
       <p>防府のお店の<wbr>ホームページ制作・<wbr>WEB担当者代行</p>
       <p><a href="tel:09011896726">090-1189-6726</a>　<a href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
     </div>
