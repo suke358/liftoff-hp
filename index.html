@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&family=Michroma&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -523,6 +523,27 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   .route li.again .stop::after{left:-9px;top:-9px;right:-9px;bottom:-9px}
   .route-loop{text-align:left;font-size:16px}
 }
+
+/* ---------- 料金の搭乗券を作り込み（2026/10/8） ---------- */
+.pass-top{display:flex;justify-content:space-between;align-items:center;margin:-26px -26px 18px;padding:10px 26px;border-bottom:2px solid var(--ink);border-radius:18px 18px 0 0;background:var(--sky);font-size:13px;color:var(--ink)}
+.pass.rec .pass-top{background:var(--signal)}
+.pass-top .flight{font-family:"Michroma",var(--head);font-size:13px;letter-spacing:.08em}
+.pass-top .leg{display:flex;align-items:center;font-family:var(--head);font-weight:700}
+.pass-top .leg svg{width:16px;height:16px;margin:0 8px;color:var(--sea);-webkit-transform:rotate(28deg);transform:rotate(28deg)}
+.pass.rec .pass-top .leg svg{color:var(--ink)}
+.price{font-family:"Michroma",var(--head);font-weight:400;letter-spacing:.01em}
+.price small{font-family:var(--head);font-weight:700}
+.price.init{font-family:var(--head);font-weight:700}
+.pass .stub{padding-right:84px}
+.barcode{position:absolute;right:22px;top:20px;bottom:22px;width:44px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 5px,transparent 5px 8px,var(--ink) 8px 11px,transparent 11px 12px);opacity:.75;border-radius:2px}
+.pass.rec .barcode{background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 4px,#fff 4px 5px,transparent 5px 8px,#fff 8px 11px,transparent 11px 12px);opacity:.55}
+@media (max-width:760px){
+  .pass-top{margin:-22px -20px 16px;padding:9px 20px}
+  .pass .stub{padding-right:76px}
+  .barcode{right:18px;top:16px;bottom:18px;width:40px}
+  .pass .stub .price{font-size:30px}
+}
+@media (max-width:360px){.pass .stub .price{font-size:26px}}
 </style>
 </head>
 <body>
@@ -636,6 +657,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
     <div class="passes">
       <article class="pass rec">
         <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 01</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
           <p class="who">作って、<wbr>ときどき更新する<wbr>基本の<wbr>プラン</p>
           <h3>スタンダード <span class="tag">おすすめ</span></h3>
           <dl>
@@ -647,11 +669,13 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <div class="stub">
           <span class="price-k">月額</span>
           <span class="price">5,500<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
           <span class="price init">初期 98,000円</span>
         </div>
       </article>
       <article class="pass">
         <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 02</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
           <p class="who">最初に<wbr>まとまった<wbr>お金を<wbr>かけずに<wbr>始めたい方に</p>
           <h3>初期0円プラン</h3>
           <dl>
@@ -663,11 +687,13 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <div class="stub">
           <span class="price-k">月額</span>
           <span class="price">9,800<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
           <span class="price init">初期 0円</span>
         </div>
       </article>
       <article class="pass">
         <div class="main">
+          <div class="pass-top" aria-hidden="true"><span class="flight">LO 03</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
           <p class="who">ネットの<wbr>ことは、<wbr>まる<wbr>ごと<wbr>任せたい方に</p>
           <h3>WEB担当者代行</h3>
           <dl>
@@ -681,6 +707,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <div class="stub">
           <span class="price-k">月額</span>
           <span class="price">19,800<small>円</small></span>
+          <span class="barcode" aria-hidden="true"></span>
           <span class="price init">初期 98,000円</span>
         </div>
       </article>
