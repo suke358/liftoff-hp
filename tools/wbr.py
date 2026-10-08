@@ -46,6 +46,8 @@ def add_wbr(s):
     for w in KEEP:
         for i in range(1, len(w)):
             s = s.replace(w[:i] + '<wbr>' + w[i:], w)
+    # 折り返さない枠（class="nw"）の中には入れない。<wbr> は nowrap の中でも折り返してしまうため（10/8 つまずき）
+    s = re.sub(r'(<span class="nw">)(.*?)(</span>)', lambda m: m.group(1) + m.group(2).replace('<wbr>', '') + m.group(3), s, flags=re.S)
     return s, n
 
 
