@@ -788,6 +788,15 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 .p-points li{display:flex;align-items:center;background:var(--paper);border-radius:999px;padding:6px 16px 6px 10px;margin:5px 8px;font-size:15px;font-family:var(--head);font-weight:700}
 .p-points svg{width:18px;height:18px;margin-right:8px;flex:none}
 @media (max-width:860px){.p-card{grid-template-columns:1fr;gap:20px;padding:30px 22px}.p-mark{width:110px;height:110px;box-shadow:inset 0 0 0 6px var(--sky),0 0 0 2px var(--line)}.p-mark img{width:66px;height:66px}.p-points li{font-size:14px}}
+/* Lift-Off という名前について（2026/10/8 夜）：左そろえ・行の間は広め。行の切れ目は HTML の <br> で決める */
+.p-name{margin:0 0 40px;padding:0 8px}
+.p-name-h{display:flex;align-items:center;font-size:22px;margin-bottom:14px}
+.p-name-plane{width:40px;height:28px;flex:none;margin-right:12px}
+.p-name p{color:var(--ink-2);font-size:17px;line-height:2.1}
+@media (min-width:900px){.p-name .sp-br{display:none}}
+@media (max-width:899px){.p-name{padding:0 4px}.p-name-h{font-size:20px}.p-name p{font-size:16px;line-height:2}}
+@media (max-width:400px){.p-name-h{font-size:18px;white-space:nowrap}}
+@media (max-width:360px){.p-name-h{font-size:16px}.p-name-plane{width:30px;height:21px;margin-right:8px}}
 
 /* デザイン見本：テイストと業種の2つの並び */
 @media (min-width:761px){.has-viewer .samples.three{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}}
@@ -1183,6 +1192,12 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 <!-- 担当する人（2026/10/8 夜 ユーザー了承：名前と顔は出さず、経歴の一文） -->
 <section id="person" class="sec person" aria-labelledby="person-h">
   <div class="wrap">
+    <!-- Lift-Off という名前について（2026/10/8 夜 チャットで決めた文。言葉と行の切れ目は変えない。wbr.py をかけない）
+         行は <br> で決める。スマホだけの切れ目は <br class="sp-br">（パソコンでは消す）。各行は nw で、ほかの所では折り返さない -->
+    <div class="p-name">
+      <h2 class="p-name-h"><svg class="p-name-plane" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><path d="M3 14 L37 3 L25 25 L19 17 Z M19 17 L37 3" fill="none" stroke="#2F6F8F" stroke-width="1.8" stroke-linejoin="round"/><path d="M1 22 C6 21 10 20 14 18" fill="none" stroke="#F2C230" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2 3"/></svg>Lift-Off という名前について</h2>
+      <p><span class="nw">飛行機は、飛び立つときに<br class="sp-br">いちばん大きな力を使います。</span><br><span class="nw">お店も同じで、始めるとき・<br class="sp-br">新しいことに踏み出すときに、<br class="sp-br">いちばん力がいります。</span><br><span class="nw">その「飛び立つとき」の<br class="sp-br">チカラになりたい。<br class="sp-br">そんな思いで名づけました。</span></p>
+    </div>
     <div class="p-card">
       <div class="p-mark" aria-hidden="true"><img src="img/emblem.svg" alt="" width="120" height="120"></div>
       <div class="p-body">
