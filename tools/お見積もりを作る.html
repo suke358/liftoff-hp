@@ -82,6 +82,11 @@ tr.sub td{background:#fafcfd;font-weight:700}
     <h1>お見積もりを作る</h1>
     <p class="lead">押すと右の見積書がすぐ変わります。入力は自動で残ります（いつも同じブラウザで開く）。</p>
 
+    <fieldset><legend>角印（はじめの1回だけ）</legend>
+      <input type="file" id="stampFile" accept="image/*">
+      <p class="hint">白い紙に押した角印をスマホで真上から撮り、その写真を選びます。赤いところだけを残して、背景を自動で消します。この Mac のブラウザにだけ残ります。</p>
+      <div class="btns" style="margin-top:6px"><button type="button" id="stampOff" style="font-size:12px;padding:5px 12px">角印を外す</button></div>
+    </fieldset>
     <fieldset><legend>宛名と日付</legend>
       <label class="row" style="display:block">お店の名前<input type="text" id="shop" placeholder="例：よもぎ蒸しサロン 〇〇"></label>
       <label class="row" style="display:block">発行日<input type="date" id="date"></label>
@@ -121,7 +126,7 @@ tr.sub td{background:#fafcfd;font-weight:700}
     </div>
     <div class="s-to">
       <div><div class="to"><span id="to"></span>　様</div><p style="font-size:12px;margin-top:6px">下記のとおり、お見積もりいたします。（金額はすべて税込）</p></div>
-      <div class="s-from"><b>Lift-Off</b>（リフトオフ）<br>ホームページ制作・WEB担当者代行<br>山口県防府市<br>電話 090-1189-6726<br>liftoff.358@gmail.com</div>
+      <div class="s-from" style="position:relative"><img id="stamp" alt="" style="position:absolute;right:1mm;top:-2mm;width:20mm;height:auto;opacity:.92;display:none;pointer-events:none"><b>Lift-Off</b>（リフトオフ）<br>ホームページ制作・WEB担当者代行<br>山口県防府市<br>電話 090-1189-6726<br>liftoff.358@gmail.com</div>
     </div>
     <div class="s-sum">
       <div><span>はじめにお支払い</span><b id="sumFirst"></b></div>
@@ -238,6 +243,41 @@ $('copy').addEventListener('click', function(){
   else { prompt('この文をコピーしてください', t); }
 });
 draw();
+</script>
+<script>
+// 角印：写真から赤いところだけ残して、背景を透明にする（2026/10/8）。見積もり・請求書で同じものを使う
+(function(){
+  var KEY = 'liftoff-stamp', img = document.getElementById('stamp'), f = document.getElementById('stampFile');
+  function show(){ var d = null; try { d = localStorage.getItem(KEY); } catch (e) {} img.src = d || ''; img.style.display = d ? 'block' : 'none'; }
+  f.addEventListener('change', function(){
+    var file = f.files && f.files[0]; if (!file) return;
+    var r = new FileReader();
+    r.onload = function(){
+      var im = new Image();
+      im.onload = function(){
+        var max = 600, k = Math.min(1, max / Math.max(im.width, im.height)), w = Math.round(im.width * k), h = Math.round(im.height * k);
+        var c = document.createElement('canvas'); c.width = w; c.height = h; var x = c.getContext('2d'); x.drawImage(im, 0, 0, w, h);
+        var d = x.getImageData(0, 0, w, h), p = d.data, minX = w, minY = h, maxX = 0, maxY = 0;
+        for (var i = 0; i < p.length; i += 4) {
+          var R = p[i], G = p[i + 1], B = p[i + 2], red = R - Math.max(G, B);
+          if (red > 40 && R > 90) { var a = Math.min(255, red * 3); p[i] = 200; p[i + 1] = 30; p[i + 2] = 40; p[i + 3] = a;
+            var px = (i / 4) % w, py = Math.floor(i / 4 / w); if (px < minX) minX = px; if (px > maxX) maxX = px; if (py < minY) minY = py; if (py > maxY) maxY = py; }
+          else p[i + 3] = 0;
+        }
+        if (maxX <= minX) { alert('赤いところが見つかりませんでした。白い紙に押した角印を、明るい場所で撮り直してください。'); return; }
+        x.putImageData(d, 0, 0);
+        var s = Math.max(maxX - minX, maxY - minY) + 8, o = document.createElement('canvas'); o.width = s; o.height = s;
+        o.getContext('2d').drawImage(c, minX - 4, minY - 4, s, s, 0, 0, s, s);
+        try { localStorage.setItem(KEY, o.toDataURL('image/png')); } catch (e) { alert('保存できませんでした（写真が大きすぎるかもしれません）'); }
+        show();
+      };
+      im.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+  document.getElementById('stampOff').addEventListener('click', function(){ try { localStorage.removeItem(KEY); } catch (e) {} f.value = ''; show(); });
+  show();
+})();
 </script>
 </body>
 </html>
