@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>依頼の記録（Lift-Off）</title>
+<!-- 2026/10/8 作成。お店からの依頼を1件ずつ書き、見積・契約の範囲の中か外かを道具が判断する。
+     範囲の外は「作業の前に金額を伝えて OK をもらう」→ 請求書の道具に送る。料金は決定事項.md のとおり（変わったら PRICE を直す。お見積もり・請求書の道具も同じ）。
+     お店のデータはこの Mac のブラウザにだけ残る（このファイルには書かない。GitHub に上がるため） -->
+<style>
+:root{--ink:#17283A;--sea:#2F6F8F;--sky:#EAF2F6;--line:#D2DEE6;--signal:#F2C230;--muted:#4A5F72;--ok:#2E7D4F;--ng:#B3403A}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP",sans-serif;color:var(--ink);background:#f3f6f8;font-size:15px;line-height:1.7}
+.app{display:grid;grid-template-columns:420px minmax(0,1fr);gap:24px;max-width:1300px;margin:0 auto;padding:24px}
+.panel,.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.panel{align-self:start;position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+h1{font-size:18px}
+h2{font-size:16px;margin-bottom:8px}
+.lead,.hint{font-size:12.5px;color:var(--muted)}
+fieldset{border:none;border-top:1px solid var(--line);padding:12px 0 6px;margin-top:10px}
+legend{font-weight:700;font-size:14px;padding-right:8px}
+label.blk{display:block;font-size:13px;margin:6px 0}
+input,select,textarea{font:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:8px;padding:6px 9px;width:100%;background:#fff}
+textarea{resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{font:inherit;font-weight:700;border-radius:999px;padding:7px 14px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;font-size:13.5px}
+button.main{background:var(--ink);color:#fff}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.judge{margin-top:10px;border-radius:12px;padding:10px 12px;font-size:14px}
+.judge.in{background:#E8F4EC;border:1.5px solid var(--ok)}
+.judge.out{background:#FBECEA;border:1.5px solid var(--ng)}
+.judge b{display:block}
+.main-col{display:grid;gap:18px;align-content:start}
+.sum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sum div{background:var(--sky);border-radius:12px;padding:10px 12px}
+.sum span{display:block;font-size:12px;color:var(--muted)}
+.sum b{font-size:20px}
+.done-banner{background:var(--signal);border-radius:12px;padding:10px 14px;font-weight:700;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:700}
+td.n{text-align:right;white-space:nowrap}
+td:first-child{white-space:nowrap;font-size:12.5px}
+.tag{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;white-space:nowrap}
+.tag.in{background:#E8F4EC;color:var(--ok)}
+.tag.out{background:#FBECEA;color:var(--ng)}
+.st{font-size:12.5px;padding:3px 6px;width:auto}
+.scope li{list-style:none;display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.scope input[type=checkbox]{width:18px;height:18px}
+.scope .p{margin-left:auto;white-space:nowrap;font-size:13px}
+.scope input.price{width:110px;padding:2px 6px;font-size:13px;text-align:right}
+.msg{white-space:pre-wrap;background:#fffdf2;border:1px dashed #d8c27a;border-radius:10px;padding:8px 10px;font-size:13px;margin-top:8px}
+.empty{color:var(--muted);font-size:13px;padding:8px 0}
+.warn{color:var(--ng);font-weight:700;font-size:12.5px}
+@media (max-width:980px){.app{grid-template-columns:1fr}.panel{position:static;max-height:none}.sum{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<form class="panel" id="f" onsubmit="return false">
+  <h1>依頼の記録（範囲チェック）</h1>
+  <p class="lead">お店からの依頼を1件ずつ書くと、見積・契約の<b>範囲の中か外か</b>を出します。範囲の外は、<b>作業の前に金額を伝えて OK をもらってから</b>。OK のあとで請求書の道具に送れます。</p>
+
+  <fieldset><legend>お店</legend>
+    <label class="blk">お店を選ぶ<select id="shopSel"></select></label>
+    <div class="btns">
+      <button type="button" id="fromEst">見積もりから新しく作る</button>
+      <button type="button" id="newShop">何もないところから作る</button>
+    </div>
+    <p class="hint">見積もりの道具（同じブラウザ）で最後に作った内容から、範囲を作ります。</p>
+  </fieldset>
+
+  <div id="shopBox">
+  <fieldset><legend>依頼を書く</legend>
+    <div class="two">
+      <label class="blk">日付<input type="date" id="rDate"></label>
+      <label class="blk">どこから<select id="rVia"><option>LINE</option><option>電話</option><option>会って</option><option>メール</option><option>そのほか</option></select></label>
+    </div>
+    <label class="blk">依頼の中身<textarea id="rText" rows="2" placeholder="例：メニューの料金を変えてほしい"></textarea></label>
+    <label class="blk">どれにあたる？<select id="rKind"></select></label>
+    <div id="rExtra"></div>
+    <label class="blk">かかった時間（時間・あとで入れてよい）<input type="number" id="rHours" min="0" step="0.25" placeholder="例：0.5"></label>
+    <div id="judge"></div>
+    <div class="btns"><button type="button" class="main" id="addReq">この依頼を記録する</button></div>
+  </fieldset>
+  </div>
+
+  <fieldset><legend>Claude とのやりとり</legend>
+    <div class="btns">
+      <button type="button" id="copy">Claudeに渡す用にコピー</button>
+      <button type="button" id="impBtn">Claudeからもらった設定を読み込む</button>
+    </div>
+    <textarea id="imp" rows="3" style="display:none;margin-top:8px" placeholder="Claude からもらった文をここに貼って、もう一度「読み込む」を押す"></textarea>
+    <p class="hint" id="status" role="status"></p>
+    <p class="hint">記録はこの Mac のこのブラウザにだけ残ります（いつも同じブラウザで開く）。週に1回くらい「Claudeに渡す用にコピー」でチャットに貼ると、控えになります。</p>
+  </fieldset>
+</form>
+
+<div class="main-col">
+  <section class="card" id="sumCard"></section>
+  <section class="card">
+    <h2>見積・契約の中身（範囲）</h2>
+    <p class="hint">終わったものにチェック。金額はこのお店との約束の値段（サービスなら 0）。</p>
+    <ul class="scope" id="scope"></ul>
+    <p class="hint" id="scopeNote"></p>
+  </section>
+  <section class="card">
+    <h2>依頼の記録</h2>
+    <div id="logBox"></div>
+  </section>
+</div>
+</div>
+
+<script>
+// 料金（税込）：決定事項.md のとおり
+var PRICE = {
+  plans: { std: { name: 'スタンダード', init: 98000, upd: 2 }, zero: { name: '初期0円プラン', init: 0, upd: 2 }, web: { name: 'WEB担当者代行', init: 98000, upd: 4 }, none: { name: 'ホームページなし', init: 0, upd: 0 } },
+  over: 3300, page: 22000, fixes: 2,
+  opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000] }
+};
+var KEY = 'liftoff-requests-v1', $ = function(i){ return document.getElementById(i); };
+var db = { shops: {}, cur: '' };
+function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+function esc(t){ return String(t == null ? '' : t).replace(/[&<>"]/g, function(c){ return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function pad(n){ return ('0' + n).slice(-2); }
+function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function jp(s){ var d = new Date(s + 'T00:00:00'); return d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
+function shop(){ return db.shops[db.cur]; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) { $('status').textContent = '保存できませんでした。「Claudeに渡す用にコピー」で控えを残してください'; } }
+function load(){ try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (o && o.shops) db = o; } catch (e) {} }
+
+// 範囲の作り方：見積もりの道具の内容（liftoff-estimate-v1）から
+function makeShop(name, plan, pages, opts, extra){
+  var s = { name: name, plan: plan, member: plan !== 'none', items: [], log: [], memo: extra || '' };
+  var P = PRICE.plans[plan];
+  if (plan !== 'none') s.items.push({ k: 'hp', name: P.name + ' 初期費用（ホームページ制作・公開まで）', price: P.init, done: false });
+  if (pages > 0) s.items.push({ k: 'page', name: 'ページの追加 ' + pages + 'ページ', price: PRICE.page * pages, done: false });
+  Object.keys(PRICE.opts).forEach(function(k){ var o = opts[k]; if (o && o.on) s.items.push({ k: k, name: PRICE.opts[k][0] + '（直し' + PRICE.fixes + '回まで）', price: parseInt(o.v, 10) || 0, done: false }); });
+  return s;
+}
+$('fromEst').addEventListener('click', function(){
+  var e = null; try { e = JSON.parse(localStorage.getItem('liftoff-estimate-v1') || 'null'); } catch (x) {}
+  if (!e || !e.shop) { alert('見積もりの内容が見つかりませんでした（同じブラウザで「お見積もりを作る.html」を開いて、お店の名前を入れたときだけ読めます）'); return; }
+  if (db.shops[e.shop] && !confirm(e.shop + ' はもうあります。見積もりの内容で作り直しますか？（依頼の記録は残します）')) return;
+  var s = makeShop(e.shop, e.plan || 'std', parseInt(e.pages || '0', 10), e.opts || {});
+  if (db.shops[e.shop]) s.log = db.shops[e.shop].log;
+  db.shops[e.shop] = s; db.cur = e.shop; save(); all();
+});
+$('newShop').addEventListener('click', function(){
+  var n = prompt('お店の名前'); if (!n) return;
+  var p = prompt('プラン（std＝スタンダード／zero＝初期0円／web＝代行／none＝ホームページなし）', 'std'); if (!PRICE.plans[p]) { alert('std・zero・web・none のどれかで入れてください'); return; }
+  db.shops[n] = makeShop(n, p, 0, {}); db.cur = n; save(); all();
+});
+$('shopSel').addEventListener('change', function(){ db.cur = this.value; save(); all(); });
+
+// 依頼の種類
+function kinds(){
+  var s = shop(), k = [];
+  if (!s) return k;
+  var hp = s.items.filter(function(i){ return i.k === 'hp'; })[0];
+  if (hp) k.push(['build', 'ホームページ制作の中（公開まで）']);
+  if (s.plan !== 'none') k.push(['update', '毎月の更新（文・写真・料金などを直す）']);
+  s.items.forEach(function(i){ if (PRICE.opts[i.k]) k.push(['fix:' + i.k, PRICE.opts[i.k][0] + 'の直し']); });
+  k.push(['new:page', '新しく足す：ページの追加']);
+  Object.keys(PRICE.opts).forEach(function(o){ if (!s.items.some(function(i){ return i.k === o; })) k.push(['new:' + o, '新しく作る：' + PRICE.opts[o][0]]); });
+  k.push(['other', 'そのほか・迷う（金額を決めて伝える）']);
+  return k;
+}
+function monthOf(d){ return d.slice(0, 7); }
+// 判断：{ judge:'in'|'out', why, price, msg }
+function decide(kind, date, text, pages, otherPrice, ignoreId){
+  var s = shop(), r = { judge: 'in', why: '', price: 0, msg: '' }, P = PRICE.plans[s.plan];
+  var live = s.log.filter(function(l){ return l.id !== ignoreId && l.status !== 'no'; });
+  if (kind === 'build') {
+    var hp = s.items.filter(function(i){ return i.k === 'hp'; })[0];
+    if (hp && hp.done) { r.judge = 'out'; r.why = '公開まで（制作）はもう済んでいます。「毎月の更新」を選んでください'; return r; }
+    r.why = '見積の「ホームページ制作」の中です'; return r;
+  }
+  if (kind === 'update') {
+    var used = live.filter(function(l){ return l.kind === 'update' && l.judge === 'in' && monthOf(l.date) === monthOf(date); }).length;
+    if (used < P.upd) { r.why = 'この月の更新 ' + (used + 1) + '回目（' + P.upd + '回まで）'; return r; }
+    r.judge = 'out'; r.price = PRICE.over; r.why = 'この月の更新は ' + P.upd + '回を使い切っています（回数をこえた更新は1回3,300円）';
+    r.msg = 'ご依頼ありがとうございます。今月の更新は ' + P.upd + '回分を使っているため、この更新は1回3,300円（税込）になります。\n来月の分として、来月1日以降に直すこともできます。どちらがよろしいですか？';
+    return r;
+  }
+  if (kind.indexOf('fix:') === 0) {
+    var o = kind.slice(4), n = live.filter(function(l){ return l.kind === kind && l.judge === 'in'; }).length;
+    if (n < PRICE.fixes) { r.why = PRICE.opts[o][0] + 'の直し ' + (n + 1) + '回目（' + PRICE.fixes + '回まで）'; return r; }
+    r.judge = 'out'; r.price = otherPrice || 0; r.why = PRICE.opts[o][0] + 'の直しは ' + PRICE.fixes + '回まで使っています。金額を決めて、先に伝えます';
+    r.msg = 'ご依頼ありがとうございます。' + PRICE.opts[o][0] + 'の直しは、お見積もりの ' + PRICE.fixes + '回分を使っているため、この直しは ' + (r.price ? yen(r.price) : '〇〇円') + '（税込）になります。\n進めてよろしければ、お返事ください。';
+    return r;
+  }
+  if (kind === 'new:page') {
+    var pg = Math.max(1, pages || 1); r.judge = 'out'; r.price = PRICE.page * pg; r.why = 'ページの追加は見積に入っていません（1ページ22,000円）';
+    r.msg = 'ご依頼ありがとうございます。ページの追加はご契約の内容に入っていないため、' + pg + 'ページで ' + yen(r.price) + '（税込）になります。\n進めてよろしければ、お返事ください。';
+    return r;
+  }
+  if (kind.indexOf('new:') === 0) {
+    var k = kind.slice(4), op = PRICE.opts[k]; r.judge = 'out'; r.price = otherPrice || (s.member ? op[2] : op[1]);
+    r.why = op[0] + 'は見積に入っていません（' + (s.member ? 'ご契約のお店 ' : '通常 ') + yen(s.member ? op[2] : op[1]) + '〜・直し2回まで）';
+    r.msg = 'ご依頼ありがとうございます。' + op[0] + 'はご契約の内容とは別のご依頼になるため、' + yen(r.price) + '（税込）〜でお作りします（直し2回まで）。\n進めてよろしければ、お返事ください。';
+    return r;
+  }
+  r.judge = 'out'; r.price = otherPrice || 0; r.why = '見積・契約のどれにもあたりません。金額を決めて、先に伝えます（迷ったら Claude に相談）';
+  r.msg = 'ご依頼ありがとうございます。「' + (text || 'このご依頼') + '」はご契約の内容に入っていないため、' + (r.price ? yen(r.price) : '〇〇円') + '（税込）になります。\n進めてよろしければ、お返事ください。';
+  return r;
+}
+
+// 入力欄
+function extraFields(){
+  var k = $('rKind').value, h = '';
+  if (k === 'new:page') h = '<label class="blk">ページ数<input type="number" id="rPages" min="1" value="1"></label>';
+  else if (k === 'other' || k.indexOf('fix:') === 0 || (k.indexOf('new:') === 0 && k !== 'new:page')) h = '<label class="blk">範囲の外のときの金額（税込）<input type="number" id="rPrice" min="0" step="500" placeholder="空なら決まった値段"></label>';
+  $('rExtra').innerHTML = h; preview();
+}
+function preview(){
+  if (!shop()) { $('judge').innerHTML = ''; return; }
+  var d = decide($('rKind').value, $('rDate').value || iso(new Date()), $('rText').value, $('rPages') ? parseInt($('rPages').value, 10) : 0, $('rPrice') ? parseInt($('rPrice').value || '0', 10) : 0);
+  $('judge').innerHTML = '<div class="judge ' + d.judge + '"><b>' + (d.judge === 'in' ? '範囲の中：そのまま作業してOK' : '範囲の外：作業の前に金額を伝えて OK をもらう') + '</b>' + esc(d.why) + (d.judge === 'out' ? '<br>金額：' + (d.price ? yen(d.price) : '<span class="warn">まだ決めていません</span>') : '') + '</div>';
+}
+$('rKind').addEventListener('change', extraFields);
+['rDate', 'rText', 'rExtra'].forEach(function(id){ $(id).addEventListener('input', preview); });
+
+$('addReq').addEventListener('click', function(){
+  var s = shop(); if (!s) return;
+  var text = $('rText').value.trim(); if (!text) { alert('依頼の中身を書いてください'); return; }
+  var date = $('rDate').value || iso(new Date()), kind = $('rKind').value;
+  var d = decide(kind, date, text, $('rPages') ? parseInt($('rPages').value, 10) : 0, $('rPrice') ? parseInt($('rPrice').value || '0', 10) : 0);
+  s.log.push({ id: Date.now(), date: date, via: $('rVia').value, text: text, kind: kind, judge: d.judge, why: d.why, price: d.price, msg: d.msg, hours: $('rHours').value, status: d.judge === 'in' ? 'todo' : 'ask' });
+  $('rText').value = ''; $('rHours').value = ''; save(); all();
+  $('status').textContent = d.judge === 'in' ? '記録しました（範囲の中）' : '記録しました（範囲の外）。右の「お店に送る文」をコピーして、OK をもらってから作業してください';
+});
+
+// 右側
+var ST_IN = [['todo', 'これから'], ['done', '済み'], ['no', 'やめた']];
+var ST_OUT = [['ask', '金額をまだ伝えていない'], ['sent', '金額を伝えた・返事待ち'], ['ok', 'OKをもらった（作業してよい）'], ['done', '作業済み（請求前）'], ['billed', '請求書に入れた'], ['no', 'やめた（作業しない）']];
+function all(){
+  var names = Object.keys(db.shops);
+  $('shopSel').innerHTML = names.length ? names.map(function(n){ return '<option' + (n === db.cur ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join('') : '<option value="">（まだありません）</option>';
+  if (!db.shops[db.cur]) db.cur = names[0] || '';
+  var s = shop();
+  $('shopBox').style.display = s ? '' : 'none';
+  if (!s) { $('sumCard').innerHTML = '<p class="empty">左の「見積もりから新しく作る」か「何もないところから作る」で、お店を足してください。</p>'; $('scope').innerHTML = ''; $('logBox').innerHTML = ''; return; }
+  $('rKind').innerHTML = kinds().map(function(k){ return '<option value="' + k[0] + '">' + esc(k[1]) + '</option>'; }).join('');
+  if (!$('rDate').value) $('rDate').value = iso(new Date());
+  extraFields();
+
+  // 範囲
+  $('scope').innerHTML = s.items.map(function(i, n){ return '<li><input type="checkbox" data-done="' + n + '"' + (i.done ? ' checked' : '') + '><span>' + esc(i.name) + '</span><span class="p"><input class="price" type="number" min="0" step="500" data-price="' + n + '" value="' + i.price + '"> 円</span></li>'; }).join('') || '<li class="empty">（範囲の中身がありません）</li>';
+  var P = PRICE.plans[s.plan];
+  $('scopeNote').textContent = (s.plan !== 'none' ? '公開のあと：' + P.name + '（更新 月' + P.upd + '回まで）。' : '') + (s.memo ? '　' + s.memo : '');
+
+  // まとめ
+  var est = 0, add = 0, wait = 0, hours = 0;
+  s.items.forEach(function(i){ est += parseInt(i.price, 10) || 0; });
+  s.log.forEach(function(l){ hours += parseFloat(l.hours) || 0; if (l.judge === 'out' && (l.status === 'ok' || l.status === 'done' || l.status === 'billed')) add += l.price || 0; if (l.judge === 'out' && (l.status === 'ask' || l.status === 'sent')) wait++; });
+  var allDone = s.items.length && s.items.every(function(i){ return i.done; });
+  var wage = hours > 0 ? Math.round((est + add) / hours) : 0;
+  $('sumCard').innerHTML = (allDone ? '<p class="done-banner">見積の中身はすべて済みました。ここからの依頼は「毎月の更新」か「追加のご依頼（範囲の外）」です。</p>' : '') +
+    '<h2>' + esc(s.name) + '</h2><div class="sum">' +
+    '<div><span>見積・約束の金額</span><b>' + yen(est) + '</b></div>' +
+    '<div><span>追加（OK済み）</span><b>' + yen(add) + '</b></div>' +
+    '<div><span>返事待ち・未連絡</span><b>' + wait + '件</b></div>' +
+    '<div><span>記録した作業時間 → 時給</span><b>' + hours + 'h' + (wage ? '｜' + yen(wage) : '') + '</b></div></div>' +
+    (hours > 0 && wage < 5000 ? '<p class="hint" style="margin-top:8px">時給が 5,000円（決定事項の目安）を下回っています。' + (est === 0 ? '無料・サービスのお店です。' : 'プランにない作業をサービスしていないか見直します。') + '</p>' : '');
+
+  // 記録
+  if (!s.log.length) { $('logBox').innerHTML = '<p class="empty">まだありません。</p>'; return; }
+  var rows = s.log.slice().reverse().map(function(l){
+    var opts = (l.judge === 'in' ? ST_IN : ST_OUT).map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === l.status ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('');
+    var act = '';
+    if (l.judge === 'out') {
+      if (l.status === 'ask' || l.status === 'sent') act += '<div class="msg">' + esc(l.msg || '') + '</div><button type="button" data-copy="' + l.id + '" style="margin-top:6px">お店に送る文をコピー</button>';
+      if (l.status === 'ask' || l.status === 'sent') act += ' <span class="warn">OK をもらうまで作業しない</span>';
+      if (l.status === 'done' || l.status === 'ok') act += '<button type="button" data-bill="' + l.id + '">請求書に入れる</button>';
+    }
+    return '<tr><td>' + esc(jp(l.date)) + '<br><small>' + esc(l.via) + '</small></td><td>' + esc(l.text) + '<br><small class="hint">' + esc(l.why) + '</small>' + act + '</td>' +
+      '<td><span class="tag ' + l.judge + '">' + (l.judge === 'in' ? '範囲の中' : '範囲の外') + '</span>' + (l.judge === 'out' ? '<br><input type="number" class="st" style="width:100px;margin-top:4px" min="0" step="500" data-lprice="' + l.id + '" value="' + (l.price || '') + '" placeholder="金額"> 円' : '') + '</td>' +
+      '<td><select class="st" data-st="' + l.id + '">' + opts + '</select></td>' +
+      '<td class="n"><input type="number" class="st" style="width:70px" min="0" step="0.25" data-h="' + l.id + '" value="' + esc(l.hours) + '"> h<br><button type="button" data-del="' + l.id + '" style="font-size:11px;padding:2px 8px;border-width:1px;margin-top:4px">消す</button></td></tr>';
+  }).join('');
+  $('logBox').innerHTML = '<table><thead><tr><th>日付</th><th>依頼</th><th>判断</th><th>状態</th><th class="n">時間</th></tr></thead><tbody>' + rows + '</tbody></table>';
+}
+function findLog(id){ var s = shop(); for (var i = 0; i < s.log.length; i++) if (String(s.log[i].id) === String(id)) return s.log[i]; return null; }
+document.addEventListener('change', function(e){
+  var t = e.target, s = shop(); if (!s) return;
+  if (t.getAttribute('data-done') !== null) { s.items[+t.getAttribute('data-done')].done = t.checked; save(); all(); }
+  else if (t.getAttribute('data-price') !== null) { s.items[+t.getAttribute('data-price')].price = parseInt(t.value || '0', 10); save(); all(); }
+  else if (t.getAttribute('data-st')) { var l = findLog(t.getAttribute('data-st')); l.status = t.value; save(); all(); }
+  else if (t.getAttribute('data-h')) { findLog(t.getAttribute('data-h')).hours = t.value; save(); all(); }
+  else if (t.getAttribute('data-lprice')) { var m = findLog(t.getAttribute('data-lprice')); m.price = parseInt(t.value || '0', 10);
+    var d = decide(m.kind, m.date, m.text, 0, m.price, m.id); if (m.kind !== 'update' && m.kind !== 'new:page') m.msg = d.msg; save(); all(); }
+});
+function copyText(t, ok){
+  function done(){ $('status').textContent = ok; }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function(){ prompt('コピーしてください', t); });
+  else { prompt('コピーしてください', t); }
+}
+document.addEventListener('click', function(e){
+  var t = e.target, s = shop(); if (!s || !t.getAttribute) return;
+  var c = t.getAttribute('data-copy'), b = t.getAttribute('data-bill'), d = t.getAttribute('data-del');
+  if (c) { var l = findLog(c); if (!l.price && /〇〇円/.test(l.msg)) { alert('先に金額を入れてください（表の「判断」の欄）'); return; }
+    copyText(l.msg, 'お店に送る文をコピーしました。送ったら、状態を「金額を伝えた・返事待ち」にしてください'); }
+  if (b) bill(findLog(b));
+  if (d && confirm('この記録を消しますか？')) { s.log = s.log.filter(function(x){ return String(x.id) !== d; }); save(); all(); }
+});
+// 請求書の道具（liftoff-invoice-v1）に1行足す
+function bill(l){
+  var s = shop();
+  if (!l.price) { alert('金額が入っていません'); return; }
+  if (l.status === 'ask' || l.status === 'sent') { alert('まだ OK をもらっていません'); return; }
+  var inv = null; try { inv = JSON.parse(localStorage.getItem('liftoff-invoice-v1') || 'null'); } catch (x) {}
+  if (!inv) inv = { shop: '', date: iso(new Date()), seq: 1, plan: s.plan, memo: '', rows: [] };
+  if (inv.shop && inv.shop !== s.name && inv.rows && inv.rows.length) {
+    if (!confirm('請求書の道具には「' + inv.shop + '」の内容が入っています。消して「' + s.name + '」の請求書にしますか？\n（前の請求書を出し終わっていなければ「キャンセル」）')) return;
+    inv.rows = []; inv.memo = ''; inv.seq = 1; inv.due = ''; inv.hand = '';
+  }
+  inv.shop = s.name; inv.plan = s.plan; inv.rows = inv.rows || [];
+  inv.rows.push({ kind: 'free', name: l.text + (l.kind === 'update' ? '（回数をこえた更新）' : ''), when: jp(l.date), qty: 1, price: l.price });
+  try { localStorage.setItem('liftoff-invoice-v1', JSON.stringify(inv)); } catch (x) { alert('請求書の道具に送れませんでした'); return; }
+  l.status = 'billed'; save(); all();
+  $('status').textContent = '請求書の道具に送りました。「請求書を作る.html」を開くと入っています（開いていたら読み直す）';
+}
+// Claude とのやりとり
+$('copy').addEventListener('click', function(){
+  var s = shop(); if (!s) return;
+  copyText('【依頼の記録】' + s.name + '\n' + JSON.stringify(s), 'コピーしました。Claude のチャットに貼ってください');
+});
+$('impBtn').addEventListener('click', function(){
+  var a = $('imp');
+  if (a.style.display === 'none') { a.style.display = ''; a.focus(); return; }
+  var t = a.value, i = t.indexOf('{'); if (i < 0) { alert('読み込める内容がありません'); return; }
+  try { var o = JSON.parse(t.slice(i)); if (!o.name || !o.items) throw 0;
+    if (db.shops[o.name] && !confirm(o.name + ' はもうあります。置きかえますか？')) return;
+    o.log = o.log || []; db.shops[o.name] = o; db.cur = o.name; save(); a.value = ''; a.style.display = 'none'; all(); $('status').textContent = o.name + ' を読み込みました';
+  } catch (x) { alert('読み込めませんでした。Claude からもらった文を、そのまま全部貼ってください'); }
+});
+
+load(); all();
+</script>
+</body>
+</html>
