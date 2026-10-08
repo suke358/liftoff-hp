@@ -544,6 +544,26 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   .pass .stub .price{font-size:30px}
 }
 @media (max-width:360px){.pass .stub .price{font-size:26px}}
+
+/* ---------- 作成の流れ：滑走路と誘導灯（2026/10/8） ---------- */
+.flow{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px;padding-top:0}
+.flow::before{left:0;right:0;top:0;height:64px;border:none;border-radius:14px;background:var(--ink)}
+.flow::after{content:"";position:absolute;left:24px;right:24px;top:30px;height:4px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 22px,transparent 22px 40px)}
+.flow li::before{width:44px;height:44px;margin:10px 0 22px 10px;background:var(--signal);color:var(--ink);font-family:"Michroma",var(--head);font-weight:400;font-size:16px;box-shadow:0 0 0 5px rgba(242,194,48,.25),0 0 18px rgba(242,194,48,.55)}
+.flow li:last-child::before{background:#fff;color:var(--ink);box-shadow:0 0 0 5px rgba(255,255,255,.22),0 0 18px rgba(255,255,255,.5)}
+.flow li.up h3::after{content:"";display:inline-block;width:18px;height:18px;margin-left:6px;vertical-align:-2px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M2 11 L18 3 L13 18 L9.5 12 Z' fill='%232F6F8F'/%3E%3C/svg%3E") no-repeat center/contain}
+.flow h3{font-size:17px}
+.flow p{font-size:14px;line-height:1.8}
+@media (max-width:1100px) and (min-width:901px){.flow{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:8px}.flow::before,.flow::after{display:none}.flow li::before{box-shadow:0 0 0 5px rgba(242,194,48,.25);margin-left:0}.flow li:last-child::before{background:var(--ink);color:#fff;box-shadow:0 0 0 5px rgba(23,40,58,.15)}}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr}
+  .flow::before{left:0;right:auto;top:0;bottom:0;width:64px;height:auto;border-radius:14px}
+  .flow::after{left:30px;right:auto;top:20px;bottom:20px;width:4px;height:auto;background:repeating-linear-gradient(180deg,rgba(255,255,255,.55) 0 22px,transparent 22px 40px)}
+  .flow li{grid-template-columns:64px 1fr;gap:18px;padding:12px 0 18px}
+  .flow li::before{margin:0 0 0 10px}
+  .flow h3{margin-top:8px}
+  .flow p{font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -845,14 +865,15 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
   <div class="wrap">
     <div class="sec-head">
       <h2>作成の<wbr>流れ</h2>
-      <p>打ち合わせは基本1回。<wbr>あとはLINEや電話での<wbr>やりとりで進めます。<wbr>写真や載せる内容が<wbr>そろってから公開まで、<wbr>目安は<span class="nw">2〜3週間</span>です。</p>
+      <p>お会いする<wbr>打ち合わせは<wbr>2回です。<wbr>あいだは<wbr>LINEや<wbr>電話での<wbr>やりとりで<wbr>進めます。<wbr>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<span class="nw">2〜3週間</span>です。</p>
     </div>
     <ol class="flow">
-      <li><div><h3>お問い合わせ</h3><p>電話・メール・<wbr>下のフォームから<wbr>お気軽にどうぞ。<wbr>相談だけでも大丈夫です。</p></div></li>
-      <li><div><h3>打ち合わせ</h3><p>お店にうかがって、<wbr>載せたい内容や<wbr>お好みのデザインを<wbr>お聞きします。<wbr>写真もこのときに。</p></div></li>
-      <li><div><h3>見本を作って<wbr>確認</h3><p>実際にスマホで見られる<wbr>見本をお送りします。<wbr>気になるところは<wbr>何度でもお伝えください。</p></div></li>
-      <li><div><h3>公開</h3><p>ドメインの取得や<wbr>Googleへの登録などの<wbr>設定をして、<wbr>ネットに公開します。</p></div></li>
-      <li><div><h3>毎月の<wbr>更新</h3><p>公開後も、<wbr>変更はひと言いただければ<wbr>こちらで直します。</p></div></li>
+      <li><div><h3>お問い合わせ</h3><p>フォーム・<wbr>電話・<wbr>メールから。<wbr>選んで<wbr>送るだけでも<wbr>大丈夫です。</p></div></li>
+      <li><div><h3>1回目の<wbr>打ち合わせ</h3><p>ご都合の<wbr>よい<wbr>場所で、<wbr>載せたい<wbr>内容や<wbr>お好みの<wbr>デザインを<wbr>お聞きします。<wbr>写真は<wbr>お店で<wbr>撮って<wbr>いただきます<wbr>（撮り方は<wbr>お伝えします）。</p></div></li>
+      <li><div><h3>見本を作って<wbr>確認</h3><p>スマホで<wbr>見られる<wbr>見本を<wbr>お送りします。<wbr>気になる<wbr>ところを<wbr>お伝えください。</p></div></li>
+      <li><div><h3>2回目の<wbr>打ち合わせ</h3><p>ドメインや<wbr>Googleマップ、<wbr>ネット予約など、<wbr>お店の<wbr>名義で<wbr>作るものを<wbr>一緒に<wbr>作ります。</p></div></li>
+      <li><div><h3>公開</h3><p>Googleへの<wbr>登録などの<wbr>設定をして、<wbr>ネットに<wbr>公開します。</p></div></li>
+      <li class="up"><div><h3>毎月の<wbr>更新</h3><p>公開後も、<wbr>変えたい<wbr>ことは<wbr>ひと言<wbr>いただければ<wbr>こちらで<wbr>直します。</p></div></li>
     </ol>
   </div>
 </section>
