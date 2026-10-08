@@ -10,6 +10,11 @@
 <meta property="og:title" content="Lift-Off｜防府のお店のホームページ制作・WEB担当者代行">
 <meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">
+<meta property="og:image" content="https://liftoff-hp.liftoff-358.workers.dev/img/og-20261008.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#17283A">
 <link rel="icon" href="img/favicon.png" type="image/png">
 <link rel="icon" href="img/emblem.svg" type="image/svg+xml">
@@ -402,6 +407,45 @@ footer a:hover{color:var(--signal)}
 .fixbar .btn + .btn{margin-left:8px}
 .fixbar.hide{-webkit-transform:translateY(110%);transform:translateY(110%)}
 @media (max-width:760px){.fixbar{display:flex}}
+
+/* ---------- お支払いの合計（何か月使うかで計算。2026/10/8） ---------- */
+.sim[hidden]{display:none}
+.sim-q{display:flex;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.sim-q label{font-family:var(--head);font-weight:700;font-size:15px;margin-right:12px}
+.sim-q output{font-family:var(--head);font-weight:900;font-size:26px;color:var(--ink);line-height:1.2}
+.sim-q output small{font-size:15px;margin-left:2px}
+.sim input[type=range]{width:100%;height:36px;margin:2px 0 4px;accent-color:#17283A;cursor:pointer}
+.sim-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:10px}
+.sim-quick{display:flex;flex-wrap:wrap;margin:-4px -4px 10px}
+.sim-quick button{margin:4px;font:inherit;font-size:14px;border:1px solid var(--line);background:var(--sky);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.sim-quick button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-rows{list-style:none}
+.sim-rows li{padding:10px 0;border-top:1px solid var(--line)}
+.sim-rows .row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.sim-rows .row b{font-family:var(--head);font-size:19px;white-space:nowrap}
+.sim-rows .bar{height:8px;border-radius:4px;background:var(--sky);margin-top:6px;overflow:hidden}
+.sim-rows .bar i{display:block;height:100%;width:0;background:#9fb6c6;border-radius:4px;-webkit-transition:width .3s;transition:width .3s}
+.sim-rows li.low .bar i{background:var(--signal)}
+.sim-rows li.low .row span::after{content:"いちばん少ない";font-size:11px;font-family:var(--head);font-weight:700;background:var(--signal);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.sim-rows .fee{display:block;font-size:12px;color:#7a5b00;margin-top:2px}
+.sim-note{font-size:13px;color:var(--muted);line-height:1.7;margin-top:8px}
+@media (max-width:340px){.sim-rows .row{display:block}.sim-rows .row b{display:block}}
+
+/* ---------- このページも同じ作り（2026/10/8） ---------- */
+.same{background:var(--ink);color:#fff;position:relative}
+.same::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.same .sec-head p{color:#c9d6e0}
+.same-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;list-style:none}
+.same-list li{background:var(--ink-2);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:26px 24px}
+.same-list .ic{width:44px;height:44px;border-radius:12px;background:rgba(242,194,48,.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.same-list .ic svg{width:26px;height:26px}
+.same-list h3{font-size:18px;margin-bottom:6px;color:#fff}
+.same-list p{font-size:15px;line-height:1.8;color:#dbe5ec}
+.same-list .try{display:block;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(255,255,255,.2);font-size:13px;color:var(--signal);line-height:1.7}
+.same a{color:var(--signal)}
+.same-foot{margin-top:28px;font-size:14px;color:#c9d6e0}
+@media (max-width:1000px){.same-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.same-list{grid-template-columns:1fr;gap:14px}.same-list li{padding:22px 20px}}
 </style>
 </head>
 <body>
@@ -594,7 +638,19 @@ footer a:hover{color:var(--signal)}
       <div class="box total">
         <h3>お支払いの<wbr>合計の<wbr>目安<wbr>（税込）</h3>
         <p>初期費用と、<wbr>公開してからの<wbr>月額を<wbr>足した<wbr>金額です。</p>
-        <table>
+        <div class="sim" id="sim" hidden>
+          <div class="sim-q"><label for="sim-m">使う<wbr>期間</label><output id="sim-out" for="sim-m">12<small>か月</small></output></div>
+          <input type="range" id="sim-m" min="1" max="36" step="1" value="12" aria-describedby="sim-note">
+          <div class="sim-scale" aria-hidden="true"><span>1か月</span><span>1年</span><span>2年</span><span>3年</span></div>
+          <div class="sim-quick" role="group" aria-label="よく聞かれる期間"><button type="button" data-m="6">半年</button><button type="button" data-m="12" aria-pressed="true">1年</button><button type="button" data-m="24">2年</button><button type="button" data-m="36">3年</button></div>
+          <ul class="sim-rows" aria-live="polite">
+            <li data-plan="std"><div class="row"><span>スタンダード</span><b>164,000円</b></div><div class="bar"><i></i></div></li>
+            <li data-plan="zero"><div class="row"><span>初期0円プラン</span><b>117,600円</b></div><div class="bar"><i></i></div><em class="fee"></em></li>
+            <li data-plan="web"><div class="row"><span>WEB担当者代行</span><b>335,600円</b></div><div class="bar"><i></i></div></li>
+          </ul>
+          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。<wbr>初期0円プランを<wbr>12か月より<wbr>前に<wbr>やめた<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）を<wbr>含めた<wbr>金額です。</p>
+        </div>
+        <table id="sim-table">
           <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
           <tbody>
             <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
@@ -748,6 +804,26 @@ footer a:hover{color:var(--signal)}
       <p>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
       <a class="btn" href="samples/index.html">見本の<wbr>一覧を<wbr>見る</a>
     </div>
+  </div>
+</section>
+
+
+<!-- このページ自体が「見本」：お店のサイトに最初から入れていること（決定事項・マニュアル 16・06） -->
+<section id="same" class="sec same" aria-labelledby="same-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="same-h"><span class="nw">このページも、</span><wbr><span class="nw">同じ作りです</span></h2>
+      <p>見えにくい<wbr>ところですが、<wbr>お店の<wbr>ホームページには、<wbr>はじめから<wbr>次のことを<wbr>入れています。<wbr>このページで<wbr>そのまま<wbr>試せます。</p>
+    </div>
+    <ul class="same-list">
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="12" height="21" rx="2.5"/><path d="M11 19.5h4"/></svg></span><h3>古いスマホでも<wbr>崩れない</h3><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h18M4 12.5h13M4 18h16"/></svg></span><h3>言葉の<wbr>途中で<wbr>切れない</h3><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6L4 12l6 6"/><path d="M4 12h11a7 7 0 010 14"/></svg></span><h3>「戻る」で、<wbr>見ていた<wbr>場所へ</h3><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="20" height="16" rx="2.5"/><path d="M3 15l5-4 4 3 4-5 7 6"/></svg></span><h3>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h3><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h4l2 5-2.5 1.5a11 11 0 006.5 6.5L17.5 14l5 2v4a2 2 0 01-2 2A17.5 17.5 0 014 5.5a2 2 0 012-2z"/></svg></span><h3>押すと<wbr>そのまま<wbr>電話・予約</h3><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
+      <li><span class="ic"><svg viewBox="0 0 26 26" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="20" height="14" rx="2"/><path d="M3.5 7l9.5 7 9.5-7"/></svg></span><h3>お問い合わせは<wbr>お店の<wbr>メールへ</h3><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
+    </ul>
+    <p class="same-foot">ほかにも、<wbr>画像は<wbr>見る<wbr>ところまで<wbr>来てから<wbr>読み込むなど、<wbr>表示が<wbr>重く<wbr>ならないように<wbr>しています。</p>
   </div>
 </section>
 
@@ -925,6 +1001,37 @@ if ('IntersectionObserver' in window) {
       });
     }
   } catch (err) {}
+})();
+</script>
+<script>
+// お支払いの合計の目安：何か月使うかで計算（2026/10/8）。金額は決定事項のプランどおり。JS がない時は下の表だけ出る
+(function(){
+  var sim = document.getElementById('sim'); if (!sim) return;
+  var range = document.getElementById('sim-m'), out = document.getElementById('sim-out');
+  var table = document.getElementById('sim-table');
+  sim.hidden = false; if (table) table.style.display = 'none';
+  function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+  function calc(m){
+    var zeroFee = m < 12 ? (12 - m) * 4900 : 0;
+    return { std: 98000 + 5500 * m, zero: 9800 * m + zeroFee, web: 98000 + 19800 * m, zeroFee: zeroFee };
+  }
+  var rows = {}; [].forEach.call(sim.querySelectorAll('[data-plan]'), function(li){ rows[li.getAttribute('data-plan')] = li; });
+  var btns = sim.querySelectorAll('.sim-quick button');
+  function draw(){
+    var m = parseInt(range.value, 10), c = calc(m);
+    out.innerHTML = (m >= 12 && m % 12 === 0 ? (m / 12) + '<small>年（' + m + 'か月）</small>' : m + '<small>か月</small>');
+    var max = c.web, low = c.std <= c.zero ? 'std' : 'zero';
+    ['std', 'zero', 'web'].forEach(function(k){
+      rows[k].querySelector('b').textContent = yen(c[k]);
+      rows[k].querySelector('.bar i').style.width = Math.max(3, Math.round(c[k] / max * 100)) + '%';
+      rows[k].className = (k === low ? 'low' : '');
+    });
+    rows.zero.querySelector('.fee').textContent = c.zeroFee ? '（うち解約金 ' + yen(c.zeroFee) + '）' : '';
+    [].forEach.call(btns, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-m') === String(m) ? 'true' : 'false'); });
+  }
+  range.addEventListener('input', draw); range.addEventListener('change', draw);
+  [].forEach.call(btns, function(b){ b.addEventListener('click', function(){ range.value = b.getAttribute('data-m'); draw(); }); });
+  draw();
 })();
 </script>
 </body>
