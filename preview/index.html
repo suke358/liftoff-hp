@@ -778,16 +778,32 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 /* 担当する人 */
 .person{padding-top:0}
 .p-card{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;align-items:center;background:var(--sky);border-radius:28px;padding:48px 56px;position:relative;overflow:hidden}
-.p-card::after{content:"";position:absolute;right:-60px;bottom:-60px;width:240px;height:240px;border-radius:50%;border:2px dashed rgba(47,111,143,.25)}
-.p-mark{width:200px;height:200px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 10px var(--sky),0 0 0 2px var(--line)}
+.p-mark{position:relative;width:200px;height:200px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 10px var(--sky),0 0 0 2px var(--line)}
 .p-mark img{width:120px;height:120px}
+/* 印のまわりの点線の輪と、輪にそって1周飛ぶ紙飛行機（2026/10/9 見比べ用）。右下の丸い点線の飾りはやめた
+   輪と機体は同じ SVG（中心が 0,0・幅 260）。スマホは SVG ごと小さくする */
+.p-orbit{position:absolute;left:-30px;top:-30px;width:260px;height:260px;max-width:none;overflow:visible;pointer-events:none}
+.p-orbit .ring{fill:none;stroke:rgba(47,111,143,.4);stroke-width:2;stroke-dasharray:3 7;stroke-linecap:round}
+.p-orbit .wing{fill:#fff;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
+.p-orbit .keel{fill:#C9D6E0;stroke:#17283A;stroke-width:1.2;stroke-linejoin:round}
+.p-orbit .fold{fill:none;stroke:#F2C230;stroke-width:1.6;stroke-linecap:round}
 .p-eyebrow{font-family:var(--head);font-weight:700;color:var(--sea);font-size:14px;letter-spacing:.08em;margin-bottom:6px}
 .p-body h2{font-size:26px;font-size:clamp(21px,2.6vw,30px);margin-bottom:16px}
 .p-body > p{color:var(--ink-2);max-width:40em}
 .p-points{list-style:none;display:flex;flex-wrap:wrap;margin:18px -8px 0}
 .p-points li{display:flex;align-items:center;background:var(--paper);border-radius:999px;padding:6px 16px 6px 10px;margin:5px 8px;font-size:15px;font-family:var(--head);font-weight:700}
 .p-points svg{width:18px;height:18px;margin-right:8px;flex:none}
-@media (max-width:860px){.p-card{grid-template-columns:1fr;gap:20px;padding:30px 22px}.p-mark{width:110px;height:110px;box-shadow:inset 0 0 0 6px var(--sky),0 0 0 2px var(--line)}.p-mark img{width:66px;height:66px}.p-points li{font-size:14px}}
+@media (max-width:860px){.p-card{grid-template-columns:1fr;gap:20px;padding:30px 22px}.p-mark{width:110px;height:110px;box-shadow:inset 0 0 0 6px var(--sky),0 0 0 2px var(--line)}.p-mark img{width:66px;height:66px}.p-points li{font-size:14px}
+  .p-card{padding-top:40px}.p-mark{margin:0 0 14px 10px}.p-orbit{left:-20px;top:-20px;width:150px;height:150px}}
+/* Lift-Off という名前について（2026/10/8 夜）：左そろえ・行の間は広め。行の切れ目は HTML の <br> で決める */
+.p-name{margin:0 0 40px;padding:0 8px}
+.p-name-h{display:flex;align-items:center;font-size:22px;margin-bottom:14px}
+.p-name-plane{width:40px;height:28px;flex:none;margin-right:12px}
+.p-name p{color:var(--ink-2);font-size:17px;line-height:2.1}
+@media (min-width:900px){.p-name .sp-br{display:none}}
+@media (max-width:899px){.p-name{padding:0 4px}.p-name-h{font-size:20px}.p-name p{font-size:16px;line-height:2}}
+@media (max-width:400px){.p-name-h{font-size:18px;white-space:nowrap}}
+@media (max-width:360px){.p-name-h{font-size:16px}.p-name-plane{width:30px;height:21px;margin-right:8px}}
 
 /* デザイン見本：テイストと業種の2つの並び */
 @media (min-width:761px){.has-viewer .samples.three{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}}
@@ -1183,8 +1199,14 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
 <!-- 担当する人（2026/10/8 夜 ユーザー了承：名前と顔は出さず、経歴の一文） -->
 <section id="person" class="sec person" aria-labelledby="person-h">
   <div class="wrap">
+    <!-- Lift-Off という名前について（2026/10/8 夜 チャットで決めた文。言葉と行の切れ目は変えない。wbr.py をかけない）
+         行は <br> で決める。スマホだけの切れ目は <br class="sp-br">（パソコンでは消す）。各行は nw で、ほかの所では折り返さない -->
+    <div class="p-name">
+      <h2 class="p-name-h"><svg class="p-name-plane" viewBox="0 0 40 28" aria-hidden="true" focusable="false"><path d="M3 14 L37 3 L25 25 L19 17 Z M19 17 L37 3" fill="none" stroke="#2F6F8F" stroke-width="1.8" stroke-linejoin="round"/><path d="M1 22 C6 21 10 20 14 18" fill="none" stroke="#F2C230" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="2 3"/></svg>Lift-Off という名前について</h2>
+      <p><span class="nw">飛行機は、飛び立つときに<br class="sp-br">いちばん大きな力を使います。</span><br><span class="nw">お店も同じで、始めるとき・<br class="sp-br">新しいことに踏み出すときに、<br class="sp-br">いちばん力がいります。</span><br><span class="nw">その「飛び立つとき」の<br class="sp-br">チカラになりたい。<br class="sp-br">そんな思いで名づけました。</span></p>
+    </div>
     <div class="p-card">
-      <div class="p-mark" aria-hidden="true"><img src="../img/emblem.svg" alt="" width="120" height="120"></div>
+      <div class="p-mark" aria-hidden="true"><img src="../img/emblem.svg" alt="" width="120" height="120"><svg class="p-orbit" viewBox="-130 -130 260 260" focusable="false"><circle class="ring" cx="0" cy="0" r="118"/><g class="orbit-plane" transform="translate(0 -118) scale(1.3)"><path class="wing" d="M17 0 L-13 -9 L-6 -1 Z"/><path class="keel" d="M17 0 L-6 -1 L-11 6 Z"/><path class="fold" d="M16 0 L-6 -1"/></g></svg></div>
       <div class="p-body">
         <p class="p-eyebrow">担当する人</p>
         <h2 id="person-h">最初の<wbr>ご相談から<wbr>毎月の<wbr>更新まで、<wbr><span class="nw">同じ1人が担当します。</span></h2>
@@ -1842,6 +1864,30 @@ if ('IntersectionObserver' in window) {
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
+})();
+</script>
+<script>
+// 担当する人：印のまわりの点線の輪にそって、紙飛行機が1周飛び、真上で止まる（2026/10/9 見比べ用）
+// 欄が画面に入ったとき1回だけ・約2秒。動きを減らす設定や IntersectionObserver がないときは、真上に止まった絵のまま（HTML の最初の形）
+(function(){
+  var mark = document.querySelector('#person .p-mark'), pl = mark && mark.querySelector('.orbit-plane');
+  if (!pl || !window.requestAnimationFrame || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var R = 118, DUR = 2000, start = null;
+  function put(a){ // a：角度（度）。-90 が真上で、時計回りに進む。機首は進む向き
+    var r = a * Math.PI / 180;
+    pl.setAttribute('transform', 'translate(' + (R * Math.cos(r)).toFixed(1) + ' ' + (R * Math.sin(r)).toFixed(1) + ') rotate(' + (a + 90).toFixed(1) + ') scale(1.3)');
+  }
+  function step(ts){
+    if (start === null) start = ts;
+    var t = Math.min(1, (ts - start) / DUR), e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // ゆっくり出て、ゆっくり止まる
+    put(-90 + 360 * e);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function(es){
+    for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { io.disconnect(); requestAnimationFrame(step); return; }
+  }, { threshold: .6 });
+  io.observe(mark);
 })();
 </script>
 <script>
