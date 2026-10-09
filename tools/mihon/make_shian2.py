@@ -223,6 +223,10 @@ s = re.sub(r'(<details class="acc"><summary>ロゴや<wbr>名刺、<wbr>チラ�
            s, count=1, flags=re.S)
 if 'ネットで<wbr>商品を<wbr>売れますか' not in s: sys.exit('質問を足せなかった')
 
+# ?off=rv のとき、ふわっと表示（revealAll）をしない（切り分け用）
+must("function revealAll(items, gap, each, done){\n  if (STILL) { if (done) done(); return; }",
+     "function revealAll(items, gap, each, done){\n  if (STILL || (window.OFF && window.OFF.rv)) { if (done) done(); return; }")
+
 # ---- 切りかえ式だけの CSS
 css = '''
 /* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
@@ -305,17 +309,6 @@ js = r'''
     if (window.jetGo) window.jetGo(tabIndex(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
     dbgDone = false; fitHome();
-    nudge();
-  }
-  // iOS の Safari 向け：画面を出したあとに 1px だけ動かして戻し、sticky のヘッダーの下の本文を描き直させる（見た目は変わらない）
-  function nudge(){
-    if (!window.requestAnimationFrame) return;
-    requestAnimationFrame(function(){
-      var se = document.documentElement, keep = se.style.scrollBehavior;
-      se.style.scrollBehavior = 'auto';
-      var y = window.pageYOffset || 0; window.scrollTo(0, y + 1); window.scrollTo(0, y);
-      se.style.scrollBehavior = keep;
-    });
   }
   // ホームの画面：帯の分だけヘッダーが高くなるので、見出しの一番上が「帯の一番下＋16px」より上に来ないように、実際の高さを測って最初の section を下げる
   // （決め打ちの数字にしない。帯の高さが文字の大きさや幅で変わっても合う。ふつうはヘッダーが場所を取るので足す量は 0 だが、ブラウザによってはヘッダーが本文に重なるので、その分を足す）
@@ -323,13 +316,27 @@ js = r'''
     var band = el('irai-band'), hero = document.querySelector('#home .hero'), h1 = hero && hero.querySelector('h1');
     if (!band || !hero || !h1) return;
     hero.style.marginTop = '0px';
-    if (cur !== 'home') return;
+    if (cur !== 'home' || OFF.fit) return;
     var y = window.pageYOffset || 0, need = (band.getBoundingClientRect().bottom + y) + 16 - (h1.getBoundingClientRect().top + y);
     if (need > 0) hero.style.marginTop = Math.ceil(need) + 'px';
     debugBox();
   }
   // 2. URL に ?debug=1 があるときだけ：画面の下のほうに小さな黒い箱で数字を出す（開いた直後と1秒後）。iPhone の実機で位置を調べる用
   var DEBUG = /[?&]debug=1/.test(location.search || ''), dbgLines = [], dbgDone = false;
+  // 実機で原因を切り分ける用：?off=sticky,band,sky,jet,rv,fit,switch を付けると、その仕組みを切る（いくつでも。例 ?debug=1&off=sticky,jet）
+  //   sticky：ヘッダーを貼り付けない（ふつうの流れに置く）／band：帯を出さない／sky：飛行機の通る白い地を出さない／jet：飛行機を出さない
+  //   rv：ふわっと表示をしない／fit：見出しの位置合わせをしない／switch：画面の切りかえをやめて全部の画面を縦に並べる
+  var OFF = (function(){ var m = /[?&]off=([^&#]+)/.exec(location.search || ''); var o = {}; if (m) decodeURIComponent(m[1]).split(',').forEach(function(k){ o[k.replace(/\s/g, '')] = true; }); return o; })();
+  window.OFF = OFF;
+  (function(){
+    var css = [];
+    if (OFF.sticky) css.push('.top{position:static!important}');
+    if (OFF.band) css.push('.irai-band{display:none!important}');
+    if (OFF.sky) css.push('.jet-sky{display:none!important}');
+    if (OFF.jet) css.push('.nav-jet{display:none!important}');
+    if (OFF['switch']) css.push('.scr{display:block!important}.tabbar{display:none!important}');
+    if (css.length) { var st = document.createElement('style'); st.textContent = css.join(''); document.head.appendChild(st); }
+  })();
   function measure(label){
     var top = document.querySelector('.top'), band = el('irai-band'), h1 = document.querySelector('#home .hero h1'), vv = window.visualViewport;
     var r = function(e){ return e ? e.getBoundingClientRect() : null; }, tb = r(top), bb = r(band), hb = r(h1), cs = getComputedStyle(document.body);
