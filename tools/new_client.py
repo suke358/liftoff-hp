@@ -10,7 +10,7 @@
   2回目の打ち合わせの前（初回の資料を「5 済んだ打ち合わせ」に移し、2回目の道具を入れる）：
     python3 new_client.py <英字の短い名前> <お店の名前> [<置く場所>] --second
 
-  料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月9日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
+  料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
 
 できるもの:
   <お店の名前>_今日の打ち合わせ/
@@ -25,7 +25,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TPL = os.path.join(HERE, 'templates')
 SAMPLES = 'https://liftoff-hp.liftoff-358.workers.dev/samples/'
 BASE_DEFAULT = '~/Desktop/03_Lift-off事業/1_HP制作/2_お客さん'  # 打ち合わせフォルダを作る場所（置く場所を省いたとき）
-PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月9日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
+PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
 DIRS = ['1 次の打ち合わせで使うもの', '2 名刺の見本', '3 ロゴ案', '4 もらった写真', '5 済んだ打ち合わせ', '6 LINEの下書き', '7 古いもの（使わない）']
 
 def fill(name, slug, shop):
