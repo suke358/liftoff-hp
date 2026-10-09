@@ -533,6 +533,26 @@ footer a:hover{color:var(--signal)}
 .tabbar a[data-scr="soudan"].on{background:var(--signal)}
 footer{padding-bottom:96px}
 @media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
+/* 修正依頼（ご契約中のお店の入口）：帯は控えめ（相談の入口より目立たせない） */
+.irai-band{display:block;text-align:center;background:var(--sky);color:var(--ink-2);font-size:14px;text-decoration:none;padding:9px 16px;border-bottom:1px solid var(--line);line-height:1.5}
+.irai-band .sep{color:#9fb6c6;margin:0 2px}
+.irai-band:hover{color:var(--sea)}
+.irai-line{text-align:center;padding:0 20px 24px;font-size:15px}
+.irai-line a{color:var(--sea)}
+.foot-irai{grid-column:1 / -1;font-size:14px}
+.foot-irai a{color:#dbe6ee;text-decoration:underline}
+.irai .sec-head h2{padding-top:18px}
+.irai-box{max-width:560px}
+.irai-photo{background:rgba(242,194,48,.14);color:#fff;border-radius:10px;padding:10px 14px}
+.irai-small{color:#c3d2dd}
+.news{max-width:560px;margin-top:28px;border:2px solid var(--ink);border-radius:18px;padding:18px 20px 8px;background:var(--paper)}
+.news h3{font-size:18px;margin-bottom:6px}
+.news ul{list-style:none}
+.news li{padding:10px 0 12px;border-top:1px solid var(--line)}
+.news li b{display:block;font-family:var(--head);font-size:16px;margin-bottom:2px}
+.news li p{font-size:15px;color:var(--ink-2);line-height:1.75}
+.news li a{color:var(--sea)}
+@media (max-width:760px){.irai-band{font-size:13px;padding:8px 12px}}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
 /* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
@@ -566,7 +586,7 @@ footer{padding-bottom:96px}
       <small>ホームページ制作</small>
     </a>
     <nav class="nav" id="nav" aria-label="ページ内">
-      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a class="nav-m sub" href="#price-zero">初期0円プラン</a><a class="nav-m sub" href="#option">ロゴ・名刺・チラシの料金</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#trust">安心の<wbr>ために</a><a class="nav-m sub" href="#data">データの管理</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">無料相談</a><a class="nav-m" href="mailto:liftoff.358@gmail.com?subject=%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E4%BF%AE%E6%AD%A3%E3%81%AE%E3%81%94%E4%BE%9D%E9%A0%BC">修正依頼</a>
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a class="nav-m sub" href="#price-zero">初期0円プラン</a><a class="nav-m sub" href="#option">ロゴ・名刺・チラシの料金</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#trust">安心の<wbr>ために</a><a class="nav-m sub" href="#data">データの管理</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">無料相談</a><a class="nav-m" href="#irai">修正依頼</a>
     </nav>
     <div class="top-right">
       <a class="btn primary" href="#contact">相談する</a>
@@ -578,6 +598,7 @@ footer{padding-bottom:96px}
 <main id="main">
 <!-- ===== 画面 1：ホーム ===== -->
 <div class="scr" id="home" data-name="ホーム">
+<a class="irai-band" id="irai-band" href="#irai">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</a>
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy" id="hero-copy">
@@ -1120,6 +1141,49 @@ footer{padding-bottom:96px}
     </div>
   </div>
 </section>
+<p class="irai-line"><a href="#irai">ご契約中の<wbr>お店：<wbr>修正の<wbr>ご依頼 →</a></p>
+</div>
+<!-- ===== 画面：修正のご依頼（#irai。下のタブには出さない。ホームの帯・メニューの「修正依頼」・相談の下・フッターから） ===== -->
+<div class="scr" id="irai" data-name="修正のご依頼">
+<section class="sec irai" aria-labelledby="irai-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="irai-h">修正の<wbr>ご依頼<wbr><span class="nw">（ご契約中のお店）</span></h2>
+      <p>直したい<wbr>所を<wbr>選んで<wbr>「メールを作る」を<wbr>押すと、<wbr>内容の<wbr>入った<wbr>メールの<wbr>画面が<wbr>開きます。<wbr>そのまま<wbr>送信してください。</p>
+    </div>
+    <div class="formbox irai-box" id="irai-box">
+      <svg class="send-plane" id="irai-plane" aria-hidden="true" focusable="false"><path class="trail" id="irai-trail" d=""/><g class="plane" id="irai-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+      <div class="form-top"><span>修正のご依頼票</span><span class="left" id="irai-top"></span></div>
+      <form id="irai-form" action="" method="POST" novalidate>
+        <label><span>お店の<wbr>名前<span class="req">必須</span></span><input name="shop" id="irai-shop" autocomplete="organization" placeholder="例：〇〇サロン"></label>
+        <fieldset><legend>直したい<wbr>所<span class="opt-label">いくつでも</span></legend>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="what" value="お休み・営業時間"><span>お休み・営業時間</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="メニュー・料金"><span>メニュー・料金</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="写真"><span>写真</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="文の直し"><span>文の直し</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="そのほか"><span>そのほか</span></label>
+          </div>
+        </fieldset>
+        <label><span>ひと言<span class="opt-label">自由に</span></span><textarea name="note" id="irai-note-in" placeholder="例：来週の水曜はお休みにします"></textarea></label>
+        <p class="formnote irai-photo">写真が<wbr>あるときは、<wbr>次に<wbr>開く<wbr>メールに<wbr>付けて<wbr>送ってください。</p>
+        <button class="btn signal" type="submit" id="irai-btn">メールを<wbr>作る</button>
+        <p class="formnote" id="irai-msg" role="status"></p>
+        <p class="formnote irai-small">ご依頼には<wbr>原則<wbr>3営業日以内に<wbr>対応します。<wbr>回数は<wbr>月の<wbr>回数の<wbr>中で<wbr>数えます。</p>
+      </form>
+    </div>
+    <!-- 最近できるようになったこと：お知らせとして並べるだけ（あおる言葉は使わない） -->
+    <div class="news" id="news">
+      <h3>最近<wbr>できるように<wbr>なったこと</h3>
+      <ul>
+        <li><b>商品ページ<wbr>（ネットで<wbr>売る）</b><p>1ページ・<wbr>商品5点までの<wbr>商品ページを<wbr>作れるように<wbr>なりました。<wbr>「購入する」<wbr>ボタン付きで、<wbr>支払いは<wbr>Square の<wbr>しくみです。<wbr><a href="#option">料金の表</a></p></li>
+        <li><b>動きの<wbr>演出</b><p>お店の<wbr>ロゴや<wbr>絵に<wbr>合わせた<wbr>オリジナルの<wbr>動きを、<wbr>1か所から<wbr>付けられます。<wbr><a href="#option">料金の表</a></p></li>
+        <li><b>ロゴ・<wbr>名刺・<wbr>チラシ</b><p>ホームページと<wbr>同じ<wbr>色・言葉で<wbr>そろえて<wbr>作れます。<wbr>印刷用の<wbr>データで<wbr>お渡しします。<wbr><a href="#option">料金の表</a></p></li>
+      </ul>
+    </div>
+    <p class="next-btn"><a class="btn" href="#home">← ホームへ</a></p>
+  </div>
+</section>
 </div>
 </main>
 
@@ -1133,6 +1197,7 @@ footer{padding-bottom:96px}
     <ul class="foot-nav">
       <li><a href="#can">できること</a></li><li><a href="#price">料金</a></li><li><a href="#flow">作成の流れ</a></li><li><a href="#work">デザイン見本</a></li><li><a href="#trust">安心のために</a></li><li><a href="#faq">よくある質問</a></li><li><a href="#contact">無料相談</a></li>
     </ul>
+    <p class="foot-irai"><a href="#irai">ご契約中のお店：修正のご依頼 →</a></p>
     <p class="copy"><span>© Lift-Off　山口県防府市</span><a href="#">ページの上へ ↑</a></p>
   </div>
 </footer>
@@ -1183,21 +1248,22 @@ function revealAll(items, gap, each, done){
 <script>
 // ===== 切りかえ式：画面を1つずつ見せる。URL の #ryokin などで画面を覚え、スマホの「戻る」で前の画面に戻る =====
 (function(){
-  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null;
+  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], ALL = IDS.concat(['irai']), cur = null; // irai：タブのない画面（修正のご依頼）。飛行機と線はホームの位置
+  function tabIndex(id){ var i = IDS.indexOf(id); return i < 0 ? 0 : i; }
   var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar');
   function el(id){ return document.getElementById(id); }
   function screenOf(node){ while (node && node !== document.body) { if (node.className && String(node.className).indexOf('scr') === 0) return node.id; node = node.parentNode; } return null; }
   for (var k = 1; k < IDS.length; k++) { var seg = document.createElement('i'); seg.className = 'prog-seg'; seg.style.left = (k / IDS.length * 100) + '%'; prog.appendChild(seg); }
   function render(id){
-    for (var i = 0; i < IDS.length; i++) { var sc = el(IDS[i]); if (sc) sc.className = IDS[i] === id ? 'scr on' : 'scr'; }
+    for (var i = 0; i < ALL.length; i++) { var sc = el(ALL[i]); if (sc) sc.className = ALL[i] === id ? 'scr on' : 'scr'; }
     var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
     cur = id;
-    setTf(pbar, 'scaleX(' + ((IDS.indexOf(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
-    if (window.jetGo) window.jetGo(IDS.indexOf(id));
+    setTf(pbar, 'scaleX(' + ((tabIndex(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
+    if (window.jetGo) window.jetGo(tabIndex(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
   }
   function go(id, push){
-    if (IDS.indexOf(id) < 0) id = 'home';
+    if (ALL.indexOf(id) < 0) id = 'home';
     if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
     if (id === cur) return;
     render(id); window.scrollTo(0, 0);
@@ -1209,19 +1275,62 @@ function revealAll(items, gap, each, done){
     e.preventDefault();
     var id = h.slice(1);
     if (!id) { go('home', true); return; }
-    if (IDS.indexOf(id) >= 0) { go(id, true); return; }
+    if (ALL.indexOf(id) >= 0) { go(id, true); return; }
     var target = el(id); if (!target) return;
     var sid = screenOf(target) || cur;
     if (sid !== cur) go(sid, true);
     setTimeout(function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } }, 30);
   });
-  window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (IDS.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
+  window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (ALL.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
   // 最初の画面：URL の # で決める（#option のような中の場所なら、その画面を出してから開く）
   var first = location.hash.replace('#', ''), inner = null;
-  if (IDS.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
+  if (ALL.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
   render(first);
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
-  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
+  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(tabIndex(cur)); });
+})();
+// ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名の頭は今までと同じ「ホームページの修正のご依頼」） =====
+// URL に ?shop=colore のように付いていたら、お店の名前を最初から入れる（下の SHOPS の表で shop → 店名。お店が増えたらここに足す）
+(function(){
+  var form = document.getElementById('irai-form'); if (!form) return;
+  var SHOPS = { colore: 'colore' };
+  var MAIL = 'liftoff.358@gmail.com', SUBJECT_HEAD = 'ホームページの修正のご依頼';
+  var shop = document.getElementById('irai-shop'), msg = document.getElementById('irai-msg'), btn = document.getElementById('irai-btn'), box = document.getElementById('irai-box');
+  var m = /[?&]shop=([^&#]+)/.exec(location.search || ''); if (m) { var k = decodeURIComponent(m[1]); shop.value = SHOPS[k] || k; }
+  function build(){
+    var what = [], els = form.querySelectorAll('input[name=what]'), i;
+    for (i = 0; i < els.length; i++) if (els[i].checked) what.push(els[i].value);
+    var name = shop.value.replace(/^\s+|\s+$/g, ''), note = document.getElementById('irai-note-in').value.replace(/^\s+|\s+$/g, '');
+    var body = 'お店：' + name + '\n直したい所：' + (what.length ? what.join('、') : '（未選択）') + '\nひと言：' + (note || '（なし）') + '\n\n写真があるときは、このメールに付けて送ってください。';
+    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent(SUBJECT_HEAD + '（' + name + '）') + '&body=' + encodeURIComponent(body);
+  }
+  // 送るときの飛行機：相談のフォームと同じ動き（右上へ飛んで黄色い飛行機雲）。動きを減らす設定の人には飛ばさない
+  function fly(done){
+    var svg = document.getElementById('irai-plane'), jet = document.getElementById('irai-jet'), trail = document.getElementById('irai-trail');
+    if (STILL || !svg || !jet) { done(); return; }
+    var r = box.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height), b = btn.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px'; svg.setAttribute('class', 'send-plane on');
+    var x0 = b.left - r.left + b.width / 2, y0 = b.top - r.top, x1 = W + 80, y1 = -60, cx = x0 + (x1 - x0) * .25, cy = y0 - (y0 - y1) * .02;
+    function at(u){ var a = 1 - u; return [a * a * x0 + 2 * a * u * cx + u * u * x1, a * a * y0 + 2 * a * u * cy + u * u * y1]; }
+    tween(1000, function(u){
+      var p = at(u), a = 1 - u, dx = 2 * a * (cx - x0) + 2 * u * (x1 - cx), dy = 2 * a * (cy - y0) + 2 * u * (y1 - cy);
+      jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(' + (.9 + u * .5).toFixed(2) + ')');
+      var d = 'M' + x0 + ' ' + y0, k, n = Math.max(2, Math.round(u * 20));
+      for (k = 1; k <= n; k++) { var t = at(u * k / n); d += ' L' + t[0].toFixed(1) + ' ' + t[1].toFixed(1); }
+      trail.setAttribute('d', d);
+    }, function(){ svg.setAttribute('class', 'send-plane'); done(); }, easeInOut);
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!shop.value.replace(/\s/g, '')) { msg.textContent = 'お店の名前を入れてください。'; shop.focus(); return; }
+    var href = build(); window.iraiLastMailto = href; // 確かめる用
+    btn.disabled = true;
+    fly(function(){
+      msg.textContent = 'メールの画面を開きます。写真を付けて送信してください。';
+      btn.disabled = false;
+      setTimeout(function(){ location.href = href; }, 300);
+    });
+  });
 })();
 // ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を飛ぶ。切りかえの移動は「どこへでも約1.5秒で着く」（遠いほど速い。動き出しと止まる所は少しゆっくり。折り返しの旋回も1.5秒の中） =====
 // 開いたときは1回だけ、画面の右下の外から、画面の中ほどを通る大きなゆるいカーブで左上へ上がり、線に乗って今の画面のタブの位置で止まる（約3秒。動き出しと止まる所はゆっくり、途中は速め）
@@ -1255,7 +1364,7 @@ function revealAll(items, gap, each, done){
   function plan(tx){
     path = [];
     var dir = heading(), need = tx >= pos.x ? 1 : -1, y0 = pos.y, y1 = need > 0 ? Y_R : Y_L, i;
-    if (Math.abs(tx - pos.x) < 1 && Math.abs(y1 - y0) < 1) return;
+    if (Math.abs(tx - pos.x) < 1) return; // もう同じ位置なら動かない（向きが左でも折り返さない。#irai でホームの位置を指すときなど）
     if (dir !== need) {
       // 折り返し：進んでいる方へふくらむ半円で、もう一方の高さへ（向きが 180 度なめらかに変わる）
       var r = Math.abs(y1 - y0) / 2 || R, n = 16;

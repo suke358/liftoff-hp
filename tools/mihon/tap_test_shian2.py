@@ -9,6 +9,7 @@ headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで�
   2. python3 tools/mihon/tap_test_shian2.py             … このファイル。入り方（4秒待つ）→ 料金→ホーム→相談→できること→相談 と押して、
                                                            2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
   3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
+  3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=colore で店名が入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
   4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
   引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
 """
@@ -18,8 +19,8 @@ CH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 import datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 args = [a for a in sys.argv[1:]]
-mode = args[0] if args and args[0] in ('normal', 'early') else 'normal'
-rest = [a for a in args if a not in ('normal', 'early')]
+mode = args[0] if args and args[0] in ('normal', 'early', 'irai') else 'normal'
+rest = [a for a in args if a not in ('normal', 'early', 'irai')]
 URL = rest[0] if rest else 'file://' + os.path.join(ROOT, 'shian2', 'index.html')
 OUT = rest[1] if len(rest) > 1 else os.path.expanduser('~/src/_確認画像/自社_%s_shian2_タブを押す' % datetime.date.today().strftime('%Y%m%d'))
 os.makedirs(OUT, exist_ok=True)
@@ -96,7 +97,41 @@ try:
         return js("document.querySelector('.scr.on').id")
 
     NAMES = {'home': 'ホーム', 'ryokin': '料金', 'soudan': '相談', 'dekiru': 'できること', 'nagare': '流れ'}
-    if mode == 'early':
+    if mode == 'irai':
+        # 修正依頼：?shop=colore 付きで開き直す
+        call('Page.navigate', url=URL + ('&' if '?' in URL else '?') + 'shop=colore'); time.sleep(4.2)
+        d = state('開いて4秒（ホーム）'); allok = d['left'] == 0 and not d['entry']
+        # ホームの帯を本当に押す
+        rect = json.loads(js("JSON.stringify(document.getElementById('irai-band').getBoundingClientRect())"))
+        x, y = rect['x'] + rect['width'] / 2, rect['y'] + rect['height'] / 2
+        call('Input.dispatchMouseEvent', type='mousePressed', x=x, y=y, button='left', clickCount=1)
+        call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
+        time.sleep(2.0)
+        sc = scr(); d = state('帯を押して2秒後'); shopv = js("document.getElementById('irai-shop').value")
+        ok1 = sc == 'irai' and d['left'] == 0 and abs(d['x'] - 39) < 2 and d['dir'] == -1
+        print('   画面=%s 店名=%s → %s' % (sc, shopv, 'OK' if ok1 and shopv == 'colore' else 'NG'))
+        shot('修正依頼_1_帯を押した（#irai・飛行機はホームの位置）', 0, 844)
+        # 直したい所を1つ押して、ひと言を入れて、「メールを作る」を押す
+        js("var c=document.querySelector('#irai-form input[value=\"写真\"]').nextElementSibling; c.scrollIntoView({block:'center'});"); time.sleep(0.3)
+        rect = json.loads(js("JSON.stringify(document.querySelector('#irai-form input[value=\"写真\"]').nextElementSibling.getBoundingClientRect())"))
+        x, y = rect['x'] + rect['width'] / 2, rect['y'] + rect['height'] / 2
+        call('Input.dispatchMouseEvent', type='mousePressed', x=x, y=y, button='left', clickCount=1)
+        call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
+        js("document.getElementById('irai-note-in').value='来週の水曜はお休みにします'")
+        js("document.getElementById('irai-btn').scrollIntoView({block:'center'})"); time.sleep(0.3)  # 下の固定ボタンに隠れないように
+        rect = json.loads(js("JSON.stringify(document.getElementById('irai-btn').getBoundingClientRect())"))
+        x, y = rect['x'] + rect['width'] / 2, rect['y'] + rect['height'] / 2
+        call('Input.dispatchMouseEvent', type='mousePressed', x=x, y=y, button='left', clickCount=1)
+        call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
+        time.sleep(0.5); flying = 'on' in (js("document.getElementById('irai-plane').getAttribute('class')") or '')
+        shot('修正依頼_2_メールを作る（飛行機が飛んでいる所）', 0, 844)
+        time.sleep(1.2); m = js("document.getElementById('irai-msg').textContent"); href = js('window.iraiLastMailto') or ''
+        import urllib.parse; dec = urllib.parse.unquote(href)
+        ok2 = flying and 'メールの画面を開きます' in m and dec.startswith('mailto:liftoff.358@gmail.com?subject=ホームページの修正のご依頼（colore）') and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
+        print('   飛行機が飛んだ=%s 文=%s' % (flying, m)); print('   メール: %s' % dec.replace('\n', ' / ')[:200])
+        shot('修正依頼_3_メールの文ができた', 0, 844)
+        print('全部:', 'OK' if allok and ok1 and shopv == 'colore' and ok2 else 'NG')
+    elif mode == 'early':
         state('開いて1秒（入り方の途中）'); shot('途中押し_0_開いて1秒', 0, 844)
         tap('ryokin'); print('→ 1秒の時点で 料金 を押した。画面=', scr())
         time.sleep(1.0); state('押して1秒後'); shot('途中押し_1_押して1秒後', 0, 844)
