@@ -9,7 +9,7 @@ headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで�
   2. python3 tools/mihon/tap_test_shian2.py             … このファイル。入り方（4秒待つ）→ 料金→ホーム→相談→できること→相談 と押して、
                                                            2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
   3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
-  3''. python3 tools/mihon/tap_test_shian2.py fit       … 幅 320・390・1280 で、開いた直後と ホーム→料金→ホーム のあとに「見出しの一番上 ≥ 帯の一番下＋16px」か
+  3''. python3 tools/mihon/tap_test_shian2.py fit       … 幅 320・390・1280 で、開いた直後と ホーム→料金→ホーム のあとに「帯の下と見出しの間が 24px（パソコンは 24px 以上）」か
   3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=〇〇 の文字がそのまま店名に入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
   4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
   引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
@@ -106,8 +106,9 @@ try:
             call('Page.navigate', url=URL); time.sleep(0.6)
             def gap(label):
                 g = js("(function(){var b=document.getElementById('irai-band').getBoundingClientRect(),h=document.querySelector('#home .hero h1').getBoundingClientRect();return JSON.stringify({band:Math.round(b.bottom),h1:Math.round(h.top),scroll:window.pageYOffset,scr:document.querySelector('.scr.on').id});})()")
-                g = json.loads(g); ok = g['scr'] == 'home' and g['h1'] >= g['band'] + 16 and g['scroll'] == 0
-                print('   幅%d %s: 帯の下=%d 見出しの上=%d 間=%d → %s' % (w, label, g['band'], g['h1'], g['h1'] - g['band'], 'OK' if ok else 'NG'))
+                g = json.loads(g); gap = g['h1'] - g['band']
+                ok = g['scr'] == 'home' and g['scroll'] == 0 and (24 <= gap <= 32 if w < 800 else gap >= 24)  # スマホは 24px（多すぎてもだめ）、パソコンは 24px 以上
+                print('   幅%d %s: 帯の下=%d 見出しの上=%d 間=%d → %s' % (w, label, g['band'], g['h1'], gap, 'OK' if ok else 'NG'))
                 return ok
             allok = gap('開いた直後') and allok
             if w < 800: shot('合わせ_幅%d_開いた直後' % w, 0, 300)
