@@ -244,10 +244,7 @@ footer{padding-bottom:96px}
 .irai-band .in{display:block;text-align:center;background:#fff;padding:6px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .scr-home .irai-band{display:block}
 /* ヘッダーの帯（0〜66px）の地色は ::before に移し（飛行機は帯の中を飛ばない）、ヘッダー自体は透明にして、飛行機が通る所に地色が付かないようにする */
-.top{position:fixed;left:0;right:0;top:0;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:none;z-index:24}
-/* ヘッダーは固定（本文に重ねる）。本文の上の空きは JS がヘッダーの実際の高さを測って main の padding-top に入れる（sticky だと iPhone の Safari で、帯が出たあとの高さが本文に反映されないことがあった） */
-main{padding-top:66px}
-@media (max-width:760px){.hero{padding-top:24px}} /* 帯の下と見出しの間：スマホは 24px */
+.top{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:none;z-index:24}
 .top::before{content:"";position:absolute;left:0;right:0;top:0;height:66px;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:-1}
 /* 飛行機が通る所の白い地（ホームの画面だけ。飛行機より後ろ、本文より手前） */
 .jet-sky{position:fixed;left:0;right:0;top:66px;height:34px;background:#fff;z-index:19;display:none}
@@ -306,15 +303,34 @@ js = r'''
     setTf(pbar, 'scaleX(' + ((tabIndex(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
     if (window.jetGo) window.jetGo(tabIndex(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
-    fitHome();
+    dbgDone = false; fitHome();
   }
-  // ヘッダーは固定（本文に重ねる）ので、本文の上の空きはヘッダーの実際の高さ（帯があるときは帯込み）を測って付ける（決め打ちの数字にしない）
-  // ホームの画面：帯の下と見出しの間は hero の padding-top（スマホ 24px・パソコン 64px）
+  // ホームの画面：帯の分だけヘッダーが高くなるので、見出しの一番上が「帯の一番下＋16px」より上に来ないように、実際の高さを測って最初の section を下げる
+  // （決め打ちの数字にしない。帯の高さが文字の大きさや幅で変わっても合う。ふつうはヘッダーが場所を取るので足す量は 0 だが、ブラウザによってはヘッダーが本文に重なるので、その分を足す）
   function fitHome(){
-    var top = document.querySelector('.top'), main = el('main'); if (!top || !main) return;
-    var h = top.offsetHeight;
-    main.style.paddingTop = h + 'px';
-    document.documentElement.style.scrollPaddingTop = (h + 16) + 'px';
+    var band = el('irai-band'), hero = document.querySelector('#home .hero'), h1 = hero && hero.querySelector('h1');
+    if (!band || !hero || !h1) return;
+    hero.style.marginTop = '0px';
+    if (cur !== 'home') return;
+    var y = window.pageYOffset || 0, need = (band.getBoundingClientRect().bottom + y) + 16 - (h1.getBoundingClientRect().top + y);
+    if (need > 0) hero.style.marginTop = Math.ceil(need) + 'px';
+    debugBox();
+  }
+  // 2. URL に ?debug=1 があるときだけ：画面の下のほうに小さな黒い箱で数字を出す（開いた直後と1秒後）。iPhone の実機で位置を調べる用
+  var DEBUG = /[?&]debug=1/.test(location.search || ''), dbgLines = [], dbgDone = false;
+  function measure(label){
+    var top = document.querySelector('.top'), band = el('irai-band'), h1 = document.querySelector('#home .hero h1'), vv = window.visualViewport;
+    var r = function(e){ return e ? e.getBoundingClientRect() : null; }, tb = r(top), bb = r(band), hb = r(h1), cs = getComputedStyle(document.body);
+    return label + ' innerH=' + window.innerHeight + ' vv.h=' + (vv ? Math.round(vv.height) : '-') + ' vv.top=' + (vv ? Math.round(vv.offsetTop) : '-') + ' scrollY=' + Math.round(window.pageYOffset || 0) +
+      ' | ヘッダー下=' + (tb ? Math.round(tb.bottom) : '-') + ' 帯 上=' + (bb ? Math.round(bb.top) : '-') + ' 下=' + (bb ? Math.round(bb.bottom) : '-') + ' 見出し上=' + (hb ? Math.round(hb.top) : '-') +
+      ' | body余白 m=' + cs.marginTop + ' p=' + cs.paddingTop + ' hero.mt=' + ((document.querySelector('#home .hero') || {}).style || {}).marginTop + ' 画面=' + cur;
+  }
+  function debugBox(){
+    if (!DEBUG || dbgDone) return; dbgDone = true; // 画面を出すたびに1回だけ（0秒と1秒の2行）
+    var box = el('dbg'); if (!box) { box = document.createElement('pre'); box.id = 'dbg'; box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:64px;z-index:99;background:rgba(0,0,0,.85);color:#fff;font:11px/1.5 monospace;padding:8px;border-radius:8px;white-space:pre-wrap;word-break:break-all;margin:0'; document.body.appendChild(box); }
+    dbgLines = [measure('0秒')];
+    box.textContent = dbgLines.join('\n');
+    setTimeout(function(){ dbgLines.push(measure('1秒')); box.textContent = dbgLines.join('\n'); }, 1000);
   }
   window.fitHome = fitHome;
   function go(id, push){
