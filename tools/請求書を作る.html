@@ -99,6 +99,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
         <button type="button" data-add="menu">＋メニュー表</button>
         <button type="button" data-add="gmap">＋Googleマップ整備</button>
         <button type="button" data-add="anim">＋動きの演出</button>
+        <button type="button" data-add="goods">＋商品ページ</button>
         <button type="button" data-add="free">＋そのほか</button>
       </div>
       <button type="button" id="fromEst" style="margin-top:8px;font-size:13px">見積もりから読み込む</button>
@@ -147,7 +148,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
 var PRICE = { // 税込。決定事項.md のとおり（変わったらここを直す。「お見積もりを作る.html」も同じ）
   plans: { std: { name: 'スタンダード', init: 98000, month: 5500 }, zero: { name: '初期0円プラン', init: 0, month: 9800 }, web: { name: 'WEB担当者代行', init: 98000, month: 19800 } },
   over: 3300, page: 22000, form: 550, // form：お問い合わせフォームの管理（付けるお店だけ・月額。2026/10/9 決定）
-  opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000], anim: ['ホームページの動きの演出（1か所）', 16500, 16500] }
+  opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000], anim: ['ホームページの動きの演出（1か所）', 16500, 16500], goods: ['商品ページの追加（1ページ・商品5点まで）', 22000, 22000] } // goods：2026/10/10 決定。ご契約のお店 22,000円〜（通常は「—」）
 };
 var KEY = 'liftoff-invoice-v1', ME = 'liftoff-invoice-me', $ = function(i){ return document.getElementById(i); };
 var rows = [];

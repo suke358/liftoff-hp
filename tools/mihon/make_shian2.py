@@ -148,6 +148,22 @@ quiz_js = r"""// ===== 「どのプランが合う？」3問の診断（shian2 �
 s = re.sub(r'// ===== 「どのプランが合う？」3問の診断：.*?\n\}\)\(\);\n(?=// ===== 上の細い進み具合の線)', quiz_js, s, count=1, flags=re.S)
 if 'shian2 の飛び方' not in s: sys.exit('診断の JS を差しかえられなかった')
 
+# ---- 【商品ページ】別料金のメニューに「商品ページの追加」を足す（2026/10/10 決定。今の本番トップには入れない。shian2 を本体にするときに入る）
+# 料金の表に1行（通常の列は「—」。動きの演出と同じ扱い）
+must('<tr><td>ホームページの<wbr>動きの<wbr>演出<wbr><span class="nw">（1か所）</span></td><td>—</td><td><b>16,500円〜</b></td></tr>',
+     '<tr><td>ホームページの<wbr>動きの<wbr>演出<wbr><span class="nw">（1か所）</span></td><td>—</td><td><b>16,500円〜</b></td></tr>\n'
+     '            <tr><td>商品ページの<wbr>追加<wbr><span class="nw">（1ページ・</span><wbr><span class="nw">商品5点まで）</span></td><td>—</td><td><b>22,000円〜</b></td></tr>')
+# 表の下の注に1つ
+s = re.sub(r'(<li>動きの<wbr>演出は、.*?</li>)',
+           r'\1\n          <li>商品ページは、<wbr>「購入する」<wbr>ボタンと<wbr>特定商取引法の<wbr>表示の<wbr>ページ込みです。<wbr>ホームページを<wbr>ご契約の<wbr>お店だけの<wbr>メニューです。<wbr>商品の<wbr>追加・<wbr>入れかえは<wbr>更新1回です。<wbr>6点以上や、<wbr>配送・<wbr>在庫の<wbr>管理が<wbr>要るときは、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</li>',
+           s, count=1, flags=re.S)
+if '商品ページは、' not in s: sys.exit('注を足せなかった')
+# よくある質問「あわせて頼めること」に1つ
+s = re.sub(r'(<details class="acc"><summary>ロゴや<wbr>名刺、<wbr>チラシも.*?</details>)',
+           r'\1\n        <details class="acc"><summary>ネットで<wbr>商品を<wbr>売れますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>できます。<wbr>商品ページ<wbr>1ページ・<wbr>商品5点までで<wbr>22,000円〜<wbr>（ホームページを<wbr>ご契約の<wbr>お店）です。<wbr>支払いは<wbr>Square の<wbr>しくみで、<wbr>手数料は<wbr>お店から<wbr>Square へ<wbr>お支払い<wbr>いただきます。<wbr>売る<wbr>物や<wbr>点数を<wbr>うかがって、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</p></div></div></details>',
+           s, count=1, flags=re.S)
+if 'ネットで<wbr>商品を<wbr>売れますか' not in s: sys.exit('質問を足せなかった')
+
 # ---- 切りかえ式だけの CSS
 css = '''
 /* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
