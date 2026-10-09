@@ -139,9 +139,17 @@ try:
         ok = d['left'] == 0 and abs(d['x'] - 195) < 2 and d['dir'] == 1 and not d['entry']
         print('結果:', 'OK' if ok else 'NG', '（入り方3秒＋移動1.5秒のあと、料金の位置 195・右向き・残り 0 か）')
     else:
-        time.sleep(3.2)
+        # 開いた直後：スクロールなしで帯（ご契約中のお店へ）が全部見えるか・飛行機と重ならないか
+        time.sleep(0.3); shot('00_開いた直後（スクロールなし）', 0, 844)
+        band = json.loads(js("JSON.stringify(document.getElementById('irai-band').getBoundingClientRect())"))
+        vis = band['top'] >= 0 and band['bottom'] <= 844 and js('window.pageYOffset') == 0 and js("getComputedStyle(document.getElementById('irai-band')).display") == 'block'
+        print('帯: 上=%d 下=%d 見える=%s' % (band['top'], band['bottom'], 'OK' if vis else 'NG'))
+        time.sleep(2.9)
         d = state('開いて4秒（入り方が終わった）'); shot('0_開いて4秒_ホーム', 0, 130)
-        allok = d['left'] == 0 and not d['entry']
+        # 飛行機（右向き 68px・左向き 78px。機体の高さ ±8px）と帯の文字（padding の内側）が重ならないか
+        pt = band['top'] + float(js("parseFloat(getComputedStyle(document.getElementById('irai-band')).paddingTop)"))
+        print('帯の文字の上=%d  飛行機の下（右向き 76・左向き 86）→ %s' % (pt, 'OK（重ならない）' if pt >= 88 else 'NG'))
+        allok = d['left'] == 0 and not d['entry'] and vis and pt >= 88
         for i, s in enumerate(['ryokin', 'home', 'soudan', 'dekiru', 'soudan']):
             tap(s); time.sleep(0.1); sc = scr()
             time.sleep(2.0)
@@ -150,7 +158,9 @@ try:
             want_dir = 1 if d['x'] >= 0 and s in ('ryokin', 'soudan') else -1
             ok = sc == s and d['left'] == 0 and abs(d['x'] - tx) < 2 and d['dir'] == want_dir and (d['a'] == 0 if want_dir == 1 else abs(d['a']) == 180)
             allok = allok and ok
-            print('   画面=%s 目標x=%d → %s' % (sc, tx, 'OK' if ok else 'NG'))
+            bd = js("getComputedStyle(document.getElementById('irai-band')).display")
+            okb = (bd == 'block') == (s == 'home'); allok = allok and okb
+            print('   画面=%s 目標x=%d 帯=%s → %s' % (sc, tx, bd, 'OK' if ok and okb else 'NG'))
             shot('%d_%s' % (i + 1, s), 0, 130)
         print('全部:', 'OK' if allok else 'NG')
 finally:

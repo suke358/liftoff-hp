@@ -534,8 +534,10 @@ footer a:hover{color:var(--signal)}
 footer{padding-bottom:96px}
 @media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
 /* 修正依頼（ご契約中のお店の入口）：帯は控えめ（相談の入口より目立たせない） */
-.irai-band{display:block;text-align:center;background:#fff;color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;text-decoration:none;padding:36px 16px 10px;border-bottom:1px solid var(--line);line-height:1.5}
-/* 上の 36px は飛行機が通る所（線の高さ 68px と、左向きのときの 90px）。文字はその下 */
+.irai-band{display:none;text-align:center;background:#fff;color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;text-decoration:none;padding:24px 16px 6px;border-top:1px solid var(--line);line-height:1.5}
+/* ヘッダーの中、線（66〜70px）のすぐ下。上の 24px は飛行機が通る所（右向き 68px・左向き 78px。機体の高さ ±8px → 86px まで）。文字は 90px から。ホームの画面のときだけ出す */
+.scr-home .irai-band{display:block}
+html{scroll-padding-top:120px}
 .irai-band::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--signal);margin-right:8px;vertical-align:1px}
 .irai-band .sep{color:#9fb6c6;margin:0 4px;font-weight:400}
 .irai-band:hover{color:var(--sea)}
@@ -554,7 +556,7 @@ footer{padding-bottom:96px}
 .news li b{display:block;font-family:var(--head);font-size:16px;margin-bottom:2px}
 .news li p{font-size:15px;color:var(--ink-2);line-height:1.75}
 .news li a{color:var(--sea)}
-@media (max-width:760px){.irai-band{font-size:14px;padding:36px 12px 9px}}
+@media (max-width:760px){.irai-band{font-size:14px;padding:24px 12px 6px}}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
 /* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
@@ -595,12 +597,12 @@ footer{padding-bottom:96px}
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav"><i></i>メニュー</button>
     </div>
   </div>
+  <a class="irai-band" id="irai-band" href="#irai">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</a>
 </header>
 
 <main id="main">
 <!-- ===== 画面 1：ホーム ===== -->
 <div class="scr" id="home" data-name="ホーム">
-<a class="irai-band" id="irai-band" href="#irai">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</a>
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy" id="hero-copy">
@@ -1259,7 +1261,7 @@ function revealAll(items, gap, each, done){
   function render(id){
     for (var i = 0; i < ALL.length; i++) { var sc = el(ALL[i]); if (sc) sc.className = ALL[i] === id ? 'scr on' : 'scr'; }
     var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
-    cur = id;
+    cur = id; document.body.className = 'switch scr-' + id;
     setTf(pbar, 'scaleX(' + ((tabIndex(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
     if (window.jetGo) window.jetGo(tabIndex(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
@@ -1338,12 +1340,12 @@ function revealAll(items, gap, each, done){
 // ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を飛ぶ。切りかえの移動は「どこへでも約1.5秒で着く」（遠いほど速い。動き出しと止まる所は少しゆっくり。折り返しの旋回も1.5秒の中） =====
 // 開いたときは1回だけ、画面の右下の外から、画面の中ほどを通る大きなゆるいカーブで左上へ上がり、線に乗って今の画面のタブの位置で止まる（約3秒。動き出しと止まる所はゆっくり、途中は速め）
 // 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
-// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中）。折り返しは半円を描いて機首を 180 度なめらかに回す。向きは常に進む方向
+// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 10px 下。折り返しは半円を描いて機首を 180 度なめらかに回す。向きは常に進む方向
 // 上下の反転は「いま右へ進んでいるか、左へ進んでいるか」（moveDir）で決める：右へ進むときは必ず背中が上。角度は毎回 -180〜180 度にそろえる（足され続けない）
 // 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
-  var N = 5, Y_R = 68, Y_L = 90, R = 11, FLY_MS = 1500, ENTRY_MS = 3000;
+  var N = 5, Y_R = 68, Y_L = 78, R = 5, FLY_MS = 1500, ENTRY_MS = 3000; // 左向きは線の 10px 下（帯の文字 90px〜に重ならない）
   var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, turn = 0, moveDir = 1, entry = null, fly = null;
   function norm(a){ while (a > 180) a -= 360; while (a <= -180) a += 360; return a; }
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
