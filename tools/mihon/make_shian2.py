@@ -323,7 +323,7 @@ js = r'''
   };
   // 確かめる用（確認画像・JS での確認）
   window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; entry = null; apply(); };
-  window.jetEntryPose = function(u){ if (!entry) planEntry(xOf(0)); var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; apply(); };
+  window.jetEntryPose = function(u){ if (!entry) planEntry(xOf(0)); var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; entry = null; path = []; apply(); }; // 置いたあとは入り方の動きを止める（画像を撮る用）
   window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { advance(16); t += 16; } speed = SPEED; turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
   window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, dir: moveDir, turn: turn, left: path.length, entry: !!entry }; };
   apply();
