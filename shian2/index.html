@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
 <meta name="description" content="山口県防府市で、お店・事業者のホームページを作り、毎月の更新まで引き受けます。料金はすべて税込。">
-<!-- 試しの版（2026/10/9）。本番に入れかえるまで検索に出さない -->
+<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ を直して作り直す -->
 <meta name="robots" content="noindex">
 <meta property="og:title" content="Lift-Off｜防府のお店のホームページ制作・WEB担当者代行">
 <meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/shian/">
+<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/shian2/">
 <meta property="og:image" content="https://liftoff-hp.liftoff-358.workers.dev/img/og-20261009c.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -526,9 +526,28 @@ footer a:hover{color:var(--signal)}
 .fixbar .btn + .btn{margin-left:8px}
 .fixbar.hide{-webkit-transform:translateY(110%);transform:translateY(110%)}
 @media (max-width:760px){.fixbar{display:flex}}
+
+/* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
+.scr{display:none}
+.scr.on{display:block}
+.next-btn{text-align:center;padding:8px 20px 56px}
+.next-btn .btn{min-width:260px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar a{flex:1 1 0;text-align:center;text-decoration:none;color:var(--muted);font-family:var(--head);font-weight:700;font-size:13px;padding:12px 2px 10px;min-height:56px;border-top:3px solid transparent;line-height:1.3}
+.tabbar a.on{color:var(--ink);border-top-color:var(--signal)}
+.tabbar a[data-scr="soudan"]{color:var(--ink);background:#FFF4CC}
+.tabbar a[data-scr="soudan"].on{background:var(--signal)}
+footer{padding-bottom:96px}
+@media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
+.totop{bottom:84px}
+.prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
+/* 切りかえのときに飛ぶ飛行機（上の線の飛行機が、押したボタンへ飛んで、次の画面の位置へ戻る） */
+.fly-jet{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:40;display:none}
+.fly-jet.on{display:block}
+.fly-jet .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-dasharray:6 9;stroke-linecap:round;opacity:.85}
 </style>
 </head>
-<body>
+<body class="switch">
 <!-- 飛行機（旅客機の横向きのシルエット。機首は右）。動きの所で <use href="#jet"> で使い回す。色はロゴに合わせて紺＋白、飛行機雲は黄色 -->
 <svg width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true" focusable="false"><defs>
 <symbol id="jet" viewBox="-32 -16 64 32">
@@ -542,6 +561,7 @@ footer a:hover{color:var(--signal)}
 </symbol>
 </defs></svg>
 <a class="skip" href="#main">本文へ</a>
+<svg class="fly-jet" id="fly-jet" aria-hidden="true" focusable="false"><path class="trail" id="fly-trail" d=""/><g id="fly-plane"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
 <!-- 上の細い進み具合の線。その上を小さな飛行機が進む（JS で動かす。動きを減らす設定の人は線だけ） -->
 <div class="prog" id="prog" aria-hidden="true"><i class="prog-bar" id="prog-bar"></i><svg class="prog-jet" id="prog-jet" viewBox="-32 -16 64 32"><use href="#jet" xlink:href="#jet"/></svg></div>
 
@@ -562,6 +582,8 @@ footer a:hover{color:var(--signal)}
 </header>
 
 <main id="main">
+<!-- ===== 画面 1：ホーム ===== -->
+<div class="scr" id="home" data-name="ホーム">
 <section class="hero">
   <svg class="hero-plane" id="hero-plane" aria-hidden="true" focusable="false"><path class="trail" id="hero-trail" d=""/><g class="plane" id="hero-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
   <div class="wrap">
@@ -577,8 +599,6 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
-<!-- お店の人がよく言うこと（吹き出し）→ 答え。見えたら1つずつ出る -->
 <section class="sec worry" aria-labelledby="worry-h">
   <div class="wrap">
     <h2 id="worry-h">こんなこと、<wbr>ありませんか？</h2>
@@ -593,24 +613,6 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
-<section id="can" class="sec alt">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>できる<wbr>こと</h2>
-      <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
-    </div>
-    <ol class="can" aria-label="ホームページを作ってから、ずっと続く流れ">
-      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
-      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
-      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="18" width="34" height="26" rx="4" stroke="#17283A" stroke-width="2.6"/><path d="M7 20l16 12 16-12" stroke="#17283A" stroke-width="2.6"/><rect x="34" y="30" width="24" height="24" rx="4" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M34 37h24M41 27v6M51 27v6" stroke="#17283A" stroke-width="2.6"/><path d="M40 45l4 4 8-8" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p></li>
-      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h30v20H22l-8 7v-7H8z" fill="#06C755" stroke="#17283A" stroke-width="2.4"/><path d="M15 22h16" stroke="#fff" stroke-width="2.4"/><path d="M50 30a12 12 0 01-20 12" stroke="#F2C230" stroke-width="2.8"/><path d="M30 42v-6h6" stroke="#F2C230" stroke-width="2.8"/><path d="M30 46a12 12 0 0120-12" stroke="#17283A" stroke-width="2.8"/><path d="M50 34v6h-6" stroke="#17283A" stroke-width="2.8"/></svg></span><h3>直す・<wbr>更新する<span class="tag">公開したあとも</span></h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p></li>
-    </ol>
-    <p class="can-foot">作って<wbr>終わりではなく、<wbr>お店が<wbr>続くかぎり、<wbr>直す・<wbr>更新するを<wbr>くり返します。<wbr>ホームページと<wbr>同じ<wbr>色・言葉で、<wbr>メニュー表・<wbr>チラシ・<wbr>名刺・<wbr>ロゴも<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
-  </div>
-</section>
-
-<!-- 更新の見本：LINE の吹き出しが1つずつ届く。最後の吹き出しの中に、直したあとの画面（架空のお店） -->
 <section id="update" class="sec" aria-labelledby="up-h">
   <div class="wrap">
     <div class="sec-head">
@@ -633,7 +635,126 @@ footer a:hover{color:var(--signal)}
     <p class="up-note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
   </div>
 </section>
-
+<section id="work" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="nw">お店に合わせて、</span><wbr><span class="nw">いろいろ作れます</span></h2>
+      <p>業種ごとの<wbr>見本と、<wbr>同じ<wbr>お店で<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
+    </div>
+    <!-- カードを指で横にめくる（scroll-snap）。1枚目の5つは業種、あとの6つは同じサロンで雰囲気を変えた見本 -->
+    <div class="cards" id="cards">
+      <ul>
+        <li><a class="card" href="../samples/cafe/index.html"><span class="shot"><img src="../samples/thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">落ち着いた、木の色で</span><b>喫茶・カフェ</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/school/index.html"><span class="shot"><img src="../samples/thumbs/school.jpg" alt="教室・習いごとの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">明るく、わかりやすく</span><b>教室・習いごと</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/reform/index.html"><span class="shot"><img src="../samples/thumbs/reform.jpg" alt="工務店・リフォームの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">頼りになる感じを</span><b>工務店・リフォーム</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/hair/index.html"><span class="shot"><img src="../samples/thumbs/hair.jpg" alt="美容室の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">静かに、上品に</span><b>美容室</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/relax/index.html"><span class="shot"><img src="../samples/thumbs/relax.jpg" alt="整体の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">やさしく、安心して</span><b>整体</b><span class="open">この見本を開く</span></span></a></li>
+      
+        <li><a class="card" href="../samples/homey/index.html"><span class="shot"><img src="../samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">やわらかく、親しみやすく</span><b>アットホーム</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/luxury/index.html"><span class="shot"><img src="../samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">上品に、落ち着いて</span><b>ラグジュアリー</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/pop/index.html"><span class="shot"><img src="../samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">明るく、わかりやすく</span><b>カラフル</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/chic/index.html"><span class="shot"><img src="../samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">大人っぽく、印象に残る</span><b>シック</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/photo/index.html"><span class="shot"><img src="../samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">トップに写真や絵を大きく</span><b>写真を大きく</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../samples/wa/index.html"><span class="shot"><img src="../samples/thumbs/wa.jpg" alt="和風・職人の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">落ち着いて、確かな手仕事を</span><b>和風・職人</b><span class="open">この見本を開く</span></span></a></li>
+      </ul>
+    </div>
+    <p class="cards-hint"><i>⇆</i>指で<wbr>横に<wbr>めくれます。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>写真の<wbr>ところには、<wbr>お店で<wbr>撮った<wbr>写真が<wbr>入ります。</p>
+    <div class="work-foot">
+      <p>ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（見本：<wbr><a href="../samples/logo/index.html">ロゴ</a>・<a href="../samples/card/index.html">名刺</a>／<a href="#option">料金</a>）。<wbr>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
+      <a class="btn" href="../samples/index.html">業種ごとの<wbr>見本<wbr>（22種）を<wbr>見る</a>
+    </div>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#dekiru">次へ：できること →</a></p>
+</div>
+<!-- ===== 画面 2：できること ===== -->
+<div class="scr" id="dekiru" data-name="できること">
+<section id="can" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>できる<wbr>こと</h2>
+      <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
+    </div>
+    <ol class="can" aria-label="ホームページを作ってから、ずっと続く流れ">
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="18" width="34" height="26" rx="4" stroke="#17283A" stroke-width="2.6"/><path d="M7 20l16 12 16-12" stroke="#17283A" stroke-width="2.6"/><rect x="34" y="30" width="24" height="24" rx="4" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M34 37h24M41 27v6M51 27v6" stroke="#17283A" stroke-width="2.6"/><path d="M40 45l4 4 8-8" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h30v20H22l-8 7v-7H8z" fill="#06C755" stroke="#17283A" stroke-width="2.4"/><path d="M15 22h16" stroke="#fff" stroke-width="2.4"/><path d="M50 30a12 12 0 01-20 12" stroke="#F2C230" stroke-width="2.8"/><path d="M30 42v-6h6" stroke="#F2C230" stroke-width="2.8"/><path d="M30 46a12 12 0 0120-12" stroke="#17283A" stroke-width="2.8"/><path d="M50 34v6h-6" stroke="#17283A" stroke-width="2.8"/></svg></span><h3>直す・<wbr>更新する<span class="tag">公開したあとも</span></h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p></li>
+    </ol>
+    <p class="can-foot">作って<wbr>終わりではなく、<wbr>お店が<wbr>続くかぎり、<wbr>直す・<wbr>更新するを<wbr>くり返します。<wbr>ホームページと<wbr>同じ<wbr>色・言葉で、<wbr>メニュー表・<wbr>チラシ・<wbr>名刺・<wbr>ロゴも<wbr>作れます<wbr>（<a href="#option">料金</a>）。</p>
+  </div>
+</section>
+<section id="trust" class="sec trust">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>安心して<wbr>お任せ<wbr>いただく<wbr>ために</h2>
+      <p>約束している<wbr>ことや、<wbr>データの<wbr>扱い、<wbr>担当する<wbr>人の<wbr>ことです。<wbr>気になる<wbr>項目を<wbr>押すと<wbr>開きます。</p>
+    </div>
+    <div class="acc-list">
+      <details class="acc" id="promise"><summary>お約束している<wbr>こと<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <ul class="ck">
+          <li>「検索で<wbr>1位」<wbr>「必ず<wbr>お客さんが<wbr>増える」などの<wbr>約束は<wbr>しません。<wbr>できる<wbr>ことを<wbr>正直に<wbr>お伝えします。</li>
+          <li>お店の<wbr>サイトに、<wbr>効果を<wbr>言い切る<wbr>表現や<wbr>大げさな<wbr>言葉は<wbr>使いません。</li>
+          <li>写真や<wbr>お名前は、<wbr>了承を<wbr>いただいてから<wbr>載せます。</li>
+        </ul>
+      </div></div></details>
+      <details class="acc" id="data"><summary>データの<wbr>管理<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">ホームページは<wbr>お店の大事な財産です。<wbr>やめるときに<wbr>困らないよう、<wbr>最初からお店のものとして<wbr>持っていただきます。</p>
+        <div class="keys">
+          <div class="k-own">
+            <h4>お店の<wbr>名義で<wbr>作るもの</h4>
+            <p class="k-lead">最初から<wbr>お店の<wbr>ものです。<wbr>やめても<wbr>そのまま<wbr>使えます。</p>
+            <ul>
+              <li><b>ドメイン</b><span>ホームページの<wbr>住所<wbr><span class="nw">（〇〇.jp など）。</span><wbr>代金も<wbr>お店から<wbr>直接<wbr>お支払い</span></li>
+              <li><b>Googleマップの<wbr>お店情報</b></li>
+              <li><b>ネット予約</b><span>RESERVA など</span></li>
+              <li><b>お問い合わせの<wbr>メール</b><span>お店の<wbr>メールに<wbr>直接<wbr>届きます</span></li>
+            </ul>
+          </div>
+          <div class="k-keep">
+            <h4>こちらで<wbr>預かって<wbr>管理するもの</h4>
+            <p class="k-lead">やめる<wbr>ときは<wbr>一式を<wbr>お渡しします。<wbr>ほかの<wbr>会社にも<wbr>引き継げます。</p>
+            <ul>
+              <li><b>ホームページの<wbr>ファイル</b><span>2か所に<wbr>保管。<wbr>変更の<wbr>記録も<wbr>すべて<wbr>残すので、<wbr>前の<wbr>状態にも<wbr>戻せます</span></li>
+              <li><b>いただいた<wbr>写真</b><span>やめる<wbr>ときに<wbr>お返しして、<wbr>こちらの<wbr>分は<wbr>消します</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="k-note">お店の<wbr>お客さんの<wbr>個人情報<wbr>（お問い合わせ・<wbr>予約）は、<wbr>こちらでは<wbr>持ちません。</p>
+      </div></div></details>
+      <details class="acc" id="person"><summary>担当する人<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p><b>最初の<wbr>ご相談から<wbr>毎月の<wbr>更新まで、<wbr><span class="nw">同じ1人が担当します。</span></b></p>
+        <p>防府市を<wbr>拠点に<wbr>している<wbr>個人の<wbr>事業者です。<wbr>会社勤めを<wbr>25年<wbr>続けた<wbr>あと<wbr>独立し、<wbr>ホームページの<wbr>仕事と、<wbr>伐採・<wbr>草刈りの<wbr>仕事を<wbr>しています。<wbr>話した<wbr>ことが<wbr>担当者の<wbr>あいだで<wbr>伝わらない、<wbr>ということは<wbr>ありません。</p>
+        <ul class="p-points">
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>窓口は<wbr>最後まで<wbr>同じ人</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>打ち合わせは<wbr>お会いして<wbr>2回</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>インボイス<wbr>登録済み</li>
+        </ul>
+      </div></div></details>
+      <!-- Lift-Off という名前について（チャットで決めた文。言葉と行の切れ目は変えない。wbr.py をかけない）
+           行は <br> で決める。スマホだけの切れ目は <br class="sp-br">（パソコンでは消す） -->
+      <details class="acc p-name" id="name"><summary>Lift-Off という名前について<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p><span class="nw">飛行機は、飛び立つときに<br class="sp-br">いちばん大きな力を使います。</span><br><span class="nw">お店も同じで、始めるとき・<br class="sp-br">新しいことに踏み出すときに、<br class="sp-br">いちばん力がいります。</span><br><span class="nw">その「飛び立つとき」の<br class="sp-br">チカラになりたい。<br class="sp-br">そんな思いで名づけました。</span></p>
+      </div></div></details>
+      <details class="acc" id="same"><summary><span class="nw">このページも、</span><wbr><span class="nw">同じ作りです</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">見えにくい<wbr>ところですが、<wbr>お店の<wbr>ホームページには、<wbr>はじめから<wbr>次のことを<wbr>入れています。<wbr>このページで<wbr>そのまま<wbr>試せます。</p>
+        <ul class="same-list">
+          <li><h4>古いスマホでも<wbr>崩れない</h4><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
+          <li><h4>言葉の<wbr>途中で<wbr>切れない</h4><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
+          <li><h4>「戻る」で、<wbr>見ていた<wbr>場所へ</h4><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="../samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
+          <li><h4>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h4><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
+          <li><h4>押すと<wbr>そのまま<wbr>電話・予約</h4><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
+          <li><h4>お問い合わせは<wbr>お店の<wbr>メールへ</h4><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
+        </ul>
+        <p class="note">ほかにも、<wbr>画像は<wbr>見る<wbr>ところまで<wbr>来てから<wbr>読み込むなど、<wbr>表示が<wbr>重く<wbr>ならないように<wbr>しています。</p>
+      </div></div></details>
+    </div>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#ryokin">次へ：料金 →</a></p>
+</div>
+<!-- ===== 画面 3：料金 ===== -->
+<div class="scr" id="ryokin" data-name="料金">
 <section id="price" class="sec alt">
   <div class="wrap">
     <div class="sec-head">
@@ -819,7 +940,10 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
+<p class="next-btn"><a class="btn primary" href="#nagare">次へ：流れ →</a></p>
+</div>
+<!-- ===== 画面 4：流れ ===== -->
+<div class="scr" id="nagare" data-name="流れ">
 <section id="flow" class="sec">
   <div class="wrap">
     <div class="sec-head">
@@ -840,108 +964,6 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
-<!-- デザイン見本：実在のお店は載せず、架空のお店の見本だけ（「お店に合わせて作れます」と1つにまとめた） -->
-<section id="work" class="sec alt">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2><span class="nw">お店に合わせて、</span><wbr><span class="nw">いろいろ作れます</span></h2>
-      <p>業種ごとの<wbr>見本と、<wbr>同じ<wbr>お店で<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
-    </div>
-    <!-- カードを指で横にめくる（scroll-snap）。1枚目の5つは業種、あとの6つは同じサロンで雰囲気を変えた見本 -->
-    <div class="cards" id="cards">
-      <ul>
-        <li><a class="card" href="../samples/cafe/index.html"><span class="shot"><img src="../samples/thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">落ち着いた、木の色で</span><b>喫茶・カフェ</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/school/index.html"><span class="shot"><img src="../samples/thumbs/school.jpg" alt="教室・習いごとの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">明るく、わかりやすく</span><b>教室・習いごと</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/reform/index.html"><span class="shot"><img src="../samples/thumbs/reform.jpg" alt="工務店・リフォームの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">頼りになる感じを</span><b>工務店・リフォーム</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/hair/index.html"><span class="shot"><img src="../samples/thumbs/hair.jpg" alt="美容室の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">静かに、上品に</span><b>美容室</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/relax/index.html"><span class="shot"><img src="../samples/thumbs/relax.jpg" alt="整体の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">やさしく、安心して</span><b>整体</b><span class="open">この見本を開く</span></span></a></li>
-      
-        <li><a class="card" href="../samples/homey/index.html"><span class="shot"><img src="../samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">やわらかく、親しみやすく</span><b>アットホーム</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/luxury/index.html"><span class="shot"><img src="../samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">上品に、落ち着いて</span><b>ラグジュアリー</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/pop/index.html"><span class="shot"><img src="../samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">明るく、わかりやすく</span><b>カラフル</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/chic/index.html"><span class="shot"><img src="../samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">大人っぽく、印象に残る</span><b>シック</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/photo/index.html"><span class="shot"><img src="../samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">トップに写真や絵を大きく</span><b>写真を大きく</b><span class="open">この見本を開く</span></span></a></li>
-        <li><a class="card" href="../samples/wa/index.html"><span class="shot"><img src="../samples/thumbs/wa.jpg" alt="和風・職人の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">落ち着いて、確かな手仕事を</span><b>和風・職人</b><span class="open">この見本を開く</span></span></a></li>
-      </ul>
-    </div>
-    <p class="cards-hint"><i>⇆</i>指で<wbr>横に<wbr>めくれます。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>写真の<wbr>ところには、<wbr>お店で<wbr>撮った<wbr>写真が<wbr>入ります。</p>
-    <div class="work-foot">
-      <p>ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（見本：<wbr><a href="../samples/logo/index.html">ロゴ</a>・<a href="../samples/card/index.html">名刺</a>／<a href="#option">料金</a>）。<wbr>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
-      <a class="btn" href="../samples/index.html">業種ごとの<wbr>見本<wbr>（22種）を<wbr>見る</a>
-    </div>
-  </div>
-</section>
-
-<!-- 安心してお任せいただくために：お約束・データの管理・担当する人・名前の由来・このページも同じ作り を1つに。項目を押すと開く -->
-<section id="trust" class="sec trust">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2>安心して<wbr>お任せ<wbr>いただく<wbr>ために</h2>
-      <p>約束している<wbr>ことや、<wbr>データの<wbr>扱い、<wbr>担当する<wbr>人の<wbr>ことです。<wbr>気になる<wbr>項目を<wbr>押すと<wbr>開きます。</p>
-    </div>
-    <div class="acc-list">
-      <details class="acc" id="promise"><summary>お約束している<wbr>こと<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <ul class="ck">
-          <li>「検索で<wbr>1位」<wbr>「必ず<wbr>お客さんが<wbr>増える」などの<wbr>約束は<wbr>しません。<wbr>できる<wbr>ことを<wbr>正直に<wbr>お伝えします。</li>
-          <li>お店の<wbr>サイトに、<wbr>効果を<wbr>言い切る<wbr>表現や<wbr>大げさな<wbr>言葉は<wbr>使いません。</li>
-          <li>写真や<wbr>お名前は、<wbr>了承を<wbr>いただいてから<wbr>載せます。</li>
-        </ul>
-      </div></div></details>
-      <details class="acc" id="data"><summary>データの<wbr>管理<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <p class="note">ホームページは<wbr>お店の大事な財産です。<wbr>やめるときに<wbr>困らないよう、<wbr>最初からお店のものとして<wbr>持っていただきます。</p>
-        <div class="keys">
-          <div class="k-own">
-            <h4>お店の<wbr>名義で<wbr>作るもの</h4>
-            <p class="k-lead">最初から<wbr>お店の<wbr>ものです。<wbr>やめても<wbr>そのまま<wbr>使えます。</p>
-            <ul>
-              <li><b>ドメイン</b><span>ホームページの<wbr>住所<wbr><span class="nw">（〇〇.jp など）。</span><wbr>代金も<wbr>お店から<wbr>直接<wbr>お支払い</span></li>
-              <li><b>Googleマップの<wbr>お店情報</b></li>
-              <li><b>ネット予約</b><span>RESERVA など</span></li>
-              <li><b>お問い合わせの<wbr>メール</b><span>お店の<wbr>メールに<wbr>直接<wbr>届きます</span></li>
-            </ul>
-          </div>
-          <div class="k-keep">
-            <h4>こちらで<wbr>預かって<wbr>管理するもの</h4>
-            <p class="k-lead">やめる<wbr>ときは<wbr>一式を<wbr>お渡しします。<wbr>ほかの<wbr>会社にも<wbr>引き継げます。</p>
-            <ul>
-              <li><b>ホームページの<wbr>ファイル</b><span>2か所に<wbr>保管。<wbr>変更の<wbr>記録も<wbr>すべて<wbr>残すので、<wbr>前の<wbr>状態にも<wbr>戻せます</span></li>
-              <li><b>いただいた<wbr>写真</b><span>やめる<wbr>ときに<wbr>お返しして、<wbr>こちらの<wbr>分は<wbr>消します</span></li>
-            </ul>
-          </div>
-        </div>
-        <p class="k-note">お店の<wbr>お客さんの<wbr>個人情報<wbr>（お問い合わせ・<wbr>予約）は、<wbr>こちらでは<wbr>持ちません。</p>
-      </div></div></details>
-      <details class="acc" id="person"><summary>担当する人<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <p><b>最初の<wbr>ご相談から<wbr>毎月の<wbr>更新まで、<wbr><span class="nw">同じ1人が担当します。</span></b></p>
-        <p>防府市を<wbr>拠点に<wbr>している<wbr>個人の<wbr>事業者です。<wbr>会社勤めを<wbr>25年<wbr>続けた<wbr>あと<wbr>独立し、<wbr>ホームページの<wbr>仕事と、<wbr>伐採・<wbr>草刈りの<wbr>仕事を<wbr>しています。<wbr>話した<wbr>ことが<wbr>担当者の<wbr>あいだで<wbr>伝わらない、<wbr>ということは<wbr>ありません。</p>
-        <ul class="p-points">
-          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>窓口は<wbr>最後まで<wbr>同じ人</li>
-          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>打ち合わせは<wbr>お会いして<wbr>2回</li>
-          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>インボイス<wbr>登録済み</li>
-        </ul>
-      </div></div></details>
-      <!-- Lift-Off という名前について（チャットで決めた文。言葉と行の切れ目は変えない。wbr.py をかけない）
-           行は <br> で決める。スマホだけの切れ目は <br class="sp-br">（パソコンでは消す） -->
-      <details class="acc p-name" id="name"><summary>Lift-Off という名前について<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <p><span class="nw">飛行機は、飛び立つときに<br class="sp-br">いちばん大きな力を使います。</span><br><span class="nw">お店も同じで、始めるとき・<br class="sp-br">新しいことに踏み出すときに、<br class="sp-br">いちばん力がいります。</span><br><span class="nw">その「飛び立つとき」の<br class="sp-br">チカラになりたい。<br class="sp-br">そんな思いで名づけました。</span></p>
-      </div></div></details>
-      <details class="acc" id="same"><summary><span class="nw">このページも、</span><wbr><span class="nw">同じ作りです</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <p class="note">見えにくい<wbr>ところですが、<wbr>お店の<wbr>ホームページには、<wbr>はじめから<wbr>次のことを<wbr>入れています。<wbr>このページで<wbr>そのまま<wbr>試せます。</p>
-        <ul class="same-list">
-          <li><h4>古いスマホでも<wbr>崩れない</h4><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
-          <li><h4>言葉の<wbr>途中で<wbr>切れない</h4><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
-          <li><h4>「戻る」で、<wbr>見ていた<wbr>場所へ</h4><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="../samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
-          <li><h4>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h4><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
-          <li><h4>押すと<wbr>そのまま<wbr>電話・予約</h4><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
-          <li><h4>お問い合わせは<wbr>お店の<wbr>メールへ</h4><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
-        </ul>
-        <p class="note">ほかにも、<wbr>画像は<wbr>見る<wbr>ところまで<wbr>来てから<wbr>読み込むなど、<wbr>表示が<wbr>重く<wbr>ならないように<wbr>しています。</p>
-      </div></div></details>
-    </div>
-  </div>
-</section>
-
 <section id="faq" class="sec alt">
   <div class="wrap">
     <div class="sec-head">
@@ -974,7 +996,6 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
 <section id="other" class="sec">
   <div class="wrap">
     <div class="other">
@@ -988,7 +1009,10 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
-
+<p class="next-btn"><a class="btn primary" href="#soudan">次へ：相談 →</a></p>
+</div>
+<!-- ===== 画面 5：相談 ===== -->
+<div class="scr" id="soudan" data-name="相談">
 <section id="contact" class="sec contact">
   <div class="wrap">
     <div class="sec-head">
@@ -1100,6 +1124,7 @@ footer a:hover{color:var(--signal)}
     </div>
   </div>
 </section>
+</div>
 </main>
 
 <footer>
@@ -1117,10 +1142,13 @@ footer a:hover{color:var(--signal)}
 </footer>
 
 <button class="totop" id="totop" type="button" aria-label="ページの上へ"><svg viewBox="-32 -16 64 32" aria-hidden="true"><use href="#jet" xlink:href="#jet"/></svg></button>
-<div class="fixbar" id="fixbar">
-  <a class="btn primary" href="#contact" data-topic="会って話したい">会って<wbr>相談する</a>
-  <a class="btn" href="tel:09011896726">電話する</a>
-</div>
+<nav class="tabbar" id="tabbar" aria-label="画面の切りかえ">
+  <a href="#home" data-scr="home">ホーム</a>
+  <a href="#dekiru" data-scr="dekiru">できること</a>
+  <a href="#ryokin" data-scr="ryokin">料金</a>
+  <a href="#nagare" data-scr="nagare">流れ</a>
+  <a href="#soudan" data-scr="soudan">相談</a>
+</nav>
 
 <script>
 // ===== 動きの共通の道具 =====
@@ -1154,6 +1182,83 @@ function revealAll(items, gap, each, done){
   }
   return function(){ for (var i = 0; i < items.length; i++) (function(i){ setTimeout(function(){ one(i); }, i * gap); })(i); };
 }
+</script>
+
+<script>
+// ===== 切りかえ式：画面を1つずつ見せる。URL の #ryokin などで画面を覚え、スマホの「戻る」で前の画面に戻る =====
+(function(){
+  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null, busy = false;
+  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar'), pjet = document.getElementById('prog-jet');
+  var fsvg = document.getElementById('fly-jet'), fplane = document.getElementById('fly-plane'), ftrail = document.getElementById('fly-trail');
+  var STILL2 = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame;
+  function el(id){ return document.getElementById(id); }
+  function screenOf(node){ while (node && node !== document.body) { if (node.className && String(node.className).indexOf('scr') === 0) return node.id; node = node.parentNode; } return null; }
+  // 上の線：5つに区切って、今の画面の所まで黄色。飛行機は今の画面の位置
+  function progAt(i){
+    var W = document.documentElement.clientWidth, x = (i + .5) / IDS.length * W;
+    pbar.style.width = ((i + 1) / IDS.length * 100).toFixed(1) + '%';
+    if (pjet) pjet.style.left = (x - 9).toFixed(1) + 'px';
+    return x;
+  }
+  for (var k = 1; k < IDS.length; k++) { var seg = document.createElement('i'); seg.className = 'prog-seg'; seg.style.left = (k / IDS.length * 100) + '%'; prog.appendChild(seg); }
+  function render(id){
+    for (var i = 0; i < IDS.length; i++) { var sc = el(IDS[i]); if (sc) sc.className = IDS[i] === id ? 'scr on' : 'scr'; }
+    var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
+    cur = id; progAt(IDS.indexOf(id));
+    if (id === 'home' && window.heroStart) setTimeout(window.heroStart, 50);
+    if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
+    if (window.requestAnimationFrame) requestAnimationFrame(function(){ window.dispatchEvent(document.createEvent('Event').initEvent ? (function(){ var e = document.createEvent('Event'); e.initEvent('resize', true, false); return e; })() : new Event('resize')); });
+  }
+  // 切りかえの動き：上の線の飛行機が、押したボタンへ飛び（黄色い飛行機雲）、次の画面が出てから新しい位置へ戻る
+  function fly(toId, btn, done){
+    if (STILL2 || !fsvg || !btn) { done(); return; }
+    var W = document.documentElement.clientWidth, H = window.innerHeight, b = btn.getBoundingClientRect();
+    fsvg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); fsvg.setAttribute('class', 'fly-jet on');
+    var x0 = parseFloat(pjet.style.left || '0') + 9, y0 = 68, x1 = b.left + b.width / 2, y1 = b.top + 10, x2 = (IDS.indexOf(toId) + .5) / IDS.length * W, y2 = 68;
+    if (pjet) pjet.style.visibility = 'hidden';
+    var pts = [];
+    function seg(a, b2, c, ms, next){
+      tween(ms, function(u){
+        var av = 1 - u, x = av * av * a[0] + 2 * av * u * b2[0] + u * u * c[0], y = av * av * a[1] + 2 * av * u * b2[1] + u * u * c[1];
+        var dx = 2 * av * (b2[0] - a[0]) + 2 * u * (c[0] - b2[0]), dy = 2 * av * (b2[1] - a[1]) + 2 * u * (c[1] - b2[1]);
+        fplane.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(.6)');
+        if (pts.length > 40) pts.shift(); pts.push([x, y]);
+        var d = ''; for (var i = 0; i < pts.length; i++) d += (i ? ' L' : 'M') + pts[i][0].toFixed(1) + ' ' + pts[i][1].toFixed(1); ftrail.setAttribute('d', d);
+      }, next, easeInOut);
+    }
+    seg([x0, y0], [(x0 + x1) / 2 + 60, (y0 + y1) / 2], [x1, y1], 420, function(){
+      done();
+      seg([x1, y1], [(x1 + x2) / 2 - 60, (y1 + y2) / 2], [x2, y2], 420, function(){ fsvg.setAttribute('class', 'fly-jet'); if (pjet) pjet.style.visibility = ''; });
+    });
+  }
+  function go(id, push, btn){
+    if (IDS.indexOf(id) < 0) id = 'home';
+    if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
+    if (id === cur) return;
+    if (busy) return; busy = true;
+    fly(id, btn, function(){ render(id); window.scrollTo(0, 0); busy = false; });
+  }
+  // ページの中のリンク（#price-zero・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null; if (!a) return;
+    var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;
+    e.preventDefault();
+    var id = h.slice(1);
+    if (!id) { go('home', true, bar.querySelector('[data-scr=home]')); return; }
+    if (IDS.indexOf(id) >= 0) { go(id, true, bar.querySelector('[data-scr=' + id + ']')); return; }
+    var target = el(id); if (!target) return;
+    var sid = screenOf(target) || cur;
+    var after = function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } };
+    if (sid !== cur) { go(sid, true, bar.querySelector('[data-scr=' + sid + ']')); setTimeout(after, STILL2 ? 30 : 500); } else after();
+  });
+  window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (IDS.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
+  // 最初の画面：URL の # で決める（#option のような中の場所なら、その画面を出してから開く）
+  var first = location.hash.replace('#', ''), inner = null;
+  if (IDS.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
+  render(first);
+  if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
+  window.addEventListener('resize', function(){ progAt(IDS.indexOf(cur)); });
+})();
 </script>
 <script>
 // ===== 最初：飛行機がゆっくり上昇しながら横切る（離陸のイメージ。約2.4秒）。見出し・説明・ボタンは飛行機を待たず 0.5 秒以内に出す =====
