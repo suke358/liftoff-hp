@@ -285,7 +285,10 @@ js = r'''
   function step(ts){
     raf = 0;
     if (last === null) last = ts;
-    var more = entry ? entryStep(ts) : advance(ts - last); last = ts;
+    var more;
+    try { more = entry ? entryStep(ts) : advance(ts - last); }
+    catch (err) { if (entry) entryFinish(); path = []; more = false; }
+    last = ts;
     if (more) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; apply(); }
   }
   function kick(){ if (!raf) { last = null; raf = requestAnimationFrame(step); } }
@@ -294,17 +297,18 @@ js = r'''
   function planEntry(tx){
     var W = document.documentElement.clientWidth, VH = window.innerHeight || 800;
     // 画面のまん中（幅の半分・高さの半分あたり）を通るように、2つの制御点を置く。目標が左寄りなら左向きで線に乗る（その高さは Y_L）、右寄りなら右向き（Y_R）
-    var leftEnd = tx < W * .32, P = [[W + 50, VH + 30], [W * .6, VH * .8], [W * .32, 60], [tx, leftEnd ? Y_L : Y_R]], pts = [], cum = [0], i, L = 0;
+    var leftEnd = tx < W * .32, P = [[W + 50, VH + 30], [W * .6, VH * .8], [W * .32, 60], [tx, leftEnd ? Y_L : Y_R]], pts = [], cum = [], i, L = 0;
     for (i = 0; i <= 120; i++) { var q = bez(P, i / 120); if (i) L += Math.sqrt((q[0] - pts[i - 1][0]) * (q[0] - pts[i - 1][0]) + (q[1] - pts[i - 1][1]) * (q[1] - pts[i - 1][1])); pts.push(q); cum.push(L); }
     entry = { pts: pts, cum: cum, L: L, t0: null, tx: tx, leftEnd: leftEnd };
     pos = { x: P[0][0], y: P[0][1], a: Math.atan2(P[1][1] - P[0][1], P[1][0] - P[0][0]) * 180 / Math.PI }; moveDir = -1; turn = 0;
   }
-  function entryAt(u){ // 道のり u（0〜1）の点
-    var sL = u * entry.L, i = 1; while (i < entry.cum.length - 1 && entry.cum[i] < sL) i++;
+  function entryAt(u){ // 道のり u（0〜1）の点（pts[i] までの道のりが cum[i]。i は 1〜最後）
+    var sL = Math.max(0, Math.min(1, u)) * entry.L, i = 1; while (i < entry.pts.length - 1 && entry.cum[i] < sL) i++;
     var a = entry.pts[i - 1], b = entry.pts[i], seg = entry.cum[i] - entry.cum[i - 1], k = seg > 0 ? (sL - entry.cum[i - 1]) / seg : 0;
     return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
   }
-  function entryFinish(){ var d = entry.leftEnd ? -1 : 1; pos = { x: entry.tx, y: d > 0 ? Y_R : Y_L, a: d > 0 ? 0 : 180 }; moveDir = d; turn = 0; entry = null; path = []; apply(); }
+  // 入り方の終わり：線の上の決まった位置に置く。入ってくる途中にタブが押されていたら（nextTx）、そのまま線にそってそこへ続けて飛ぶ
+  function entryFinish(){ var d = entry.leftEnd ? -1 : 1, nx = entry.nextTx; pos = { x: entry.tx, y: d > 0 ? Y_R : Y_L, a: d > 0 ? 0 : 180 }; moveDir = d; turn = 0; entry = null; path = []; apply(); if (nx !== undefined) { plan(nx); if (path.length) kick(); } }
   function entryStep(ts){
     if (entry.t0 === null) entry.t0 = ts;
     var u = Math.min(1, (ts - entry.t0) / ENTRY_MS), e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; // 動き出しと止まる所はゆっくり、途中は速め
@@ -320,13 +324,14 @@ js = r'''
     var tx = xOf(i);
     if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; path = []; entry = null; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
     if (!entered) { entered = true; planEntry(tx); apply(); kick(); return; }
-    if (entry) { entry.tx = tx; return; } // 入ってくる途中に切りかえた：行き先だけ変える
+    if (entry) { entry.nextTx = tx; return; } // 入ってくる途中に切りかえた：入り方は最後まで飛んで、そのあと線にそって新しい行き先へ
     plan(tx); if (path.length) kick();
   };
   // 確かめる用（確認画像・JS での確認）
   window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; entry = null; apply(); };
   window.jetEntryPose = function(u, i){ planEntry(xOf(i || 0)); if (u >= 1) { entryFinish(); return; } var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; entry = null; path = []; apply(); }; // 置いたあとは入り方の動きを止める（画像を撮る用）
   window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { advance(16); t += 16; } speed = SPEED; turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
+  window.jetTick = function(ts){ step(ts); return { raf: raf, last: last, entry: !!entry, left: path.length, x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a) }; }; // 確かめる用：描画の1コマを手で回す
   window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, dir: moveDir, turn: turn, left: path.length, entry: !!entry }; };
   apply();
   window.jetGo(['home', 'dekiru', 'ryokin', 'nagare', 'soudan'].indexOf(document.querySelector('.scr.on') ? document.querySelector('.scr.on').id : 'home'));
