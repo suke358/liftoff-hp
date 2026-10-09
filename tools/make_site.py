@@ -14,6 +14,14 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   ・画像は設定に書いた場所（images/〜）に自分で入れる。ないときは「写真が入ります」の仮画像を入れる
   ・最後に check_site.py（公開前チェック）を自動で走らせる
 設定の書き方は templates/site_sample.json（山口造庭舎のデモ）を見る。分からない情報は書かない（空にすると、その行は出ない）
+
+部品（入れる／入れないを選べる。2026/10/9 追加）：設定に "parts": {...} を書く。全部入れた見本は templates/site_sample_parts.json
+  "belt"    … 写真の帯（横にゆっくり流れる。さわると止まる。動きを減らす設定の人には流さない）
+  "compare" … 作業の前と後を、つまみで見比べる（JS がないときは2枚を並べて出す）
+  "calc"    … 本数・回数を選ぶと合計の目安が出る料金（JS がないときは料金表として出る）
+  "cases"   … 施工例（作業前・作業後の写真を並べる）
+  "form"    … 選んで送れるフォーム（Formspree。JS がないときもふつうのフォームとして送れる）
+  それぞれ true と書くと決まった中身（メニューの写真など）で入る。{...} で中身を書ける。色・書体はお店の theme に合わせて出る
 """
 import sys, os, json, html, shutil, subprocess, urllib.parse
 
@@ -52,6 +60,7 @@ def build(c):
     has_rsv = bool(c.get('reserve_url'))
     tel = c.get('tel', ''); tel_d = ''.join(ch for ch in tel if ch.isdigit())
     I = lambda: '<svg class="mk"><use href="#mk"/></svg>'
+    P = parts_conf(c)  # 入れる部品（"parts"）。{} なら部品なし
 
     # ---------- 予約・相談の入口（いま使えるものを先に） ----------
     first_btns = []
@@ -61,6 +70,8 @@ def build(c):
     if not first_btns: first_btns.append('<a class="btn btn-main" href="#reserve">お問い合わせ</a>')
 
     secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
+    if 'calc' in P: secs.append(('calc', P['calc'].get('title', '料金の目安')))
+    if 'cases' in P: secs.append(('cases', P['cases'].get('title', '施工例')))
     if c.get('flow'): secs.append(('flow', c.get('flow_title', 'ご依頼の流れ')))
     secs += [('reserve', c.get('reserve_title', 'ご予約・ご相談')), ('access', c.get('info_title', '店舗情報')), ('faq', 'よくある質問')]
     if c.get('greeting'): secs.insert(0, ('greeting', 'ごあいさつ'))
@@ -179,18 +190,21 @@ def build(c):
         ways.append(f'<div class="way"><h3>お電話</h3><p>{e(c.get("tel_note","作業中は出られないことがあります。折り返しご連絡いたします。"))}</p><a class="tel" href="tel:{tel_d}">{e(tel)}</a></div>')
     if has_rsv:
         ways.append(f'<div class="way"><h3>ネット予約</h3><p>空いている日時を見て、24時間いつでもご予約いただけます。</p><a class="btn btn-main" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a></div>')
-    if c.get('form_url'):
+    if 'form' in P:
+        ways.append(f'<div class="way"><h3>フォーム</h3><p>{e(P["form"].get("way_text","選んで送るだけ。24時間いつでも送れます。"))}</p><a class="btn btn-main" href="#form">フォームで<wbr>送る</a></div>')
+    elif c.get('form_url'):
         ways.append(f'<div class="way"><h3>フォーム</h3><p>24時間いつでも送れます。</p><a class="btn btn-main" {ext(c["form_url"])}>フォームを開く</a></div>')
     if not ways:
         ways.append(f'<div class="way"><h3>準備中</h3><p>{e(c.get("pending_text","連絡先は準備中です。"))}</p></div>')
     rules = ''.join(f'<li>{e(x)}</li>' for x in c.get('rules', []))
+    ctx = dict(c=c, P=P, I=I, has_line=has_line, tel=tel, tel_d=tel_d, name=name, short=short)
     reserve_html = f'''
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
       <div class="sec-head center"><i>{I()}contact</i><h2>{e(c.get("reserve_title","ご予約・ご相談"))}</h2></div>
       {f'<p class="muted center" style="margin-bottom:40px">{e(c["reserve_lead"])}</p>' if c.get("reserve_lead") else ''}
       <div class="ways n{len(ways)}">{''.join(ways)}</div>
-      {f'<div class="rules"><h4>{e(c.get("rules_title","ご予約について"))}</h4><ul>{rules}</ul></div>' if rules else ''}
+      {f'<div class="rules"><h4>{e(c.get("rules_title","ご予約について"))}</h4><ul>{rules}</ul></div>' if rules else ''}{part_form(ctx)}
     </div>
   </section>'''
 
@@ -240,7 +254,9 @@ def build(c):
     bar = []
     if tel: bar.append(f'<a href="tel:{tel_d}">電話する</a>')
     if has_line: bar.append(f'<a class="l" {ext(c["line_url"])}>LINEで相談</a>')
-    bar.append(f'<a class="r" {ext(c["reserve_url"])}>ネット予約</a>' if has_rsv else '<a class="r" href="#menu">メニュー</a>')
+    if has_rsv: bar.append(f'<a class="r" {ext(c["reserve_url"])}>ネット予約</a>')
+    elif 'form' in P: bar.append('<a class="r" href="#form">フォーム</a>')
+    else: bar.append('<a class="r" href="#menu">メニュー</a>')
 
     # ---------- 頭 ----------
     desc = c.get('description', c.get('lead', ''))
@@ -260,11 +276,15 @@ def build(c):
     if sns: ld["sameAs"] = [s['url'] for s in sns]
 
     css = CSS
+    if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
+    js = JS
+    if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
     css = css.replace('{{head_font}}', head_font)
+    belt_html, calc_html, cases_html, compare_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx)
 
     out = f'''<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="no-js">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -287,6 +307,7 @@ def build(c):
 <style>
 {css}
 </style>
+<script>document.documentElement.className = 'js';</script>
 </head>
 <body>
 <!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->
@@ -298,7 +319,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{greet}{menu_html}{flow_html}{reserve_html}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{greet}{belt_html}{menu_html}{calc_html}{cases_html}{compare_html}{flow_html}{reserve_html}{access_html}{faq_html}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -312,7 +333,7 @@ def build(c):
 {f'<nav class="spbar n{len(bar)}" aria-label="ご予約・ご相談">' + ''.join(bar) + '</nav>' if (tel or has_line or has_rsv) else ''}
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
-{JS}
+{js}
 </script>
 </body>
 </html>
@@ -565,10 +586,409 @@ JS = r'''// スマホのメニュー（開く・閉じる）と、上へ戻る�
   } catch (err) {}
 })();'''
 
-def placeholder(path, w, h, label):
+# ======================= 部品（入れる／入れないを選べる。2026/10/9） =======================
+# 設定の "parts": {"belt": true, "compare": {...}, "calc": {...}, "cases": {...}, "form": {...}}
+# それぞれの部品は、①動きを減らす設定の人には動かさない ②古いスマホ対策（マニュアル16の書き方）③JS がないときの代わりの表示 を入れている
+# 色・書体は :root の変数（--primary・--head など）だけを使う → お店の theme に自然に合う
+PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form']
+
+def parts_conf(c):
+    """設定の "parts" を {部品名: 中身の辞書} にそろえる。true → {}（決まった中身）、false / null → 入れない。中身が足りない部品は外す"""
+    if '_P' in c: return c['_P']
+    P = {}
+    for k, v in (c.get('parts') or {}).items():
+        if k not in PART_ORDER: print('⚠️ 知らない部品です（入れません）：', k); continue
+        if v is True: v = {}
+        if isinstance(v, dict): P[k] = v
+    if 'cases' in P and not P['cases'].get('items'): print('⚠️ cases：施工例（items）がないので入れません'); del P['cases']
+    if 'compare' in P and not (P['compare'].get('before') and P['compare'].get('after')):
+        cs = (P.get('cases') or {}).get('items') or []
+        if cs: P['compare'].setdefault('before', cs[0]['before']); P['compare'].setdefault('after', cs[0]['after'])  # 施工例の1つ目を借りる
+        else: print('⚠️ compare：前と後の写真（before・after）がないので入れません'); del P['compare']
+    if 'calc' in P and not P['calc'].get('items'): print('⚠️ calc：項目（items）がないので入れません'); del P['calc']
+    c['_P'] = P
+    return P
+
+def img_tag(o, alt='', w=1000, h=750):
+    return f'<img src="{e(o["image"])}" alt="{e(o.get("alt") or alt)}" width="{o.get("w", w)}" height="{o.get("h", h)}" loading="lazy">'
+
+def sec_head(I, eyebrow, title):
+    return f'<div class="sec-head center"><i>{I()}{e(eyebrow)}</i><h2>{e(title)}</h2></div>'
+
+def sec_lead(p):
+    return f'<p class="sec-lead center muted">{e(p["lead"])}</p>' if p.get('lead') else ''
+
+def yen(n): return f'{int(n):,}円'
+
+def part_belt(x):
+    """写真の帯：横にゆっくり流れる。中身は items か、なければメニューの写真"""
+    p = x['P'].get('belt')
+    if p is None: return ''
+    c, I = x['c'], x['I']
+    items = p.get('items') or [dict(image=m['image'], alt=m.get('alt', m['name']), title=m['name'], w=m.get('w', 1000), h=m.get('h', 750)) for m in c.get('menus', []) if m.get('image')]
+    if not items: print('⚠️ belt：写真がないので入れません'); return ''
+    lis = []
+    for it in items:
+        ttl, sub = it.get('title', ''), it.get('sub', '')
+        sub_html = f'<small>{e(sub)}</small>' if sub else ''
+        cap = f'<figcaption><b>{e(ttl)}</b>{sub_html}</figcaption>' if (ttl or sub) else ''
+        lis.append(f'<li><figure><span class="b-shot">{img_tag(it, alt=ttl)}</span>{cap}</figure></li>')
+    title = p.get('title', '写真')
+    return f'''
+  <section id="gallery" class="sec belt-sec">
+    <div class="wrap">
+      {sec_head(I, p.get('eyebrow', 'photo'), title)}
+      {sec_lead(p)}
+    </div>
+    <div class="belt" id="belt"><ul class="belt-track" aria-label="{e(title)}の一覧">{''.join(lis)}</ul></div>
+    <p class="belt-note center muted">{e(p.get('note', '横に動かして見られます。'))}</p>
+  </section>'''
+
+def part_compare(x):
+    """前と後の見比べ：下に「後」の写真、その上に「前」の写真を左から重ね、つまみで「前」の見える幅を変える（左が前・右が後）。clip-path は使わず「幅＋overflow:hidden」（古いスマホでも動く）"""
+    p = x['P'].get('compare')
+    if p is None: return ''
+    I = x['I']
+    lb, la = p.get('label_before', '作業前'), p.get('label_after', '作業後')
+    cap = f'<p class="cmp-cap muted center">{e(p["caption"])}</p>' if p.get('caption') else ''
+    return f'''
+  <section id="compare" class="sec compare-sec">
+    <div class="wrap narrow">
+      {sec_head(I, p.get('eyebrow', 'before / after'), p.get('title', '作業の前と後'))}
+      {sec_lead(p)}
+      <div class="cmp">
+        <div class="cmp-frame" id="cmp-frame">
+          <div class="cmp-over" id="cmp-over">{img_tag(p["before"], alt=lb)}</div>
+          {img_tag(p["after"], alt=la)}
+          <span class="cmp-line" id="cmp-line" aria-hidden="true"><i></i></span>
+          <span class="cmp-tag l">{e(lb)}</span><span class="cmp-tag r">{e(la)}</span>
+        </div>
+        <label class="cmp-range"><span>つまみを<wbr>動かして<wbr>見比べる</span><input type="range" id="cmp-range" min="0" max="100" value="50" aria-label="{e(lb)}と{e(la)}を見比べる（左が{e(lb)}、右が{e(la)}）"></label>
+        {cap}
+      </div>
+    </div>
+  </section>'''
+
+def part_calc(x):
+    """合計の目安が出る料金：items の本数・回数（select）やチェックを足す。金額は HTML の data-price に持つ（JS に金額を書かない）"""
+    p = x['P'].get('calc')
+    if p is None: return ''
+    c, I, has_line = x['c'], x['I'], x['has_line']
+    rows = []
+    for it in p['items']:
+        note = f'<small>{e(it["note"])}</small>' if it.get('note') else ''
+        unit = it.get('unit', '')
+        unit_html = f'<small>／{e(unit)}</small>' if unit else ''
+        price = f'<div class="calc-price">{yen(it["price"])}{unit_html}</div>'
+        if it.get('type') == 'check':
+            rows.append(f'<li class="chk"><label class="calc-chk"><input type="checkbox" data-price="{int(it["price"])}" data-name="{e(it["name"])}"><span><b>{e(it["name"])}</b>{note}</span></label>{price}</li>')
+        else:
+            opts = ''.join(f'<option value="{k}">{k}{e(unit)}</option>' for k in range(0, int(it.get('max', 10)) + 1))
+            rows.append(f'<li><div class="calc-name"><b>{e(it["name"])}</b>{note}</div>{price}<div class="calc-q"><label><span class="vh">{e(it["name"])}の{e(unit or "数")}</span><select data-price="{int(it["price"])}" data-name="{e(it["name"])}" data-unit="{e(unit)}">{opts}</select></label></div></li>')
+    line_btn = ''
+    if has_line:
+        msg = p.get('line_msg', 'ホームページの「料金の目安」を見ました。{items}（合計の目安 {total}）について相談したいです。')
+        line_btn = f'<a class="btn btn-line calc-line" id="calc-line" {ext(c["line_url"])} data-oa="{e(c.get("line_id", ""))}" data-msg="{e(msg)}">{LINE_ICON}この内容で<wbr>LINEで相談</a>'
+    note = p.get('note', '目安の金額です。実際の金額は、内容を確かめてからお見積もりでお出しします。')
+    return f'''
+  <section id="calc" class="sec calc-sec">
+    <div class="wrap narrow">
+      {sec_head(I, p.get('eyebrow', 'estimate'), p.get('title', '料金の目安'))}
+      {sec_lead(p)}
+      <div class="calc" id="calc-box">
+        <ul class="calc-rows">{''.join(rows)}</ul>
+        <div class="calc-total"><span>合計の<wbr>目安<small>（税込）</small></span><output id="calc-out" aria-live="polite">0円</output></div>
+        <p class="calc-note muted">{e(note)}</p>
+        <div class="calc-act">{line_btn}<button type="button" class="calc-reset" id="calc-reset">選び直す</button></div>
+      </div>
+    </div>
+  </section>'''
+
+def part_cases(x):
+    """施工例：作業前・作業後の写真を並べる（samples/wa の作りを元に）"""
+    p = x['P'].get('cases')
+    if p is None: return ''
+    I = x['I']
+    lb, la = p.get('label_before', '作業前'), p.get('label_after', '作業後')
+    arts = []
+    for it in p['items']:
+        meta = f'<span class="meta">{e(it["meta"])}</span>' if it.get('meta') else ''
+        txt = f'<p>{e(it["text"])}</p>' if it.get('text') else ''
+        arts.append(f'''
+        <article class="case">
+          <figure>{img_tag(it["before"], alt=lb)}<figcaption>{e(lb)}</figcaption></figure>
+          <figure class="after">{img_tag(it["after"], alt=la)}<figcaption>{e(la)}</figcaption></figure>
+          <div class="txt"><h3>{e(it.get("title", ""))}{meta}</h3>{txt}</div>
+        </article>''')
+    return f'''
+  <section id="cases" class="sec cases-sec">
+    <div class="wrap">
+      {sec_head(I, p.get('eyebrow', 'works'), p.get('title', '施工例'))}
+      {sec_lead(p)}
+      <div class="cases">{''.join(arts)}
+      </div>
+    </div>
+  </section>'''
+
+def part_form(x):
+    """選んで送れるフォーム：Formspree（endpoint）に送る。欄の名前は日本語（届くメールがそのまま読める）。JS がなくてもふつうに送れる"""
+    p = x['P'].get('form')
+    if p is None: return ''
+    c, has_line, tel, name = x['c'], x['has_line'], x['tel'], x['name']
+    topics = p.get('topics') or [m['name'] for m in c.get('menus', [])] + ['そのほか']
+    reply = p.get('reply')
+    if reply is None: reply = (['電話'] if tel else []) + (['LINE'] if has_line else []) + ['メール']
+    times = p.get('times') or ['午前（〜12時）', '午後（12〜17時）', '夕方以降（17時〜）', 'いつでも']
+    def chips(nm, vals, kind):
+        out = []
+        for i, v in enumerate(vals):
+            chk = ' checked' if (kind == 'radio' and i == 0) else ''
+            out.append(f'<label class="chip"><input type="{kind}" name="{e(nm)}" value="{e(v)}"{chk}><span>{e(v)}</span></label>')
+        return '<div class="chips">' + ''.join(out) + '</div>'
+    endpoint = p.get('endpoint') or ''
+    if not endpoint: print('⚠️ form：送り先（endpoint。Formspree の URL）がまだありません。送るボタンを押すと「準備中」と出ます')
+    return f'''
+      <div class="formbox" id="form">
+        <div class="form-top"><span>{e(p.get("title", "ご相談フォーム"))}</span><span class="form-sub">{e(p.get("sub", "選んで送るだけ"))}</span></div>
+        <form id="cform" action="{e(endpoint)}" method="POST" data-endpoint="{e(endpoint)}">
+          <p class="form-lead">{e(p.get("lead", "選んで送るだけで大丈夫です。文を考えなくても、こちらからうかがいます。"))}</p>
+          <label class="f-row"><span>お名前<span class="req">必須</span></span><input name="お名前" required autocomplete="name"></label>
+          <label class="f-row"><span>ご連絡先（電話番号かメール）<span class="req">必須</span></span><input name="ご連絡先" required autocomplete="tel" placeholder="例：090-0000-0000"></label>
+          <fieldset><legend>ご相談の内容<span class="opt-label">いくつでも</span></legend>{chips('ご相談の内容', topics, 'checkbox')}</fieldset>
+          <fieldset><legend>ご希望の連絡方法</legend>{chips('ご希望の連絡方法', reply, 'radio')}</fieldset>
+          <fieldset><legend>連絡がつきやすい時間<span class="opt-label">いくつでも</span></legend>{chips('連絡がつきやすい時間', times, 'checkbox')}</fieldset>
+          <label class="f-row"><span>ほかに伝えたいこと<span class="opt-label">なくても可</span></span><textarea name="ほかに伝えたいこと" placeholder="なければ空のままで大丈夫です"></textarea></label>
+          <input type="hidden" name="_subject" value="【{e(name)}】ホームページからのお問い合わせ">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="gotcha">
+          <button class="btn btn-main" type="submit">この<wbr>内容で<wbr>送る</button>
+          <p class="formnote" id="formnote" role="status">{e(p.get("note", "送信後、こちらから折り返しご連絡します。"))}</p>
+          <p class="formnote">いただいた内容は、ご相談への返事のためだけに使います。</p>
+        </form>
+      </div>'''
+
+PARTS_CSS = {
+'common': r'''/* ---------- 部品（parts）共通 ---------- */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
+.wrap.narrow{max-width:760px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}''',
+'belt': r'''/* 部品：写真の帯（横にゆっくり流れる） */
+.belt-sec{padding:72px 0 56px;background:var(--bg2)}
+.belt-sec .sec-head{margin-bottom:28px}
+.belt-sec .sec-lead{margin:-12px auto 24px}
+.belt{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 0 10px}
+.belt::-webkit-scrollbar{display:none}
+.belt-track{list-style:none;margin:0;display:flex;width:-webkit-max-content;width:max-content;padding:0 20px}
+.belt-track li{width:340px;flex:none;margin-right:22px}
+.belt-track figure{margin:0}
+.b-shot{display:block;border-radius:var(--r);overflow:hidden;background:var(--bg);box-shadow:0 10px 26px rgba(0,0,0,.08)}
+.b-shot img{width:100%;height:auto}
+.belt-track figcaption{display:flex;align-items:baseline;margin-top:10px;font-size:.92rem}
+.belt-track figcaption b{font-family:var(--head);font-weight:500;letter-spacing:.08em}
+.belt-track figcaption small{font-size:.8rem;color:var(--muted);margin-left:10px}
+.belt-note{font-size:.82rem;margin:8px 20px 0}
+@media (max-width:760px){.belt-sec{padding:56px 0 44px}.belt-track li{width:260px;margin-right:16px}}''',
+'compare': r'''/* 部品：前と後の見比べ（つまみ） */
+.compare-sec{background:var(--pale)}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--r);background:var(--bg2);-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:ew-resize}
+.cmp-frame > img{width:100%;height:auto;display:block}
+.cmp-over{position:absolute;top:0;left:0;bottom:0;width:50%;overflow:hidden}
+.cmp-over img{width:200%;max-width:none;height:auto;display:block}
+.cmp-line{position:absolute;top:0;bottom:0;left:50%;width:3px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.15);pointer-events:none}
+.cmp-line i{position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:var(--primary);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.cmp-line i::before,.cmp-line i::after{content:"";position:absolute;top:50%;margin-top:-6px;border:6px solid transparent}
+.cmp-line i::before{left:7px;border-right-color:#fff}
+.cmp-line i::after{right:7px;border-left-color:#fff}
+.cmp-tag{position:absolute;top:12px;z-index:2;font-family:var(--head);font-size:.82rem;letter-spacing:.14em;background:rgba(0,0,0,.6);color:#fff;padding:.25em 1em;border-radius:999px;line-height:1.7}
+.cmp-tag.l{left:12px}
+.cmp-tag.r{right:12px;background:var(--primary)}
+.cmp-range{display:block;max-width:420px;margin:22px auto 0;font-size:.88rem;color:var(--muted);text-align:center}
+.cmp-range span{display:block;margin-bottom:6px}
+.cmp-range input{width:100%;accent-color:var(--primary);min-height:32px;margin:0}
+.cmp-cap{font-size:.88rem;margin:14px 0 0}
+/* JS がないとき：2枚を並べて出す */
+.no-js .cmp-frame{display:grid;grid-template-columns:1fr 1fr;grid-gap:12px;gap:12px;background:none;overflow:visible;cursor:auto}
+.no-js .cmp-frame > img,.no-js .cmp-over img{width:100%;border-radius:12px}
+.no-js .cmp-over{position:static;width:auto}
+.no-js .cmp-line,.no-js .cmp-range{display:none}
+.no-js .cmp-tag{top:0}.no-js .cmp-tag.l{left:0}.no-js .cmp-tag.r{right:0}''',
+'calc': r'''/* 部品：合計の目安が出る料金 */
+.calc{background:#fff;border-radius:var(--r);padding:30px 24px;padding:30px clamp(18px,4vw,40px);box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.calc-rows{list-style:none;margin:0;padding:0}
+.calc-rows li{display:grid;grid-template-columns:1fr auto 7.5em;grid-gap:14px;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.calc-rows li.chk{grid-template-columns:1fr auto}
+.calc-name b,.calc-chk b{display:block;font-family:var(--head);font-weight:500;letter-spacing:.08em;font-size:1.05rem;line-height:1.6}
+.calc-name small,.calc-chk small{display:block;font-size:.8rem;color:var(--muted);line-height:1.6}
+.calc-price{font-family:var(--head);color:var(--dark);font-size:1.1rem;white-space:nowrap}
+.calc-price small{font-family:var(--gothic);font-size:.78rem;color:var(--muted)}
+.calc-q select{font:inherit;font-size:1rem;width:100%;min-height:44px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.calc-chk{display:flex;align-items:flex-start;cursor:pointer}
+.calc-chk input{width:22px;height:22px;margin:.45em 12px 0 0;flex:none;accent-color:var(--primary)}
+.calc-total{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:2px solid var(--dark)}
+.calc-total span{font-family:var(--head);letter-spacing:.1em}
+.calc-total small{font-family:var(--gothic);font-size:.8rem;color:var(--muted)}
+.calc-total output{font-family:var(--head);font-size:2rem;color:var(--primary-deep);letter-spacing:.04em;line-height:1.3}
+.calc-note{font-size:.85rem;margin:14px 0 0}
+.calc-act{display:flex;flex-wrap:wrap;align-items:center;margin:18px -6px 0}
+.calc-act .btn{margin:6px}
+.calc-reset{margin:6px;font:inherit;font-size:.88rem;background:none;border:1px solid var(--line);border-radius:999px;padding:.6em 1.3em;color:var(--muted);cursor:pointer;min-height:44px}
+.calc-reset:hover{border-color:var(--primary);color:var(--primary-deep)}
+@media (max-width:640px){
+  .calc-rows li{grid-template-columns:1fr auto}
+  .calc-rows li .calc-q{grid-column:1 / -1}
+  .calc-total output{font-size:1.7rem}
+  .calc-act .btn{flex:1 1 100%}
+}
+/* JS がないとき：料金表として出す */
+.no-js .calc-q,.no-js .calc-total,.no-js .calc-act,.no-js .calc-chk input{display:none}
+.no-js .calc-rows li{grid-template-columns:1fr auto}''',
+'cases': r'''/* 部品：施工例（作業前・作業後） */
+.cases-sec{background:var(--bg2)}
+.cases{display:grid;grid-gap:56px;gap:56px;max-width:1000px;margin:0 auto}
+.case{display:grid;grid-template-columns:1fr 1fr;grid-gap:18px;gap:18px}
+.case figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg)}
+.case figure img{width:100%;height:auto;display:block}
+.case figcaption{position:absolute;left:0;top:0;background:rgba(0,0,0,.6);color:#fff;font-family:var(--head);font-size:.85rem;letter-spacing:.2em;padding:.35em 1.1em;border-radius:0 0 12px 0;line-height:1.7}
+.case figure.after figcaption{background:var(--primary)}
+.case .txt{grid-column:1 / -1;display:grid;grid-template-columns:16em 1fr;grid-gap:28px;gap:28px;border-top:1px solid var(--line);padding-top:18px}
+.case h3{font-size:1.15rem;letter-spacing:.14em}
+.case .txt p{margin:0;font-size:.93rem;color:var(--muted)}
+.case .meta{display:block;font-size:.8rem;color:var(--muted);font-family:var(--gothic);letter-spacing:.1em;margin-top:4px}
+@media (max-width:760px){.case{grid-template-columns:1fr}.case .txt{grid-template-columns:1fr;grid-gap:6px;gap:6px}.cases{grid-gap:44px;gap:44px}}''',
+'form': r'''/* 部品：選んで送れるフォーム */
+.formbox{max-width:760px;margin:44px auto 0;background:var(--dark2);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);overflow:hidden;scroll-margin-top:16px}
+.form-top{display:flex;justify-content:space-between;align-items:baseline;padding:12px 28px;background:var(--primary);color:#fff;font-family:var(--head);letter-spacing:.14em}
+.form-sub{font-family:var(--gothic);font-size:.78rem;letter-spacing:.1em;opacity:.9}
+.formbox form{display:grid;grid-gap:18px;gap:18px;padding:24px 28px 28px}
+.formbox .form-lead{margin:0;font-size:.92rem;color:#d9d4c8}
+.f-row{display:block;font-size:.9rem}
+.f-row > span{display:block;margin-bottom:6px;font-family:var(--head);letter-spacing:.08em}
+.formbox input,.formbox textarea{font:inherit;font-size:16px;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink);width:100%;min-height:50px;display:block}
+.formbox input:focus,.formbox textarea:focus{border-color:var(--primary);outline:none}
+.formbox textarea{min-height:130px;resize:vertical}
+.formbox fieldset{border:none;margin:0;padding:0;min-width:0}
+.formbox legend{padding:0;margin-bottom:8px;font-family:var(--head);letter-spacing:.08em;font-size:.9rem}
+.req,.opt-label{display:inline-block;margin-left:8px;font-family:var(--gothic);font-size:.7rem;letter-spacing:.05em;border-radius:4px;padding:0 6px;vertical-align:.15em;line-height:1.7}
+.req{background:var(--primary);color:#fff}
+.opt-label{border:1px solid rgba(255,255,255,.4);color:#d9d4c8}
+.chips{display:flex;flex-wrap:wrap;margin:-4px}
+.chip{position:relative;margin:4px;font-size:.92rem;cursor:pointer}
+.formbox .chip input{position:absolute;left:0;top:0;width:1px;height:1px;min-height:0;padding:0;opacity:0}
+.formbox .chip span{display:block;margin:0;padding:9px 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.4);color:#fff;line-height:1.5;min-height:44px;-webkit-transition:background .15s;transition:background .15s}
+.formbox .chip input:checked + span{background:var(--primary);border-color:var(--primary)}
+.formbox .chip input:checked + span::before{content:"✓ "}
+.formbox .chip input:focus-visible + span{outline:2px solid #fff;outline-offset:2px}
+.formbox .btn{width:100%;font-size:1.05rem}
+.formnote{font-size:.82rem;color:#cfcabd;margin:0;line-height:1.7}
+.formbox .gotcha{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.form-sent{text-align:center;padding:20px 0}
+.form-sent h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:10px}
+@media (max-width:640px){.form-top{padding:11px 18px}.formbox form{padding:18px 18px 22px}.form-sub{display:none}}''',
+}
+
+PARTS_JS = {
+'belt': r'''// 部品：写真の帯。横にゆっくり流れる。さわっている間・マウスを乗せている間は止まる。指で横に動かせる
+// 動きを減らす設定の人には流さない（横に動かして見られる）。古いスマホでも動くよう scrollLeft を requestAnimationFrame で動かす
+(function(){
+  var belt = document.getElementById('belt'); if (!belt || !window.requestAnimationFrame) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var track = belt.querySelector('.belt-track'), orig = track.innerHTML, n = 1;
+  // 2つ以上並べて、1つ分まで来たら最初に戻す（つなぎ目が見えない）。短いときは画面の2倍になるまで増やす
+  while (n < 2 || (track.scrollWidth < belt.clientWidth * 2 && n < 6)) { track.innerHTML += orig; n++; }
+  var items = track.querySelectorAll('li'), per = items.length / n;
+  for (var i = per; i < items.length; i++) items[i].setAttribute('aria-hidden', 'true');
+  var x = 0, hold = false, until = 0, last = null, speed = 0.03, seen = true; // speed：1ミリ秒あたりの点数（約30点/秒）
+  function one(){ return track.scrollWidth / n; }
+  function stop(){ hold = true; }
+  function later(){ hold = false; until = Date.now() + 2500; }
+  belt.addEventListener('mouseenter', stop); belt.addEventListener('mouseleave', later);
+  belt.addEventListener('touchstart', stop, {passive:true}); belt.addEventListener('touchend', later);
+  belt.addEventListener('focusin', stop); belt.addEventListener('focusout', later);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ seen = es[0].isIntersecting; }).observe(belt);
+  function step(ts){
+    var dt = last === null ? 16 : Math.min(64, ts - last); last = ts;
+    var w = one();
+    if (!hold && seen && !document.hidden && Date.now() > until) {
+      if (Math.abs(belt.scrollLeft - Math.round(x)) > 2) x = belt.scrollLeft; // 指で動かしたら、そこから続ける
+      x += speed * dt; if (x >= w) x -= w;
+      belt.scrollLeft = Math.round(x);
+    } else { x = belt.scrollLeft; if (x >= w) { x -= w; belt.scrollLeft = x; } }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();''',
+'compare': r'''// 部品：前と後の見比べ。つまみ（range）か、写真の上を指・マウスで動かすと、左に重ねた「前」の写真の見える幅が変わる（左が前・右が後）
+// clip-path は使わず「幅＋overflow:hidden」で切る（古いスマホでも動く）。中の写真の幅は枠と同じにそろえる
+(function(){
+  var frame = document.getElementById('cmp-frame'), r = document.getElementById('cmp-range'), a = document.getElementById('cmp-over'), line = document.getElementById('cmp-line');
+  if (!frame || !r || !a) return;
+  var img = a.querySelector('img');
+  function fit(){ if (img) img.style.width = frame.clientWidth + 'px'; }
+  function set(){ var v = r.value; a.style.width = v + '%'; if (line) line.style.left = v + '%'; }
+  r.addEventListener('input', set); r.addEventListener('change', set);
+  window.addEventListener('resize', fit); window.addEventListener('load', fit);
+  fit(); set();
+  var down = false;
+  function at(ev){ var p = ev.touches ? ev.touches[0] : ev, b = frame.getBoundingClientRect(); var v = (p.clientX - b.left) / b.width * 100; r.value = Math.round(Math.max(0, Math.min(100, v))); set(); }
+  frame.addEventListener('mousedown', function(ev){ down = true; at(ev); ev.preventDefault(); });
+  window.addEventListener('mousemove', function(ev){ if (down) at(ev); });
+  window.addEventListener('mouseup', function(){ down = false; });
+  frame.addEventListener('touchstart', at, {passive:true});
+  frame.addEventListener('touchmove', at, {passive:true});
+})();''',
+'calc': r'''// 部品：合計の目安。本数・回数（select）とチェックを足して出す。金額は HTML の data-price から読む（この JS に金額は書かない）
+// LINE のボタンがあれば、選んだ内容と合計を下書きに入れる（line_id があるとき）
+(function(){
+  var box = document.getElementById('calc-box'); if (!box) return;
+  var out = document.getElementById('calc-out'), line = document.getElementById('calc-line'), reset = document.getElementById('calc-reset');
+  var ctrls = box.querySelectorAll('select[data-price], input[data-price]');
+  function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+  function draw(){
+    var total = 0, picked = [];
+    for (var i = 0; i < ctrls.length; i++) {
+      var el = ctrls[i], price = parseInt(el.getAttribute('data-price'), 10) || 0, q;
+      if (el.tagName === 'SELECT') q = parseInt(el.value, 10) || 0; else q = el.checked ? 1 : 0;
+      if (q > 0) { total += price * q; picked.push(el.getAttribute('data-name') + (el.tagName === 'SELECT' ? ' ' + q + (el.getAttribute('data-unit') || '') : '')); }
+    }
+    out.textContent = yen(total);
+    if (line) {
+      var oa = line.getAttribute('data-oa'), tpl = line.getAttribute('data-msg') || '';
+      if (oa) line.href = 'https://line.me/R/oaMessage/' + encodeURIComponent(oa) + '/?' + encodeURIComponent(tpl.replace('{items}', picked.length ? picked.join('、') : '（まだ選んでいません）').replace('{total}', yen(total)));
+    }
+  }
+  for (var j = 0; j < ctrls.length; j++) { ctrls[j].addEventListener('change', draw); ctrls[j].addEventListener('input', draw); }
+  if (reset) reset.addEventListener('click', function(){ for (var k = 0; k < ctrls.length; k++) { if (ctrls[k].tagName === 'SELECT') ctrls[k].selectedIndex = 0; else ctrls[k].checked = false; } draw(); });
+  draw();
+})();''',
+'form': r'''// 部品：フォーム。送り先は Formspree（form の action）。JS があれば、ページを離れずに送って「送りました」と出す
+// 送れなかったとき（XMLHttpRequest が使えない・エラー）は、ふつうの送信（Formspree の画面）に切りかえる。送り先が未設定なら送らず案内を出す
+(function(){
+  var form = document.getElementById('cform'); if (!form) return;
+  var note = document.getElementById('formnote'), btn = form.querySelector('button[type=submit]'), ep = form.getAttribute('data-endpoint');
+  var done = note ? note.textContent : 'こちらから折り返しご連絡します。', plain = false;
+  form.addEventListener('submit', function(ev){
+    if (plain) return; // 切りかえたあとは、ふつうに送る
+    if (!ep) { ev.preventDefault(); if (note) note.textContent = 'フォームの送り先はただいま準備中です。お電話など、ほかの方法でご相談ください。'; return; }
+    if (!window.XMLHttpRequest || !window.FormData) return;
+    ev.preventDefault();
+    var g = form.querySelector('.gotcha'); if (g && g.value) return;
+    if (btn) btn.disabled = true; if (note) note.textContent = '送っています…';
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', ep, true); xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState !== 4) return;
+      if (xhr.status >= 200 && xhr.status < 300) {
+        form.innerHTML = '<div class="form-sent" role="status"><h3>送りました</h3><p class="formnote">' + done + '</p></div>';
+      } else { plain = true; if (btn) btn.disabled = false; if (note) note.textContent = done; form.submit(); }
+    };
+    try { xhr.send(new FormData(form)); } catch (err) { plain = true; if (btn) btn.disabled = false; form.submit(); }
+  });
+})();''',
+}
+
+def placeholder(path, w, h, label, colors=('#ece5da', '#d9cfc0')):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, 'w', encoding='utf-8').write(f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ece5da"/><stop offset="1" stop-color="#d9cfc0"/></linearGradient></defs>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{colors[0]}"/><stop offset="1" stop-color="{colors[1]}"/></linearGradient></defs>
 <rect width="{w}" height="{h}" fill="url(#g)"/>
 <text x="{w/2}" y="{h/2}" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="{max(28, w//28)}" letter-spacing="3" fill="#8a7d6a">{html.escape(label)}</text>
 </svg>
@@ -580,13 +1000,24 @@ def main():
     c = json.load(open(conf, encoding='utf-8'))
     os.makedirs(outdir, exist_ok=True)
     # 写真がまだないところは「写真が入ります」の仮画像（.svg）を入れる
-    def need(obj, label, w, h):
+    def need(obj, label, w, h, colors=None):
         if obj and obj.get('image') and not os.path.exists(os.path.join(outdir, obj['image'])):
-            if obj['image'].endswith('.svg'): placeholder(os.path.join(outdir, obj['image']), w, h, label)
+            if obj['image'].endswith('.svg'): placeholder(os.path.join(outdir, obj['image']), obj.get('w', w), obj.get('h', h), label, colors or ('#ece5da', '#d9cfc0'))
             else: print('⚠️ 写真がありません：', obj['image'])
     need(c.get('hero'), 'トップの写真が入ります', c.get('hero', {}).get('w', 1600), c.get('hero', {}).get('h', 1000))
     need(c.get('greeting'), 'ごあいさつの写真が入ります', 800, 1000)
     for m in c.get('menus', []): need(m, m['name'] + 'の写真が入ります', m.get('w', 1000), m.get('h', 750))
+    # 部品の写真（前＝灰色っぽく、後＝緑っぽく。仮画像でも見比べが分かるように）
+    P = parts_conf(c)
+    BEFORE, AFTER = ('#d8d2c6', '#b9b1a3'), ('#dfe9d6', '#b3cc9f')
+    for it in (P.get('belt') or {}).get('items', []): need(it, (it.get('title') or '') + 'の写真が入ります', 1000, 750)
+    cs = P.get('cases') or {}
+    for it in cs.get('items', []):
+        need(it.get('before'), cs.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
+        need(it.get('after'), cs.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)
+    cp = P.get('compare') or {}
+    need(cp.get('before'), cp.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
+    need(cp.get('after'), cp.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)
     s = build(c)
     try:
         sys.path.insert(0, HERE); import wbr
