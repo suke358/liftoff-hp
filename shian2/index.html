@@ -1224,23 +1224,33 @@ function revealAll(items, gap, each, done){
   window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
 })();
 // ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を、ゆっくり一定の速さ（1秒に 60px）で飛ぶ =====
-// 開いたときは1回だけ、画面の右下の外からなめらかなカーブで斜めに上がって入り、線に近づいたら向きを線にそろえて乗り、今の画面のタブの位置で止まる（3秒以内。文字より手前を飛ぶ）
+// 開いたときは1回だけ、画面の右下の外から、画面の中ほどを通る大きなゆるいカーブで左上へ上がり、線に乗って今の画面のタブの位置で止まる（約3秒。動き出しと止まる所はゆっくり、途中は速め）
 // 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
-// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中。文字やボタンの上には来ない）。折り返しは半円を描いて、機首は進む向きに
+// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中）。折り返しは半円を描いて機首を 180 度なめらかに回す。向きは常に進む方向
+// 上下の反転は「いま右へ進んでいるか、左へ進んでいるか」（moveDir）で決める：右へ進むときは必ず背中が上。角度は毎回 -180〜180 度にそろえる（足され続けない）
 // 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
-  var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
-  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED, turn = 0;
+  var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60, ENTRY_MS = 3000;
+  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED, turn = 0, moveDir = 1, entry = null;
+  function norm(a){ while (a > 180) a -= 360; while (a <= -180) a += 360; return a; }
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
-  // 向き a で回したあと、上下を f 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き。逆さまにならない）。
+  // 向き a で回したあと、上下を f 倍にする：右へ進んでいれば +（そのまま）、左へ進んでいれば -（上下反転＝背中が上・機首が進む向き）。
   // 曲がっている最中（turn＝1px 進むあいだに何度向きが変わるか）は f を 0 に近づけて、旋回して傾いているように見せる。
-  // 折り返しの半円は強く曲がるので、向きが 90 度をまたいで反転する瞬間は f がほぼ 0 → パッと切りかわって見えない。
-  // 斜めに上がる入り方や、ゆるい S 字はほとんど曲がらないので、機体はそのままの大きさで見える
-  function apply(){ var dir = (pos.a > 90 || pos.a < -90) ? -1 : 1, f = dir * Math.max(.1, 1 - turn / 3.5); setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
-  window.jetPose = function(x, y, a, t){ pos = { x: x, y: y, a: a }; turn = t || 0; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
-  window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, speed: speed, left: path.length, next: path[0] || null, end: path[path.length - 1] || null }; }; // 確かめる用
-  function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
+  // 折り返しの半円は強く曲がるので、左右が入れかわる瞬間は f がほぼ 0 → パッと切りかわって見えない
+  function apply(){ var f = moveDir * Math.max(.1, 1 - turn / 3.5); setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
+  // 1歩すすめる：目標の点へ向けて d px。向きは進む方向へ少しずつ。左右の向きは実際の動きで決める
+  function moveTo(p, d){
+    var dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
+    if (L < .01) return 0;
+    var step = Math.min(L, d), ang = Math.atan2(dy, dx) * 180 / Math.PI, da = norm(ang - pos.a);
+    var turned = da * Math.min(1, step / 6); pos.a = norm(pos.a + turned);
+    turn += (Math.abs(turned) / Math.max(.5, step) - turn) * .25;
+    if (Math.abs(dx) > .01) moveDir = dx > 0 ? 1 : -1;
+    pos.x += dx / L * step; pos.y += dy / L * step;
+    return step;
+  }
+  function heading(){ return moveDir; } // 今の向き：1 右、-1 左
   // いまの位置・向きから目標の x まで、なめらかな道筋を作る
   function plan(tx){
     path = [];
@@ -1257,47 +1267,60 @@ function revealAll(items, gap, each, done){
     }
     path.push([tx, y1]);
   }
+  // 線の上の飛び方：一定の速さで道筋をたどる（dt ミリ秒ぶん）
+  function advance(dt){
+    var d = speed * Math.min(50, dt) / 1000;
+    while (d > 0 && path.length) { var moved = moveTo(path[0], d); if (moved === 0) { path.shift(); continue; } d -= moved; if (moved < .01) break; if (Math.abs(path[0][0] - pos.x) < .01 && Math.abs(path[0][1] - pos.y) < .01) path.shift(); }
+    apply();
+    return path.length > 0;
+  }
   function step(ts){
     raf = 0;
     if (last === null) last = ts;
-    var d = speed * Math.min(50, ts - last) / 1000; last = ts;
-    while (d > 0 && path.length) {
-      var p = path[0], dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
-      if (L < .01) { path.shift(); continue; }
-      var ang = Math.atan2(dy, dx) * 180 / Math.PI, da = ang - pos.a;
-      while (da > 180) da -= 360; while (da < -180) da += 360;
-      var turned = da * Math.min(1, d / 6); pos.a += turned; // 向きは進む方向へ少しずつ（6px 進むあいだに合わせる）
-      turn += (Math.abs(turned) / Math.max(.5, d) - turn) * .25; // 曲がり具合（なめらかに追いかける）
-      if (L <= d) { pos.x = p[0]; pos.y = p[1]; d -= L; path.shift(); }
-      else { pos.x += dx / L * d; pos.y += dy / L * d; d = 0; }
-    }
-    apply();
-    if (path.length) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; apply(); }
+    var more = entry ? entryStep(ts) : advance(ts - last); last = ts;
+    if (more) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; apply(); }
   }
-  // 開いたときの入り方：右下の外 → なめらかなカーブ（3次ベジェ）で斜めに上がる → 線の高さで水平になって乗る → 目標まで線にそって左へ
+  function kick(){ if (!raf) { last = null; raf = requestAnimationFrame(step); } }
+  // ---- 開いたときの入り方：右下の外 → 画面の中ほど → 左上 → 線に乗って目標（3次ベジェ。長さで等分して、時間はゆっくり→速め→ゆっくり）
+  function bez(P, t){ var a = 1 - t; return [a * a * a * P[0][0] + 3 * a * a * t * P[1][0] + 3 * a * t * t * P[2][0] + t * t * t * P[3][0], a * a * a * P[0][1] + 3 * a * a * t * P[1][1] + 3 * a * t * t * P[2][1] + t * t * t * P[3][1]]; }
   function planEntry(tx){
     var W = document.documentElement.clientWidth, VH = window.innerHeight || 800;
-    var ex = Math.max(tx + 40, W * .55); // 線に乗る所（目標より右）
-    var P0 = [W + 60, VH + 40], P1 = [W + 10, VH * .55], P2 = [ex + 140, Y_L], P3 = [ex, Y_L], i, n = 40, L = 0, prev = P0;
-    path = [];
-    for (i = 1; i <= n; i++) {
-      var t = i / n, a = 1 - t, x = a * a * a * P0[0] + 3 * a * a * t * P1[0] + 3 * a * t * t * P2[0] + t * t * t * P3[0], y = a * a * a * P0[1] + 3 * a * a * t * P1[1] + 3 * a * t * t * P2[1] + t * t * t * P3[1];
-      path.push([x, y]); L += Math.sqrt((x - prev[0]) * (x - prev[0]) + (y - prev[1]) * (y - prev[1])); prev = [x, y];
-    }
-    path.push([tx, Y_L]); L += Math.abs(ex - tx);
-    pos = { x: P0[0], y: P0[1], a: Math.atan2(P1[1] - P0[1], P1[0] - P0[0]) * 180 / Math.PI }; // 最初から進む向きを向いておく
-    speed = Math.max(SPEED * 2, Math.min(420, L / 2.6)); // 全部で 2.6 秒くらい（3秒はこえない）。線の上より少し速い
+    var P = [[W + 50, VH + 30], [W * .05, VH * .8], [W * .05, 60], [tx, Y_R]], pts = [], cum = [0], i, L = 0;
+    for (i = 0; i <= 120; i++) { var q = bez(P, i / 120); if (i) L += Math.sqrt((q[0] - pts[i - 1][0]) * (q[0] - pts[i - 1][0]) + (q[1] - pts[i - 1][1]) * (q[1] - pts[i - 1][1])); pts.push(q); cum.push(L); }
+    entry = { pts: pts, cum: cum, L: L, t0: null, tx: tx };
+    pos = { x: P[0][0], y: P[0][1], a: Math.atan2(P[1][1] - P[0][1], P[1][0] - P[0][0]) * 180 / Math.PI }; moveDir = -1; turn = 0;
+  }
+  function entryAt(u){ // 道のり u（0〜1）の点
+    var sL = u * entry.L, i = 1; while (i < entry.cum.length - 1 && entry.cum[i] < sL) i++;
+    var a = entry.pts[i - 1], b = entry.pts[i], seg = entry.cum[i] - entry.cum[i - 1], k = seg > 0 ? (sL - entry.cum[i - 1]) / seg : 0;
+    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+  }
+  function entryStep(ts){
+    if (entry.t0 === null) entry.t0 = ts;
+    var u = Math.min(1, (ts - entry.t0) / ENTRY_MS), e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; // 動き出しと止まる所はゆっくり、途中は速め
+    var p = entryAt(e), q = entryAt(Math.min(1, e + .004)), dx = q[0] - p[0], dy = q[1] - p[1];
+    var moved = Math.sqrt((p[0] - pos.x) * (p[0] - pos.x) + (p[1] - pos.y) * (p[1] - pos.y));
+    if (dx * dx + dy * dy > .0001) { var da = norm(Math.atan2(dy, dx) * 180 / Math.PI - pos.a); var turned = da * .25; pos.a = norm(pos.a + turned); turn += (Math.abs(turned) / Math.max(.5, moved) - turn) * .15; if (Math.abs(dx) > .001) moveDir = dx > 0 ? 1 : -1; }
+    pos.x = p[0]; pos.y = p[1];
+    apply();
+    if (u >= 1) { pos = { x: entry.tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; entry = null; apply(); return false; }
+    return true;
   }
   window.jetGo = function(i){
     var tx = xOf(i);
-    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; path = []; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
-    if (!entered) { entered = true; planEntry(tx); apply(); if (!raf) { last = null; raf = requestAnimationFrame(step); } return; }
-    plan(tx);
-    if (!raf && path.length) { last = null; raf = requestAnimationFrame(step); }
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; path = []; entry = null; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
+    if (!entered) { entered = true; planEntry(tx); apply(); kick(); return; }
+    if (entry) { entry.tx = tx; return; } // 入ってくる途中に切りかえた：行き先だけ変える
+    plan(tx); if (path.length) kick();
   };
+  // 確かめる用（確認画像・JS での確認）
+  window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; entry = null; apply(); };
+  window.jetEntryPose = function(u){ if (!entry) planEntry(xOf(0)); var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; apply(); };
+  window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { advance(16); t += 16; } speed = SPEED; turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
+  window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, dir: moveDir, turn: turn, left: path.length, entry: !!entry }; };
   apply();
   window.jetGo(['home', 'dekiru', 'ryokin', 'nagare', 'soudan'].indexOf(document.querySelector('.scr.on') ? document.querySelector('.scr.on').id : 'home'));
-  document.addEventListener('visibilitychange', function(){ if (!document.hidden && path.length && !raf) { last = null; raf = requestAnimationFrame(step); } });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && (path.length || entry) && !raf) { last = null; if (entry) entry.t0 = null; raf = requestAnimationFrame(step); } });
 })();
 </script>
 <script>
