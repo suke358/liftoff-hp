@@ -223,12 +223,14 @@ js = r'''
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
   var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
-  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED;
+  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED, turn = 0;
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
-  // 向き a で回したあと、上下を cos(a) 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き）。
-  // 半円の途中（真下向き＝90度）は 0 に近づいて、旋回して傾いているように見える。急にパッと切りかわらない
-  function apply(){ var f = Math.cos(pos.a * Math.PI / 180); if (Math.abs(f) < .2) f = f < 0 ? -.2 : .2; /* 真横でも薄く見えるように、0 にはしない */ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
-  window.jetPose = function(x, y, a){ pos = { x: x, y: y, a: a }; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
+  // 向き a で回したあと、上下を f 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き。逆さまにならない）。
+  // 曲がっている最中（turn＝1px 進むあいだに何度向きが変わるか）は f を 0 に近づけて、旋回して傾いているように見せる。
+  // 折り返しの半円は強く曲がるので、向きが 90 度をまたいで反転する瞬間は f がほぼ 0 → パッと切りかわって見えない。
+  // 斜めに上がる入り方や、ゆるい S 字はほとんど曲がらないので、機体はそのままの大きさで見える
+  function apply(){ var dir = (pos.a > 90 || pos.a < -90) ? -1 : 1, f = dir * Math.max(.1, 1 - turn / 3.5); setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
+  window.jetPose = function(x, y, a, t){ pos = { x: x, y: y, a: a }; turn = t || 0; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
   window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, speed: speed, left: path.length, next: path[0] || null, end: path[path.length - 1] || null }; }; // 確かめる用
   function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
   // いまの位置・向きから目標の x まで、なめらかな道筋を作る
@@ -256,12 +258,13 @@ js = r'''
       if (L < .01) { path.shift(); continue; }
       var ang = Math.atan2(dy, dx) * 180 / Math.PI, da = ang - pos.a;
       while (da > 180) da -= 360; while (da < -180) da += 360;
-      pos.a += da * Math.min(1, d / 6); // 向きは進む方向へ少しずつ（6px 進むあいだに合わせる）
+      var turned = da * Math.min(1, d / 6); pos.a += turned; // 向きは進む方向へ少しずつ（6px 進むあいだに合わせる）
+      turn += (Math.abs(turned) / Math.max(.5, d) - turn) * .25; // 曲がり具合（なめらかに追いかける）
       if (L <= d) { pos.x = p[0]; pos.y = p[1]; d -= L; path.shift(); }
       else { pos.x += dx / L * d; pos.y += dy / L * d; d = 0; }
     }
     apply();
-    if (path.length) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; }
+    if (path.length) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; apply(); }
   }
   // 開いたときの入り方：右下の外 → なめらかなカーブ（3次ベジェ）で斜めに上がる → 線の高さで水平になって乗る → 目標まで線にそって左へ
   function planEntry(tx){
