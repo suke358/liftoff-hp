@@ -99,6 +99,7 @@ tr.sub td{background:#fafcfd;font-weight:700}
       <label class="row"><input type="radio" name="plan" value="web">WEB担当者代行<small>初期98,000円＋月19,800円</small></label>
       <label class="row"><input type="radio" name="plan" value="none">ホームページなし<small>ロゴなどだけ</small></label>
       <label class="row" style="display:block">ページの追加（1ページ 22,000円）<input type="number" id="pages" min="0" max="20" value="0"> ページ</label>
+      <label class="row"><input type="checkbox" id="form">お問い合わせフォームを付ける<small>フォームの管理 月550円（月額に加算。2026/10/9 決定）</small></label>
     </fieldset>
 
     <fieldset><legend>あわせてのご依頼（目安の金額から。内容が決まったら金額を直せます）</legend>
@@ -159,6 +160,7 @@ var PRICE = {
     none: null
   },
   page: 22000,
+  form: 550, // お問い合わせフォームの管理（付けるお店だけ・月額に加算）
   opts: [
     { k: 'logo', name: 'ロゴ', normal: 33000, member: 22000, note: 'メインのロゴと小さい場所用の2つで1組' },
     { k: 'card', name: '名刺（デザイン）', normal: 11000, member: 5500, note: '印刷用のデータでお渡し' },
@@ -195,7 +197,8 @@ function draw(){
   $('no').textContent = dt.getFullYear() + ('0' + (dt.getMonth() + 1)).slice(-2) + ('0' + dt.getDate()).slice(-2) + '-' + ('0' + Math.max(1, parseInt($('seq').value || '1', 10))).slice(-2);
   $('to').textContent = $('shop').value || '　　　　　　　　';
   var first = [], firstSum = 0;
-  if (p) { first.push([p.name + ' 初期費用', '1式', p.init, p.init === 0 ? '初期費用は月額に分けてお支払い' : 'デザイン・ページづくり・フォームの設置・独自ドメインの取得と設定・Googleの検索に登録する設定・地図を載せる']); firstSum += p.init; }
+  var hasForm = !!(p && $('form').checked);
+  if (p) { first.push([p.name + ' 初期費用', '1式', p.init, p.init === 0 ? '初期費用は月額に分けてお支払い' : 'デザイン・ページづくり・' + (hasForm ? 'フォームの設置・' : '') + '独自ドメインの取得と設定・Googleの検索に登録する設定・地図を載せる']); firstSum += p.init; }
   if (pages > 0) { first.push(['ページの追加', pages + 'ページ', PRICE.page * pages, '']); firstSum += PRICE.page * pages; }
   PRICE.opts.forEach(function(o){
     $('b-' + o.k).textContent = (member() ? 'ご契約 ' : '通常 ') + yen(base(o)) + '〜';
@@ -203,8 +206,9 @@ function draw(){
     if ($('o-' + o.k).checked) { var v = Math.max(0, parseInt(a.value || '0', 10)); first.push([o.name + '（' + o.note + '・直し2回まで）', '1式', v, '']); firstSum += v; }
   });
   $('tFirst').innerHTML = first.length ? first.map(function(r){ return '<tr><td>' + esc(r[0]) + (r[3] ? '<br><small style="color:#4A5F72">' + esc(r[3]) + '</small>' : '') + '</td><td class="n">' + r[1] + '</td><td class="n">' + yen(r[2]) + '</td></tr>'; }).join('') + '<tr class="sub"><td>はじめにお支払い 合計</td><td></td><td class="n">' + yen(firstSum) + '</td></tr>' : '<tr><td class="empty" colspan="3">なし</td></tr>';
-  var month = p ? p.month : 0;
-  $('tMonth').innerHTML = p ? '<tr><td>' + esc(p.name) + ' 月額<br><small style="color:#4A5F72">' + esc(p.items) + '／フォーム代込み</small></td><td class="n">' + yen(month) + '</td></tr>' : '<tr><td class="empty" colspan="2">なし</td></tr>';
+  var month = p ? p.month + (hasForm ? PRICE.form : 0) : 0;
+  $('tMonth').innerHTML = p ? '<tr><td>' + esc(p.name) + ' 月額<br><small style="color:#4A5F72">' + esc(p.items) + '</small></td><td class="n">' + yen(p.month) + '</td></tr>' +
+    (hasForm ? '<tr><td>お問い合わせフォームの管理 月額<br><small style="color:#4A5F72">フォームを付けるお店だけ。毎月の月額と一緒にご請求</small></td><td class="n">' + yen(PRICE.form) + '</td></tr>' : '') : '<tr><td class="empty" colspan="2">なし</td></tr>';
   function total(m){ var t = firstSum + month * m; return t; }
   $('tTotal').innerHTML = p ? [12, 24].map(function(m){ return '<tr><td>公開から' + (m / 12) + '年（' + m + 'か月）使うと</td><td class="n">' + yen(total(m)) + '</td></tr>'; }).join('') : '<tr><td>合計</td><td class="n">' + yen(firstSum) + '</td></tr>';
   $('sumFirst').textContent = yen(firstSum); $('sumMonth').textContent = p ? yen(month) : 'なし';
@@ -220,11 +224,11 @@ function draw(){
 }
 
 // 入力を残す（ブラウザに）
-function save(){ try { var o = { shop: $('shop').value, date: $('date').value, seq: $('seq').value, plan: plan(), pages: $('pages').value, memo: $('memo').value, opts: {} };
+function save(){ try { var o = { shop: $('shop').value, date: $('date').value, seq: $('seq').value, plan: plan(), pages: $('pages').value, form: $('form').checked, memo: $('memo').value, opts: {} };
   PRICE.opts.forEach(function(x){ o.opts[x.k] = { on: $('o-' + x.k).checked, v: $('a-' + x.k).value, auto: $('a-' + x.k).getAttribute('data-auto') }; });
   localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
 function load(){ try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (!o) return;
-  $('shop').value = o.shop || ''; $('date').value = o.date || ''; $('seq').value = o.seq || 1; $('pages').value = o.pages || 0; $('memo').value = o.memo || '';
+  $('shop').value = o.shop || ''; $('date').value = o.date || ''; $('seq').value = o.seq || 1; $('pages').value = o.pages || 0; $('form').checked = !!o.form; $('memo').value = o.memo || '';
   var r = document.querySelector('input[name=plan][value="' + o.plan + '"]'); if (r) r.checked = true;
   PRICE.opts.forEach(function(x){ var s = o.opts && o.opts[x.k]; if (!s) return; $('o-' + x.k).checked = s.on; $('a-' + x.k).value = s.v; $('a-' + x.k).setAttribute('data-auto', s.auto || ''); }); } catch (e) {} }
 

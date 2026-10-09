@@ -741,9 +741,8 @@ def part_form(x):
     times = p.get('times') or ['午前（〜12時）', '午後（12〜17時）', '夕方以降（17時〜）', 'いつでも']
     def chips(nm, vals, kind):
         out = []
-        for i, v in enumerate(vals):
-            chk = ' checked' if (kind == 'radio' and i == 0) else ''
-            out.append(f'<label class="chip"><input type="{kind}" name="{e(nm)}" value="{e(v)}"{chk}><span>{e(v)}</span></label>')
+        for v in vals:  # 最初は何も選ばれていない状態（radio も。2026/10/9 決定）
+            out.append(f'<label class="chip"><input type="{kind}" name="{e(nm)}" value="{e(v)}"><span>{e(v)}</span></label>')
         return '<div class="chips">' + ''.join(out) + '</div>'
     endpoint = p.get('endpoint') or ''
     if not endpoint: print('⚠️ form：送り先（endpoint。Formspree の URL）がまだありません。送るボタンを押すと「準備中」と出ます')

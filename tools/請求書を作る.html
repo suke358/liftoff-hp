@@ -90,6 +90,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
       <div class="adds">
         <button type="button" data-add="init">＋初期費用</button>
         <button type="button" data-add="month">＋月額</button>
+        <button type="button" data-add="form">＋フォームの管理（月額）</button>
         <button type="button" data-add="over">＋回数をこえた更新</button>
         <button type="button" data-add="page">＋ページの追加</button>
         <button type="button" data-add="logo">＋ロゴ</button>
@@ -145,7 +146,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
 <script>
 var PRICE = { // 税込。決定事項.md のとおり（変わったらここを直す。「お見積もりを作る.html」も同じ）
   plans: { std: { name: 'スタンダード', init: 98000, month: 5500 }, zero: { name: '初期0円プラン', init: 0, month: 9800 }, web: { name: 'WEB担当者代行', init: 98000, month: 19800 } },
-  over: 3300, page: 22000,
+  over: 3300, page: 22000, form: 550, // form：お問い合わせフォームの管理（付けるお店だけ・月額。2026/10/9 決定）
   opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000], anim: ['ホームページの動きの演出（1か所）', 16500, 16500] }
 };
 var KEY = 'liftoff-invoice-v1', ME = 'liftoff-invoice-me', $ = function(i){ return document.getElementById(i); };
@@ -163,7 +164,8 @@ function add(kind){
   var p = $('plan').value, P = PRICE.plans[p], dt = day($('date').value), r = { kind: kind, when: jp(dt), qty: 1 };
   var member = p !== 'none';
   if (kind === 'init') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 初期費用（ホームページ制作・公開の設定）'; r.price = P.init; }
-  else if (kind === 'month') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 月額（お問い合わせフォーム代込み）'; r.price = P.month; r.when = ym(dt); }
+  else if (kind === 'month') { if (!P) return alert('プランを選んでください'); r.name = P.name + ' 月額'; r.price = P.month; r.when = ym(dt); }
+  else if (kind === 'form') { r.name = 'お問い合わせフォームの管理 月額'; r.price = PRICE.form; r.when = ym(dt); }
   else if (kind === 'over') { r.name = '回数をこえた更新'; r.price = PRICE.over; }
   else if (kind === 'page') { r.name = 'ページの追加'; r.price = PRICE.page; }
   else if (kind === 'free') { r.name = ''; r.price = 0; }
@@ -182,7 +184,7 @@ function paint(){
 // 期限：月額だけなら「その月の末」、それ以外が入っていれば「翌月末」（決定事項）
 function autoDue(){
   if ($('due').getAttribute('data-hand') === '1') return;
-  var dt = day($('date').value), onlyMonth = rows.length && rows.every(function(r){ return r.kind === 'month'; });
+  var dt = day($('date').value), onlyMonth = rows.length && rows.every(function(r){ return r.kind === 'month' || r.kind === 'form'; });
   $('due').value = iso(endOf(dt, onlyMonth ? 0 : 1));
   $('dueHint').textContent = onlyMonth ? '月額だけなので「その月の末」にしています（決定事項）' : '初期費用・ロゴなどは「翌月末」まで（決定事項）。直すこともできます';
 }

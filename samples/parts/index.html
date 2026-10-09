@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>松葉造園｜〇〇市の造園・剪定・庭づくり</title>
+<meta name="description" content="〇〇市の造園店、松葉造園のホームページです。剪定・庭づくり・外構・伐採を、〇〇県内でお受けしています。">
+<!-- 本公開前は検索に出さない設定。本公開のときに tools/launch.py で外す -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#23221f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="松葉造園">
+<meta property="og:title" content="松葉造園">
+<meta property="og:description" content="〇〇市の造園店、松葉造園のホームページです。剪定・庭づくり・外構・伐採を、〇〇県内でお受けしています。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "松葉造園", "areaServed": "〇〇県"}
+</script>
+<style>
+/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+.nw{white-space:nowrap}
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+:root{
+  --primary:#a8432a;--primary-deep:#8f3822;--accent:#3e5640;--accent-soft:#c9b98f;--pale:#efe6d6;
+  --dark:#23221f;--dark2:#33312c;--bg:#f3eee3;--bg2:#e9e2d3;--ink:#23221f;--muted:#6d675c;--line:#cfc6b4;
+  --r:18px;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
+  --latin:"Cormorant Garamond","Shippori Mincho B1",serif;
+  --head:var(--mincho);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:2;letter-spacing:.06em}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:4px}
+.wrap{width:min(1100px,100% - 40px);margin-left:auto;margin-right:auto}
+h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
+p{margin:0 0 1.2em}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
+.photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.photo img{width:100%;height:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:500;letter-spacing:.12em;padding:.95em 1.8em;border-radius:999px;line-height:1.4;text-align:center;-webkit-transition:background .2s;transition:background .2s}
+.btn svg{width:1.25em;height:1.25em;flex:none;margin-right:.5em}
+.btn-main{background:var(--primary);color:#fff}
+.btn-main:hover{background:var(--primary-deep)}
+.btn-line{background:#06c755;color:#fff}
+.btn-line:hover{background:#05b04b}
+.btn-ghost{border:1px solid rgba(255,255,255,.45);color:#fff}
+.btn-ghost:hover{border-color:#fff}
+/* ヘッダー */
+.head{position:absolute;top:0;left:0;right:0;z-index:30}
+.head .wrap{display:flex;justify-content:space-between;align-items:center;height:84px;color:#f3efe6}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand img{width:46px;height:46px;border-radius:10px;margin-right:12px}
+.bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
+.bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
+.nav{display:flex;align-items:center;font-size:.86rem}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a:hover{opacity:1;color:var(--accent-soft)}
+.nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
+.menubtn{display:none}
+@media (max-width:860px){
+  .nav a{display:none}.bk{display:none}
+  .menubtn{display:inline-flex;align-items:center;background:rgba(0,0,0,.35);color:#f3efe6;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:.45em .95em;font:inherit;font-size:.8rem;letter-spacing:.1em;cursor:pointer}
+  .menubtn i{display:block;width:14px;height:10px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;position:relative;margin-right:6px}
+  .menubtn i::after{content:"";position:absolute;left:0;right:0;top:3.5px;border-top:1.5px solid currentColor}
+  .head.open .nav{display:flex;position:absolute;top:76px;right:12px;flex-direction:column;align-items:stretch;background:var(--dark);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:6px;min-width:210px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+  .head.open .nav a{display:block;margin:0;padding:.85em 1em;border-radius:10px;font-size:.92rem}
+  .head.open .nav .rsv{margin-top:4px;text-align:center}
+}
+/* トップ */
+.hero{background:var(--dark);color:#f3efe6;position:relative;overflow:hidden}
+.hero .wrap{width:100%;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:stretch;min-height:100vh;min-height:min(100vh,940px)}
+.poster{margin:0;position:relative;overflow:hidden}
+.poster img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.poster::after{content:"";position:absolute;top:0;right:0;bottom:0;width:30%;background:linear-gradient(90deg,rgba(0,0,0,0),var(--dark));pointer-events:none}
+.poster.plain{display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 60% at 50% 45%,var(--dark2),var(--dark))}
+.plain-name{font-family:var(--head);font-size:3rem;letter-spacing:.3em;color:var(--accent-soft);margin:0;padding:0 20px;text-align:center}
+.hero-info{align-self:center;padding:130px clamp(28px,6vw,90px) 90px clamp(24px,3vw,48px);max-width:640px}
+.eyebrow{font-family:var(--head);color:var(--accent-soft);letter-spacing:.2em;font-size:.95rem;margin-bottom:18px;display:flex;align-items:center}
+.eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
+.hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
+.hero .lead{color:#ddd8cc;line-height:2.1}
+.addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
+.addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
+.hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}
+.hero-btns .btn{margin:6px}
+.toc{display:flex;flex-wrap:wrap;margin:18px -4px 0;padding:0;list-style:none}
+.toc li{margin:4px}
+.toc a{display:inline-block;text-decoration:none;font-size:.82rem;letter-spacing:.1em;color:#efeadf;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.45em 1.1em}
+.toc a:hover{border-color:var(--accent-soft);color:var(--accent-soft)}
+@media (max-width:860px){
+  .hero{padding-bottom:48px}
+  .hero .wrap{grid-template-columns:1fr;min-height:0}
+  .poster img{position:static;height:auto}
+  .poster::after{display:none}
+  .poster.plain{min-height:220px;padding-top:70px}
+  .plain-name{font-size:2.2rem}
+  .hero-info{width:auto;max-width:none;margin:28px 20px 0;padding:0}
+  .hero-btns .btn{flex:1 1 100%}
+}
+/* 見出し */
+.sec{padding:110px 0}
+.sec-head{margin-bottom:48px}
+.sec-head i{display:flex;align-items:center;font-family:var(--latin);font-style:italic;font-size:1.1rem;color:var(--primary-deep);letter-spacing:.08em;margin-bottom:4px}
+.sec-head i .mk{margin-right:.45em}
+.sec-head.center i{justify-content:center}
+.sec-head h2{font-size:1.75rem;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:.16em}
+.dark{background:var(--dark);color:#efeadf}
+.dark .muted{color:#cfcabd}
+.dark .sec-head i{color:var(--primary)}
+.sec-lead{max-width:40em;margin:-24px auto 32px}
+@media (max-width:860px){.sec{padding:80px 0}.sec-head{margin-bottom:34px}}
+/* ごあいさつ */
+.owner .wrap{display:grid;grid-template-columns:340px 1fr;grid-gap:72px;gap:72px;align-items:center;max-width:1000px}
+.owner.noimg .wrap{grid-template-columns:1fr;max-width:760px}
+.role{display:inline-block;font-size:.8rem;letter-spacing:.2em;background:var(--pale);color:var(--primary-deep);padding:.3em 1.1em;border-radius:999px;margin-bottom:16px}
+.owner h3{font-size:1.4rem;letter-spacing:.12em;margin-bottom:22px}
+@media (max-width:860px){.owner .wrap{grid-template-columns:1fr;grid-gap:40px;gap:40px}.owner .photo{max-width:300px;margin:0 auto}}
+/* メニュー */
+.menu-tabs{display:flex;flex-wrap:wrap;justify-content:center;margin:-8px auto 36px;max-width:700px}
+.menu-tabs a{margin:4px;text-decoration:none;font-size:.86rem;letter-spacing:.08em;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:.5em 1.2em}
+.menu-tabs a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));grid-gap:24px;gap:24px}
+.menu-cards.n4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){.menu-cards.n4{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.menu-cards.n4{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06);display:flex;flex-direction:column;scroll-margin-top:16px}
+.card .photo{border-radius:0}
+.card-body{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:1.25rem;letter-spacing:.12em;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.92rem;line-height:1.9;margin-bottom:14px}
+.sub-items{display:flex;flex-wrap:wrap;margin:0 -3px 12px;padding:0;list-style:none}
+.sub-items li{margin:3px;font-size:.78rem;background:var(--pale);color:var(--primary-deep);border-radius:999px;padding:.15em .9em}
+.price{margin-top:auto;border-top:1px dashed var(--line);padding-top:12px;font-family:var(--head);display:flex;justify-content:space-between;align-items:baseline}
+.price b{font-size:1.35rem;font-weight:500;color:var(--dark);letter-spacing:.04em}
+.price small{font-family:var(--gothic);font-size:.8rem;color:var(--muted)}
+.price .ask{font-size:.9rem;color:var(--muted)}
+.ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
+.ask-line:hover{background:#06c755;color:#fff}
+.ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
+.ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
+.ptable h3 .mk{margin-right:.45em}
+.ptable .lead{color:var(--muted);font-size:.92rem;margin-bottom:20px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:14px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-family:var(--head);font-weight:500;letter-spacing:.08em;font-size:1.05rem;width:9em}
+.tbl td{color:var(--muted);font-size:.9rem;line-height:1.8}
+.tbl td.yen{text-align:right;white-space:nowrap;font-family:var(--head);color:var(--dark);font-size:1.2rem;width:7em}
+.tbl .tag{display:inline-block;margin-left:.6em;font-family:var(--gothic);font-size:.68rem;background:var(--pale);color:var(--primary-deep);border-radius:999px;padding:.1em .7em;vertical-align:.15em;white-space:nowrap}
+.tbl tr.first{background:linear-gradient(90deg,var(--pale),rgba(255,255,255,0))}
+.cols{display:grid;grid-template-columns:1.4fr 1fr;grid-gap:44px;gap:44px}
+.cols.one{grid-template-columns:1fr}
+.opt h4{font-family:var(--head);font-weight:500;letter-spacing:.14em;margin:0 0 6px}
+.opt .tbl th{width:auto;font-size:.95rem}
+.extra{margin:20px 0 0;background:var(--bg);border-radius:12px;padding:14px 18px;font-size:.88rem;color:var(--muted)}
+.price-note{margin-top:28px;font-size:.88rem}
+@media (max-width:860px){.cols{grid-template-columns:1fr;grid-gap:30px;gap:30px}}
+@media (max-width:640px){
+  .menu-tabs{margin:-12px -4px 26px}.menu-tabs a{font-size:.8rem;padding:.45em .95em}
+  .card-body{padding:16px 16px 18px}.card h3{font-size:1.08rem}.card p{font-size:.84rem;line-height:1.75;margin-bottom:10px}
+  .ptable{padding:30px 18px}
+  .tbl.course tr{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--line);padding:12px 0}
+  .tbl.course th,.tbl.course td{border:none;padding:0;width:auto}
+  .tbl.course td.yen{grid-column:2;grid-row:1}
+  .tbl.course td:not(.yen){grid-column:1 / -1;margin-top:4px;font-size:.84rem}
+}
+/* 流れ */
+.steps{list-style:none;margin:0 auto;padding:0;max-width:860px;counter-reset:s}
+.steps li{position:relative;padding:0 0 30px 64px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-size:1.2rem}
+.steps li::after{content:"";position:absolute;left:21px;top:48px;bottom:4px;border-left:2px dotted var(--line)}
+.steps li:last-child::after{display:none}
+.steps h3{font-size:1.15rem;letter-spacing:.1em;margin:4px 0 4px}
+.steps p{color:var(--muted);font-size:.92rem;margin:0}
+/* 予約・相談 */
+.reserve .wrap{max-width:1000px}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);grid-gap:18px;gap:18px}
+.ways.n1{grid-template-columns:1fr;max-width:460px;margin:0 auto}
+.ways.n2{grid-template-columns:1fr 1fr;max-width:760px;margin:0 auto}
+.way{background:var(--dark2);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:32px 22px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.way h3{font-size:1rem;letter-spacing:.2em;color:var(--accent-soft);margin-bottom:6px}
+.way p{font-size:.9rem;color:#d9d4c8;margin-bottom:18px}
+.way .btn{width:100%;margin-top:auto}
+.tel{font-family:var(--latin);font-size:2rem;letter-spacing:.06em;text-decoration:none;color:#fff;margin-top:auto}
+.rules{max-width:760px;margin:36px auto 0;border:1px solid rgba(255,255,255,.18);border-radius:var(--r);padding:24px 26px}
+.rules h4{font-family:var(--head);font-weight:500;color:var(--accent-soft);letter-spacing:.16em;margin:0 0 8px}
+.rules ul{margin:0;padding-left:1.2em;font-size:.9rem}
+@media (max-width:860px){.ways,.ways.n2{grid-template-columns:1fr}}
+/* 店舗情報 */
+.access .wrap{display:grid;grid-template-columns:1fr 1fr;grid-gap:56px;gap:56px}
+.access .wrap.nomap{grid-template-columns:1fr;max-width:760px}
+.info{margin:0;background:#fff;border-radius:var(--r);padding:6px 26px}
+.info div{display:grid;grid-template-columns:7em 1fr;padding:14px 0;border-bottom:1px solid var(--line)}
+.info div:last-child{border-bottom:none}
+.info dt{color:var(--muted);font-size:.9rem}
+.info dd{margin:0}
+.route{display:flex;align-items:center;justify-content:center;margin-top:18px;text-decoration:none;background:var(--dark);color:#fbf7ef;border-radius:999px;padding:.95em 1.4em;letter-spacing:.12em;font-size:.92rem}
+.route svg{width:1.1em;height:1.1em;fill:var(--primary);margin-right:.5em}
+.map{border-radius:var(--r);overflow:hidden;min-height:400px;background:var(--bg2)}
+.map iframe{width:100%;height:100%;min-height:400px;border:0;display:block}
+@media (max-width:860px){.access .wrap{grid-template-columns:1fr;grid-gap:36px;gap:36px}.info{padding:4px 18px}.info div{grid-template-columns:5.5em 1fr}.map,.map iframe{min-height:280px}}
+/* よくある質問 */
+.faq{background:var(--bg2)}
+.faq-list{max-width:820px;margin:0 auto}
+.faq details{background:#fff;border-radius:14px;margin-bottom:12px}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;padding:18px 48px 18px 20px;position:relative;font-family:var(--head);letter-spacing:.06em;line-height:1.7}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:20px;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);color:var(--primary-deep);font-size:1.3rem;font-family:var(--gothic)}
+.faq details[open] summary::after{content:"−"}
+.faq p{margin:0;padding:0 20px 20px;display:flex;color:var(--muted);font-size:.93rem;line-height:1.9}
+.faq .q,.faq .a{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-family:var(--latin);font-style:italic;margin-right:14px}
+.faq .q{background:var(--primary);color:#fff}
+.faq .a{background:var(--pale);color:var(--primary-deep)}
+/* SNS・下 */
+.sns{background:var(--pale)}
+.sns-list{display:flex;flex-wrap:wrap;justify-content:center}
+.sns-list a{margin:6px;background:#fff;border-radius:14px;padding:16px 26px;text-decoration:none}
+.foot{background:var(--dark);color:#e9e4d8;padding:56px 0 110px;font-size:.88rem}
+.foot .fname{font-family:var(--head);font-size:1.1rem;letter-spacing:.14em;color:#fff}
+.foot nav{display:flex;flex-wrap:wrap;margin:20px -10px}
+.foot nav a{margin:4px 10px;text-decoration:none;opacity:.85}
+.foot .copy{font-family:var(--latin);font-style:italic;opacity:.7;margin:0}
+.spbar{display:none}
+@media (max-width:860px){
+  .spbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--dark);border-top:1px solid var(--accent-soft);padding-bottom:env(safe-area-inset-bottom)}
+  .spbar.n2{grid-template-columns:1fr 1fr}.spbar.n1{grid-template-columns:1fr}
+  .spbar a{text-align:center;text-decoration:none;color:#fbf7ef;padding:1em .3em;font-size:.86rem;letter-spacing:.1em}
+  .spbar a.l{background:#06c755}.spbar a.r{background:var(--primary)}
+}
+.totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.totop.show{opacity:.92;visibility:visible}
+@media (max-width:860px){.totop{bottom:76px;right:12px}}
+/* ---------- 部品（parts）共通 ---------- */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
+.wrap.narrow{max-width:760px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 部品：写真の帯（横にゆっくり流れる） */
+.belt-sec{padding:72px 0 56px;background:var(--bg2)}
+.belt-sec .sec-head{margin-bottom:28px}
+.belt-sec .sec-lead{margin:-12px auto 24px}
+.belt{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 0 10px}
+.belt::-webkit-scrollbar{display:none}
+.belt-track{list-style:none;margin:0;display:flex;width:-webkit-max-content;width:max-content;padding:0 20px}
+.belt-track li{width:340px;flex:none;margin-right:22px}
+.belt-track figure{margin:0}
+.b-shot{display:block;border-radius:var(--r);overflow:hidden;background:var(--bg);box-shadow:0 10px 26px rgba(0,0,0,.08)}
+.b-shot img{width:100%;height:auto}
+.belt-track figcaption{display:flex;align-items:baseline;margin-top:10px;font-size:.92rem}
+.belt-track figcaption b{font-family:var(--head);font-weight:500;letter-spacing:.08em}
+.belt-track figcaption small{font-size:.8rem;color:var(--muted);margin-left:10px}
+.belt-note{font-size:.82rem;margin:8px 20px 0}
+@media (max-width:760px){.belt-sec{padding:56px 0 44px}.belt-track li{width:260px;margin-right:16px}}
+/* 部品：前と後の見比べ（つまみ） */
+.compare-sec{background:var(--pale)}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--r);background:var(--bg2);-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:ew-resize}
+.cmp-frame > img{width:100%;height:auto;display:block}
+.cmp-over{position:absolute;top:0;left:0;bottom:0;width:50%;overflow:hidden}
+.cmp-over img{width:200%;max-width:none;height:auto;display:block}
+.cmp-line{position:absolute;top:0;bottom:0;left:50%;width:3px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.15);pointer-events:none}
+.cmp-line i{position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:var(--primary);box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.cmp-line i::before,.cmp-line i::after{content:"";position:absolute;top:50%;margin-top:-6px;border:6px solid transparent}
+.cmp-line i::before{left:7px;border-right-color:#fff}
+.cmp-line i::after{right:7px;border-left-color:#fff}
+.cmp-tag{position:absolute;top:12px;z-index:2;font-family:var(--head);font-size:.82rem;letter-spacing:.14em;background:rgba(0,0,0,.6);color:#fff;padding:.25em 1em;border-radius:999px;line-height:1.7}
+.cmp-tag.l{left:12px}
+.cmp-tag.r{right:12px;background:var(--primary)}
+.cmp-range{display:block;max-width:420px;margin:22px auto 0;font-size:.88rem;color:var(--muted);text-align:center}
+.cmp-range span{display:block;margin-bottom:6px}
+.cmp-range input{width:100%;accent-color:var(--primary);min-height:32px;margin:0}
+.cmp-cap{font-size:.88rem;margin:14px 0 0}
+/* JS がないとき：2枚を並べて出す */
+.no-js .cmp-frame{display:grid;grid-template-columns:1fr 1fr;grid-gap:12px;gap:12px;background:none;overflow:visible;cursor:auto}
+.no-js .cmp-frame > img,.no-js .cmp-over img{width:100%;border-radius:12px}
+.no-js .cmp-over{position:static;width:auto}
+.no-js .cmp-line,.no-js .cmp-range{display:none}
+.no-js .cmp-tag{top:0}.no-js .cmp-tag.l{left:0}.no-js .cmp-tag.r{right:0}
+/* 部品：合計の目安が出る料金 */
+.calc{background:#fff;border-radius:var(--r);padding:30px 24px;padding:30px clamp(18px,4vw,40px);box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.calc-rows{list-style:none;margin:0;padding:0}
+.calc-rows li{display:grid;grid-template-columns:1fr auto 7.5em;grid-gap:14px;gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.calc-rows li.chk{grid-template-columns:1fr auto}
+.calc-name b,.calc-chk b{display:block;font-family:var(--head);font-weight:500;letter-spacing:.08em;font-size:1.05rem;line-height:1.6}
+.calc-name small,.calc-chk small{display:block;font-size:.8rem;color:var(--muted);line-height:1.6}
+.calc-price{font-family:var(--head);color:var(--dark);font-size:1.1rem;white-space:nowrap}
+.calc-price small{font-family:var(--gothic);font-size:.78rem;color:var(--muted)}
+.calc-q select{font:inherit;font-size:1rem;width:100%;min-height:44px;padding:6px 10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.calc-chk{display:flex;align-items:flex-start;cursor:pointer}
+.calc-chk input{width:22px;height:22px;margin:.45em 12px 0 0;flex:none;accent-color:var(--primary)}
+.calc-total{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:2px solid var(--dark)}
+.calc-total span{font-family:var(--head);letter-spacing:.1em}
+.calc-total small{font-family:var(--gothic);font-size:.8rem;color:var(--muted)}
+.calc-total output{font-family:var(--head);font-size:2rem;color:var(--primary-deep);letter-spacing:.04em;line-height:1.3}
+.calc-note{font-size:.85rem;margin:14px 0 0}
+.calc-act{display:flex;flex-wrap:wrap;align-items:center;margin:18px -6px 0}
+.calc-act .btn{margin:6px}
+.calc-reset{margin:6px;font:inherit;font-size:.88rem;background:none;border:1px solid var(--line);border-radius:999px;padding:.6em 1.3em;color:var(--muted);cursor:pointer;min-height:44px}
+.calc-reset:hover{border-color:var(--primary);color:var(--primary-deep)}
+@media (max-width:640px){
+  .calc-rows li{grid-template-columns:1fr auto}
+  .calc-rows li .calc-q{grid-column:1 / -1}
+  .calc-total output{font-size:1.7rem}
+  .calc-act .btn{flex:1 1 100%}
+}
+/* JS がないとき：料金表として出す */
+.no-js .calc-q,.no-js .calc-total,.no-js .calc-act,.no-js .calc-chk input{display:none}
+.no-js .calc-rows li{grid-template-columns:1fr auto}
+/* 部品：施工例（作業前・作業後） */
+.cases-sec{background:var(--bg2)}
+.cases{display:grid;grid-gap:56px;gap:56px;max-width:1000px;margin:0 auto}
+.case{display:grid;grid-template-columns:1fr 1fr;grid-gap:18px;gap:18px}
+.case figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg)}
+.case figure img{width:100%;height:auto;display:block}
+.case figcaption{position:absolute;left:0;top:0;background:rgba(0,0,0,.6);color:#fff;font-family:var(--head);font-size:.85rem;letter-spacing:.2em;padding:.35em 1.1em;border-radius:0 0 12px 0;line-height:1.7}
+.case figure.after figcaption{background:var(--primary)}
+.case .txt{grid-column:1 / -1;display:grid;grid-template-columns:16em 1fr;grid-gap:28px;gap:28px;border-top:1px solid var(--line);padding-top:18px}
+.case h3{font-size:1.15rem;letter-spacing:.14em}
+.case .txt p{margin:0;font-size:.93rem;color:var(--muted)}
+.case .meta{display:block;font-size:.8rem;color:var(--muted);font-family:var(--gothic);letter-spacing:.1em;margin-top:4px}
+@media (max-width:760px){.case{grid-template-columns:1fr}.case .txt{grid-template-columns:1fr;grid-gap:6px;gap:6px}.cases{grid-gap:44px;gap:44px}}
+/* 部品：選んで送れるフォーム */
+.formbox{max-width:760px;margin:44px auto 0;background:var(--dark2);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);overflow:hidden;scroll-margin-top:16px}
+.form-top{display:flex;justify-content:space-between;align-items:baseline;padding:12px 28px;background:var(--primary);color:#fff;font-family:var(--head);letter-spacing:.14em}
+.form-sub{font-family:var(--gothic);font-size:.78rem;letter-spacing:.1em;opacity:.9}
+.formbox form{display:grid;grid-gap:18px;gap:18px;padding:24px 28px 28px}
+.formbox .form-lead{margin:0;font-size:.92rem;color:#d9d4c8}
+.f-row{display:block;font-size:.9rem}
+.f-row > span{display:block;margin-bottom:6px;font-family:var(--head);letter-spacing:.08em}
+.formbox input,.formbox textarea{font:inherit;font-size:16px;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink);width:100%;min-height:50px;display:block}
+.formbox input:focus,.formbox textarea:focus{border-color:var(--primary);outline:none}
+.formbox textarea{min-height:130px;resize:vertical}
+.formbox fieldset{border:none;margin:0;padding:0;min-width:0}
+.formbox legend{padding:0;margin-bottom:8px;font-family:var(--head);letter-spacing:.08em;font-size:.9rem}
+.req,.opt-label{display:inline-block;margin-left:8px;font-family:var(--gothic);font-size:.7rem;letter-spacing:.05em;border-radius:4px;padding:0 6px;vertical-align:.15em;line-height:1.7}
+.req{background:var(--primary);color:#fff}
+.opt-label{border:1px solid rgba(255,255,255,.4);color:#d9d4c8}
+.chips{display:flex;flex-wrap:wrap;margin:-4px}
+.chip{position:relative;margin:4px;font-size:.92rem;cursor:pointer}
+.formbox .chip input{position:absolute;left:0;top:0;width:1px;height:1px;min-height:0;padding:0;opacity:0}
+.formbox .chip span{display:block;margin:0;padding:9px 16px;border-radius:999px;border:1.5px solid rgba(255,255,255,.4);color:#fff;line-height:1.5;min-height:44px;-webkit-transition:background .15s;transition:background .15s}
+.formbox .chip input:checked + span{background:var(--primary);border-color:var(--primary)}
+.formbox .chip input:checked + span::before{content:"✓ "}
+.formbox .chip input:focus-visible + span{outline:2px solid #fff;outline-offset:2px}
+.formbox .btn{width:100%;font-size:1.05rem}
+.formnote{font-size:.82rem;color:#cfcabd;margin:0;line-height:1.7}
+.formbox .gotcha{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.form-sent{text-align:center;padding:20px 0}
+.form-sent h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:10px}
+@media (max-width:640px){.form-top{padding:11px 18px}.formbox form{padding:18px 18px 22px}.form-sub{display:none}}
+</style>
+<script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<!-- このページは tools/make_site.py で作った（設定：matsuba-zouen-parts.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><path d="M20 4C10 4 4 9 4 16c0 1.6.4 3 1 4 1-4 4-8 9-10-4 3-6 6-7 10 1 .3 2 .5 3 .5 7 0 10-7 10-16z"/></symbol></svg>
+<header class="head">
+  <div class="wrap">
+    <a href="#top" class="brand" aria-label="松葉造園 トップへ"><span class="bn">松葉造園</span><span class="bk">造園・庭づくり｜〇〇市</span></a>
+    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">お仕事の内容</a><a href="#calc">料金の目安</a><a href="#cases">施工例</a><a href="#flow">ご依頼の流れ</a><a href="#access">松葉造園に<wbr>ついて</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
+    <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
+  </div>
+</header>
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="poster plain"><p class="plain-name">松葉造園</p></div>
+      <div class="hero-info">
+        <p class="eyebrow">造園・庭づくり｜〇〇市</p>
+        <h1><span class="nw">庭の手入れから、</span><br><span class="nw">新しい庭づくりまで。</span></h1>
+        <p class="lead">〇〇市を<wbr>拠点に、<wbr>剪定・庭づくり・外構・伐採を<wbr>お受けしています。<wbr>個人の<wbr>お宅も、<wbr>会社・施設の<wbr>お庭も、<wbr>まずは<wbr>ご相談ください。</p>
+        <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
+        <div class="hero-btns"><a class="btn btn-line" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a></div>
+        <ul class="toc" aria-label="このページの案内"><li><a href="#menu">お仕事の内容</a></li><li><a href="#calc">料金の目安</a></li><li><a href="#cases">施工例</a></li><li><a href="#flow">ご依頼の流れ</a></li><li><a href="#reserve">ご相談・<wbr>お問い合わせ</a></li><li><a href="#access">松葉造園に<wbr>ついて</a></li><li><a href="#faq">よくある質問</a></li></ul>
+      </div>
+    </div>
+  </section>
+  <section id="gallery" class="sec belt-sec">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>photo</i><h2>お庭の写真</h2></div>
+      <p class="sec-lead center muted">手が<wbr>けた<wbr>お庭の<wbr>様子です。</p>
+    </div>
+    <div class="belt" id="belt"><ul class="belt-track" aria-label="お庭の写真の一覧"><li><figure><span class="b-shot"><img src="images/belt-1.svg" alt="剪定を終えた松（見本）" width="1000" height="750" loading="lazy"></span><figcaption><b>松の剪定</b><small>〇〇市</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/belt-2.svg" alt="新しく作った庭（見本）" width="1000" height="750" loading="lazy"></span><figcaption><b>庭づくり</b><small>〇〇市</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/belt-3.svg" alt="門まわりの外構（見本）" width="1000" height="750" loading="lazy"></span><figcaption><b>門まわりの<wbr>外構</b><small>〇〇町</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/belt-4.svg" alt="伐採のあと（見本）" width="1000" height="750" loading="lazy"></span><figcaption><b>伐採</b><small>〇〇市</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/belt-5.svg" alt="生け垣の刈り込み（見本）" width="1000" height="750" loading="lazy"></span><figcaption><b>生け垣の<wbr>刈り込み</b><small>〇〇市</small></figcaption></figure></li></ul></div>
+    <p class="belt-note center muted">横に<wbr>動かして<wbr>見られます。</p>
+  </section>
+  <section id="menu" class="sec menu">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>お仕事の内容</h2></div>
+      <p class="sec-lead center muted">お庭の<wbr>ことなら、<wbr>小さな<wbr>ことから<wbr>お気軽に<wbr>どうぞ。</p>
+      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-sentei">剪定</a><a href="#m-niwa">庭づくり</a><a href="#m-gaikou">外構</a><a href="#m-bassai">伐採</a></nav>
+      <div class="menu-cards n4">
+        <article class="card" id="m-sentei">
+          <div class="photo"><img src="images/menu-sentei.svg" alt="剪定の作業の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>剪定</h3>
+            
+            <p>伸びた<wbr>枝を<wbr>整え、<wbr>木の<wbr>形と<wbr>風通しを<wbr>よくします。<wbr>庭木1本から<wbr>お受けします。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="https://line.me/R/oaMessage/%40example/?%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E8%A6%8B%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%E5%89%AA%E5%AE%9A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%80%82" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-niwa">
+          <div class="photo"><img src="images/menu-niwa.svg" alt="庭づくりの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>庭づくり</h3>
+            
+            <p>植栽・石・<wbr>砂利などを<wbr>組み合わせて、<wbr>暮らしに<wbr>合った<wbr>お庭を<wbr>つくります。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="https://line.me/R/oaMessage/%40example/?%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E8%A6%8B%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%E5%BA%AD%E3%81%A5%E3%81%8F%E3%82%8A%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%80%82" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-gaikou">
+          <div class="photo"><img src="images/menu-gaikou.svg" alt="外構工事の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>外構</h3>
+            
+            <p>門まわり・塀・アプローチなど、<wbr>お庭の<wbr>まわりも<wbr>合わせて<wbr>ご相談いただけます。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="https://line.me/R/oaMessage/%40example/?%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E8%A6%8B%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%E5%A4%96%E6%A7%8B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%80%82" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-bassai">
+          <div class="photo"><img src="images/menu-bassai.svg" alt="伐採の作業の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>伐採</h3>
+            
+            <p>大きくなりすぎた<wbr>木や、<wbr>枯れた<wbr>木を<wbr>切り倒して<wbr>片付けます。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="https://line.me/R/oaMessage/%40example/?%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E8%A6%8B%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%E4%BC%90%E6%8E%A1%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E7%9B%B8%E8%AB%87%E3%81%97%E3%81%9F%E3%81%84%E3%81%A7%E3%81%99%E3%80%82" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+          </div>
+        </article>
+      </div>
+      <p class="price-note muted center">料金は<wbr>お庭の<wbr>広さ・木の<wbr>大きさで<wbr>変わります。<wbr>下見の<wbr>うえで<wbr>お見積もりを<wbr>お出しします。</p>
+    </div>
+  </section>
+  <section id="calc" class="sec calc-sec">
+    <div class="wrap narrow">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>estimate</i><h2>料金の目安</h2></div>
+      <p class="sec-lead center muted">本数や回数を<wbr>選ぶと、<wbr>合計の<wbr>目安が<wbr>出ます。</p>
+      <div class="calc" id="calc-box">
+        <ul class="calc-rows"><li><div class="calc-name"><b>庭木の<wbr>剪定<wbr>（低木・高さ2mまで）</b><small>1本あたりの<wbr>目安</small></div><div class="calc-price">3,300円<small>／本</small></div><div class="calc-q"><label><span class="vh">庭木の<wbr>剪定<wbr>（低木・高さ2mまで）の<wbr>本</span><select data-price="3300" data-name="庭木の剪定（低木・高さ2mまで）" data-unit="本"><option value="0">0本</option><option value="1">1本</option><option value="2">2本</option><option value="3">3本</option><option value="4">4本</option><option value="5">5本</option><option value="6">6本</option><option value="7">7本</option><option value="8">8本</option><option value="9">9本</option><option value="10">10本</option></select></label></div></li><li><div class="calc-name"><b>庭木の<wbr>剪定<wbr>（中木・高さ2〜4m）</b></div><div class="calc-price">7,700円<small>／本</small></div><div class="calc-q"><label><span class="vh">庭木の<wbr>剪定<wbr>（中木・高さ2〜4m）の<wbr>本</span><select data-price="7700" data-name="庭木の剪定（中木・高さ2〜4m）" data-unit="本"><option value="0">0本</option><option value="1">1本</option><option value="2">2本</option><option value="3">3本</option><option value="4">4本</option><option value="5">5本</option><option value="6">6本</option><option value="7">7本</option><option value="8">8本</option><option value="9">9本</option><option value="10">10本</option></select></label></div></li><li><div class="calc-name"><b>生け垣の<wbr>刈り込み</b><small>長さ1mあたり</small></div><div class="calc-price">1,100円<small>／m</small></div><div class="calc-q"><label><span class="vh">生け垣の<wbr>刈り込みの<wbr>m</span><select data-price="1100" data-name="生け垣の刈り込み" data-unit="m"><option value="0">0m</option><option value="1">1m</option><option value="2">2m</option><option value="3">3m</option><option value="4">4m</option><option value="5">5m</option><option value="6">6m</option><option value="7">7m</option><option value="8">8m</option><option value="9">9m</option><option value="10">10m</option><option value="11">11m</option><option value="12">12m</option><option value="13">13m</option><option value="14">14m</option><option value="15">15m</option><option value="16">16m</option><option value="17">17m</option><option value="18">18m</option><option value="19">19m</option><option value="20">20m</option><option value="21">21m</option><option value="22">22m</option><option value="23">23m</option><option value="24">24m</option><option value="25">25m</option><option value="26">26m</option><option value="27">27m</option><option value="28">28m</option><option value="29">29m</option><option value="30">30m</option></select></label></div></li><li class="chk"><label class="calc-chk"><input type="checkbox" data-price="5500" data-name="枝・葉の処分"><span><b>枝・葉の処分</b><small>作業で<wbr>出た<wbr>枝葉を<wbr>こちらで<wbr>持ち帰ります</small></span></label><div class="calc-price">5,500円</div></li><li class="chk"><label class="calc-chk"><input type="checkbox" data-price="2200" data-name="出張費（〇〇市外）"><span><b>出張費<wbr>（〇〇市外）</b></span></label><div class="calc-price">2,200円</div></li></ul>
+        <div class="calc-total"><span>合計の<wbr>目安<small>（税込）</small></span><output id="calc-out" aria-live="polite">0円</output></div>
+        <p class="calc-note muted">目安の<wbr>金額です<wbr>（税込）。<wbr>木の<wbr>高さ・枝の<wbr>張りぐ<wbr>あいで<wbr>変わる<wbr>ことが<wbr>ある<wbr>ため、<wbr>正式な<wbr>金額は<wbr>下見の<wbr>うえで<wbr>お見積もりを<wbr>お出しします。</p>
+        <div class="calc-act"><a class="btn btn-line calc-line" id="calc-line" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener" data-oa="@example" data-msg="ホームページの「料金の目安」を見ました。{items}（合計の目安 {total}）について相談したいです。"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>この内容で<wbr>LINEで<wbr>相談</a><button type="button" class="calc-reset" id="calc-reset">選び直す</button></div>
+      </div>
+    </div>
+  </section>
+  <section id="cases" class="sec cases-sec">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>works</i><h2>施工例</h2></div>
+      <p class="sec-lead center muted">作業の<wbr>前と<wbr>後を、<wbr>並べて<wbr>ご覧いただけます。</p>
+      <div class="cases">
+        <article class="case">
+          <figure><img src="images/case1-before.svg" alt="作業前のお庭（見本）" width="1000" height="750" loading="lazy"><figcaption>作業前</figcaption></figure>
+          <figure class="after"><img src="images/case1-after.svg" alt="作業後のお庭（見本）" width="1000" height="750" loading="lazy"><figcaption>作業後</figcaption></figure>
+          <div class="txt"><h3>黒松の<wbr>剪定と、<wbr>生け垣の<wbr>刈り込み<span class="meta">〇〇市　個人の<wbr>お宅</span></h3><p>何年か<wbr>手が<wbr>入っていなかった<wbr>黒松を、<wbr>枝ぶりが<wbr>見えるように<wbr>整えました。<wbr>生け垣は<wbr>道には<wbr>み出していた<wbr>分を<wbr>刈り込み、<wbr>通りやすくしています。</p></div>
+        </article>
+        <article class="case">
+          <figure><img src="images/case2-before.svg" alt="作業前の玄関まわり（見本）" width="1000" height="750" loading="lazy"><figcaption>作業前</figcaption></figure>
+          <figure class="after"><img src="images/case2-after.svg" alt="作業後の玄関まわり（見本）" width="1000" height="750" loading="lazy"><figcaption>作業後</figcaption></figure>
+          <div class="txt"><h3>玄関まわりの<wbr>砂利敷きと<wbr>飛び石<span class="meta">〇〇市　店舗</span></h3><p>雨の<wbr>日に<wbr>ぬかるんでいた<wbr>通路に、<wbr>砂利と<wbr>飛び石を<wbr>入れました。<wbr>草が<wbr>生えに<wbr>くいよう、<wbr>下に<wbr>防草シートを<wbr>敷いています。</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section id="compare" class="sec compare-sec">
+    <div class="wrap narrow">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>before / after</i><h2>作業の前と後</h2></div>
+      <p class="sec-lead center muted">つまみを<wbr>動かすと、<wbr>同じ<wbr>場所の<wbr>前と<wbr>後が<wbr>見比べられます。</p>
+      <div class="cmp">
+        <div class="cmp-frame" id="cmp-frame">
+          <div class="cmp-over" id="cmp-over"><img src="images/cmp-before.svg" alt="作業前のお庭（見本）" width="1000" height="750" loading="lazy"></div>
+          <img src="images/cmp-after.svg" alt="作業後のお庭（見本）" width="1000" height="750" loading="lazy">
+          <span class="cmp-line" id="cmp-line" aria-hidden="true"><i></i></span>
+          <span class="cmp-tag l">作業前</span><span class="cmp-tag r">作業後</span>
+        </div>
+        <label class="cmp-range"><span>つまみを<wbr>動かして<wbr>見比べる</span><input type="range" id="cmp-range" min="0" max="100" value="50" aria-label="作業前と作業後を見比べる（左が作業前、右が作業後）"></label>
+        <p class="cmp-cap muted center">黒松の<wbr>剪定と<wbr>生け垣の<wbr>刈り込み<wbr>（〇〇市）</p>
+      </div>
+    </div>
+  </section>
+  <section id="flow" class="sec flow">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>flow</i><h2>ご依頼の流れ</h2></div>
+      <ol class="steps"><li><h3>ご相談</h3><p>お庭の<wbr>様子と、<wbr>気に<wbr>なっている<wbr>ことを<wbr>お知らせ<wbr>ください。</p></li><li><h3>下見</h3><p>お庭を<wbr>見せていただき、<wbr>ご希望を<wbr>うかが<wbr>います。</p></li><li><h3>お見積もり</h3><p>作業の<wbr>内容と<wbr>金額を<wbr>お出しします。<wbr>ご納得いただいてから<wbr>決めてください。</p></li><li><h3>作業</h3><p>日程を<wbr>決めて<wbr>作業します。<wbr>終わったら<wbr>一緒に<wbr>仕上がりを<wbr>確かめます。</p></li></ol>
+    </div>
+  </section>
+  <section id="reserve" class="sec reserve dark">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご相談・<wbr>お問い合わせ</h2></div>
+      <p class="muted center" style="margin-bottom:40px">お庭の<wbr>こと、<wbr>どんな<wbr>小さな<wbr>ことでも<wbr>ご相談ください。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>フォーム</h3><p>選んで<wbr>送るだけ。<wbr>24時間いつでも<wbr>送れます。</p><a class="btn btn-main" href="#form">フォームで<wbr>送る</a></div></div>
+      
+      <div class="formbox" id="form">
+        <div class="form-top"><span>ご相談フォーム</span><span class="form-sub">選んで<wbr>送るだけ</span></div>
+        <form id="cform" action="" method="POST" data-endpoint="">
+          <p class="form-lead">選んで<wbr>送るだけで<wbr>大丈夫です。<wbr>文を<wbr>考えなくても、<wbr>こちらからうかが<wbr>います。</p>
+          <label class="f-row"><span>お名前<span class="req">必須</span></span><input name="お名前" required autocomplete="name"></label>
+          <label class="f-row"><span>ご連絡先<wbr>（電話番号か<wbr>メール）<span class="req">必須</span></span><input name="ご連絡先" required autocomplete="tel" placeholder="例：090-0000-0000"></label>
+          <fieldset><legend>ご相談の内容<span class="opt-label">いくつでも</span></legend><div class="chips"><label class="chip"><input type="checkbox" name="ご相談の内容" value="剪定"><span>剪定</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="庭づくり"><span>庭づくり</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="外構"><span>外構</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="伐採"><span>伐採</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="草刈り"><span>草刈り</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="見積もりだけ聞きたい"><span>見積もりだけ<wbr>聞きたい</span></label><label class="chip"><input type="checkbox" name="ご相談の内容" value="そのほか"><span>そのほか</span></label></div></fieldset>
+          <fieldset><legend>ご希望の<wbr>連絡方法</legend><div class="chips"><label class="chip"><input type="radio" name="ご希望の連絡方法" value="LINE"><span>LINE</span></label><label class="chip"><input type="radio" name="ご希望の連絡方法" value="メール"><span>メール</span></label></div></fieldset>
+          <fieldset><legend>連絡が<wbr>つきやすい<wbr>時間<span class="opt-label">いくつでも</span></legend><div class="chips"><label class="chip"><input type="checkbox" name="連絡がつきやすい時間" value="午前（〜12時）"><span>午前<wbr>（〜12時）</span></label><label class="chip"><input type="checkbox" name="連絡がつきやすい時間" value="午後（12〜17時）"><span>午後<wbr>（12〜17時）</span></label><label class="chip"><input type="checkbox" name="連絡がつきやすい時間" value="夕方以降（17時〜）"><span>夕方以降<wbr>（17時〜）</span></label><label class="chip"><input type="checkbox" name="連絡がつきやすい時間" value="いつでも"><span>いつでも</span></label></div></fieldset>
+          <label class="f-row"><span>ほかに<wbr>伝えたい<wbr>こと<span class="opt-label">なくても可</span></span><textarea name="ほかに伝えたいこと" placeholder="なければ空のままで大丈夫です"></textarea></label>
+          <input type="hidden" name="_subject" value="【松葉造園】ホームページからのお問い合わせ">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="gotcha">
+          <button class="btn btn-main" type="submit">この<wbr>内容で<wbr>送る</button>
+          <p class="formnote" id="formnote" role="status">送信後、<wbr>こちらから<wbr>折り返しご連絡します。<wbr>お急ぎの<wbr>ときは<wbr>お電話が<wbr>早いです。</p>
+          <p class="formnote">いただいた<wbr>内容は、<wbr>ご相談への<wbr>返事の<wbr>ためだけに<wbr>使います。</p>
+        </form>
+      </div>
+    </div>
+  </section>
+  <section id="access" class="sec access">
+    <div class="wrap nomap">
+      <div>
+        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>松葉造園に<wbr>ついて</h2></div>
+        <dl class="info"><div><dt>店名</dt><dd>松葉造園</dd></div><div><dt>対応エリア</dt><dd>〇〇県内</dd></div><div><dt>お仕事</dt><dd>剪定・庭づくり・外構・伐採</dd></div><div><dt>ご依頼</dt><dd>個人の<wbr>お宅・<wbr>会社や<wbr>施設の<wbr>どちらも</dd></div></dl>
+        
+      </div>
+      
+    </div>
+  </section>
+  <section id="faq" class="sec faq">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>木1本だけでも<wbr>頼めますか？</span></summary><p><span class="a">A</span><span>はい、<wbr>お受けしています。<wbr>お気軽に<wbr>ご相談ください。</span></p></details><details><summary><span class="q">Q</span><span>会社や<wbr>施設の<wbr>お庭も<wbr>お願いできますか？</span></summary><p><span class="a">A</span><span>はい、<wbr>個人の<wbr>お宅・<wbr>会社や<wbr>施設の<wbr>どちらも<wbr>お受けしています。</span></p></details><details><summary><span class="q">Q</span><span>どこまで<wbr>来て<wbr>もらえますか？</span></summary><p><span class="a">A</span><span>〇〇市を<wbr>中心に、<wbr>〇〇県内で<wbr>お受けしています。</span></p></details><details><summary><span class="q">Q</span><span>料金は<wbr>どれくらい<wbr>かかりますか？</span></summary><p><span class="a">A</span><span>お庭の<wbr>広さや<wbr>木の<wbr>大きさで<wbr>変わる<wbr>ため、<wbr>下見の<wbr>うえで<wbr>お見積もりを<wbr>お出しします。</span></p></details></div>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="fname">松葉造園</p>
+    
+    
+    <nav aria-label="フッター"><a href="#menu">お仕事の内容</a><a href="#calc">料金の目安</a><a href="#cases">施工例</a><a href="#flow">ご依頼の流れ</a><a href="#access">松葉造園に<wbr>ついて</a><a href="#faq">よくある質問</a></nav>
+    <p class="copy">© 松葉造園</p>
+  </div>
+</footer>
+<nav class="spbar n2" aria-label="ご予約・ご相談"><a class="l" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener">LINEで<wbr>相談</a><a class="r" href="#form">フォーム</a></nav>
+<a class="totop" href="#top" aria-label="ページの上へ">↑</a>
+<script>
+// スマホのメニュー（開く・閉じる）と、上へ戻るボタン
+(function(){
+  var head = document.querySelector('.head'), btn = document.querySelector('.menubtn'), nav = document.getElementById('gnav');
+  if (head && btn && nav) {
+    function set(open){ head.className = open ? 'head open' : 'head'; btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); set(head.className.indexOf('open') < 0); });
+    nav.addEventListener('click', function(e){ if (e.target.tagName === 'A') set(false); });
+    document.addEventListener('click', function(e){ if (head.className.indexOf('open') >= 0 && !nav.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
+  }
+  var up = document.querySelector('.totop');
+  if (up) { var f = function(){ up.className = (window.pageYOffset || 0) > 900 ? 'totop show' : 'totop'; }; window.addEventListener('scroll', f); f(); }
+})();
+// 戻ったときに、見ていた場所に戻す
+(function(){
+  var key = 'y:' + location.pathname;
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) window.addEventListener('load', function(){ var y = parseInt(sessionStorage.getItem(key) || '0', 10); if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y); });
+  } catch (err) {}
+})();
+// 部品：写真の帯。横にゆっくり流れる。さわっている間・マウスを乗せている間は止まる。指で横に動かせる
+// 動きを減らす設定の人には流さない（横に動かして見られる）。古いスマホでも動くよう scrollLeft を requestAnimationFrame で動かす
+(function(){
+  var belt = document.getElementById('belt'); if (!belt || !window.requestAnimationFrame) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var track = belt.querySelector('.belt-track'), orig = track.innerHTML, n = 1;
+  // 2つ以上並べて、1つ分まで来たら最初に戻す（つなぎ目が見えない）。短いときは画面の2倍になるまで増やす
+  while (n < 2 || (track.scrollWidth < belt.clientWidth * 2 && n < 6)) { track.innerHTML += orig; n++; }
+  var items = track.querySelectorAll('li'), per = items.length / n;
+  for (var i = per; i < items.length; i++) items[i].setAttribute('aria-hidden', 'true');
+  var x = 0, hold = false, until = 0, last = null, speed = 0.03, seen = true; // speed：1ミリ秒あたりの点数（約30点/秒）
+  function one(){ return track.scrollWidth / n; }
+  function stop(){ hold = true; }
+  function later(){ hold = false; until = Date.now() + 2500; }
+  belt.addEventListener('mouseenter', stop); belt.addEventListener('mouseleave', later);
+  belt.addEventListener('touchstart', stop, {passive:true}); belt.addEventListener('touchend', later);
+  belt.addEventListener('focusin', stop); belt.addEventListener('focusout', later);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(es){ seen = es[0].isIntersecting; }).observe(belt);
+  function step(ts){
+    var dt = last === null ? 16 : Math.min(64, ts - last); last = ts;
+    var w = one();
+    if (!hold && seen && !document.hidden && Date.now() > until) {
+      if (Math.abs(belt.scrollLeft - Math.round(x)) > 2) x = belt.scrollLeft; // 指で動かしたら、そこから続ける
+      x += speed * dt; if (x >= w) x -= w;
+      belt.scrollLeft = Math.round(x);
+    } else { x = belt.scrollLeft; if (x >= w) { x -= w; belt.scrollLeft = x; } }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+// 部品：前と後の見比べ。つまみ（range）か、写真の上を指・マウスで動かすと、左に重ねた「前」の写真の見える幅が変わる（左が前・右が後）
+// clip-path は使わず「幅＋overflow:hidden」で切る（古いスマホでも動く）。中の写真の幅は枠と同じにそろえる
+(function(){
+  var frame = document.getElementById('cmp-frame'), r = document.getElementById('cmp-range'), a = document.getElementById('cmp-over'), line = document.getElementById('cmp-line');
+  if (!frame || !r || !a) return;
+  var img = a.querySelector('img');
+  function fit(){ if (img) img.style.width = frame.clientWidth + 'px'; }
+  function set(){ var v = r.value; a.style.width = v + '%'; if (line) line.style.left = v + '%'; }
+  r.addEventListener('input', set); r.addEventListener('change', set);
+  window.addEventListener('resize', fit); window.addEventListener('load', fit);
+  fit(); set();
+  var down = false;
+  function at(ev){ var p = ev.touches ? ev.touches[0] : ev, b = frame.getBoundingClientRect(); var v = (p.clientX - b.left) / b.width * 100; r.value = Math.round(Math.max(0, Math.min(100, v))); set(); }
+  frame.addEventListener('mousedown', function(ev){ down = true; at(ev); ev.preventDefault(); });
+  window.addEventListener('mousemove', function(ev){ if (down) at(ev); });
+  window.addEventListener('mouseup', function(){ down = false; });
+  frame.addEventListener('touchstart', at, {passive:true});
+  frame.addEventListener('touchmove', at, {passive:true});
+})();
+// 部品：合計の目安。本数・回数（select）とチェックを足して出す。金額は HTML の data-price から読む（この JS に金額は書かない）
+// LINE のボタンがあれば、選んだ内容と合計を下書きに入れる（line_id があるとき）
+(function(){
+  var box = document.getElementById('calc-box'); if (!box) return;
+  var out = document.getElementById('calc-out'), line = document.getElementById('calc-line'), reset = document.getElementById('calc-reset');
+  var ctrls = box.querySelectorAll('select[data-price], input[data-price]');
+  function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+  function draw(){
+    var total = 0, picked = [];
+    for (var i = 0; i < ctrls.length; i++) {
+      var el = ctrls[i], price = parseInt(el.getAttribute('data-price'), 10) || 0, q;
+      if (el.tagName === 'SELECT') q = parseInt(el.value, 10) || 0; else q = el.checked ? 1 : 0;
+      if (q > 0) { total += price * q; picked.push(el.getAttribute('data-name') + (el.tagName === 'SELECT' ? ' ' + q + (el.getAttribute('data-unit') || '') : '')); }
+    }
+    out.textContent = yen(total);
+    if (line) {
+      var oa = line.getAttribute('data-oa'), tpl = line.getAttribute('data-msg') || '';
+      if (oa) line.href = 'https://line.me/R/oaMessage/' + encodeURIComponent(oa) + '/?' + encodeURIComponent(tpl.replace('{items}', picked.length ? picked.join('、') : '（まだ選んでいません）').replace('{total}', yen(total)));
+    }
+  }
+  for (var j = 0; j < ctrls.length; j++) { ctrls[j].addEventListener('change', draw); ctrls[j].addEventListener('input', draw); }
+  if (reset) reset.addEventListener('click', function(){ for (var k = 0; k < ctrls.length; k++) { if (ctrls[k].tagName === 'SELECT') ctrls[k].selectedIndex = 0; else ctrls[k].checked = false; } draw(); });
+  draw();
+})();
+// 部品：フォーム。送り先は Formspree（form の action）。JS があれば、ページを離れずに送って「送りました」と出す
+// 送れなかったとき（XMLHttpRequest が使えない・エラー）は、ふつうの送信（Formspree の画面）に切りかえる。送り先が未設定なら送らず案内を出す
+(function(){
+  var form = document.getElementById('cform'); if (!form) return;
+  var note = document.getElementById('formnote'), btn = form.querySelector('button[type=submit]'), ep = form.getAttribute('data-endpoint');
+  var done = note ? note.textContent : 'こちらから折り返しご連絡します。', plain = false;
+  form.addEventListener('submit', function(ev){
+    if (plain) return; // 切りかえたあとは、ふつうに送る
+    if (!ep) { ev.preventDefault(); if (note) note.textContent = 'フォームの送り先はただいま準備中です。お電話など、ほかの方法でご相談ください。'; return; }
+    if (!window.XMLHttpRequest || !window.FormData) return;
+    ev.preventDefault();
+    var g = form.querySelector('.gotcha'); if (g && g.value) return;
+    if (btn) btn.disabled = true; if (note) note.textContent = '送っています…';
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', ep, true); xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState !== 4) return;
+      if (xhr.status >= 200 && xhr.status < 300) {
+        form.innerHTML = '<div class="form-sent" role="status"><h3>送りました</h3><p class="formnote">' + done + '</p></div>';
+      } else { plain = true; if (btn) btn.disabled = false; if (note) note.textContent = done; form.submit(); }
+    };
+    try { xhr.send(new FormData(form)); } catch (err) { plain = true; if (btn) btn.disabled = false; form.submit(); }
+  });
+})();
+</script>
+</body>
+</html>
