@@ -289,7 +289,7 @@ js = r'''
     try { more = entry ? entryStep(ts) : advance(ts - last); }
     catch (err) { if (entry) entryFinish(); path = []; more = false; }
     last = ts;
-    if (more) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; apply(); }
+    if (more) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; if (!entry) pos.a = moveDir > 0 ? 0 : 180; apply(); } // 止まったら向きを線にぴったりそろえる
   }
   function kick(){ if (!raf) { last = null; raf = requestAnimationFrame(step); } }
   // ---- 開いたときの入り方：右下の外 → 画面の中ほど → 左上 → 線に乗って目標（3次ベジェ。長さで等分して、時間はゆっくり→速め→ゆっくり）
