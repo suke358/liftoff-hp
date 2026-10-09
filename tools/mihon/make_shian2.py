@@ -95,6 +95,59 @@ must('<a class="skip" href="#main">本文へ</a>',
      '<!-- 飛行機は1機だけ。ヘッダーのすぐ下の線の上を飛ぶ。位置は JS の変数に持ち、transform で動かす（top/left は動かさない） -->\n'
      '<div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>')
 
+# ---- 【診断の飛行機】shian2 では、3問そろったらその高さのまま右へまっすぐ飛んで右はしで止まる（着地しない）。答えを変えても下がらない
+quiz_js = r"""// ===== 「どのプランが合う？」3問の診断（shian2 の飛び方）：答えるたびに少し上がり、3つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
+// 高さは答えた数で決める（どのプランでも同じ高さ・同じ飛び方）。答えを変えても下がらず、今の位置からなめらかにつなぐ。動きを減らす設定の人には最後の位置に置く
+// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／初期費用をおさえたい → 初期0円プラン／それ以外 → スタンダード
+(function(){
+  var q = document.getElementById('quiz'), svg = document.getElementById('quiz-sky'); if (!q || !svg) return;
+  var jet = document.getElementById('q-jet'), trail = document.getElementById('q-trail'), label = document.getElementById('q-label'), out = document.getElementById('quiz-out');
+  var NAME = { std: 'スタンダード', zero: '初期0円プラン', web: 'WEB担当者代行' }, ID = { std: 'price-std', zero: 'price-zero', web: 'price-web' }, TAB = { std: 'pt-std', zero: 'pt-zero', web: 'pt-web' };
+  var W = 0, H = 74, cur = [0, 0], pts = [], landed = null, stage = 0, busy = false, seg = [];
+  function val(n){ var el = q.querySelector('input[name=' + n + ']:checked'); return el ? el.value : null; }
+  function setup(){
+    W = Math.round(svg.getBoundingClientRect().width) || 300; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var g = document.getElementById('q-ground'), l = document.getElementById('q-lights');
+    g.setAttribute('x1', 12); g.setAttribute('y1', H - 10); g.setAttribute('x2', W - 12); g.setAttribute('y2', H - 10);
+    l.setAttribute('x1', 16); l.setAttribute('y1', H - 14); l.setAttribute('x2', W - 16); l.setAttribute('y2', H - 14);
+    label.setAttribute('x', W - 14); label.setAttribute('y', H - 32);
+    // 止まる所：出発 → 1問目 → 2問目 → 3問目（少しずつ上がる）→ 右はし（同じ高さのまま）
+    pts = [[28, H - 22], [W * .28, H - 36], [W * .46, H - 48], [W * .62, H - 58], [W - 52, H - 58]];
+  }
+  function put(p, a){ jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (a || 0) + ') scale(.75)'); }
+  function drawTrail(){ var d = '', i; for (i = 0; i < seg.length; i++) d += (i ? ' L' : 'M') + seg[i][0].toFixed(1) + ' ' + seg[i][1].toFixed(1); trail.setAttribute('d', d); }
+  function flyTo(p, done){
+    var from = cur.slice(); busy = true;
+    tween(500, function(u){
+      var x = from[0] + (p[0] - from[0]) * u, y = from[1] + (p[1] - from[1]) * u;
+      cur = [x, y]; put(cur, Math.atan2(p[1] - from[1], p[0] - from[0]) * 180 / Math.PI * .5);
+      if (seg.length > 60) seg.shift(); seg.push([x, y]); drawTrail();
+    }, function(){ cur = p.slice(); put(cur, 0); busy = false; if (done) done(); }, easeInOut);
+  }
+  function pick(k){
+    var tabs = document.querySelectorAll('#ptabs [role=tab]'), i;
+    for (i = 0; i < tabs.length; i++) tabs[i].className = tabs[i].id === TAB[k] ? 'fit-on' : '';
+    if (window.pickPlan) window.pickPlan(ID[k], true);
+    label.textContent = NAME[k];
+    out.innerHTML = '<b>目安</b>' + NAME[k] + 'が合いそうです。相談で一緒に決めます。';
+  }
+  function update(){
+    if (busy) { setTimeout(update, 120); return; }
+    var a = val('q1'), b = val('q2'), c = val('q3'), n = (a ? 1 : 0) + (b ? 1 : 0) + (c ? 1 : 0);
+    if (n < 3) { out.textContent = n ? 'あと' + (3 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
+    var k = (a === '4' || b === 'yes') ? 'web' : (c === 'yes' ? 'zero' : 'std');
+    if (landed) { landed = k; pick(k); return; } // 3問そろったあとに答えを変えた：位置はそのまま、プラン名だけ変える
+    landed = k; stage = 4;
+    flyTo(pts[3], function(){ flyTo(pts[4], function(){ pick(k); }); });
+  }
+  setup(); cur = pts[0].slice(); seg = [cur.slice()]; put(cur, 0);
+  q.addEventListener('change', update);
+  window.addEventListener('resize', function(){ setTimeout(function(){ setup(); cur = pts[stage].slice(); seg = [cur.slice()]; put(cur, 0); drawTrail(); }, 80); });
+})();
+"""
+s = re.sub(r'// ===== 「どのプランが合う？」3問の診断：.*?\n\}\)\(\);\n(?=// ===== 上の細い進み具合の線)', quiz_js, s, count=1, flags=re.S)
+if 'shian2 の飛び方' not in s: sys.exit('診断の JS を差しかえられなかった')
+
 # ---- 切りかえ式だけの CSS
 css = '''
 /* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
@@ -171,7 +224,10 @@ js = r'''
   var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
   var pos = { x: -80, y: Y_R, a: 0 }, path = [], last = null, raf = 0;
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
-  function apply(){ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg)'); }
+  // 向き a で回したあと、上下を cos(a) 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き）。
+  // 半円の途中（真下向き＝90度）は 0 に近づいて、旋回して傾いているように見える。急にパッと切りかわらない
+  function apply(){ var f = Math.cos(pos.a * Math.PI / 180); if (Math.abs(f) < .2) f = f < 0 ? -.2 : .2; // 真横でも薄く見えるように、0 にはしない setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
+  window.jetPose = function(x, y, a){ pos = { x: x, y: y, a: a }; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
   function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
   // いまの位置・向きから目標の x まで、なめらかな道筋を作る
   function plan(tx){
