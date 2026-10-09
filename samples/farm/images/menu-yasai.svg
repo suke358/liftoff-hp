@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecf2e3"/><stop offset="1" stop-color="#d8e4c9"/></linearGradient></defs>
+<rect width="1000" height="750" fill="url(#g)"/>
+<g fill="none" stroke="#467b2e" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(342.5 180.0) scale(3.150)"><path d="M24 80 60 44c4-4 10-4 12 0s0 8-4 12z"/><path d="M60 44c-2-8 2-14 8-16M60 44c-8-2-14 2-16 8"/><path d="M44 60l6 6M36 68l6 6"/></g></g>
+<text x="500.0" y="552" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="26" letter-spacing="3" fill="#5f7352">季節の野菜の写真が入ります</text>
+</svg>

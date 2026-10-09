@@ -1,0 +1,110 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "tsumugi",
+ "name": "nail & eyelash tsumugi",
+ "short_name": "tsumugi",
+ "kind": "ネイル・まつげ｜〇〇市",
+ "catch_html": "<span class=\"nw\">指先とまつげに、</span><br><span class=\"nw\">ちょうどいい彩りを。</span>",
+ "lead": "〇〇市の、席がひとつだけのネイル・まつげサロンです。ご希望をうかがってから、ひとつずつ仕上げます。",
+ "title_place": "〇〇市のネイル・まつげサロン",
+ "description": "〇〇市のネイル・まつげサロン「tsumugi」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#c47a8a",
+  "primary_deep": "#a55f70",
+  "accent": "#b9a07a",
+  "accent_soft": "#e1d4bd",
+  "pale": "#f8eef0",
+  "dark": "#2d2628",
+  "dark2": "#3a3133",
+  "bg": "#faf6f5",
+  "bg2": "#f1e9e8",
+  "ink": "#332c2e",
+  "muted": "#75696c",
+  "line": "#e5d9da"
+ },
+ "mark": "heart",
+ "font": "mincho",
+ "menu_title": "メニュー・料金",
+ "menu_word": "メニュー",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "デザインや本数で変わることがあります。",
+ "menus": [
+  {
+   "id": "gel",
+   "name": "ジェルネイル",
+   "text": "色・デザインを相談しながら決めます。",
+   "image": "images/menu-gel.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "ジェルネイルの写真",
+   "price": "5,500円〜"
+  },
+  {
+   "id": "off",
+   "name": "つけかえ・オフ",
+   "text": "ほかのお店でつけたものも、お受けしています。",
+   "image": "images/menu-off.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "つけかえ・オフの写真",
+   "price": "1,100円"
+  },
+  {
+   "id": "ext",
+   "name": "まつげエクステ",
+   "text": "目の形に合わせて、1本ずつつけていきます。",
+   "image": "images/menu-ext.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "まつげエクステの写真",
+   "price": "4,400円〜",
+   "price_note": "80本"
+  },
+  {
+   "id": "perm",
+   "name": "まつげパーマ",
+   "text": "自分のまつげを、上向きに整えます。",
+   "image": "images/menu-perm.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "まつげパーマの写真",
+   "price": "4,400円"
+  }
+ ],
+ "hours": "10:00〜19:00（見本）",
+ "holiday": "水曜日（見本）",
+ "parking": "1台（見本）",
+ "payment": "現金・クレジットカード（見本）",
+ "reserve_title": "ご予約",
+ "info_title": "お店のこと",
+ "reserve_lead": "ご予約はLINEかお電話でどうぞ。目の病気や治療中の方は、事前にご相談ください。",
+ "faq": [
+  {
+   "q": "はじめてでも予約できますか？",
+   "a": "はい。はじめての方も、LINEかお電話でどうぞ。"
+  },
+  {
+   "q": "デザインの持ち込みはできますか？",
+   "a": "はい。写真を見せていただければ、近い形でお作りします。"
+  },
+  {
+   "q": "どのくらい時間がかかりますか？",
+   "a": "ジェルネイルで1時間半〜2時間ほどです（見本）。"
+  }
+ ],
+ "schema_type": "BeautySalon",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

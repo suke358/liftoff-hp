@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#efe6d6"/><stop offset="1" stop-color="#dccdb3"/></linearGradient></defs>
+<rect width="1000" height="750" fill="url(#g)"/>
+<g fill="none" stroke="#96351f" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(145.6 180.0) scale(3.150)"><path d="M26 26h40v52a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6z"/><path d="M66 40h8a8 8 0 0 1 8 8v12a8 8 0 0 1-8 8h-8"/><path d="M26 26c0-8 8-12 14-8 4-6 16-6 20 0 6-2 10 2 6 8"/><path d="M38 44v26M50 44v26"/></g><g transform="translate(539.4 180.0) scale(3.150)"><path d="M38 18h12v10c8 4 12 12 12 24v24a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V52c0-12 4-20 12-24z"/><path d="M64 62h22l-3 16a8 8 0 0 1-8 6h-2a8 8 0 0 1-8-6z"/></g></g>
+<text x="500.0" y="552" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="26" letter-spacing="3" fill="#7a6a55">飲みものの写真が入ります</text>
+</svg>

@@ -1,0 +1,131 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "tsubasa",
+ "name": "つばさ学習教室",
+ "short_name": "つばさ学習教室",
+ "kind": "学習塾｜〇〇市",
+ "catch_html": "<span class=\"nw\">「わかった」を、</span><br><span class=\"nw\">ひとつずつ増やす。</span>",
+ "lead": "〇〇市の、少人数の学習塾です。学校の授業に合わせて、つまずいたところまで戻ってやり直します。",
+ "title_place": "〇〇市の学習塾",
+ "description": "〇〇市の学習塾「つばさ学習教室」のホームページです（デザイン見本・架空の教室）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#2f6fb5",
+  "primary_deep": "#24588f",
+  "accent": "#e9a23b",
+  "accent_soft": "#f5d7a3",
+  "pale": "#e9f0f9",
+  "dark": "#1b2b40",
+  "dark2": "#263a52",
+  "bg": "#f7f9fc",
+  "bg2": "#eaf0f6",
+  "ink": "#22303e",
+  "muted": "#5f6b78",
+  "line": "#d5dfe9"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "コースと月謝",
+ "menu_word": "コース",
+ "menu_lead": "月謝は見本です。",
+ "menu_note": "入会金・教材費はお問い合わせください。",
+ "menus": [
+  {
+   "id": "sho",
+   "name": "小学生コース",
+   "text": "算数・国語を中心に、学校の進みに合わせて。",
+   "image": "images/menu-sho.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "小学生コースの写真",
+   "price": "月 8,800円",
+   "price_note": "週2回"
+  },
+  {
+   "id": "chu",
+   "name": "中学生コース",
+   "text": "5教科。定期テストの前は回数を増やします。",
+   "image": "images/menu-chu.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "中学生コースの写真",
+   "price": "月 13,200円",
+   "price_note": "週2回"
+  },
+  {
+   "id": "kou",
+   "name": "高校生コース",
+   "text": "教科を選んで、自分のペースで進めます。",
+   "image": "images/menu-kou.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "高校生コースの写真",
+   "price": "月 16,500円",
+   "price_note": "週2回"
+  },
+  {
+   "id": "trial",
+   "name": "体験授業",
+   "text": "まずは2回、教室の様子を見に来てください。",
+   "image": "images/menu-trial.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "体験授業の写真",
+   "price": "無料",
+   "price_note": "2回まで"
+  }
+ ],
+ "flow_title": "入塾までの流れ",
+ "flow": [
+  {
+   "title": "お問い合わせ",
+   "text": "LINEかお電話で、面談の日を決めます。"
+  },
+  {
+   "title": "面談",
+   "text": "いまの様子と、目標をうかがいます。"
+  },
+  {
+   "title": "体験授業",
+   "text": "実際の授業に参加していただきます。"
+  },
+  {
+   "title": "ご入塾",
+   "text": "コースと曜日を決めて、始めます。"
+  }
+ ],
+ "hours": "平日 15:00〜21:30・土 13:00〜19:00（見本）",
+ "holiday": "日曜・祝日（見本）",
+ "parking": "3台（見本）",
+ "reserve_title": "体験・お問い合わせ",
+ "info_title": "教室のこと",
+ "reserve_lead": "体験授業は無料です。保護者の方の見学もできます。",
+ "faq": [
+  {
+   "q": "自習室は使えますか？",
+   "a": "はい。開いている時間はいつでも使えます（見本）。"
+  },
+  {
+   "q": "部活と両立できますか？",
+   "a": "曜日と時間を相談して決めます。"
+  },
+  {
+   "q": "月の途中からでも入れますか？",
+   "a": "はい。月謝は日割りでお受けしています（見本）。"
+  }
+ ],
+ "schema_type": "EducationalOrganization",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

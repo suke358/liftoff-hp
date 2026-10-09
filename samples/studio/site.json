@@ -1,0 +1,109 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "hikarido",
+ "name": "写真館 ひかり堂",
+ "short_name": "ひかり堂",
+ "kind": "写真館｜〇〇市",
+ "catch_html": "<span class=\"nw\">その日の顔を、</span><br><span class=\"nw\">ずっと残せるように。</span>",
+ "lead": "〇〇市の写真館です。七五三・成人式・家族写真・証明写真。緊張しない、ゆっくりした撮影を心がけています。",
+ "title_place": "〇〇市の写真館",
+ "description": "〇〇市の写真館「ひかり堂」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#9a7b4f",
+  "primary_deep": "#7d6239",
+  "accent": "#c9b07a",
+  "accent_soft": "#e6d9b8",
+  "pale": "#f4efe6",
+  "dark": "#1f1d1b",
+  "dark2": "#2c2927",
+  "bg": "#f7f5f1",
+  "bg2": "#ece8e1",
+  "ink": "#2a2724",
+  "muted": "#6f6a63",
+  "line": "#ddd6ca"
+ },
+ "mark": "dot",
+ "font": "mincho",
+ "menu_title": "撮影メニュー・料金",
+ "menu_word": "撮影",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "写真のデータと、台紙や額はメニューによって変わります。くわしくはお問い合わせください。",
+ "menus": [
+  {
+   "id": "753",
+   "name": "七五三",
+   "text": "着物の着付けとヘアセット込み。",
+   "image": "images/menu-753.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "七五三の写真",
+   "price": "22,000円〜"
+  },
+  {
+   "id": "seijin",
+   "name": "成人式・卒業",
+   "text": "前撮り・後撮り、どちらも。",
+   "image": "images/menu-seijin.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "成人式・卒業の写真",
+   "price": "16,500円〜"
+  },
+  {
+   "id": "family",
+   "name": "家族写真",
+   "text": "お宮参り・入学・記念日に。ペットも一緒にどうぞ。",
+   "image": "images/menu-family.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "家族写真の写真",
+   "price": "11,000円〜"
+  },
+  {
+   "id": "shoumei",
+   "name": "証明写真",
+   "text": "履歴書・パスポート・受験用。その場でお渡しします。",
+   "image": "images/menu-shoumei.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "証明写真の写真",
+   "price": "1,650円"
+  }
+ ],
+ "hours": "10:00〜18:00（見本）",
+ "holiday": "火曜日（見本）",
+ "parking": "4台（見本）",
+ "payment": "現金・クレジットカード（見本）",
+ "reserve_title": "ご予約",
+ "info_title": "写真館のこと",
+ "reserve_lead": "撮影はご予約制です（証明写真はご予約なしでどうぞ）。衣装のご相談もお気軽に。",
+ "faq": [
+  {
+   "q": "写真のデータはもらえますか？",
+   "a": "はい。撮影メニューにデータが付いています（見本）。"
+  },
+  {
+   "q": "衣装の持ち込みはできますか？",
+   "a": "はい。お持ちの着物・服でも撮影できます。"
+  },
+  {
+   "q": "撮影はどのくらい時間がかかりますか？",
+   "a": "七五三で、着付けを入れて2時間ほどです（見本）。"
+  }
+ ],
+ "schema_type": "LocalBusiness",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6eef8"/><stop offset="1" stop-color="#cfdcef"/></linearGradient></defs>
+<rect width="1000" height="750" fill="url(#g)"/>
+<g fill="none" stroke="#24588f" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(342.5 180.0) scale(3.150)"><path d="M18 82V22M18 82h64"/><path d="M28 66l16-14 14 8 20-24"/><path d="M70 36h8v8"/></g></g>
+<text x="500.0" y="552" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="26" letter-spacing="3" fill="#4e6688">高校生コースの写真が入ります</text>
+</svg>

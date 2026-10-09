@@ -1,0 +1,171 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "minato",
+ "name": "みなと電気設備",
+ "short_name": "みなと電気設備",
+ "kind": "電気工事・水道設備｜〇〇市",
+ "catch_html": "<span class=\"nw\">コンセント1つから、</span><br><span class=\"nw\">水まわりの困りごとまで。</span>",
+ "lead": "〇〇市の電気・水道の工事店です。照明の取りかえ・エアコンの取りつけ・水もれの修理など、小さな工事からお受けしています。",
+ "title_place": "〇〇市の電気工事・水道設備",
+ "description": "〇〇市の電気・水道工事店「みなと電気設備」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#2d6b8f",
+  "primary_deep": "#235670",
+  "accent": "#e0a627",
+  "accent_soft": "#f2d98e",
+  "pale": "#e7eff4",
+  "dark": "#1c2a35",
+  "dark2": "#273746",
+  "bg": "#f6f6f3",
+  "bg2": "#ebebe5",
+  "ink": "#232a30",
+  "muted": "#626a71",
+  "line": "#d8d8d0"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "お仕事の内容",
+ "menu_word": "仕事",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "料金は家の状態で変わります。見せていただいてからお見積もりをお出しします。",
+ "menus": [
+  {
+   "id": "denki",
+   "name": "電気工事",
+   "text": "コンセントの増設・照明の取りかえ・スイッチの修理。",
+   "image": "images/menu-denki.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "電気工事の写真",
+   "price": "3,300円〜"
+  },
+  {
+   "id": "suidou",
+   "name": "水道・トイレの修理",
+   "text": "蛇口の水もれ・トイレのつまり・給水管の取りかえ。",
+   "image": "images/menu-suidou.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "水道・トイレの修理の写真",
+   "price": "5,500円〜"
+  },
+  {
+   "id": "aircon",
+   "name": "エアコンの取りつけ",
+   "text": "取りつけ・取りはずし・古いものの引き取り。",
+   "image": "images/menu-aircon.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "エアコンの取りつけの写真",
+   "price": "16,500円〜",
+   "price_note": "1台"
+  },
+  {
+   "id": "kyuto",
+   "name": "給湯器の取りかえ",
+   "text": "お湯が出ない・音がする、などのご相談も。",
+   "image": "images/menu-kyuto.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "給湯器の取りかえの写真"
+  }
+ ],
+ "flow_title": "ご依頼の流れ",
+ "flow": [
+  {
+   "title": "ご相談",
+   "text": "困っていることをお知らせください。写真があると早いです。"
+  },
+  {
+   "title": "下見",
+   "text": "おうちに伺って、様子を見せていただきます。"
+  },
+  {
+   "title": "お見積もり",
+   "text": "内容と金額をお出しします。決めるのはそのあとで。"
+  },
+  {
+   "title": "工事",
+   "text": "日程を決めて工事します。終わったら一緒に確かめます。"
+  }
+ ],
+ "parts": {
+  "cases": {
+   "title": "工事の例",
+   "eyebrow": "works",
+   "lead": "工事の前と後を、並べてご覧いただけます。",
+   "label_before": "工事前",
+   "label_after": "工事後",
+   "items": [
+    {
+     "before": {
+      "image": "images/case1-before.svg",
+      "alt": "工事前のトイレ（見本）"
+     },
+     "after": {
+      "image": "images/case1-after.svg",
+      "alt": "工事後のトイレ（見本）"
+     },
+     "title": "トイレの取りかえ",
+     "meta": "〇〇市　個人のお宅",
+     "text": "古くなったトイレを、節水型のものに取りかえました。床の張りかえも一緒に。"
+    },
+    {
+     "before": {
+      "image": "images/case2-before.svg",
+      "alt": "工事前の分電盤（見本）"
+     },
+     "after": {
+      "image": "images/case2-after.svg",
+      "alt": "工事後の分電盤（見本）"
+     },
+     "title": "分電盤の取りかえ",
+     "meta": "〇〇市　店舗",
+     "text": "ブレーカーがよく落ちるとのことで、容量の大きいものに取りかえました。"
+    }
+   ]
+  },
+  "compare": {
+   "title": "工事の前と後",
+   "lead": "つまみを動かすと、同じ場所の前と後が見比べられます。",
+   "label_before": "工事前",
+   "label_after": "工事後",
+   "caption": "トイレの取りかえ（見本）"
+  }
+ },
+ "hours": "8:30〜18:00（見本）",
+ "holiday": "日曜日（見本）",
+ "service_area": "〇〇市とその周辺（見本）",
+ "reserve_title": "ご相談・お見積もり",
+ "info_title": "みなと電気設備について",
+ "reserve_lead": "下見とお見積もりは無料です（見本）。急ぎの水もれは、まずお電話ください。",
+ "faq": [
+  {
+   "q": "急な水もれでも来てもらえますか？",
+   "a": "まずお電話ください。当日に伺えないこともあります。応急の止め方もお伝えします。"
+  },
+  {
+   "q": "1か所だけでも頼めますか？",
+   "a": "はい、コンセント1つからお受けしています。"
+  },
+  {
+   "q": "見積もりのあとで断ってもいいですか？",
+   "a": "はい、大丈夫です（見本）。"
+  }
+ ],
+ "schema_type": "HomeAndConstructionBusiness",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

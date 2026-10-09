@@ -1,0 +1,111 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "kotori",
+ "name": "ベーカリー ことり",
+ "short_name": "ことり",
+ "kind": "パン・焼き菓子｜〇〇市",
+ "catch_html": "<span class=\"nw\">朝いちばんに焼いた</span><br><span class=\"nw\">パンと焼き菓子。</span>",
+ "lead": "〇〇市の小さなパン屋です。食パン・惣菜パン・焼き菓子を、毎朝お店で焼いています。",
+ "title_place": "〇〇市のパン屋・洋菓子",
+ "description": "〇〇市のパン屋「ことり」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#c98a3a",
+  "primary_deep": "#a86f2a",
+  "accent": "#7a9a5a",
+  "accent_soft": "#d9e2c3",
+  "pale": "#f9efe0",
+  "dark": "#3b2e24",
+  "dark2": "#4a3b2f",
+  "bg": "#fbf7f0",
+  "bg2": "#f2ebdf",
+  "ink": "#3a3129",
+  "muted": "#7a6e62",
+  "line": "#e6dccb"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "パンと焼き菓子",
+ "menu_word": "商品",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "日によって並ぶものが変わります。売り切れのときはごめんなさい。",
+ "menus": [
+  {
+   "id": "shoku",
+   "name": "食パン",
+   "text": "毎日食べても飽きない、やわらかい食パン。",
+   "image": "images/menu-shoku.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "食パンの写真",
+   "price": "380円",
+   "price_note": "1斤"
+  },
+  {
+   "id": "souzai",
+   "name": "惣菜パン",
+   "text": "カレーパン・ウインナーロールなど、日替わりで。",
+   "image": "images/menu-souzai.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "惣菜パンの写真",
+   "price": "200円〜"
+  },
+  {
+   "id": "yaki",
+   "name": "焼き菓子",
+   "text": "クッキー・マフィン・スコーン。贈りものにも。",
+   "image": "images/menu-yaki.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "焼き菓子の写真",
+   "price": "180円〜"
+  },
+  {
+   "id": "cake",
+   "name": "お祝いのケーキ",
+   "text": "誕生日や記念日に。3日前までにご予約ください。",
+   "image": "images/menu-cake.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "お祝いのケーキの写真",
+   "price": "3,200円〜",
+   "price_note": "予約制"
+  }
+ ],
+ "hours": "8:00〜売り切れまで（見本）",
+ "holiday": "火・水曜日（見本）",
+ "parking": "4台（見本）",
+ "payment": "現金・QRコード決済（見本）",
+ "reserve_title": "ご予約・お問い合わせ",
+ "info_title": "お店のこと",
+ "reserve_lead": "ケーキのご予約・パンのお取り置きは、LINEかお電話でどうぞ。",
+ "faq": [
+  {
+   "q": "何時ごろ品がそろいますか？",
+   "a": "9時ごろにひととおり並びます（見本）。"
+  },
+  {
+   "q": "取り置きはできますか？",
+   "a": "はい。前日までにLINEかお電話でお知らせください（見本）。"
+  },
+  {
+   "q": "アレルギーの表示はありますか？",
+   "a": "主な材料は店頭の札に書いています。気になるものは、お気軽にお尋ねください。"
+  }
+ ],
+ "schema_type": "Bakery",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

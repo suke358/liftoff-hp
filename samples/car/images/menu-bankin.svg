@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ebe9e4"/><stop offset="1" stop-color="#d7d3cb"/></linearGradient></defs>
+<rect width="1000" height="750" fill="url(#g)"/>
+<g fill="none" stroke="#3b6ea5" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(342.5 180.0) scale(3.150)"><path d="M20 36h40l10-6v18l-10-6H44v30H28V48h-8z"/><path d="M76 34l10-6M76 40h12M76 46l10 6"/></g></g>
+<text x="500.0" y="552" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="26" letter-spacing="3" fill="#5f6670">板金・塗装の写真が入ります</text>
+</svg>

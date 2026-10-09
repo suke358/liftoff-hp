@@ -1,0 +1,111 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "konara",
+ "name": "居酒屋 こなら",
+ "short_name": "こなら",
+ "kind": "居酒屋・和食｜〇〇市",
+ "catch_html": "<span class=\"nw\">今日の魚と、</span><br><span class=\"nw\">あたたかいごはん。</span>",
+ "lead": "〇〇市の小さな居酒屋です。市場で仕入れた魚と、季節の野菜の煮物・焼きもの。ひとりでも、家族でも。",
+ "title_place": "〇〇市の居酒屋・和食",
+ "description": "〇〇市の居酒屋「こなら」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "wa",
+ "theme": {
+  "primary": "#b8432e",
+  "primary_deep": "#96351f",
+  "accent": "#c9a85b",
+  "accent_soft": "#e4d3a3",
+  "pale": "#f3ebdd",
+  "dark": "#1f2430",
+  "dark2": "#2b3140",
+  "bg": "#f6f2ea",
+  "bg2": "#ece6d8",
+  "ink": "#26241f",
+  "muted": "#6c675c",
+  "line": "#d8d0bf"
+ },
+ "mark": "dot",
+ "font": "mincho",
+ "menu_title": "お品書き",
+ "menu_word": "料理",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "仕入れによって内容が変わります。苦手なものがあれば、ご予約のときにお知らせください。",
+ "menus": [
+  {
+   "id": "course",
+   "name": "おまかせコース",
+   "text": "前菜・刺身・焼きもの・ごはん・甘味。2名さまから。",
+   "image": "images/menu-course.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "おまかせコースの写真",
+   "price": "4,400円",
+   "price_note": "お一人"
+  },
+  {
+   "id": "sashimi",
+   "name": "旬の刺身 盛り合わせ",
+   "text": "その日の魚を3〜5種。",
+   "image": "images/menu-sashimi.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "旬の刺身 盛り合わせの写真",
+   "price": "1,650円"
+  },
+  {
+   "id": "yaki",
+   "name": "炭火の焼きもの",
+   "text": "鶏・豚・野菜の串を1本から。",
+   "image": "images/menu-yaki.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "炭火の焼きものの写真",
+   "price": "330円〜",
+   "price_note": "1本"
+  },
+  {
+   "id": "drink",
+   "name": "飲みもの",
+   "text": "地元の日本酒・生ビール・ソフトドリンク。",
+   "image": "images/menu-drink.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "飲みものの写真",
+   "price": "550円〜"
+  }
+ ],
+ "hours": "17:00〜23:00（見本）",
+ "holiday": "月曜日（見本）",
+ "parking": "3台（見本）",
+ "payment": "現金・QRコード決済（見本）",
+ "reserve_title": "ご予約",
+ "info_title": "お店のこと",
+ "reserve_lead": "席のご予約・宴会のご相談は、LINEかお電話でどうぞ。",
+ "faq": [
+  {
+   "q": "予約なしでも入れますか？",
+   "a": "はい。席が空いていればご案内します。週末は予約をおすすめします（見本）。"
+  },
+  {
+   "q": "宴会は何人までできますか？",
+   "a": "座敷で12名さままで（見本）。貸し切りはご相談ください。"
+  },
+  {
+   "q": "子ども連れでも大丈夫ですか？",
+   "a": "はい。座敷と子ども用の食器をご用意しています（見本）。"
+  }
+ ],
+ "schema_type": "Restaurant",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

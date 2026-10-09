@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="750" viewBox="0 0 1000 750">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#efe6d6"/><stop offset="1" stop-color="#dccdb3"/></linearGradient></defs>
+<rect width="1000" height="750" fill="url(#g)"/>
+<g fill="none" stroke="#96351f" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(145.6 180.0) scale(3.150)"><path d="M14 50c12-16 30-24 50-20 8 4 14 10 20 20-6 10-12 16-20 20-20 4-38-4-50-20z"/><circle cx="66" cy="46" r="3"/><path d="M84 50l8-10v20z"/><path d="M40 36l6 14-6 14"/></g><g transform="translate(539.4 180.0) scale(3.150)"><path d="M38 18h12v10c8 4 12 12 12 24v24a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V52c0-12 4-20 12-24z"/><path d="M64 62h22l-3 16a8 8 0 0 1-8 6h-2a8 8 0 0 1-8-6z"/></g></g>
+<text x="500.0" y="552" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="26" letter-spacing="3" fill="#7a6a55">おまかせコースの写真が入ります</text>
+</svg>

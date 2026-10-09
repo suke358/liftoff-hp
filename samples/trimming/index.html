@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【見本】トリミングサロン てくてく｜〇〇市のペットのトリミング</title>
+<meta name="description" content="〇〇市のトリミングサロン「てくてく」のホームページです（デザイン見本・架空のお店）。">
+<!-- 本公開前は検索に出さない設定。本公開のときに tools/launch.py で外す -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2f2a26">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="トリミングサロン てくてく">
+<meta property="og:title" content="トリミングサロン てくてく">
+<meta property="og:description" content="〇〇市のトリミングサロン「てくてく」のホームページです（デザイン見本・架空のお店）。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "トリミングサロン てくてく", "telephone": "+81--00-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇市〇〇町1-2-3"}, "areaServed": "〇〇市"}
+</script>
+<style>
+/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+.nw{white-space:nowrap}
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+:root{
+  --primary:#e07b4a;--primary-deep:#bf6235;--accent:#7fa88a;--accent-soft:#cfe0d2;--pale:#fbeee6;
+  --dark:#2f2a26;--dark2:#3d3732;--bg:#fbf8f4;--bg2:#f2ece4;--ink:#33302b;--muted:#75706a;--line:#e6ddd2;
+  --r:18px;
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
+  --latin:"Cormorant Garamond","Shippori Mincho B1",serif;
+  --head:var(--gothic);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:2;letter-spacing:.06em}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:4px}
+.wrap{width:min(1100px,100% - 40px);margin-left:auto;margin-right:auto}
+h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
+p{margin:0 0 1.2em}
+.muted{color:var(--muted)}
+.center{text-align:center}
+.mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
+.photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.photo img{width:100%;height:auto}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:500;letter-spacing:.12em;padding:.95em 1.8em;border-radius:999px;line-height:1.4;text-align:center;-webkit-transition:background .2s;transition:background .2s}
+.btn svg{width:1.25em;height:1.25em;flex:none;margin-right:.5em}
+.btn-main{background:var(--primary);color:#fff}
+.btn-main:hover{background:var(--primary-deep)}
+.btn-line{background:#06c755;color:#fff}
+.btn-line:hover{background:#05b04b}
+.btn-ghost{border:1px solid rgba(255,255,255,.45);color:#fff}
+.btn-ghost:hover{border-color:#fff}
+/* ヘッダー */
+.head{position:absolute;top:0;left:0;right:0;z-index:30}
+.head .wrap{display:flex;justify-content:space-between;align-items:center;height:84px;color:#f3efe6}
+.brand{display:flex;align-items:center;text-decoration:none}
+.brand img{width:46px;height:46px;border-radius:10px;margin-right:12px}
+.bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
+.bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
+.nav{display:flex;align-items:center;font-size:.86rem}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a:hover{opacity:1;color:var(--accent-soft)}
+.nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
+.menubtn{display:none}
+@media (max-width:860px){
+  .nav a{display:none}.bk{display:none}
+  .menubtn{display:inline-flex;align-items:center;background:rgba(0,0,0,.35);color:#f3efe6;border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:.45em .95em;font:inherit;font-size:.8rem;letter-spacing:.1em;cursor:pointer}
+  .menubtn i{display:block;width:14px;height:10px;border-top:1.5px solid currentColor;border-bottom:1.5px solid currentColor;position:relative;margin-right:6px}
+  .menubtn i::after{content:"";position:absolute;left:0;right:0;top:3.5px;border-top:1.5px solid currentColor}
+  .head.open .nav{display:flex;position:absolute;top:76px;right:12px;flex-direction:column;align-items:stretch;background:var(--dark);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:6px;min-width:210px;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+  .head.open .nav a{display:block;margin:0;padding:.85em 1em;border-radius:10px;font-size:.92rem}
+  .head.open .nav .rsv{margin-top:4px;text-align:center}
+}
+/* トップ */
+.hero{background:var(--dark);color:#f3efe6;position:relative;overflow:hidden}
+.hero .wrap{width:100%;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:stretch;min-height:100vh;min-height:min(100vh,940px)}
+.poster{margin:0;position:relative;overflow:hidden}
+.poster img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.poster::after{content:"";position:absolute;top:0;right:0;bottom:0;width:30%;background:linear-gradient(90deg,rgba(0,0,0,0),var(--dark));pointer-events:none}
+.poster.plain{display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 60% at 50% 45%,var(--dark2),var(--dark))}
+.plain-name{font-family:var(--head);font-size:3rem;letter-spacing:.3em;color:var(--accent-soft);margin:0;padding:0 20px;text-align:center}
+.hero-info{align-self:center;padding:130px clamp(28px,6vw,90px) 90px clamp(24px,3vw,48px);max-width:640px}
+.eyebrow{font-family:var(--head);color:var(--accent-soft);letter-spacing:.2em;font-size:.95rem;margin-bottom:18px;display:flex;align-items:center}
+.eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
+.hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
+.hero .lead{color:#ddd8cc;line-height:2.1}
+.addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
+.addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
+.hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}
+.hero-btns .btn{margin:6px}
+.toc{display:flex;flex-wrap:wrap;margin:18px -4px 0;padding:0;list-style:none}
+.toc li{margin:4px}
+.toc a{display:inline-block;text-decoration:none;font-size:.82rem;letter-spacing:.1em;color:#efeadf;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:.45em 1.1em}
+.toc a:hover{border-color:var(--accent-soft);color:var(--accent-soft)}
+@media (max-width:860px){
+  .hero{padding-bottom:48px}
+  .hero .wrap{grid-template-columns:1fr;min-height:0}
+  .poster img{position:static;height:auto}
+  .poster::after{display:none}
+  .poster.plain{min-height:220px;padding-top:70px}
+  .plain-name{font-size:2.2rem}
+  .hero-info{width:auto;max-width:none;margin:28px 20px 0;padding:0}
+  .hero-btns .btn{flex:1 1 100%}
+}
+/* 見出し */
+.sec{padding:110px 0}
+.sec-head{margin-bottom:48px}
+.sec-head i{display:flex;align-items:center;font-family:var(--latin);font-style:italic;font-size:1.1rem;color:var(--primary-deep);letter-spacing:.08em;margin-bottom:4px}
+.sec-head i .mk{margin-right:.45em}
+.sec-head.center i{justify-content:center}
+.sec-head h2{font-size:1.75rem;font-size:clamp(1.5rem,2.8vw,2rem);letter-spacing:.16em}
+.dark{background:var(--dark);color:#efeadf}
+.dark .muted{color:#cfcabd}
+.dark .sec-head i{color:var(--primary)}
+.sec-lead{max-width:40em;margin:-24px auto 32px}
+@media (max-width:860px){.sec{padding:80px 0}.sec-head{margin-bottom:34px}}
+/* ごあいさつ */
+.owner .wrap{display:grid;grid-template-columns:340px 1fr;grid-gap:72px;gap:72px;align-items:center;max-width:1000px}
+.owner.noimg .wrap{grid-template-columns:1fr;max-width:760px}
+.role{display:inline-block;font-size:.8rem;letter-spacing:.2em;background:var(--pale);color:var(--primary-deep);padding:.3em 1.1em;border-radius:999px;margin-bottom:16px}
+.owner h3{font-size:1.4rem;letter-spacing:.12em;margin-bottom:22px}
+@media (max-width:860px){.owner .wrap{grid-template-columns:1fr;grid-gap:40px;gap:40px}.owner .photo{max-width:300px;margin:0 auto}}
+/* メニュー */
+.menu-tabs{display:flex;flex-wrap:wrap;justify-content:center;margin:-8px auto 36px;max-width:700px}
+.menu-tabs a{margin:4px;text-decoration:none;font-size:.86rem;letter-spacing:.08em;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:.5em 1.2em}
+.menu-tabs a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.menu-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));grid-gap:24px;gap:24px}
+.menu-cards.n4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:1100px){.menu-cards.n4{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.menu-cards.n4{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.06);display:flex;flex-direction:column;scroll-margin-top:16px}
+.card .photo{border-radius:0}
+.card-body{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:1.25rem;letter-spacing:.12em;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.92rem;line-height:1.9;margin-bottom:14px}
+.sub-items{display:flex;flex-wrap:wrap;margin:0 -3px 12px;padding:0;list-style:none}
+.sub-items li{margin:3px;font-size:.78rem;background:var(--pale);color:var(--primary-deep);border-radius:999px;padding:.15em .9em}
+.price{margin-top:auto;border-top:1px dashed var(--line);padding-top:12px;font-family:var(--head);display:flex;justify-content:space-between;align-items:baseline}
+.price b{font-size:1.35rem;font-weight:500;color:var(--dark);letter-spacing:.04em}
+.price small{font-family:var(--gothic);font-size:.8rem;color:var(--muted)}
+.price .ask{font-size:.9rem;color:var(--muted)}
+.ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
+.ask-line:hover{background:#06c755;color:#fff}
+.ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
+.ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
+.ptable h3 .mk{margin-right:.45em}
+.ptable .lead{color:var(--muted);font-size:.92rem;margin-bottom:20px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{padding:14px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.tbl th{font-family:var(--head);font-weight:500;letter-spacing:.08em;font-size:1.05rem;width:9em}
+.tbl td{color:var(--muted);font-size:.9rem;line-height:1.8}
+.tbl td.yen{text-align:right;white-space:nowrap;font-family:var(--head);color:var(--dark);font-size:1.2rem;width:7em}
+.tbl .tag{display:inline-block;margin-left:.6em;font-family:var(--gothic);font-size:.68rem;background:var(--pale);color:var(--primary-deep);border-radius:999px;padding:.1em .7em;vertical-align:.15em;white-space:nowrap}
+.tbl tr.first{background:linear-gradient(90deg,var(--pale),rgba(255,255,255,0))}
+.cols{display:grid;grid-template-columns:1.4fr 1fr;grid-gap:44px;gap:44px}
+.cols.one{grid-template-columns:1fr}
+.opt h4{font-family:var(--head);font-weight:500;letter-spacing:.14em;margin:0 0 6px}
+.opt .tbl th{width:auto;font-size:.95rem}
+.extra{margin:20px 0 0;background:var(--bg);border-radius:12px;padding:14px 18px;font-size:.88rem;color:var(--muted)}
+.price-note{margin-top:28px;font-size:.88rem}
+@media (max-width:860px){.cols{grid-template-columns:1fr;grid-gap:30px;gap:30px}}
+@media (max-width:640px){
+  .menu-tabs{margin:-12px -4px 26px}.menu-tabs a{font-size:.8rem;padding:.45em .95em}
+  .card-body{padding:16px 16px 18px}.card h3{font-size:1.08rem}.card p{font-size:.84rem;line-height:1.75;margin-bottom:10px}
+  .ptable{padding:30px 18px}
+  .tbl.course tr{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--line);padding:12px 0}
+  .tbl.course th,.tbl.course td{border:none;padding:0;width:auto}
+  .tbl.course td.yen{grid-column:2;grid-row:1}
+  .tbl.course td:not(.yen){grid-column:1 / -1;margin-top:4px;font-size:.84rem}
+}
+/* 流れ */
+.steps{list-style:none;margin:0 auto;padding:0;max-width:860px;counter-reset:s}
+.steps li{position:relative;padding:0 0 30px 64px;counter-increment:s}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--latin);font-size:1.2rem}
+.steps li::after{content:"";position:absolute;left:21px;top:48px;bottom:4px;border-left:2px dotted var(--line)}
+.steps li:last-child::after{display:none}
+.steps h3{font-size:1.15rem;letter-spacing:.1em;margin:4px 0 4px}
+.steps p{color:var(--muted);font-size:.92rem;margin:0}
+/* 予約・相談 */
+.reserve .wrap{max-width:1000px}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);grid-gap:18px;gap:18px}
+.ways.n1{grid-template-columns:1fr;max-width:460px;margin:0 auto}
+.ways.n2{grid-template-columns:1fr 1fr;max-width:760px;margin:0 auto}
+.way{background:var(--dark2);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);padding:32px 22px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.way h3{font-size:1rem;letter-spacing:.2em;color:var(--accent-soft);margin-bottom:6px}
+.way p{font-size:.9rem;color:#d9d4c8;margin-bottom:18px}
+.way .btn{width:100%;margin-top:auto}
+.tel{font-family:var(--latin);font-size:2rem;letter-spacing:.06em;text-decoration:none;color:#fff;margin-top:auto}
+.rules{max-width:760px;margin:36px auto 0;border:1px solid rgba(255,255,255,.18);border-radius:var(--r);padding:24px 26px}
+.rules h4{font-family:var(--head);font-weight:500;color:var(--accent-soft);letter-spacing:.16em;margin:0 0 8px}
+.rules ul{margin:0;padding-left:1.2em;font-size:.9rem}
+@media (max-width:860px){.ways,.ways.n2{grid-template-columns:1fr}}
+/* 店舗情報 */
+.access .wrap{display:grid;grid-template-columns:1fr 1fr;grid-gap:56px;gap:56px}
+.access .wrap.nomap{grid-template-columns:1fr;max-width:760px}
+.info{margin:0;background:#fff;border-radius:var(--r);padding:6px 26px}
+.info div{display:grid;grid-template-columns:7em 1fr;padding:14px 0;border-bottom:1px solid var(--line)}
+.info div:last-child{border-bottom:none}
+.info dt{color:var(--muted);font-size:.9rem}
+.info dd{margin:0}
+.route{display:flex;align-items:center;justify-content:center;margin-top:18px;text-decoration:none;background:var(--dark);color:#fbf7ef;border-radius:999px;padding:.95em 1.4em;letter-spacing:.12em;font-size:.92rem}
+.route svg{width:1.1em;height:1.1em;fill:var(--primary);margin-right:.5em}
+.map{border-radius:var(--r);overflow:hidden;min-height:400px;background:var(--bg2)}
+.map iframe{width:100%;height:100%;min-height:400px;border:0;display:block}
+@media (max-width:860px){.access .wrap{grid-template-columns:1fr;grid-gap:36px;gap:36px}.info{padding:4px 18px}.info div{grid-template-columns:5.5em 1fr}.map,.map iframe{min-height:280px}}
+/* よくある質問 */
+.faq{background:var(--bg2)}
+.faq-list{max-width:820px;margin:0 auto}
+.faq details{background:#fff;border-radius:14px;margin-bottom:12px}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;padding:18px 48px 18px 20px;position:relative;font-family:var(--head);letter-spacing:.06em;line-height:1.7}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:20px;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);color:var(--primary-deep);font-size:1.3rem;font-family:var(--gothic)}
+.faq details[open] summary::after{content:"−"}
+.faq p{margin:0;padding:0 20px 20px;display:flex;color:var(--muted);font-size:.93rem;line-height:1.9}
+.faq .q,.faq .a{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-family:var(--latin);font-style:italic;margin-right:14px}
+.faq .q{background:var(--primary);color:#fff}
+.faq .a{background:var(--pale);color:var(--primary-deep)}
+/* SNS・下 */
+.sns{background:var(--pale)}
+.sns-list{display:flex;flex-wrap:wrap;justify-content:center}
+.sns-list a{margin:6px;background:#fff;border-radius:14px;padding:16px 26px;text-decoration:none}
+.foot{background:var(--dark);color:#e9e4d8;padding:56px 0 110px;font-size:.88rem}
+.foot .fname{font-family:var(--head);font-size:1.1rem;letter-spacing:.14em;color:#fff}
+.foot nav{display:flex;flex-wrap:wrap;margin:20px -10px}
+.foot nav a{margin:4px 10px;text-decoration:none;opacity:.85}
+.foot .copy{font-family:var(--latin);font-style:italic;opacity:.7;margin:0}
+.spbar{display:none}
+@media (max-width:860px){
+  .spbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--dark);border-top:1px solid var(--accent-soft);padding-bottom:env(safe-area-inset-bottom)}
+  .spbar.n2{grid-template-columns:1fr 1fr}.spbar.n1{grid-template-columns:1fr}
+  .spbar a{text-align:center;text-decoration:none;color:#fbf7ef;padding:1em .3em;font-size:.86rem;letter-spacing:.1em}
+  .spbar a.l{background:#06c755}.spbar a.r{background:var(--primary)}
+}
+.totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.totop.show{opacity:.92;visibility:visible}
+@media (max-width:860px){.totop{bottom:76px;right:12px}}
+
+/* 見本帳にもどる（見本だけに出す） */
+.mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.mihon:hover{background:#000}
+@media (max-width:860px){.mihon{bottom:78px}}
+</style>
+<script>document.documentElement.className = 'js';</script>
+</head>
+<body>
+<!-- このページは tools/make_site.py で作った（設定：tekuteku.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><path d="M12 21s-7.6-4.6-9.6-9.4C1 8.2 3 4.5 6.6 4.5c2.2 0 3.7 1.3 5.4 3.3 1.7-2 3.2-3.3 5.4-3.3 3.6 0 5.6 3.7 4.2 7.1C19.6 16.4 12 21 12 21z"/></symbol></svg>
+<header class="head">
+  <div class="wrap">
+    <a href="#top" class="brand" aria-label="てくてく トップへ"><span class="bn">てくてく</span><span class="bk">ペットの<wbr>トリミング｜〇〇市</span></a>
+    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">メニュー・料金</a><a href="#access">お店のこと</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
+    <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
+  </div>
+</header>
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <figure class="poster"><img src="images/hero.svg" alt="お店の写真" width="1200" height="1500" fetchpriority="high"></figure>
+      <div class="hero-info">
+        <p class="eyebrow">ペットの<wbr>トリミング｜〇〇市</p>
+        <h1><span class="nw">その子のペースで、</span><br><span class="nw">きれいに、やさしく。</span></h1>
+        <p class="lead">〇〇市の<wbr>トリミングサロンです。<wbr>1頭ずつ、<wbr>ゆっくり時間を<wbr>とって。<wbr>はじめての<wbr>子も、<wbr>年を<wbr>とった<wbr>子も。</p>
+        <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
+        <div class="hero-btns"><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a><a class="btn btn-ghost" href="tel:0000000000">電話する <span class="nw">0000-00-0000</span></a></div>
+        <ul class="toc" aria-label="このページの案内"><li><a href="#menu">メニュー・料金</a></li><li><a href="#reserve">ご予約</a></li><li><a href="#access">お店のこと</a></li><li><a href="#faq">よくある質問</a></li></ul>
+      </div>
+    </div>
+  </section>
+  <section id="menu" class="sec menu">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>メニュー・料金</h2></div>
+      <p class="sec-lead center muted">料金は<wbr>見本です。</p>
+      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-shampoo">シャンプーコース</a><a href="#m-cut">カットコース</a><a href="#m-part">部分ケア</a><a href="#m-sougei">送迎</a></nav>
+      <div class="menu-cards n4">
+        <article class="card" id="m-shampoo">
+          <div class="photo"><img src="images/menu-shampoo.svg" alt="シャンプーコースの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>シャンプーコース</h3>
+            
+            <p>シャンプー・爪切り・耳そうじ・<wbr>足まわりの<wbr>カット。</p>
+            <div class="price"><small>小型犬</small><b>3,300円〜</b></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-cut">
+          <div class="photo"><img src="images/menu-cut.svg" alt="カットコースの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>カットコース</h3>
+            
+            <p>シャンプーコースに、<wbr>全身の<wbr>カット。</p>
+            <div class="price"><small>小型犬</small><b>5,500円〜</b></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-part">
+          <div class="photo"><img src="images/menu-part.svg" alt="部分ケアの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>部分ケア</h3>
+            
+            <p>爪切り・耳そうじ・肛門腺だけ、<wbr>でも<wbr>大丈夫。</p>
+            <div class="price"><small></small><b>550円〜</b></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+          </div>
+        </article>
+        <article class="card" id="m-sougei">
+          <div class="photo"><img src="images/menu-sougei.svg" alt="送迎の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="card-body">
+            <h3>送迎</h3>
+            
+            <p>〇〇市内は、<wbr>お迎えと<wbr>お送りを<wbr>しています。</p>
+            <div class="price"><small></small><b>片道 550円</b></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+          </div>
+        </article>
+      </div>
+      <p class="price-note muted center">犬種・<wbr>大きさ・毛の<wbr>状態で<wbr>変わります。</p>
+    </div>
+  </section>
+  <section id="reserve" class="sec reserve dark">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご予約</h2></div>
+      <p class="muted center" style="margin-bottom:40px">ご予約は<wbr>LINEか<wbr>お電話で。<wbr>はじめての<wbr>子は、<wbr>ワクチンの<wbr>証明書を<wbr>お持ちください<wbr>（見本）。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
+      
+    </div>
+  </section>
+  <section id="access" class="sec access">
+    <div class="wrap nomap">
+      <div>
+        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>お店のこと</h2></div>
+        <dl class="info"><div><dt>店名</dt><dd>トリミングサロン てくてく</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>9:00〜18:00<wbr>（見本）</dd></div><div><dt>定休日</dt><dd>木曜日<wbr>（見本）</dd></div><div><dt>駐車場</dt><dd>2台（見本）</dd></div><div><dt>お支払い</dt><dd>現金・QRコード決済<wbr>（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
+        
+      </div>
+      
+    </div>
+  </section>
+  <section id="faq" class="sec faq">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>大型犬も<wbr>お願いできますか？</span></summary><p><span class="a">A</span><span>はい。<wbr>大きさに<wbr>よって<wbr>料金と<wbr>時間が<wbr>変わります。<wbr>ご予約の<wbr>ときに<wbr>お知らせ<wbr>ください。</span></p></details><details><summary><span class="q">Q</span><span>猫も<wbr>できますか？</span></summary><p><span class="a">A</span><span>いまは<wbr>犬だけ<wbr>お受けしています<wbr>（見本）。</span></p></details><details><summary><span class="q">Q</span><span>こわがりの<wbr>子でも<wbr>大丈夫ですか？</span></summary><p><span class="a">A</span><span>はい。<wbr>休みながら、<wbr>その<wbr>子の<wbr>ペースで<wbr>進めます。</span></p></details></div>
+    </div>
+  </section>
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <p class="fname">トリミングサロン てくてく</p>
+    <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3</p>
+    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　9:00〜18:00<wbr>（見本）</p>
+    <nav aria-label="フッター"><a href="#menu">メニュー・料金</a><a href="#access">お店のこと</a><a href="#faq">よくある質問</a></nav>
+    <p class="copy">© てくてく</p>
+  </div>
+</footer>
+<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで<wbr>相談</a><a class="r" href="#menu">メニュー</a></nav>
+<a class="totop" href="#top" aria-label="ページの上へ">↑</a>
+<script>
+// スマホのメニュー（開く・閉じる）と、上へ戻るボタン
+(function(){
+  var head = document.querySelector('.head'), btn = document.querySelector('.menubtn'), nav = document.getElementById('gnav');
+  if (head && btn && nav) {
+    function set(open){ head.className = open ? 'head open' : 'head'; btn.setAttribute('aria-expanded', open ? 'true' : 'false'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); set(head.className.indexOf('open') < 0); });
+    nav.addEventListener('click', function(e){ if (e.target.tagName === 'A') set(false); });
+    document.addEventListener('click', function(e){ if (head.className.indexOf('open') >= 0 && !nav.contains(e.target)) set(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') set(false); });
+  }
+  var up = document.querySelector('.totop');
+  if (up) { var f = function(){ up.className = (window.pageYOffset || 0) > 900 ? 'totop show' : 'totop'; }; window.addEventListener('scroll', f); f(); }
+})();
+// 戻ったときに、見ていた場所に戻す
+(function(){
+  var key = 'y:' + location.pathname;
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) window.addEventListener('load', function(){ var y = parseInt(sessionStorage.getItem(key) || '0', 10); if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y); });
+  } catch (err) {}
+})();
+</script>
+<a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
+</body>
+</html>

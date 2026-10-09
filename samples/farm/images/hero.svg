@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#33432a"/><stop offset="1" stop-color="#26331f"/></linearGradient></defs>
+<rect width="1200" height="1500" fill="url(#g)"/>
+<g fill="none" stroke="#f6cfa5" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(40.0 515.0) scale(3.200)"><path d="M24 80 60 44c4-4 10-4 12 0s0 8-4 12z"/><path d="M60 44c-2-8 2-14 8-16M60 44c-8-2-14 2-16 8"/><path d="M44 60l6 6M36 68l6 6"/></g><g transform="translate(440.0 515.0) scale(3.200)"><path d="M16 48h68c0 18-14 32-34 32S16 66 16 48z"/><path d="M16 48c4-10 16-16 34-16s30 6 34 16"/><path d="M40 40c4-4 8-4 12 0 4 4 8 4 12 0"/></g><g transform="translate(840.0 515.0) scale(3.200)"><path d="M50 36c-6-6-18-6-24 4s-2 30 8 38c6 4 10 2 16 2s10 2 16-2c10-8 14-28 8-38s-18-10-24-4z"/><path d="M50 36c0-8 4-12 10-14"/></g></g>
+<text x="600.0" y="903" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="31" letter-spacing="3" fill="rgba(255,255,255,.55)">お店の写真が入ります</text>
+</svg>

@@ -1,0 +1,116 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "aozora",
+ "name": "あおぞら農園 直売所",
+ "short_name": "あおぞら農園",
+ "kind": "農家の直売所｜〇〇市",
+ "catch_html": "<span class=\"nw\">朝とった野菜を、</span><br><span class=\"nw\">その日のうちに。</span>",
+ "lead": "〇〇市の農家の直売所です。畑でとれた野菜・お米・果物と、手づくりのジャムを並べています。",
+ "title_place": "〇〇市の農家の直売所",
+ "description": "〇〇市の農家の直売所「あおぞら農園」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#5a9a3c",
+  "primary_deep": "#467b2e",
+  "accent": "#e8862e",
+  "accent_soft": "#f6cfa5",
+  "pale": "#eef5e6",
+  "dark": "#26331f",
+  "dark2": "#33432a",
+  "bg": "#f8faf4",
+  "bg2": "#edf2e4",
+  "ink": "#273024",
+  "muted": "#66705f",
+  "line": "#d8e0cf"
+ },
+ "mark": "leaf",
+ "font": "gothic",
+ "menu_title": "並んでいるもの",
+ "menu_word": "商品",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "とれた分だけ並べています。時期によって、ないものもあります。",
+ "menus": [
+  {
+   "id": "yasai",
+   "name": "季節の野菜",
+   "text": "朝とったものを、その日の分だけ。",
+   "image": "images/menu-yasai.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "季節の野菜の写真",
+   "price": "100円〜"
+  },
+  {
+   "id": "kome",
+   "name": "お米",
+   "text": "自分の田んぼでとれたお米。精米したてをお渡しします。",
+   "image": "images/menu-kome.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "お米の写真",
+   "price": "2,400円",
+   "price_note": "5kg"
+  },
+  {
+   "id": "kudamono",
+   "name": "果物",
+   "text": "みかん・いちごなど、時期のもの。",
+   "image": "images/menu-kudamono.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "果物の写真",
+   "price": "300円〜"
+  },
+  {
+   "id": "kakou",
+   "name": "手づくりの加工品",
+   "text": "畑の果物で作ったジャム・ピクルス。",
+   "image": "images/menu-kakou.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "手づくりの加工品の写真",
+   "price": "500円〜"
+  }
+ ],
+ "hours": "9:00〜15:00（見本）",
+ "holiday": "月〜水曜日（見本）",
+ "parking": "8台（見本）",
+ "payment": "現金のみ（見本）",
+ "info_extra": [
+  [
+   "入荷のお知らせ",
+   "LINEでお知らせしています（見本）"
+  ]
+ ],
+ "reserve_title": "お取り置き・お問い合わせ",
+ "info_title": "直売所のこと",
+ "reserve_lead": "お米のまとめ買い・野菜のお取り置きは、LINEかお電話でどうぞ。",
+ "faq": [
+  {
+   "q": "何が並んでいますか？",
+   "a": "その日の朝にとれたものです。LINEでお知らせしています（見本）。"
+  },
+  {
+   "q": "取り置きはできますか？",
+   "a": "はい。前日までにお知らせください（見本）。"
+  },
+  {
+   "q": "発送はできますか？",
+   "a": "いまは店頭でのお渡しだけです（見本）。"
+  }
+ ],
+ "schema_type": "Store",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

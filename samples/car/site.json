@@ -1,0 +1,179 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "hoshino",
+ "name": "ほしの自動車整備",
+ "short_name": "ほしの自動車",
+ "kind": "自動車の整備・板金｜〇〇市",
+ "catch_html": "<span class=\"nw\">車検から板金まで、</span><br><span class=\"nw\">まちの車の相談所。</span>",
+ "lead": "〇〇市の自動車整備工場です。車検・点検・修理・板金塗装を、どのメーカーの車でもお受けしています。",
+ "title_place": "〇〇市の自動車整備・板金",
+ "description": "〇〇市の自動車整備工場「ほしの自動車整備」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "fresh",
+ "theme": {
+  "primary": "#d9742b",
+  "primary_deep": "#b65d1e",
+  "accent": "#3b6ea5",
+  "accent_soft": "#c7d7ea",
+  "pale": "#f6ede3",
+  "dark": "#1e2328",
+  "dark2": "#2a3139",
+  "bg": "#f5f4f1",
+  "bg2": "#eae8e3",
+  "ink": "#23262a",
+  "muted": "#636870",
+  "line": "#d9d6cf"
+ },
+ "mark": "dot",
+ "font": "gothic",
+ "menu_title": "お仕事の内容",
+ "menu_word": "仕事",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "車種と状態で変わります。見せていただいてからお見積もりをお出しします。",
+ "menus": [
+  {
+   "id": "shaken",
+   "name": "車検",
+   "text": "法定費用込みの目安です。代車もご用意しています。",
+   "image": "images/menu-shaken.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "車検の写真",
+   "price": "49,500円〜",
+   "price_note": "軽自動車"
+  },
+  {
+   "id": "oil",
+   "name": "点検・オイル交換",
+   "text": "待っている間にできる、ふだんの点検。",
+   "image": "images/menu-oil.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "点検・オイル交換の写真",
+   "price": "4,400円〜"
+  },
+  {
+   "id": "bankin",
+   "name": "板金・塗装",
+   "text": "へこみ・すり傷の修理。保険を使う修理もご相談ください。",
+   "image": "images/menu-bankin.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "板金・塗装の写真"
+  },
+  {
+   "id": "tire",
+   "name": "タイヤ交換・保管",
+   "text": "夏タイヤ・冬タイヤの交換と、お預かり。",
+   "image": "images/menu-tire.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "タイヤ交換・保管の写真",
+   "price": "2,200円〜",
+   "price_note": "4本"
+  }
+ ],
+ "flow_title": "ご依頼の流れ",
+ "flow": [
+  {
+   "title": "ご相談",
+   "text": "車の様子と、気になることをお知らせください。"
+  },
+  {
+   "title": "お預かり・お見積もり",
+   "text": "車を見せていただき、内容と金額をお出しします。"
+  },
+  {
+   "title": "作業",
+   "text": "決めていただいてから作業します。"
+  },
+  {
+   "title": "お引き渡し",
+   "text": "作業した所を一緒に確かめて、お渡しします。"
+  }
+ ],
+ "parts": {
+  "cases": {
+   "title": "修理の例",
+   "eyebrow": "works",
+   "lead": "修理の前と後を、並べてご覧いただけます。",
+   "label_before": "修理前",
+   "label_after": "修理後",
+   "items": [
+    {
+     "before": {
+      "image": "images/case1-before.svg",
+      "alt": "修理前のドア（見本）"
+     },
+     "after": {
+      "image": "images/case1-after.svg",
+      "alt": "修理後のドア（見本）"
+     },
+     "title": "ドアのへこみの修理",
+     "meta": "軽自動車　板金・塗装",
+     "text": "駐車場でぶつけたへこみを、板金で戻してから塗装しました。"
+    },
+    {
+     "before": {
+      "image": "images/case2-before.svg",
+      "alt": "修理前のバンパー（見本）"
+     },
+     "after": {
+      "image": "images/case2-after.svg",
+      "alt": "修理後のバンパー（見本）"
+     },
+     "title": "バンパーのすり傷",
+     "meta": "普通車　塗装",
+     "text": "傷の部分だけを削って、まわりの色に合わせて塗りました。"
+    }
+   ]
+  },
+  "compare": {
+   "title": "修理の前と後",
+   "lead": "つまみを動かすと、同じ場所の前と後が見比べられます。",
+   "label_before": "修理前",
+   "label_after": "修理後",
+   "caption": "ドアのへこみの修理（見本）"
+  }
+ },
+ "hours": "9:00〜18:00（見本）",
+ "holiday": "日曜・祝日（見本）",
+ "parking": "5台（見本）",
+ "payment": "現金・クレジットカード（見本）",
+ "info_extra": [
+  [
+   "代車",
+   "ご用意しています（要予約・見本）"
+  ]
+ ],
+ "reserve_title": "ご相談・お見積もり",
+ "info_title": "ほしの自動車整備について",
+ "reserve_lead": "お見積もりは無料です（見本）。写真を送っていただければ、おおよその目安もお伝えします。",
+ "faq": [
+  {
+   "q": "車検はいつごろ頼めばいいですか？",
+   "a": "有効期限の1か月前から受けられます。早めにご相談ください。"
+  },
+  {
+   "q": "代車はありますか？",
+   "a": "はい。台数に限りがあるので、ご予約のときにお知らせください（見本）。"
+  },
+  {
+   "q": "保険を使う修理もできますか？",
+   "a": "はい。保険会社とのやりとりもお手伝いします。"
+  }
+ ],
+ "schema_type": "AutoRepair",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}

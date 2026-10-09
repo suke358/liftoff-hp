@@ -1,0 +1,111 @@
+{
+ "area": "〇〇県〇〇市",
+ "tel": "0000-00-0000",
+ "line_url": "#reserve",
+ "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
+ "line_msg": "ホームページを見ました。{name}について相談したいです。",
+ "info_eyebrow": "about",
+ "slug": "tekuteku",
+ "name": "トリミングサロン てくてく",
+ "short_name": "てくてく",
+ "kind": "ペットのトリミング｜〇〇市",
+ "catch_html": "<span class=\"nw\">その子のペースで、</span><br><span class=\"nw\">きれいに、やさしく。</span>",
+ "lead": "〇〇市のトリミングサロンです。1頭ずつ、ゆっくり時間をとって。はじめての子も、年をとった子も。",
+ "title_place": "〇〇市のペットのトリミング",
+ "description": "〇〇市のトリミングサロン「てくてく」のホームページです（デザイン見本・架空のお店）。",
+ "theme_base": "salon",
+ "theme": {
+  "primary": "#e07b4a",
+  "primary_deep": "#bf6235",
+  "accent": "#7fa88a",
+  "accent_soft": "#cfe0d2",
+  "pale": "#fbeee6",
+  "dark": "#2f2a26",
+  "dark2": "#3d3732",
+  "bg": "#fbf8f4",
+  "bg2": "#f2ece4",
+  "ink": "#33302b",
+  "muted": "#75706a",
+  "line": "#e6ddd2"
+ },
+ "mark": "heart",
+ "font": "gothic",
+ "menu_title": "メニュー・料金",
+ "menu_word": "メニュー",
+ "menu_lead": "料金は見本です。",
+ "menu_note": "犬種・大きさ・毛の状態で変わります。",
+ "menus": [
+  {
+   "id": "shampoo",
+   "name": "シャンプーコース",
+   "text": "シャンプー・爪切り・耳そうじ・足まわりのカット。",
+   "image": "images/menu-shampoo.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "シャンプーコースの写真",
+   "price": "3,300円〜",
+   "price_note": "小型犬"
+  },
+  {
+   "id": "cut",
+   "name": "カットコース",
+   "text": "シャンプーコースに、全身のカット。",
+   "image": "images/menu-cut.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "カットコースの写真",
+   "price": "5,500円〜",
+   "price_note": "小型犬"
+  },
+  {
+   "id": "part",
+   "name": "部分ケア",
+   "text": "爪切り・耳そうじ・肛門腺だけ、でも大丈夫。",
+   "image": "images/menu-part.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "部分ケアの写真",
+   "price": "550円〜"
+  },
+  {
+   "id": "sougei",
+   "name": "送迎",
+   "text": "〇〇市内は、お迎えとお送りをしています。",
+   "image": "images/menu-sougei.svg",
+   "w": 1000,
+   "h": 750,
+   "alt": "送迎の写真",
+   "price": "片道 550円"
+  }
+ ],
+ "hours": "9:00〜18:00（見本）",
+ "holiday": "木曜日（見本）",
+ "parking": "2台（見本）",
+ "payment": "現金・QRコード決済（見本）",
+ "reserve_title": "ご予約",
+ "info_title": "お店のこと",
+ "reserve_lead": "ご予約はLINEかお電話で。はじめての子は、ワクチンの証明書をお持ちください（見本）。",
+ "faq": [
+  {
+   "q": "大型犬もお願いできますか？",
+   "a": "はい。大きさによって料金と時間が変わります。ご予約のときにお知らせください。"
+  },
+  {
+   "q": "猫もできますか？",
+   "a": "いまは犬だけお受けしています（見本）。"
+  },
+  {
+   "q": "こわがりの子でも大丈夫ですか？",
+   "a": "はい。休みながら、その子のペースで進めます。"
+  }
+ ],
+ "schema_type": "LocalBusiness",
+ "area_served": "〇〇市",
+ "hero": {
+  "image": "images/hero.svg",
+  "w": 1200,
+  "h": 1500,
+  "alt": "お店の写真"
+ },
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
+}
