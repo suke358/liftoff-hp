@@ -3,11 +3,14 @@
 
 使い方:
   初回の打ち合わせの前：
-    python3 new_client.py <英字の短い名前> <お店の名前> <置く場所（ふつうはデスクトップ）>
-      例）python3 new_client.py hiyori "よもぎ蒸しサロン hiyori" ~/Desktop
+    python3 new_client.py <英字の短い名前> <お店の名前> [<置く場所>]
+      例）python3 new_client.py hiyori "よもぎ蒸しサロン hiyori"
+      置く場所を省くと ~/Desktop/03_Lift-off事業/1_HP制作/2_お客さん に作る（2026/10/9 変更。前は ~/Desktop を指定していた）
 
   2回目の打ち合わせの前（初回の資料を「5 済んだ打ち合わせ」に移し、2回目の道具を入れる）：
-    python3 new_client.py <英字の短い名前> <お店の名前> <置く場所> --second
+    python3 new_client.py <英字の短い名前> <お店の名前> [<置く場所>] --second
+
+  料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月9日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
 
 できるもの:
   <お店の名前>_今日の打ち合わせ/
@@ -21,6 +24,8 @@ import sys, os, shutil, datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 TPL = os.path.join(HERE, 'templates')
 SAMPLES = 'https://liftoff-hp.liftoff-358.workers.dev/samples/'
+BASE_DEFAULT = '~/Desktop/03_Lift-off事業/1_HP制作/2_お客さん'  # 打ち合わせフォルダを作る場所（置く場所を省いたとき）
+PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月9日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
 DIRS = ['1 次の打ち合わせで使うもの', '2 名刺の見本', '3 ロゴ案', '4 もらった写真', '5 済んだ打ち合わせ', '6 LINEの下書き', '7 古いもの（使わない）']
 
 def fill(name, slug, shop):
@@ -40,7 +45,7 @@ def readme(root, shop, second):
              '   4 Googleマップに入れる文.txt ／ 5 Googleマップ用の写真 … Claude が作って入れる\n') if second else (
              '   1 初回の打ち合わせ_入力シート（Macで開く）.html … 話しながら入力 →「Claudeに渡す用にコピー」→ チャットに貼る\n'
              '   2 デザイン見本帳を開く.webloc … テイストを番号で選んでもらう\n'
-             '   3 料金表_A4.pdf … 印刷して持っていく（デスクトップにあれば自動でコピー）\n'
+             '   3 料金表_A4.pdf … 印刷して持っていく（「1_お客さまに渡す資料」の料金表を自動でコピー）\n'
              '   4 お見積もり（Macで開く・印刷やPDFにできる）.html … その場で選ぶと金額が出る →「印刷 / PDFにする」（マニュアル 22）\n')
     txt = f'''【{shop}_今日の打ち合わせ フォルダの中身】{today} 作成（new_client.py）
 
@@ -58,8 +63,8 @@ def readme(root, shop, second):
 
 def main():
     a = [x for x in sys.argv[1:] if not x.startswith('--')]
-    if len(a) < 3: print(__doc__); sys.exit(1)
-    slug, shop, base = a[0], a[1], os.path.expanduser(a[2])
+    if len(a) < 2: print(__doc__); sys.exit(1)
+    slug, shop, base = a[0], a[1], os.path.expanduser(a[2] if len(a) >= 3 else BASE_DEFAULT)
     second = '--second' in sys.argv
     root = os.path.join(base, f'{shop}_今日の打ち合わせ')
     for d in DIRS: os.makedirs(os.path.join(root, d), exist_ok=True)
@@ -80,9 +85,11 @@ def main():
         est = os.path.join(HERE, 'お見積もりを作る.html')
         if os.path.exists(est):
             shutil.copy(est, os.path.join(nxt, '4 お見積もり（Macで開く・印刷やPDFにできる）.html')); made.append('4 お見積もり（Macで開く・印刷やPDFにできる）.html')
-        price = os.path.join(base, 'HP制作_料金表_A4.pdf')
+        price = os.path.expanduser(PRICE_PDF)
         if os.path.exists(price):
             shutil.copy(price, os.path.join(nxt, '3 料金表_A4.pdf')); made.append('3 料金表_A4.pdf')
+        else:
+            print(f'⚠️ 料金表が見つかりません（コピーしていません）：{price}')
     for tpl, name in out:
         p = os.path.join(nxt, name)
         if os.path.exists(p): made.append(f'（そのまま）{name} … もうあるので上書きしない'); continue
