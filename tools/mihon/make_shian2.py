@@ -10,15 +10,20 @@ shian2 だけの違い（この道具が書きかえる）：
   - 飛行機は1機だけ、ヘッダーのすぐ下の線の上を、ゆっくり一定の速さで飛ぶ。画面を切りかえると、いまの位置から続けて次の画面の位置へ
     （位置は変数に持つ。動かすのは transform と requestAnimationFrame だけ。向きは進む方向。折り返しは半円を描く）
 
-使い方:  python3 tools/mihon/make_shian2.py
+使い方:  python3 tools/mihon/make_shian2.py          → shian2/index.html を作る
+        python3 tools/mihon/make_shian2.py --top    → 本番のトップ index.html を作る（2026/10/10〜）
+  shian/ を直したら、この2つを両方動かして、shian/・index.html・shian2/ を一緒にコミットする。
+  --top は、index.html が前回作ったあとに手で直されていると ⚠️ を出して止まる（消える事故を防ぐ安全弁。上書きは --top --uwagaki）
 """
-import re, os, sys
+import re, os, sys, hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, 'shian', 'index.html')
 DST = os.path.join(ROOT, 'shian2', 'index.html')
 # --top を付けると、本番のトップ（index.html）用に作る（2026/10/10 決定：shian2 を本番に入れかえ）。道のり（../）・og:url・canonical・注釈をトップ用に
+# 安全弁：前回 --top で作った index.html の指紋を top_hash.txt に残し、手で直されていたら上書きせず止まる（--uwagaki で上書き）
 TOP = '--top' in sys.argv
+HASH_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'top_hash.txt')
 if TOP: DST = os.path.join(ROOT, 'index.html')
 
 # 画面の割り当て（左から順）。値は shian の <section> の id か class
@@ -549,6 +554,23 @@ if TOP:
     must('<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->',
          '<!-- 本番のトップ（2026/10/10 に切りかえ式 shian2 を本番に入れかえた。前の版は v5/）。tools/mihon/make_shian2.py --top が shian/ から作る。直すときは shian/ か、その道具を直して作り直す。公開準備ができるまで検索に出さない（noindex。本公開時に外す） -->')
     if '../' in s.replace('../samples', '').replace('../img', ''): print('注意：../ が残っている', s.count('../'))
+
+def hash_of(text):
+    return hashlib.sha256(text.encode('utf-8')).hexdigest()
+
+if TOP:
+    # 安全弁（2026/10/10 決定）：前回ここで作ったあとに index.html が手で直されていたら、上書きして消さないように止まる。
+    # 前回作った index.html のハッシュ（中身の指紋）を tools/mihon/top_hash.txt に残しておき、今の index.html と比べる
+    if os.path.exists(DST) and os.path.exists(HASH_FILE):
+        now = hash_of(open(DST, encoding='utf-8').read())
+        was = open(HASH_FILE, encoding='utf-8').read().strip()
+        if now != was and '--uwagaki' not in sys.argv:
+            print('⚠️ index.html が、前回この道具で作ったあとに直されています（直接直した分があるようです）。上書きすると消えるので止まりました。')
+            print('   → その直しを shian/index.html に写してから、もう一度 --top で作り直してください。')
+            print('   → 消えてよいと分かっているときだけ、--top --uwagaki を付けて動かすと上書きします。')
+            sys.exit(1)
 os.makedirs(os.path.dirname(DST), exist_ok=True)
 open(DST, 'w', encoding='utf-8').write(s)
+if TOP:
+    open(HASH_FILE, 'w', encoding='utf-8').write(hash_of(s) + '\n')
 print('作った:', os.path.relpath(DST, ROOT), '画面', len(SCREENS), '／ section', len(secs))
