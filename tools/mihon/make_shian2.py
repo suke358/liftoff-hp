@@ -165,7 +165,7 @@ footer{padding-bottom:96px}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
 /* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
-.nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;will-change:transform;-webkit-transform:translate3d(-80px,68px,0);transform:translate3d(-80px,68px,0)}
+.nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;will-change:transform;-webkit-transform:translate3d(-200px,-200px,0);transform:translate3d(-200px,-200px,0)}
 .nav-jet svg{display:block;width:60px;max-width:none;margin:-10px 0 0 -44px;overflow:visible}
 </style>'''
 must('</style>', css)
@@ -216,18 +216,20 @@ js = r'''
   window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
 })();
 // ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を、ゆっくり一定の速さ（1秒に 60px）で飛ぶ =====
+// 開いたときは1回だけ、画面の右下の外からなめらかなカーブで斜めに上がって入り、線に近づいたら向きを線にそろえて乗り、今の画面のタブの位置で止まる（3秒以内。文字より手前を飛ぶ）
 // 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
 // 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中。文字やボタンの上には来ない）。折り返しは半円を描いて、機首は進む向きに
 // 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
   var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
-  var pos = { x: -80, y: Y_R, a: 0 }, path = [], last = null, raf = 0;
+  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED;
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
   // 向き a で回したあと、上下を cos(a) 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き）。
   // 半円の途中（真下向き＝90度）は 0 に近づいて、旋回して傾いているように見える。急にパッと切りかわらない
   function apply(){ var f = Math.cos(pos.a * Math.PI / 180); if (Math.abs(f) < .2) f = f < 0 ? -.2 : .2; /* 真横でも薄く見えるように、0 にはしない */ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
   window.jetPose = function(x, y, a){ pos = { x: x, y: y, a: a }; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
+  window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, speed: speed, left: path.length, next: path[0] || null, end: path[path.length - 1] || null }; }; // 確かめる用
   function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
   // いまの位置・向きから目標の x まで、なめらかな道筋を作る
   function plan(tx){
@@ -248,7 +250,7 @@ js = r'''
   function step(ts){
     raf = 0;
     if (last === null) last = ts;
-    var d = SPEED * Math.min(50, ts - last) / 1000; last = ts;
+    var d = speed * Math.min(50, ts - last) / 1000; last = ts;
     while (d > 0 && path.length) {
       var p = path[0], dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
       if (L < .01) { path.shift(); continue; }
@@ -259,11 +261,26 @@ js = r'''
       else { pos.x += dx / L * d; pos.y += dy / L * d; d = 0; }
     }
     apply();
-    if (path.length) raf = requestAnimationFrame(step); else last = null;
+    if (path.length) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; }
+  }
+  // 開いたときの入り方：右下の外 → なめらかなカーブ（3次ベジェ）で斜めに上がる → 線の高さで水平になって乗る → 目標まで線にそって左へ
+  function planEntry(tx){
+    var W = document.documentElement.clientWidth, VH = window.innerHeight || 800;
+    var ex = Math.max(tx + 40, W * .55); // 線に乗る所（目標より右）
+    var P0 = [W + 60, VH + 40], P1 = [W + 10, VH * .55], P2 = [ex + 140, Y_L], P3 = [ex, Y_L], i, n = 40, L = 0, prev = P0;
+    path = [];
+    for (i = 1; i <= n; i++) {
+      var t = i / n, a = 1 - t, x = a * a * a * P0[0] + 3 * a * a * t * P1[0] + 3 * a * t * t * P2[0] + t * t * t * P3[0], y = a * a * a * P0[1] + 3 * a * a * t * P1[1] + 3 * a * t * t * P2[1] + t * t * t * P3[1];
+      path.push([x, y]); L += Math.sqrt((x - prev[0]) * (x - prev[0]) + (y - prev[1]) * (y - prev[1])); prev = [x, y];
+    }
+    path.push([tx, Y_L]); L += Math.abs(ex - tx);
+    pos = { x: P0[0], y: P0[1], a: Math.atan2(P1[1] - P0[1], P1[0] - P0[0]) * 180 / Math.PI }; // 最初から進む向きを向いておく
+    speed = Math.max(SPEED * 2, Math.min(420, L / 2.6)); // 全部で 2.6 秒くらい（3秒はこえない）。線の上より少し速い
   }
   window.jetGo = function(i){
     var tx = xOf(i);
-    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; path = []; apply(); return; } // 動きなし：その画面の位置に止めて置く
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; path = []; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
+    if (!entered) { entered = true; planEntry(tx); apply(); if (!raf) { last = null; raf = requestAnimationFrame(step); } return; }
     plan(tx);
     if (!raf && path.length) { last = null; raf = requestAnimationFrame(step); }
   };
