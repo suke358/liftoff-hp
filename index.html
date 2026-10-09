@@ -217,7 +217,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 @media (max-width:760px){.promise{grid-template-columns:1fr;padding:26px 22px}.promise li{font-size:16px}}
 
 /* ---------- 料金：縦の搭乗券 ---------- */
-.passes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch}
+.passes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:760px} /* 2026/10/10 プランは2つ */
 .pass{display:flex;flex-direction:column;border:2px solid var(--ink);border-radius:20px;background:var(--paper);position:relative}
 .pass.rec{box-shadow:10px 10px 0 var(--signal)}
 .pass .main{padding:26px 26px 22px;flex:1 0 auto}
@@ -250,7 +250,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 }
 .how{margin-top:40px;background:var(--paper);border-radius:16px;padding:20px 24px;border:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:10px 32px;align-items:center}
 .how h3{font-size:17px}
-.how ul{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 20px}
+.how ul{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 20px}
 .how li{border-left:4px solid var(--signal);padding-left:12px;line-height:1.5}
 .how li span{display:block;font-size:14px;color:var(--muted)}
 .how li b{font-family:var(--head);font-size:17px}
@@ -850,7 +850,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
     <div class="hero-copy">
       <h1><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
       <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr><span class="nw">パソコンが苦手でも大丈夫です。</span></p>
-      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span><a href="#price">初期0円の<wbr>プランも<wbr>あります<wbr><span class="nw">（月9,800円）</span></a></p>
+      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span></p>
       <div class="actions">
         <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料・<wbr>お気軽に）</a>
         <a class="btn" href="#price">料金を<wbr>見る</a>
@@ -860,7 +860,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <li><b>3<small>営業日以内</small></b><span>更新の<wbr>ご依頼への<wbr>対応<wbr>（原則）</span></li>
         <li><b>2<small>回</small></b><span>お会いしての<wbr>打ち合わせ</span></li>
       </ul>
-      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>スタンダードは<wbr>契約の<wbr>縛りなし</p>
+      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>契約の<wbr>縛りなし</p>
     </div>
 
     <!-- 見せ場：お店からLINEでひと言 → サイトにお知らせが出る（画面は架空のお店の見本） -->
@@ -1008,24 +1008,6 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <article class="pass">
         <div class="main">
           <div class="pass-top" aria-hidden="true"><span class="flight">LO 02</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
-          <p class="who">最初に<wbr>まとまった<wbr>お金を<wbr>かけずに<wbr>始めたい方に</p>
-          <h3>初期0円プラン</h3>
-          <dl>
-            <dt>中身</dt><dd>スタンダードと<wbr>同じ<wbr>（初期費用を<wbr>月額に<wbr>分けて<wbr>お支払い）</dd>
-            <dt>更新</dt><dd>月2回まで</dd>
-            <dt>契約期間</dt><dd>12か<wbr>月から</dd>
-          </dl>
-        </div>
-        <div class="stub">
-          <span class="price-k">月額</span>
-          <span class="price">9,800<small>円</small></span>
-          <span class="barcode" aria-hidden="true"></span>
-          <span class="price init">初期 0円</span>
-        </div>
-      </article>
-      <article class="pass">
-        <div class="main">
-          <div class="pass-top" aria-hidden="true"><span class="flight">LO 03</span><span class="leg">お店<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 11 L18 3 L13 18 L9.5 12 Z" fill="currentColor"/></svg>ネット</span></div>
           <p class="who">ネットの<wbr>ことは、<wbr>まる<wbr>ごと<wbr>任せたい方に</p>
           <h3>WEB担当者代行</h3>
           <dl>
@@ -1049,8 +1031,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <h3>選び方の<wbr>目安</h3>
       <ul>
         <li><span>長く<wbr>使う<wbr>予定なら</span><b>スタンダード</b></li>
-        <li><span>最初の<wbr>負担を<wbr>軽くしたいなら</span><b>初期0円プラン</b></li>
-        <li><span>Googleマップも<wbr>任せたいなら</span><b>WEB担当者代行</b></li>
+          <li><span>Googleマップも<wbr>任せたいなら</span><b>WEB担当者代行</b></li>
       </ul>
     </div>
 
@@ -1077,16 +1058,14 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
           <div class="sim-quick" role="group" aria-label="よく聞かれる期間"><button type="button" data-m="6">半年</button><button type="button" data-m="12" aria-pressed="true">1年</button><button type="button" data-m="24">2年</button><button type="button" data-m="36">3年</button></div>
           <ul class="sim-rows" aria-live="polite">
             <li data-plan="std"><div class="row"><span>スタンダード</span><b>164,000円</b></div><div class="bar"><i></i></div></li>
-            <li data-plan="zero"><div class="row"><span>初期0円プラン</span><b>117,600円</b></div><div class="bar"><i></i></div><em class="fee"></em></li>
             <li data-plan="web"><div class="row"><span>WEB担当者代行</span><b>335,600円</b></div><div class="bar"><i></i></div></li>
           </ul>
-          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。<wbr>初期0円プランを<wbr>12か月より<wbr>前に<wbr>やめた<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）を<wbr>含めた<wbr>金額です。</p>
+          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。</p>
         </div>
         <table id="sim-table">
           <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
           <tbody>
             <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
-            <tr><td>初期0円プラン</td><td><b>117,600円</b></td><td><b>235,200円</b></td></tr>
             <tr><td>WEB担当者代行</td><td><b>335,600円</b></td><td><b>573,200円</b></td></tr>
           </tbody>
         </table>
@@ -1112,7 +1091,6 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
           </dl>
         </div>
         <div class="keep">
-          <p class="note">初期0円プランは、<wbr>続けて<wbr>使う<wbr>ほど<wbr>お支払いの<wbr>合計が<wbr>スタンダードより<wbr>多くなります<wbr>（23か<wbr>月目ごろに<wbr>逆転します）。<wbr>長く<wbr>使う<wbr>予定なら<wbr>スタンダードが<wbr>お得です。<wbr>12か<wbr>月より<wbr>前に<wbr>解約する<wbr>場合は<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p>
           <p class="note">紹介料などの<wbr>仕組みは<wbr>ありません。</p>
         </div>
       </div>
@@ -1363,7 +1341,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <aside class="faq-side">
         <nav class="faq-nav" aria-label="質問の分類">
           <a href="#faq-start">はじめる前に<span>5</span></a>
-          <a href="#faq-money">お金と契約のこと<span>5</span></a>
+          <a href="#faq-money">お金と契約のこと<span>4</span></a>
           <a href="#faq-more">あわせて頼めること<span>2</span></a>
         </nav>
         <div class="faq-ask"><b>ここにない<wbr>質問は</b><p>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。</p><a class="btn primary" href="#contact">相談する</a></div>
@@ -1376,11 +1354,10 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
         <details><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？</summary><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></details>
         <details><summary>防府市以外でも<wbr>お願いできますか？</summary><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></details>
         <h3 class="faq-h" id="faq-money">お金と契約のこと</h3>
-        <details><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？</summary><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></details>
-        <details><summary>途中で<wbr>プランを<wbr>変えられますか？</summary><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>初期0円プランは、<wbr>12か<wbr>月の<wbr>ご契約期間が<wbr>終わってからの<wbr>変更に<wbr>なります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></details>
+        <details><summary>途中で<wbr>プランを<wbr>変えられますか？</summary><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></details>
         <details><summary>ドメイン代は<wbr>いくらですか？</summary><p>年2,000円前後からです<wbr>（.com や .jp など、<wbr>種類で<wbr>変わります）。<wbr>お店の<wbr>名義で<wbr>取り、<wbr>ドメインの<wbr>会社へ<wbr>お店から<wbr>直接<wbr>お支払い<wbr>いただきます。<wbr>取る<wbr>手続きは、<wbr>2回目の<wbr>打ち合わせで<wbr>一緒に<wbr>します。<wbr>更新の<wbr>時期が<wbr>近づいたら、<wbr>こちらから<wbr>お知らせします。</p></details>
         <details><summary>支払いは<wbr>どうすればいいですか？</summary><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></details>
-        <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></details>
+        <details><summary>やめる<wbr>ときは<wbr>どうなりますか？</summary><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。</p></details>
         <h3 class="faq-h" id="faq-more">あわせて頼めること</h3>
         <details><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？</summary><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>11,000円〜<wbr>（通常<wbr>22,000円〜）です。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></details>
         <details><summary>ロゴや<wbr>名刺、<wbr>チラシも<wbr>作って<wbr>もらえますか？</summary><p>できます。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>を<wbr>ご覧ください<wbr>（ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引が<wbr>あります）。<wbr>メニュー表も<wbr>作れます。<wbr>ロゴは<wbr>いくつか<wbr>案を<wbr>お見せして、<wbr>選んで<wbr>いただいてから<wbr>仕上げます。<wbr>ホームページ・<wbr>Instagram・<wbr>Googleマップ・<wbr>名刺の<wbr>ロゴを<wbr>同じ日に<wbr>そろえて<wbr>切りかえると、<wbr>お店の<wbr>印象が<wbr>ばらばらに<wbr>なりません。</p></details>
@@ -1644,21 +1621,19 @@ if ('IntersectionObserver' in window) {
   sim.hidden = false; if (table) table.style.display = 'none';
   function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
   function calc(m){
-    var zeroFee = m < 12 ? (12 - m) * 4900 : 0;
-    return { std: 98000 + 5500 * m, zero: 9800 * m + zeroFee, web: 98000 + 19800 * m, zeroFee: zeroFee };
+    return { std: 98000 + 5500 * m, web: 98000 + 19800 * m };
   }
   var rows = {}; [].forEach.call(sim.querySelectorAll('[data-plan]'), function(li){ rows[li.getAttribute('data-plan')] = li; });
   var btns = sim.querySelectorAll('.sim-quick button');
   function draw(){
     var m = parseInt(range.value, 10), c = calc(m);
     out.innerHTML = (m >= 12 && m % 12 === 0 ? (m / 12) + '<small>年（' + m + 'か月）</small>' : m + '<small>か月</small>');
-    var max = c.web, low = c.std <= c.zero ? 'std' : 'zero';
-    ['std', 'zero', 'web'].forEach(function(k){
+    var max = c.web, low = null; // プランが2つになったので「いちばん少ない」の印は出さない
+    ['std', 'web'].forEach(function(k){
       rows[k].querySelector('b').textContent = yen(c[k]);
       rows[k].querySelector('.bar i').style.width = Math.max(3, Math.round(c[k] / max * 100)) + '%';
       rows[k].className = (k === low ? 'low' : '');
     });
-    rows.zero.querySelector('.fee').textContent = c.zeroFee ? '（うち解約金 ' + yen(c.zeroFee) + '）' : '';
     [].forEach.call(btns, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-m') === String(m) ? 'true' : 'false'); });
   }
   range.addEventListener('input', draw); range.addEventListener('change', draw);

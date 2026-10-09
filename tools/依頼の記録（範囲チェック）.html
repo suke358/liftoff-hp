@@ -115,7 +115,7 @@ td:first-child{white-space:nowrap;font-size:12.5px}
 <script>
 // 料金（税込）：決定事項.md のとおり
 var PRICE = {
-  plans: { std: { name: 'スタンダード', init: 98000, upd: 2 }, zero: { name: '初期0円プラン', init: 0, upd: 2 }, web: { name: 'WEB担当者代行', init: 98000, upd: 4 }, none: { name: 'ホームページなし', init: 0, upd: 0 } },
+  plans: { std: { name: 'スタンダード', init: 98000, upd: 2 }, web: { name: 'WEB担当者代行', init: 98000, upd: 4 }, none: { name: 'ホームページなし', init: 0, upd: 0 } },
   over: 3300, page: 22000, fixes: 2,
   opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000], anim: ['ホームページの動きの演出（1か所）', 16500, 16500] }
 };
@@ -149,7 +149,7 @@ $('fromEst').addEventListener('click', function(){
 });
 $('newShop').addEventListener('click', function(){
   var n = prompt('お店の名前'); if (!n) return;
-  var p = prompt('プラン（std＝スタンダード／zero＝初期0円／web＝代行／none＝ホームページなし）', 'std'); if (!PRICE.plans[p]) { alert('std・zero・web・none のどれかで入れてください'); return; }
+  var p = prompt('プラン（std＝スタンダード／web＝代行／none＝ホームページなし）', 'std'); if (!PRICE.plans[p]) { alert('std・web・none のどれかで入れてください'); return; }
   db.shops[n] = makeShop(n, p, 0, {}); db.cur = n; save(); all();
 });
 $('delShop').addEventListener('click', function(){ var s = shop(); if (!s) return; if (!confirm('「' + s.name + '」と、その依頼の記録をすべて消しますか？（元に戻せません）')) return; delete db.shops[db.cur]; db.cur = ''; save(); all(); });

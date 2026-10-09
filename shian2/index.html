@@ -251,8 +251,8 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .quiz-out b{font-family:var(--head);color:var(--ink);background:var(--signal);border-radius:6px;padding:1px 8px;margin-right:6px}
 @media (max-width:760px){.quiz{padding:16px 16px 14px}.quiz-q li > span{flex-basis:100%;margin-right:0}}
 .pview{overflow:hidden;position:relative}
-.ptrack{display:flex;width:300%;align-items:flex-start}
-.ppanel{width:33.3333%;flex:none;padding:0 2px}
+.ptrack{display:flex;width:200%;align-items:flex-start}
+.ppanel{width:50%;flex:none;padding:0 2px}
 .ppanel[aria-hidden="true"]{visibility:hidden}
 .pass{border:2px solid var(--ink);border-radius:18px;background:var(--paper);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);overflow:hidden}
 .pass .main{padding:22px 24px}
@@ -280,7 +280,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
   .pass .stub .price.init{margin-top:0;font-size:15px}
 }
 @media (max-width:360px){.pass .stub .price{font-size:26px}}
-.how{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;list-style:none}
+.how{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;list-style:none;max-width:640px}
 .how li{border-left:4px solid var(--signal);padding-left:12px;line-height:1.5;font-size:15px}
 .how li span{display:block;font-size:14px;color:var(--muted)}
 .how li b{font-family:var(--head);font-size:17px}
@@ -608,7 +608,7 @@ html{scroll-padding-top:130px}
       <small>ホームページ制作</small>
     </a>
     <nav class="nav" id="nav" aria-label="ページ内">
-      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a class="nav-m sub" href="#price-zero">初期0円プラン</a><a class="nav-m sub" href="#option">ロゴ・名刺・チラシの料金</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#trust">安心の<wbr>ために</a><a class="nav-m sub" href="#data">データの管理</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">無料相談</a><a class="nav-m" href="#irai">修正依頼</a>
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a class="nav-m sub" href="#option">ロゴ・名刺・チラシの料金</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#trust">安心の<wbr>ために</a><a class="nav-m sub" href="#data">データの管理</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">無料相談</a><a class="nav-m" href="#irai">修正依頼</a>
     </nav>
     <div class="top-right">
       <a class="btn primary" href="#contact">相談する</a>
@@ -626,12 +626,12 @@ html{scroll-padding-top:130px}
     <div class="hero-copy" id="hero-copy">
       <h1 class=""><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
       <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr><span class="nw">パソコンが苦手でも大丈夫です。</span></p>
-      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span><a href="#price-zero">初期0円の<wbr>プランも<wbr>あります<wbr><span class="nw">（月9,800円）</span></a></p>
+      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span></p>
       <div class="actions">
         <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料・<wbr>お気軽に）</a>
         <a class="btn" href="#price">料金を<wbr>見る</a>
       </div>
-      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>スタンダードは<wbr>契約の<wbr>縛りなし</p>
+      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>契約の<wbr>縛りなし</p>
     </div>
   </div>
 </section>
@@ -800,18 +800,16 @@ html{scroll-padding-top:130px}
     <!-- 3問の診断：答えると合いそうなプランのタブが選ばれて印が付く。決めつけず「目安」と添える。小さな飛行機が答えるたびに少し上がり、最後に合うプランへ着地 -->
     <div class="quiz" id="quiz">
       <h3>どの<wbr>プランが<wbr>合う？</h3>
-      <p>3つ<wbr>答えると、<wbr>合いそうな<wbr>プランに<wbr>印が<wbr>付きます。<wbr>目安です。<wbr>相談で<wbr>一緒に<wbr>決めます。</p>
+      <p>2つ<wbr>答えると、<wbr>合いそうな<wbr>プランに<wbr>印が<wbr>付きます。<wbr>目安です。<wbr>相談で<wbr>一緒に<wbr>決めます。</p>
       <svg class="quiz-sky" id="quiz-sky" aria-hidden="true" focusable="false"><path class="q-trail" id="q-trail" d=""/><line class="ground" id="q-ground" x1="0" y1="0" x2="0" y2="0"/><line class="lights" id="q-lights" x1="0" y1="0" x2="0" y2="0"/><text class="q-label" id="q-label" x="0" y="0" text-anchor="end"></text><g id="q-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
       <ol class="quiz-q">
         <li><span>更新は<wbr>月に<wbr>何回<wbr>くらい？</span><div class="chips"><label class="chip"><input type="radio" name="q1" value="2"><span>月2回まで</span></label><label class="chip"><input type="radio" name="q1" value="4"><span>月3回以上</span></label></div></li>
         <li><span>Googleマップの<wbr>投稿も<wbr>任せたい？</span><div class="chips"><label class="chip"><input type="radio" name="q2" value="yes"><span>はい</span></label><label class="chip"><input type="radio" name="q2" value="no"><span>いいえ</span></label></div></li>
-        <li><span>初期費用を<wbr>おさえたい？</span><div class="chips"><label class="chip"><input type="radio" name="q3" value="yes"><span>はい</span></label><label class="chip"><input type="radio" name="q3" value="no"><span>いいえ</span></label></div></li>
       </ol>
       <p class="quiz-out" id="quiz-out" aria-live="polite"></p>
     </div>
     <div class="ptabs nojs" id="ptabs" role="tablist" aria-label="料金プラン">
       <button type="button" role="tab" id="pt-std" aria-controls="price-std" aria-selected="true"><span class="fit">合いそう</span>スタンダード<small>月 5,500円</small></button>
-      <button type="button" role="tab" id="pt-zero" aria-controls="price-zero" aria-selected="false" tabindex="-1"><span class="fit">合いそう</span>初期0円プラン<small>月 9,800円</small></button>
       <button type="button" role="tab" id="pt-web" aria-controls="price-web" aria-selected="false" tabindex="-1"><span class="fit">合いそう</span>WEB担当者代行<small>月 19,800円</small></button>
       <span class="uline" id="uline" aria-hidden="true"></span>
     </div>
@@ -832,24 +830,6 @@ html{scroll-padding-top:130px}
               <span class="price-k">月額</span>
               <span class="price">5,500<small>円</small></span>
               <span class="price init">初期 98,000円</span>
-            </div>
-          </article>
-        </div>
-        <div class="ppanel" id="price-zero" role="tabpanel" aria-labelledby="pt-zero" aria-hidden="true">
-          <article class="pass">
-            <div class="main">
-              <p class="who">最初に<wbr>まとまった<wbr>お金を<wbr>かけずに<wbr>始めたい方に</p>
-              <h3>初期0円プラン</h3>
-              <dl>
-                <dt>中身</dt><dd>スタンダードと<wbr>同じ<wbr>（初期費用を<wbr>月額に<wbr>分けて<wbr>お支払い）</dd>
-                <dt>更新</dt><dd>月2回まで</dd>
-                <dt>契約期間</dt><dd>12か<wbr>月から</dd>
-              </dl>
-            </div>
-            <div class="stub">
-              <span class="price-k">月額</span>
-              <span class="price">9,800<small>円</small></span>
-              <span class="price init">初期 0円</span>
             </div>
           </article>
         </div>
@@ -878,7 +858,6 @@ html{scroll-padding-top:130px}
 
     <ul class="how" aria-label="選び方の目安">
       <li><span>長く<wbr>使う<wbr>予定なら</span><b>スタンダード</b></li>
-      <li><span>最初の<wbr>負担を<wbr>軽くしたいなら</span><b>初期0円プラン</b></li>
       <li><span>Googleマップも<wbr>任せたいなら</span><b>WEB担当者代行</b></li>
     </ul>
 
@@ -904,16 +883,14 @@ html{scroll-padding-top:130px}
           <div class="sim-quick" role="group" aria-label="よく聞かれる期間"><button type="button" data-m="6">半年</button><button type="button" data-m="12" aria-pressed="true">1年</button><button type="button" data-m="24">2年</button><button type="button" data-m="36">3年</button></div>
           <ul class="sim-rows" aria-live="polite">
             <li data-plan="std"><div class="row"><span>スタンダード</span><b>164,000円</b></div><div class="bar"><i></i></div></li>
-            <li data-plan="zero"><div class="row"><span>初期0円プラン</span><b>117,600円</b></div><div class="bar"><i></i></div><em class="fee"></em></li>
             <li data-plan="web"><div class="row"><span>WEB担当者代行</span><b>335,600円</b></div><div class="bar"><i></i></div></li>
           </ul>
-          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。<wbr>初期0円プランを<wbr>12か月より<wbr>前に<wbr>やめた<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）を<wbr>含めた<wbr>金額です。</p>
+          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。</p>
         </div>
         <table id="sim-table">
           <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
           <tbody>
             <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
-            <tr><td>初期0円プラン</td><td><b>117,600円</b></td><td><b>235,200円</b></td></tr>
             <tr><td>WEB担当者代行</td><td><b>335,600円</b></td><td><b>573,200円</b></td></tr>
           </tbody>
         </table>
@@ -932,6 +909,7 @@ html{scroll-padding-top:130px}
           <dt>月額</dt><dd>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください</dd>
           <dt>請求書</dt><dd>インボイス<wbr>（適格請求書）に<wbr>対応しています</dd>
         </dl>
+        <p class="note">紹介料などの<wbr>仕組みは<wbr>ありません。</p>
       </div></div></details>
       <details class="acc opt" id="option"><summary>ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします<wbr>（税込）<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
         <p class="note">ホームページと<wbr>同じ<wbr>ロゴ・<wbr>色・<wbr>言葉で<wbr>そろえて<wbr>作ります。<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引に<wbr>なります<wbr>（右の<wbr>列の<wbr>金額）。</p>
@@ -957,12 +935,6 @@ html{scroll-padding-top:130px}
           <li>両面に<wbr>するときや、<wbr>載せる<wbr>ものが<wbr>多いとき、<wbr>写真の<wbr>撮影が<wbr>いるときは、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</li>
           <li>フォームの<wbr>管理は、<wbr>お問い合わせフォームを<wbr>付ける<wbr>お店だけの<wbr>月額です。<wbr>毎月の<wbr>月額と<wbr>一緒に<wbr>ご請求します。</li>
         </ul>
-      </div></div></details>
-      <details class="acc" id="zero-note"><summary>初期0円プランの<wbr>注意<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
-        <div class="keep">
-          <p class="note">初期0円プランは、<wbr>続けて<wbr>使う<wbr>ほど<wbr>お支払いの<wbr>合計が<wbr>スタンダードより<wbr>多くなります<wbr>（23か<wbr>月目ごろに<wbr>逆転します）。<wbr>長く<wbr>使う<wbr>予定なら<wbr>スタンダードが<wbr>お得です。<wbr>12か<wbr>月より<wbr>前に<wbr>解約する<wbr>場合は<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p>
-          <p class="note">紹介料などの<wbr>仕組みは<wbr>ありません。</p>
-        </div>
       </div></div></details>
     </div>
 
@@ -1019,11 +991,10 @@ html{scroll-padding-top:130px}
       </div>
       <p class="acc-h" id="faq-money">お金と契約のこと</p>
       <div class="acc-list">
-        <details class="acc"><summary>スタンダードと<wbr>初期0円プラン、<wbr>どちらが<wbr>いいですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>2年以上<wbr>使う<wbr>予定なら、<wbr>スタンダードの<wbr>ほうが<wbr>お支払いの<wbr>合計が<wbr>少なくなります。<wbr>最初に<wbr>まとまった<wbr>お金を<wbr>出しにくい<wbr>場合は、<wbr>初期0円プランが<wbr>向いています<wbr>（12か<wbr>月からの<wbr>ご契約です）。<wbr>どちらも、<wbr>できる<wbr>ことは<wbr>同じです。<wbr>迷ったら<wbr>打ち合わせで<wbr>一緒に<wbr>考えましょう。</p></div></div></details>
-        <details class="acc"><summary>途中で<wbr>プランを<wbr>変えられますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>初期0円プランは、<wbr>12か<wbr>月の<wbr>ご契約期間が<wbr>終わってからの<wbr>変更に<wbr>なります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></div></div></details>
+        <details class="acc"><summary>途中で<wbr>プランを<wbr>変えられますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></div></div></details>
         <details class="acc"><summary>ドメイン代は<wbr>いくらですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>年2,000円前後からです<wbr>（.com や .jp など、<wbr>種類で<wbr>変わります）。<wbr>お店の<wbr>名義で<wbr>取り、<wbr>ドメインの<wbr>会社へ<wbr>お店から<wbr>直接<wbr>お支払い<wbr>いただきます。<wbr>取る<wbr>手続きは、<wbr>2回目の<wbr>打ち合わせで<wbr>一緒に<wbr>します。<wbr>更新の<wbr>時期が<wbr>近づいたら、<wbr>こちらから<wbr>お知らせします。</p></div></div></details>
         <details class="acc"><summary>支払いは<wbr>どうすればいいですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></div></div></details>
-        <details class="acc"><summary>やめる<wbr>ときは<wbr>どうなりますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。<wbr>初期0円プランを<wbr>12か<wbr>月より<wbr>前に<wbr>やめる<wbr>場合は、<wbr>解約金<wbr>（残りの<wbr>月数×4,900円）が<wbr>かかります。</p></div></div></details>
+        <details class="acc"><summary>やめる<wbr>ときは<wbr>どうなりますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。</p></div></div></details>
       </div>
       <p class="acc-h" id="faq-more">あわせて頼めること</p>
       <div class="acc-list">
@@ -1307,7 +1278,7 @@ function revealAll(items, gap, each, done){
     if (id === cur) return;
     render(id); window.scrollTo(0, 0);
   }
-  // ページの中のリンク（#price-zero・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
+  // ページの中のリンク（#price-web・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
   document.addEventListener('click', function(e){
     var a = e.target.closest ? e.target.closest('a') : null; if (!a) return;
     var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;
@@ -1632,8 +1603,8 @@ function revealAll(items, gap, each, done){
   window.layoutPlan = layout;
   window.addEventListener('resize', function(){ setTimeout(layout, 60); });
   window.addEventListener('load', layout);
-  // タブの中のリンク（#price-zero など）に目次から来たとき
-  if (location.hash === '#price-zero' || location.hash === '#price-web') setTimeout(function(){ window.pickPlan(location.hash.slice(1)); }, 60);
+  // タブの中のリンク（#price-web）に目次から来たとき
+  if (location.hash === '#price-web') setTimeout(function(){ window.pickPlan(location.hash.slice(1)); }, 60);
 })();
 </script>
 <script>
@@ -1645,21 +1616,19 @@ function revealAll(items, gap, each, done){
   sim.hidden = false; if (table) table.style.display = 'none';
   function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
   function calc(m){
-    var zeroFee = m < 12 ? (12 - m) * 4900 : 0;
-    return { std: 98000 + 5500 * m, zero: 9800 * m + zeroFee, web: 98000 + 19800 * m, zeroFee: zeroFee };
+    return { std: 98000 + 5500 * m, web: 98000 + 19800 * m };
   }
   var rows = {}; [].forEach.call(sim.querySelectorAll('[data-plan]'), function(li){ rows[li.getAttribute('data-plan')] = li; });
   var btns = sim.querySelectorAll('.sim-quick button');
   function draw(){
     var m = parseInt(range.value, 10), c = calc(m);
     out.innerHTML = (m >= 12 && m % 12 === 0 ? (m / 12) + '<small>年（' + m + 'か月）</small>' : m + '<small>か月</small>');
-    var max = c.web, low = c.std <= c.zero ? 'std' : 'zero';
-    ['std', 'zero', 'web'].forEach(function(k){
+    var max = c.web, low = null; // プランが2つになったので「いちばん少ない」の印は出さない
+    ['std', 'web'].forEach(function(k){
       rows[k].querySelector('b').textContent = yen(c[k]);
       rows[k].querySelector('.bar i').style.width = Math.max(3, Math.round(c[k] / max * 100)) + '%';
       rows[k].className = (k === low ? 'low' : '');
     });
-    rows.zero.querySelector('.fee').textContent = c.zeroFee ? '（うち解約金 ' + yen(c.zeroFee) + '）' : '';
     [].forEach.call(btns, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-m') === String(m) ? 'true' : 'false'); });
   }
   range.addEventListener('input', draw); range.addEventListener('change', draw);
@@ -1668,13 +1637,13 @@ function revealAll(items, gap, each, done){
 })();
 </script>
 <script>
-// ===== 「どのプランが合う？」3問の診断（shian2 の飛び方）：答えるたびに少し上がり、3つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
+// ===== 「どのプランが合う？」2問の診断（shian2 の飛び方）：答えるたびに少し上がり、2つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
 // 高さは答えた数で決める（どのプランでも同じ高さ・同じ飛び方）。答えを変えても下がらず、今の位置からなめらかにつなぐ。動きを減らす設定の人には最後の位置に置く
-// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／初期費用をおさえたい → 初期0円プラン／それ以外 → スタンダード
+// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／それ以外 → スタンダード
 (function(){
   var q = document.getElementById('quiz'), svg = document.getElementById('quiz-sky'); if (!q || !svg) return;
   var jet = document.getElementById('q-jet'), trail = document.getElementById('q-trail'), label = document.getElementById('q-label'), out = document.getElementById('quiz-out');
-  var NAME = { std: 'スタンダード', zero: '初期0円プラン', web: 'WEB担当者代行' }, ID = { std: 'price-std', zero: 'price-zero', web: 'price-web' }, TAB = { std: 'pt-std', zero: 'pt-zero', web: 'pt-web' };
+  var NAME = { std: 'スタンダード', web: 'WEB担当者代行' }, ID = { std: 'price-std', web: 'price-web' }, TAB = { std: 'pt-std', web: 'pt-web' };
   var W = 0, H = 74, cur = [0, 0], pts = [], landed = null, stage = 0, busy = false, seg = [];
   function val(n){ var el = q.querySelector('input[name=' + n + ']:checked'); return el ? el.value : null; }
   function setup(){
@@ -1683,8 +1652,8 @@ function revealAll(items, gap, each, done){
     g.setAttribute('x1', 12); g.setAttribute('y1', H - 10); g.setAttribute('x2', W - 12); g.setAttribute('y2', H - 10);
     l.setAttribute('x1', 16); l.setAttribute('y1', H - 14); l.setAttribute('x2', W - 16); l.setAttribute('y2', H - 14);
     label.setAttribute('x', W - 14); label.setAttribute('y', H - 32);
-    // 止まる所：出発 → 1問目 → 2問目 → 3問目（少しずつ上がる）→ 右はし（同じ高さのまま）
-    pts = [[28, H - 22], [W * .28, H - 36], [W * .46, H - 48], [W * .62, H - 58], [W - 52, H - 58]];
+    // 止まる所：出発 → 1問目 → 2問目（少しずつ上がる）→ 右はし（同じ高さのまま）
+    pts = [[28, H - 22], [W * .32, H - 40], [W * .58, H - 58], [W - 52, H - 58]]; // 出発 → 1問目 → 2問目 → 右はし
   }
   function put(p, a){ jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (a || 0) + ') scale(.75)'); }
   function drawTrail(){ var d = '', i; for (i = 0; i < seg.length; i++) d += (i ? ' L' : 'M') + seg[i][0].toFixed(1) + ' ' + seg[i][1].toFixed(1); trail.setAttribute('d', d); }
@@ -1705,12 +1674,12 @@ function revealAll(items, gap, each, done){
   }
   function update(){
     if (busy) { setTimeout(update, 120); return; }
-    var a = val('q1'), b = val('q2'), c = val('q3'), n = (a ? 1 : 0) + (b ? 1 : 0) + (c ? 1 : 0);
-    if (n < 3) { out.textContent = n ? 'あと' + (3 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
-    var k = (a === '4' || b === 'yes') ? 'web' : (c === 'yes' ? 'zero' : 'std');
+    var a = val('q1'), b = val('q2'), n = (a ? 1 : 0) + (b ? 1 : 0);
+    if (n < 2) { out.textContent = n ? 'あと' + (2 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
+    var k = (a === '4' || b === 'yes') ? 'web' : 'std';
     if (landed) { landed = k; pick(k); return; } // 3問そろったあとに答えを変えた：位置はそのまま、プラン名だけ変える
-    landed = k; stage = 4;
-    flyTo(pts[3], function(){ flyTo(pts[4], function(){ pick(k); }); });
+    landed = k; stage = 3;
+    flyTo(pts[2], function(){ flyTo(pts[3], function(){ pick(k); }); });
   }
   setup(); cur = pts[0].slice(); seg = [cur.slice()]; put(cur, 0);
   q.addEventListener('change', update);

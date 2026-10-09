@@ -155,13 +155,13 @@ must('<a class="skip" href="#main">本文へ</a>',
      '<div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>')
 
 # ---- 【診断の飛行機】shian2 では、3問そろったらその高さのまま右へまっすぐ飛んで右はしで止まる（着地しない）。答えを変えても下がらない
-quiz_js = r"""// ===== 「どのプランが合う？」3問の診断（shian2 の飛び方）：答えるたびに少し上がり、3つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
+quiz_js = r"""// ===== 「どのプランが合う？」2問の診断（shian2 の飛び方）：答えるたびに少し上がり、2つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
 // 高さは答えた数で決める（どのプランでも同じ高さ・同じ飛び方）。答えを変えても下がらず、今の位置からなめらかにつなぐ。動きを減らす設定の人には最後の位置に置く
-// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／初期費用をおさえたい → 初期0円プラン／それ以外 → スタンダード
+// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／それ以外 → スタンダード
 (function(){
   var q = document.getElementById('quiz'), svg = document.getElementById('quiz-sky'); if (!q || !svg) return;
   var jet = document.getElementById('q-jet'), trail = document.getElementById('q-trail'), label = document.getElementById('q-label'), out = document.getElementById('quiz-out');
-  var NAME = { std: 'スタンダード', zero: '初期0円プラン', web: 'WEB担当者代行' }, ID = { std: 'price-std', zero: 'price-zero', web: 'price-web' }, TAB = { std: 'pt-std', zero: 'pt-zero', web: 'pt-web' };
+  var NAME = { std: 'スタンダード', web: 'WEB担当者代行' }, ID = { std: 'price-std', web: 'price-web' }, TAB = { std: 'pt-std', web: 'pt-web' };
   var W = 0, H = 74, cur = [0, 0], pts = [], landed = null, stage = 0, busy = false, seg = [];
   function val(n){ var el = q.querySelector('input[name=' + n + ']:checked'); return el ? el.value : null; }
   function setup(){
@@ -170,8 +170,8 @@ quiz_js = r"""// ===== 「どのプランが合う？」3問の診断（shian2 �
     g.setAttribute('x1', 12); g.setAttribute('y1', H - 10); g.setAttribute('x2', W - 12); g.setAttribute('y2', H - 10);
     l.setAttribute('x1', 16); l.setAttribute('y1', H - 14); l.setAttribute('x2', W - 16); l.setAttribute('y2', H - 14);
     label.setAttribute('x', W - 14); label.setAttribute('y', H - 32);
-    // 止まる所：出発 → 1問目 → 2問目 → 3問目（少しずつ上がる）→ 右はし（同じ高さのまま）
-    pts = [[28, H - 22], [W * .28, H - 36], [W * .46, H - 48], [W * .62, H - 58], [W - 52, H - 58]];
+    // 止まる所：出発 → 1問目 → 2問目（少しずつ上がる）→ 右はし（同じ高さのまま）
+    pts = [[28, H - 22], [W * .32, H - 40], [W * .58, H - 58], [W - 52, H - 58]]; // 出発 → 1問目 → 2問目 → 右はし
   }
   function put(p, a){ jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (a || 0) + ') scale(.75)'); }
   function drawTrail(){ var d = '', i; for (i = 0; i < seg.length; i++) d += (i ? ' L' : 'M') + seg[i][0].toFixed(1) + ' ' + seg[i][1].toFixed(1); trail.setAttribute('d', d); }
@@ -192,12 +192,12 @@ quiz_js = r"""// ===== 「どのプランが合う？」3問の診断（shian2 �
   }
   function update(){
     if (busy) { setTimeout(update, 120); return; }
-    var a = val('q1'), b = val('q2'), c = val('q3'), n = (a ? 1 : 0) + (b ? 1 : 0) + (c ? 1 : 0);
-    if (n < 3) { out.textContent = n ? 'あと' + (3 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
-    var k = (a === '4' || b === 'yes') ? 'web' : (c === 'yes' ? 'zero' : 'std');
+    var a = val('q1'), b = val('q2'), n = (a ? 1 : 0) + (b ? 1 : 0);
+    if (n < 2) { out.textContent = n ? 'あと' + (2 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
+    var k = (a === '4' || b === 'yes') ? 'web' : 'std';
     if (landed) { landed = k; pick(k); return; } // 3問そろったあとに答えを変えた：位置はそのまま、プラン名だけ変える
-    landed = k; stage = 4;
-    flyTo(pts[3], function(){ flyTo(pts[4], function(){ pick(k); }); });
+    landed = k; stage = 3;
+    flyTo(pts[2], function(){ flyTo(pts[3], function(){ pick(k); }); });
   }
   setup(); cur = pts[0].slice(); seg = [cur.slice()]; put(cur, 0);
   q.addEventListener('change', update);
@@ -335,7 +335,7 @@ js = r'''
     if (id === cur) return;
     render(id); window.scrollTo(0, 0);
   }
-  // ページの中のリンク（#price-zero・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
+  // ページの中のリンク（#price-web・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
   document.addEventListener('click', function(e){
     var a = e.target.closest ? e.target.closest('a') : null; if (!a) return;
     var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;

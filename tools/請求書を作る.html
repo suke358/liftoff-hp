@@ -86,7 +86,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
     </fieldset>
 
     <fieldset><legend>請求する内容</legend>
-      <label class="blk">プラン<select id="plan"><option value="std">スタンダード</option><option value="zero">初期0円プラン</option><option value="web">WEB担当者代行</option><option value="none">ホームページなし</option></select></label>
+      <label class="blk">プラン<select id="plan"><option value="std">スタンダード</option><option value="web">WEB担当者代行</option><option value="none">ホームページなし</option></select></label>
       <div class="adds">
         <button type="button" data-add="init">＋初期費用</button>
         <button type="button" data-add="month">＋月額</button>
@@ -146,7 +146,7 @@ thead th{background:var(--sky);font-size:11.5px;border-bottom:1.5px solid var(--
 
 <script>
 var PRICE = { // 税込。決定事項.md のとおり（変わったらここを直す。「お見積もりを作る.html」も同じ）
-  plans: { std: { name: 'スタンダード', init: 98000, month: 5500 }, zero: { name: '初期0円プラン', init: 0, month: 9800 }, web: { name: 'WEB担当者代行', init: 98000, month: 19800 } },
+  plans: { std: { name: 'スタンダード', init: 98000, month: 5500 }, web: { name: 'WEB担当者代行', init: 98000, month: 19800 } },
   over: 3300, page: 22000, form: 550, // form：お問い合わせフォームの管理（付けるお店だけ・月額。2026/10/9 決定）
   opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備', 22000, 11000], anim: ['ホームページの動きの演出（1か所）', 16500, 16500], goods: ['商品ページの追加（1ページ・商品5点まで）', 22000, 22000] } // goods：2026/10/10 決定。ご契約のお店 22,000円〜（通常は「—」）
 };

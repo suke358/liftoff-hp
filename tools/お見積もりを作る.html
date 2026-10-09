@@ -95,7 +95,6 @@ tr.sub td{background:#fafcfd;font-weight:700}
 
     <fieldset><legend>ホームページのプラン</legend>
       <label class="row"><input type="radio" name="plan" value="std" checked>スタンダード<small>初期98,000円＋月5,500円</small></label>
-      <label class="row"><input type="radio" name="plan" value="zero">初期0円プラン<small>月9,800円・12か月から</small></label>
       <label class="row"><input type="radio" name="plan" value="web">WEB担当者代行<small>初期98,000円＋月19,800円</small></label>
       <label class="row"><input type="radio" name="plan" value="none">ホームページなし<small>ロゴなどだけ</small></label>
       <label class="row" style="display:block">ページの追加（1ページ 22,000円）<input type="number" id="pages" min="0" max="20" value="0"> ページ</label>
@@ -155,7 +154,6 @@ tr.sub td{background:#fafcfd;font-weight:700}
 var PRICE = {
   plans: {
     std:  { name: 'スタンダード', init: 98000, month: 5500, items: 'スマホで見やすい縦長の1ページ／更新 月2回まで／契約の縛りなし' },
-    zero: { name: '初期0円プラン', init: 0, month: 9800, items: 'スタンダードと同じ（初期費用を月額に分けてお支払い）／更新 月2回まで／12か月からのご契約' },
     web:  { name: 'WEB担当者代行', init: 98000, month: 19800, items: 'スタンダードと同じ／更新 月4回まで／Googleマップの投稿 月4回・口コミ返信の下書き・月1回の報告／契約の縛りなし' },
     none: null
   },
@@ -217,7 +215,6 @@ function draw(){
   var memo = $('memo').value; $('memoOut').style.display = memo ? '' : 'none'; $('memoOut').textContent = memo ? 'メモ：' + memo : '';
   var n = ['金額はすべて税込です。', 'お支払いは銀行振込です。初期費用は公開のとき、あわせてのご依頼（ロゴなど）はお渡しのときにご請求します。月額は公開の翌月分から、毎月末までにお振込みください。振込手数料はお店のご負担です。'];
   if (p) n.push('ドメイン（ホームページの住所）はお店の名義で取り、代金（年2,000円前後〜。種類で変わります）はお店からドメインの会社へ直接お支払いいただきます（この見積もりには入っていません）。やめるときはサイトのデータを一式お渡しします。');
-  if (plan() === 'zero') n.push('初期0円プランは12か月からのご契約です。12か月より前に解約される場合は、解約金（残りの月数×4,900円）がかかります。続けて使うほど、お支払いの合計はスタンダードより多くなります（23か月目ごろに逆転）。');
   if (p) n.push('月の回数をこえた更新は1回3,300円、ページの追加は1ページ22,000円です。');
   if (first.some(function(r){ return /ロゴ|名刺|チラシ|メニュー/.test(r[0]); })) n.push('ロゴ・名刺・チラシ・メニュー表は直し2回まで含みます。印刷代は実費でお店のご負担です。両面・載せるものが多い・撮影が要るときは、作る前に金額をお伝えします。');
   $('notes').innerHTML = n.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
