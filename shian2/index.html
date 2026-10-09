@@ -1231,7 +1231,7 @@ function revealAll(items, gap, each, done){
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
   // 向き a で回したあと、上下を cos(a) 倍にする：右向き 1（そのまま）、左向き -1（上下反転＝背中が上・機首が進む向き）。
   // 半円の途中（真下向き＝90度）は 0 に近づいて、旋回して傾いているように見える。急にパッと切りかわらない
-  function apply(){ var f = Math.cos(pos.a * Math.PI / 180); if (Math.abs(f) < .2) f = f < 0 ? -.2 : .2; // 真横でも薄く見えるように、0 にはしない setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
+  function apply(){ var f = Math.cos(pos.a * Math.PI / 180); if (Math.abs(f) < .2) f = f < 0 ? -.2 : .2; /* 真横でも薄く見えるように、0 にはしない */ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
   window.jetPose = function(x, y, a){ pos = { x: x, y: y, a: a }; path = []; apply(); }; // 確認画像を撮る用：好きな位置・向きに置く
   function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
   // いまの位置・向きから目標の x まで、なめらかな道筋を作る
