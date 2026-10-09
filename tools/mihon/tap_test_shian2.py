@@ -147,9 +147,11 @@ try:
         time.sleep(2.9)
         d = state('開いて4秒（入り方が終わった）'); shot('0_開いて4秒_ホーム', 0, 130)
         # 飛行機（右向き 68px・左向き 78px。機体の高さ ±8px）と帯の文字（padding の内側）が重ならないか
+        # 飛行機の一番下（中心＋6px。翼の先）と帯の文字の上（padding の内側）の間が、右向き・左向きとも 12px 以上か
         pt = band['top'] + float(js("parseFloat(getComputedStyle(document.getElementById('irai-band')).paddingTop)"))
-        print('帯の文字の上=%d  飛行機の下（右向き 76・左向き 86）→ %s' % (pt, 'OK（重ならない）' if pt >= 88 else 'NG'))
-        allok = d['left'] == 0 and not d['entry'] and vis and pt >= 88
+        gapL = pt - (d['y'] + 6); gapR = pt - (70 + 6)
+        print('帯の文字の上=%d  飛行機の一番下：左向き %d（間 %dpx）・右向き 76（間 %dpx）→ %s' % (pt, d['y'] + 6, gapL, gapR, 'OK（12px 以上）' if gapL >= 12 and gapR >= 12 else 'NG'))
+        allok = d['left'] == 0 and not d['entry'] and vis and gapL >= 12 and gapR >= 12
         for i, s in enumerate(['ryokin', 'home', 'soudan', 'dekiru', 'soudan']):
             tap(s); time.sleep(0.1); sc = scr()
             time.sleep(2.0)

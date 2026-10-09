@@ -534,11 +534,19 @@ footer a:hover{color:var(--signal)}
 footer{padding-bottom:96px}
 @media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
 /* 修正依頼（ご契約中のお店の入口）：帯は控えめ（相談の入口より目立たせない） */
-.irai-band{display:none;text-align:center;background:#fff;color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;text-decoration:none;padding:24px 16px 6px;border-top:1px solid var(--line);line-height:1.5}
-/* ヘッダーの中、線（66〜70px）のすぐ下。上の 24px は飛行機が通る所（右向き 68px・左向き 78px。機体の高さ ±8px → 86px まで）。文字は 90px から。ホームの画面のときだけ出す */
+.irai-band{display:none;color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;text-decoration:none;padding:34px 0 0;line-height:1.5}
+/* ヘッダーの中、線（66〜70px）のすぐ下。上の 34px は飛行機が通る所（透明。右向き 70px・左向き 80px、機体の一番下は中心＋6px → 86px まで）。
+   文字の行（.in）は白い地で、飛行機（z-index 22）より手前（ヘッダー全体が z-index 24）。入ってくる途中の飛行機は文字の行の後ろを通って隠れる。文字は 100px から（飛行機の一番下との間 14px 以上） */
+.irai-band .in{display:block;text-align:center;background:#fff;padding:6px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .scr-home .irai-band{display:block}
-html{scroll-padding-top:120px}
-.irai-band::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--signal);margin-right:8px;vertical-align:1px}
+/* ヘッダーの帯（0〜66px）の地色は ::before に移し（飛行機は帯の中を飛ばない）、ヘッダー自体は透明にして、飛行機が通る所に地色が付かないようにする */
+.top{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:none;z-index:24}
+.top::before{content:"";position:absolute;left:0;right:0;top:0;height:66px;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:-1}
+/* 飛行機が通る所の白い地（ホームの画面だけ。飛行機より後ろ、本文より手前） */
+.jet-sky{position:fixed;left:0;right:0;top:66px;height:34px;background:#fff;z-index:19;display:none}
+.scr-home .jet-sky{display:block}
+html{scroll-padding-top:130px}
+.irai-band .in::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--signal);margin-right:8px;vertical-align:1px}
 .irai-band .sep{color:#9fb6c6;margin:0 4px;font-weight:400}
 .irai-band:hover{color:var(--sea)}
 .irai-line{text-align:center;padding:0 20px 24px;font-size:15px}
@@ -556,7 +564,7 @@ html{scroll-padding-top:120px}
 .news li b{display:block;font-family:var(--head);font-size:16px;margin-bottom:2px}
 .news li p{font-size:15px;color:var(--ink-2);line-height:1.75}
 .news li a{color:var(--sea)}
-@media (max-width:760px){.irai-band{font-size:14px;padding:24px 12px 6px}}
+@media (max-width:760px){.irai-band{font-size:14px}.irai-band .in{padding:6px 12px}}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
 /* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
@@ -579,6 +587,7 @@ html{scroll-padding-top:120px}
 </defs></svg>
 <a class="skip" href="#main">本文へ</a>
 <!-- 飛行機は1機だけ。ヘッダーのすぐ下の線の上を飛ぶ。位置は JS の変数に持ち、transform で動かす（top/left は動かさない） -->
+<div class="jet-sky" aria-hidden="true"></div>
 <div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>
 <!-- 上の細い進み具合の線。その上を小さな飛行機が進む（JS で動かす。動きを減らす設定の人は線だけ） -->
 <div class="prog" id="prog" aria-hidden="true"><i class="prog-bar" id="prog-bar"></i></div>
@@ -597,7 +606,7 @@ html{scroll-padding-top:120px}
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav"><i></i>メニュー</button>
     </div>
   </div>
-  <a class="irai-band" id="irai-band" href="#irai">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</a>
+  <a class="irai-band" id="irai-band" href="#irai"><span class="in">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</span></a>
 </header>
 
 <main id="main">
@@ -1345,7 +1354,7 @@ function revealAll(items, gap, each, done){
 // 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
-  var N = 5, Y_R = 68, Y_L = 78, R = 5, FLY_MS = 1500, ENTRY_MS = 3000; // 左向きは線の 10px 下（帯の文字 90px〜に重ならない）
+  var N = 5, Y_R = 70, Y_L = 80, R = 5, FLY_MS = 1500, ENTRY_MS = 3000; // 右向きは線のすぐ下 70px、左向きはその 10px 下 80px（機体の一番下は中心＋6px。帯の文字 100px〜との間 14px 以上）
   var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, turn = 0, moveDir = 1, entry = null, fly = null;
   function norm(a){ while (a > 180) a -= 360; while (a <= -180) a += 360; return a; }
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
