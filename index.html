@@ -101,6 +101,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .nav a{text-decoration:none;color:var(--ink);padding:6px 0;margin:0 12px;border-bottom:2px solid transparent;white-space:nowrap}
 .nav a:hover{color:var(--sea)}
 .nav a.now{border-bottom-color:var(--signal)}
+.nav a.nav-m{display:none}
 .top .btn{padding:9px 20px;min-height:0;font-size:14px}
 .menu-btn{display:none;align-items:center;font:inherit;font-family:var(--head);font-weight:700;font-size:14px;background:none;border:2px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink);cursor:pointer;min-height:44px}
 .menu-btn i{display:block;width:16px;height:2px;margin-right:7px;background:var(--ink);box-shadow:0 -5px 0 var(--ink),0 5px 0 var(--ink)}
@@ -113,6 +114,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
   .nav.open{display:flex}
   .nav a{padding:14px 4px;margin:0;border-bottom:1px solid var(--line);font-size:16px}
   .nav a:last-child{border-bottom:none}
+  .nav a.nav-m{display:block}
   .nav a.now{border-bottom-color:var(--line);color:var(--sea)}
   .menu-btn{display:inline-flex;margin-left:8px}
   .top .wrap > .nav{margin-left:0}
@@ -831,7 +833,7 @@ legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
       <small>ホームページ制作</small>
     </a>
     <nav class="nav" id="nav" aria-label="ページ内">
-      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">お問い合わせ</a>
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a href="#data">データ管理</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">お問い合わせ</a><a class="nav-m" href="mailto:taifujicun@gmail.com">修正依頼</a>
     </nav>
     <div class="top-right">
       <a class="btn primary" href="#contact">相談する</a>
