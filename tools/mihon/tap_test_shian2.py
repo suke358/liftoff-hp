@@ -9,6 +9,7 @@ headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで�
   2. python3 tools/mihon/tap_test_shian2.py             … このファイル。入り方（4秒待つ）→ 料金→ホーム→相談→できること→相談 と押して、
                                                            2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
   3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
+  3''. python3 tools/mihon/tap_test_shian2.py fit       … 幅 320・390・1280 で、開いた直後と ホーム→料金→ホーム のあとに「見出しの一番上 ≥ 帯の一番下＋16px」か
   3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=〇〇 の文字がそのまま店名に入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
   4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
   引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
@@ -19,8 +20,8 @@ CH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 import datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 args = [a for a in sys.argv[1:]]
-mode = args[0] if args and args[0] in ('normal', 'early', 'irai') else 'normal'
-rest = [a for a in args if a not in ('normal', 'early', 'irai')]
+mode = args[0] if args and args[0] in ('normal', 'early', 'irai', 'fit') else 'normal'
+rest = [a for a in args if a not in ('normal', 'early', 'irai', 'fit')]
 URL = rest[0] if rest else 'file://' + os.path.join(ROOT, 'shian2', 'index.html')
 OUT = rest[1] if len(rest) > 1 else os.path.expanduser('~/src/_確認画像/自社_%s_shian2_タブを押す' % datetime.date.today().strftime('%Y%m%d'))
 os.makedirs(OUT, exist_ok=True)
@@ -97,7 +98,24 @@ try:
         return js("document.querySelector('.scr.on').id")
 
     NAMES = {'home': 'ホーム', 'ryokin': '料金', 'soudan': '相談', 'dekiru': 'できること', 'nagare': '流れ'}
-    if mode == 'irai':
+    if mode == 'fit':
+        allok = True
+        for w in (320, 390, 1280):
+            hh = 844 if w < 800 else 900
+            call('Emulation.setDeviceMetricsOverride', width=w, height=hh, deviceScaleFactor=1, mobile=w < 800)
+            call('Page.navigate', url=URL); time.sleep(0.6)
+            def gap(label):
+                g = js("(function(){var b=document.getElementById('irai-band').getBoundingClientRect(),h=document.querySelector('#home .hero h1').getBoundingClientRect();return JSON.stringify({band:Math.round(b.bottom),h1:Math.round(h.top),scroll:window.pageYOffset,scr:document.querySelector('.scr.on').id});})()")
+                g = json.loads(g); ok = g['scr'] == 'home' and g['h1'] >= g['band'] + 16 and g['scroll'] == 0
+                print('   幅%d %s: 帯の下=%d 見出しの上=%d 間=%d → %s' % (w, label, g['band'], g['h1'], g['h1'] - g['band'], 'OK' if ok else 'NG'))
+                return ok
+            allok = gap('開いた直後') and allok
+            if w < 800: shot('合わせ_幅%d_開いた直後' % w, 0, 300)
+            time.sleep(3.6)
+            tap('ryokin'); time.sleep(0.5); tap('home'); time.sleep(0.5)
+            allok = gap('料金→ホームのあと') and allok
+        print('全部:', 'OK' if allok else 'NG')
+    elif mode == 'irai':
         # 修正依頼：?shop=colore 付きで開き直す
         call('Page.navigate', url=URL + ('&' if '?' in URL else '?') + 'shop=colore'); time.sleep(4.2)  # ?shop= の文字がそのまま店名の欄に入る
         d = state('開いて4秒（ホーム）'); allok = d['left'] == 0 and not d['entry']

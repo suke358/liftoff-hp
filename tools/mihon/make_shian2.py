@@ -290,7 +290,19 @@ js = r'''
     setTf(pbar, 'scaleX(' + ((tabIndex(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
     if (window.jetGo) window.jetGo(tabIndex(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
+    fitHome();
   }
+  // ホームの画面：帯の分だけヘッダーが高くなるので、見出しの一番上が「帯の一番下＋16px」より上に来ないように、実際の高さを測って最初の section を下げる
+  // （決め打ちの数字にしない。帯の高さが文字の大きさや幅で変わっても合う。ふつうはヘッダーが場所を取るので足す量は 0 だが、ブラウザによってはヘッダーが本文に重なるので、その分を足す）
+  function fitHome(){
+    var band = el('irai-band'), hero = document.querySelector('#home .hero'), h1 = hero && hero.querySelector('h1');
+    if (!band || !hero || !h1) return;
+    hero.style.marginTop = '0px';
+    if (cur !== 'home') return;
+    var y = window.pageYOffset || 0, need = (band.getBoundingClientRect().bottom + y) + 16 - (h1.getBoundingClientRect().top + y);
+    if (need > 0) hero.style.marginTop = Math.ceil(need) + 'px';
+  }
+  window.fitHome = fitHome;
   function go(id, push){
     if (ALL.indexOf(id) < 0) id = 'home';
     if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
@@ -316,7 +328,8 @@ js = r'''
   if (ALL.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
   render(first);
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
-  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(tabIndex(cur)); });
+  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(tabIndex(cur)); fitHome(); });
+  window.addEventListener('load', fitHome); setTimeout(fitHome, 300); // 書体が読み込まれて帯の高さが変わったあとにも合わせる
 })();
 // ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名は今までと同じ「ホームページの修正のご依頼」。店名は本文の1行目） =====
 // URL に ?shop=〇〇 のように付いていたら、その文字をそのままお店の名前の欄に入れる（日本語も可。実在のお店の名前はソースに書かない。長すぎる・おかしな文字は入れない）
