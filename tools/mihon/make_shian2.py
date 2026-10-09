@@ -77,6 +77,11 @@ IRAI_SCREEN = """<!-- ===== 画面：修正のご依頼（#irai。下のタブ�
         <p class="formnote irai-photo">写真が<wbr>あるときは、<wbr>次に<wbr>開く<wbr>メールに<wbr>付けて<wbr>送ってください。</p>
         <button class="btn signal" type="submit" id="irai-btn">メールを<wbr>作る</button>
         <p class="formnote" id="irai-msg" role="status"></p>
+        <p class="formnote irai-alt-p"><a href="#irai-altbox" id="irai-alt" class="irai-alt" aria-expanded="false">メールが<wbr>開かないときは</a></p>
+        <div class="irai-altbox" id="irai-altbox" hidden>
+          <p class="irai-addr"><span id="irai-addr">liftoff.358@gmail.com</span><button type="button" class="irai-copy" id="irai-copy">コピー</button></p>
+          <p class="formnote">件名は<wbr>『ホームページの<wbr>修正の<wbr>ご依頼』、<wbr>本文の<wbr>1行目に<wbr>『お店：<span id="irai-alt-shop">〇〇</span>』と<wbr>書いてください。</p>
+        </div>
         <p class="formnote irai-small">ご依頼には<wbr>原則<wbr>3営業日以内に<wbr>対応します。<wbr>回数は<wbr>月の<wbr>回数の<wbr>中で<wbr>数えます。</p>
       </form>
     </div>
@@ -259,6 +264,14 @@ html{scroll-padding-top:130px}
 .irai-box{max-width:560px;color:#fff} /* 紺の地なので、項目の名前（お店の名前・直したい所・ひと言）も白に。相談の画面は .contact{color:#fff} で同じになっている */
 .irai-photo{background:rgba(242,194,48,.14);color:#fff;border-radius:10px;padding:10px 14px}
 .irai-small{color:#c3d2dd}
+.irai-alt-p{margin-top:-4px}
+.irai-alt{color:#c3d2dd;font-size:13px;text-decoration:underline}
+.irai-altbox{background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.3);border-radius:12px;padding:12px 14px}
+.irai-altbox[hidden]{display:none}
+.irai-addr{display:flex;flex-wrap:wrap;align-items:center;font-size:16px;color:#fff;word-break:break-all;margin-bottom:6px}
+.irai-addr span{margin:4px 10px 4px 0}
+.irai-copy{font:inherit;font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink);background:#fff;border:none;border-radius:999px;padding:7px 14px;min-height:36px;cursor:pointer;margin:4px 0}
+.irai-copy[disabled]{opacity:.8}
 .news{max-width:560px;margin-top:28px;border:2px solid var(--ink);border-radius:18px;padding:18px 20px 8px;background:var(--paper)}
 .news h3{font-size:18px;margin-bottom:6px}
 .news ul{list-style:none}
@@ -363,6 +376,24 @@ js = r'''
       for (k = 1; k <= n; k++) { var t = at(u * k / n); d += ' L' + t[0].toFixed(1) + ' ' + t[1].toFixed(1); }
       trail.setAttribute('d', d);
     }, function(){ svg.setAttribute('class', 'send-plane'); done(); }, easeInOut);
+  }
+  // メールが開かないときは：押したときだけ、宛先と「コピー」・件名と本文の書き方を出す（?shop の店名があれば〇〇に入れる）
+  var alt = document.getElementById('irai-alt'), altbox = document.getElementById('irai-altbox'), copyBtn = document.getElementById('irai-copy');
+  alt.addEventListener('click', function(e){
+    e.preventDefault();
+    var open = altbox.hidden; altbox.hidden = !open; alt.setAttribute('aria-expanded', open ? 'true' : 'false');
+    var name = shop.value.replace(/^\s+|\s+$/g, ''); document.getElementById('irai-alt-shop').textContent = name || '〇〇';
+  });
+  function copied(ok){ copyBtn.textContent = ok ? 'コピーしました' : 'コピーできませんでした。長押しで選んでコピーしてください'; setTimeout(function(){ copyBtn.textContent = 'コピー'; }, 2500); }
+  copyBtn.addEventListener('click', function(){
+    var text = MAIL;
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function(){ copied(true); }, function(){ copied(fallback(text)); }); }
+    else copied(fallback(text));
+  });
+  function fallback(text){ // 古い iPhone 用：見えない欄に入れて選んでコピー
+    var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px;top:0'; document.body.appendChild(ta);
+    var ok = false; try { ta.select(); ta.setSelectionRange(0, text.length); ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta); return ok;
   }
   form.addEventListener('submit', function(e){
     e.preventDefault();

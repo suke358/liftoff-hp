@@ -72,8 +72,8 @@ try:
         while True:
             m = recv()
             if m.get('id') == seq[0]: return m.get('result', m)
-    def js(expr):
-        r = call('Runtime.evaluate', expression=expr, returnByValue=True)
+    def js(expr, wait=False):
+        r = call('Runtime.evaluate', expression=expr, returnByValue=True, awaitPromise=wait)
         return r.get('result', {}).get('value')
 
     call('Page.enable'); call('Runtime.enable')
@@ -149,7 +149,25 @@ try:
         ok2 = flying and 'メールの画面を開きます' in m and dec.startswith('mailto:liftoff.358@gmail.com?subject=ホームページの修正のご依頼&body=お店：colore') and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
         print('   飛行機が飛んだ=%s 文=%s' % (flying, m)); print('   メール: %s' % dec.replace('\n', ' / ')[:200])
         shot('修正依頼_3_メールの文ができた', 0, 844)
-        print('全部:', 'OK' if allok and ok1 and shopv == 'colore' and ok2 else 'NG')
+        # 「メールが開かないときは」：押したときだけ宛先と「コピー」が出て、店名が入る。コピーを押すと「コピーしました」
+        call('Browser.grantPermissions', permissions=['clipboardReadWrite', 'clipboardSanitizedWrite'])
+        js("document.getElementById('irai-alt').scrollIntoView({block:'center'})"); time.sleep(0.3)
+        hidden0 = js("document.getElementById('irai-altbox').hidden")
+        rect = json.loads(js("JSON.stringify(document.getElementById('irai-alt').getBoundingClientRect())"))
+        x, y = rect['x'] + rect['width'] / 2, rect['y'] + rect['height'] / 2
+        call('Input.dispatchMouseEvent', type='mousePressed', x=x, y=y, button='left', clickCount=1)
+        call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
+        time.sleep(0.3)
+        hidden1 = js("document.getElementById('irai-altbox').hidden"); txt = js("document.getElementById('irai-altbox').textContent")
+        rect = json.loads(js("JSON.stringify(document.getElementById('irai-copy').getBoundingClientRect())"))
+        x, y = rect['x'] + rect['width'] / 2, rect['y'] + rect['height'] / 2
+        call('Input.dispatchMouseEvent', type='mousePressed', x=x, y=y, button='left', clickCount=1)
+        call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
+        time.sleep(0.5); btn_t = js("document.getElementById('irai-copy').textContent"); clip = js("navigator.clipboard.readText()", True)
+        ok3 = hidden0 and (not hidden1) and 'liftoff.358@gmail.com' in txt and 'お店：colore' in txt and btn_t == 'コピーしました'
+        print('   メールが開かないときは: 最初は隠れている=%s 押すと出る=%s 店名入り=%s コピーのボタン=%s クリップボード=%s → %s' % (hidden0, not hidden1, 'お店：colore' in txt, btn_t, clip, 'OK' if ok3 else 'NG'))
+        shot('修正依頼_4_メールが開かないときは', 0, 844)
+        print('全部:', 'OK' if allok and ok1 and shopv == 'colore' and ok2 and ok3 else 'NG')
     elif mode == 'early':
         state('開いて1秒（入り方の途中）'); shot('途中押し_0_開いて1秒', 0, 844)
         tap('ryokin'); print('→ 1秒の時点で 料金 を押した。画面=', scr())
