@@ -227,6 +227,18 @@ if 'ネットで<wbr>商品を<wbr>売れますか' not in s: sys.exit('質問�
 must("function revealAll(items, gap, each, done){\n  if (STILL) { if (done) done(); return; }",
      "function revealAll(items, gap, each, done){\n  if (STILL || (window.OFF && window.OFF.rv)) { if (done) done(); return; }")
 
+# ---- iOS の Safari 対策（2026/10/10 実機で切り分け）：sticky のヘッダー＋飛行機の通る白い地（fixed）＋ふわっと表示（transform）の3つがそろうと、
+#      開いた直後の見出しが古い位置に描かれる。ホームの最初に見える部分（hero と「こんなこと」）のふわっと表示だけ止める（ほかの rv・sticky・白い地はそのまま）
+def strip_rv(block):
+    return re.sub(r' class="([^"]*)\brv\b([^"]*)"', lambda m: ' class="' + (m.group(1) + m.group(2)).strip().replace('  ', ' ') + '"', block)
+for sec_re in (r'<section class="hero">.*?</section>', r'<section class="sec worry"[^>]*>.*?</section>'):
+    m = re.search(sec_re, s, re.S)
+    if not m: sys.exit('iOS 対策：section が見つからない ' + sec_re)
+    s = s[:m.start()] + strip_rv(m.group(0)) + s[m.end():]
+# 「こんなこと」の吹き出しを1つずつ出す JS もやめる（最初から出ている）
+s = re.sub(r'// ===== こんなこと：悩みが1つずつ出て、最後に「LINE でひと言」 =====\n\(function\(\)\{.*?\n\}\)\(\);\n', '// （shian2：「こんなこと」のふわっと表示はしない。iOS の Safari で、開いた直後の見出しが古い位置に描かれる不具合の対策）\n', s, count=1, flags=re.S)
+if '「こんなこと」のふわっと表示はしない' not in s: sys.exit('iOS 対策：こんなこと の JS が見つからない')
+
 # ---- 切りかえ式だけの CSS
 css = '''
 /* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
@@ -582,7 +594,7 @@ js = r'''
   document.addEventListener('visibilitychange', function(){ if (!document.hidden && (path.length || entry) && !raf) { last = null; if (entry) entry.t0 = null; raf = requestAnimationFrame(step); } });
 })();
 </script>'''
-anchor = '<script>\n// ===== こんなこと：'
+anchor = '<script>\n// （shian2：「こんなこと」のふわっと表示はしない'  # 「こんなこと」の JS を差しかえたあとの行
 must(anchor, js + '\n' + anchor)
 # 最初の画面の飛行機は、切りかえの JS が出す（render → jetGo）。切りかえの JS は jetGo より前に動くので、最初の1回だけあとから呼ぶ
 # （最初の1回の jetGo は、飛行機の JS の中で呼ぶ）

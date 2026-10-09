@@ -624,14 +624,14 @@ html{scroll-padding-top:130px}
 <section class="hero">
   <div class="wrap">
     <div class="hero-copy" id="hero-copy">
-      <h1 class="rv"><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
-      <p class="sub rv">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr><span class="nw">パソコンが苦手でも大丈夫です。</span></p>
-      <p class="from rv"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span><a href="#price-zero">初期0円の<wbr>プランも<wbr>あります<wbr><span class="nw">（月9,800円）</span></a></p>
-      <div class="actions rv">
+      <h1 class=""><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
+      <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr><span class="nw">パソコンが苦手でも大丈夫です。</span></p>
+      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span><a href="#price-zero">初期0円の<wbr>プランも<wbr>あります<wbr><span class="nw">（月9,800円）</span></a></p>
+      <div class="actions">
         <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料・<wbr>お気軽に）</a>
         <a class="btn" href="#price">料金を<wbr>見る</a>
       </div>
-      <p class="facts rv">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>スタンダードは<wbr>契約の<wbr>縛りなし</p>
+      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>スタンダードは<wbr>契約の<wbr>縛りなし</p>
     </div>
   </div>
 </section>
@@ -639,11 +639,11 @@ html{scroll-padding-top:130px}
   <div class="wrap">
     <h2 id="worry-h">こんなこと、<wbr>ありませんか？</h2>
     <ul class="voices" id="voices">
-      <li class="rv">ホームページは<wbr>あるけれど、<wbr>何年も前の<wbr>情報の<wbr>ままに<wbr>なっている。</li>
-      <li class="rv">お休みや<wbr>メニューを<wbr>変えたいけれど、<wbr>直し方が<wbr>わからない。</li>
-      <li class="rv">お店の<wbr>仕事で<wbr>手いっぱいで、<wbr>ネットの<wbr>ことまで<wbr>手が<wbr>回らない。</li>
+      <li class="">ホームページは<wbr>あるけれど、<wbr>何年も前の<wbr>情報の<wbr>ままに<wbr>なっている。</li>
+      <li class="">お休みや<wbr>メニューを<wbr>変えたいけれど、<wbr>直し方が<wbr>わからない。</li>
+      <li class="">お店の<wbr>仕事で<wbr>手いっぱいで、<wbr>ネットの<wbr>ことまで<wbr>手が<wbr>回らない。</li>
     </ul>
-    <div class="answer rv">
+    <div class="answer">
       <span class="mark" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h20v12H13l-6 5v-5H5z"/><path d="M10 14h10"/></svg></span>
       <p><b>変えたいことは、<wbr>LINEで<wbr>ひと言だけ。</b>あとは<wbr>こちらで<wbr>直して、<wbr>直した<wbr>ことを<wbr>お知らせします。<wbr>作るところから、<wbr>そのあとの<wbr>更新まで<wbr>引き受けます。</p>
     </div>
@@ -1563,13 +1563,7 @@ function revealAll(items, gap, each, done){
 })();
 </script>
 <script>
-// ===== こんなこと：悩みが1つずつ出て、最後に「LINE でひと言」 =====
-(function(){
-  var ul = document.getElementById('voices'); if (!ul) return;
-  var items = [].slice.call(ul.querySelectorAll('.rv')); items.push(ul.parentNode.querySelector('.answer'));
-  var show = revealAll(items, 380);
-  if (show) whenSeen(ul, show);
-})();
+// （shian2：「こんなこと」のふわっと表示はしない。iOS の Safari で、開いた直後の見出しが古い位置に描かれる不具合の対策）
 // ===== 更新は、こんなふうに：LINE の吹き出しが1つずつ届く =====
 (function(){
   var box = document.getElementById('up-chat'); if (!box) return;
