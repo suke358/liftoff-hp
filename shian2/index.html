@@ -1307,7 +1307,34 @@ function revealAll(items, gap, each, done){
     var r = function(e){ return e ? e.getBoundingClientRect() : null; }, tb = r(top), bb = r(band), hb = r(h1), cs = getComputedStyle(document.body);
     return label + ' innerH=' + window.innerHeight + ' vv.h=' + (vv ? Math.round(vv.height) : '-') + ' vv.top=' + (vv ? Math.round(vv.offsetTop) : '-') + ' scrollY=' + Math.round(window.pageYOffset || 0) +
       ' | ヘッダー下=' + (tb ? Math.round(tb.bottom) : '-') + ' 帯 上=' + (bb ? Math.round(bb.top) : '-') + ' 下=' + (bb ? Math.round(bb.bottom) : '-') + ' 見出し上=' + (hb ? Math.round(hb.top) : '-') +
-      ' | body余白 m=' + cs.marginTop + ' p=' + cs.paddingTop + ' hero.mt=' + ((document.querySelector('#home .hero') || {}).style || {}).marginTop + ' 画面=' + cur;
+      ' | body余白 m=' + cs.marginTop + ' p=' + cs.paddingTop + ' hero.mt=' + ((document.querySelector('#home .hero') || {}).style || {}).marginTop + ' 画面=' + cur +
+      '\n' + more(h1, top, band);
+  }
+  // くわしく：見出しの rect（getBoundingClientRect で測っている）と、見出しからの親たち（transform・margin-top・position・スクロールできる親の scrollTop）、
+  // 画面のその場所に実際に描かれている要素（elementFromPoint）、帯の文字の行・ヘッダー・飛行機の通る所の rect
+  function more(h1, top, band){
+    if (!h1) return '';
+    var out = [], e = h1, n = 0, hb = h1.getBoundingClientRect();
+    out.push('見出し rect top=' + hb.top.toFixed(1) + ' bottom=' + hb.bottom.toFixed(1) + ' offsetTop=' + h1.offsetTop);
+    while (e && e !== document.documentElement && n < 12) {
+      var c = getComputedStyle(e), name = e.tagName.toLowerCase() + (e.id ? '#' + e.id : '') + (e.className && typeof e.className === 'string' ? '.' + e.className.split(' ')[0] : '');
+      var bits = [];
+      if (c.transform && c.transform !== 'none') bits.push('tf=' + c.transform);
+      if (c.marginTop !== '0px') bits.push('mt=' + c.marginTop);
+      if (c.position !== 'static') bits.push('pos=' + c.position);
+      if ((/(auto|scroll)/).test(c.overflowY) || (/(auto|scroll)/).test(c.overflow)) bits.push('scrollTop=' + e.scrollTop + '(overflow)');
+      else if (e.scrollTop) bits.push('scrollTop=' + e.scrollTop);
+      if (bits.length) out.push(name + ': ' + bits.join(' '));
+      e = e.parentNode; n++;
+    }
+    out.push('html.scrollTop=' + document.documentElement.scrollTop + ' body.scrollTop=' + document.body.scrollTop + ' scrollingElement=' + (document.scrollingElement ? document.scrollingElement.tagName + ' ' + document.scrollingElement.scrollTop : '-'));
+    var tr = top ? top.getBoundingClientRect() : null, inr = band && band.querySelector('.in') ? band.querySelector('.in').getBoundingClientRect() : null, sky = document.querySelector('.jet-sky'), sr = sky ? sky.getBoundingClientRect() : null;
+    out.push('ヘッダー rect top=' + (tr ? tr.top.toFixed(1) : '-') + ' bottom=' + (tr ? tr.bottom.toFixed(1) : '-') + ' offsetTop=' + (top ? top.offsetTop : '-') + ' | 帯の文字の行 rect top=' + (inr ? inr.top.toFixed(1) : '-') + ' bottom=' + (inr ? inr.bottom.toFixed(1) : '-') + ' | 白い地 rect ' + (sr ? sr.top.toFixed(0) + '-' + sr.bottom.toFixed(0) : '-'));
+    var pts = [120, 140, 150, 160, 170, 180, 200], hits = [];
+    for (var i = 0; i < pts.length; i++) { var el2 = document.elementFromPoint(60, pts[i]); hits.push(pts[i] + ':' + (el2 ? el2.tagName.toLowerCase() + (el2.id ? '#' + el2.id : '') + (el2.className && typeof el2.className === 'string' ? '.' + el2.className.split(' ')[0] : '') + '「' + (el2.textContent || '').replace(/\s+/g, '').slice(0, 6) + '」' : '-')); }
+    out.push('x=60 の各 y に描かれている要素: ' + hits.join(' / '));
+    out.push('innerW=' + window.innerWidth + ' dpr=' + window.devicePixelRatio + ' ua=' + navigator.userAgent.slice(0, 60));
+    return out.join('\n');
   }
   function debugBox(){
     if (!DEBUG || dbgDone) return; dbgDone = true; // 画面を出すたびに1回だけ（0秒と1秒の2行）
