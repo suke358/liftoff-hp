@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""shian/index.html から、切りかえ式の shian2/index.html を作る  2026/10/9
+"""shian/index.html から、切りかえ式の shian2/index.html を作る  2026/10/9（10/10 表示を速く・飛行機の動きを直した）
 
 shian/ と同じ中身を、画面の下の5つのボタン（ホーム／できること／料金／流れ／相談）で切りかえる形にする（ファイルは1つ）。
 shian/ を直したら、もう一度これを動かして shian2/ を作り直す。
+
+shian2 だけの違い（この道具が書きかえる）：
+  - 見出しの文字は最初から見える（JS で隠さない）。トップの飛行機の横切りはなし
+  - Google Fonts は BIZ UDPGothic（400/700）だけ。見出しの書体は端末の Hiragino Sans
+  - 飛行機は1機だけ、ヘッダーのすぐ下の線の上を、ゆっくり一定の速さで飛ぶ。画面を切りかえると、いまの位置から続けて次の画面の位置へ
+    （位置は変数に持つ。動かすのは transform と requestAnimationFrame だけ。向きは進む方向。折り返しは半円を描く）
 
 使い方:  python3 tools/mihon/make_shian2.py
 """
@@ -12,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 SRC = os.path.join(ROOT, 'shian', 'index.html')
 DST = os.path.join(ROOT, 'shian2', 'index.html')
 
-# 画面の割り当て（左から順）。値は shian の <section> の id か class（先頭の class 名）
+# 画面の割り当て（左から順）。値は shian の <section> の id か class
 SCREENS = [
     ('home',   'ホーム',     ['hero', 'worry', 'update', 'work']),
     ('dekiru', 'できること', ['can', 'trust']),
@@ -23,12 +29,19 @@ SCREENS = [
 
 s = open(SRC, encoding='utf-8').read()
 
+def must(old, new, count=1):
+    """必ずある文字列を置きかえる（なければ止まる。shian が変わったときに気づけるように）"""
+    global s
+    if old not in s: sys.exit('見つからない: ' + old[:60])
+    s = s.replace(old, new, count)
+
 # ---- <section> を切り出す（shian は section を入れ子にしていない）
 secs = {}
 for m in re.finditer(r'<section\b[^>]*>.*?</section>', s, re.S):
     tag = m.group(0)
-    mid = re.search(r'\bid="([^"]+)"', tag[:tag.index('>')])
-    mcl = re.search(r'\bclass="([^"]+)"', tag[:tag.index('>')])
+    head = tag[:tag.index('>')]
+    mid = re.search(r'\bid="([^"]+)"', head)
+    mcl = re.search(r'\bclass="([^"]+)"', head)
     if mid: secs[mid.group(1)] = tag
     elif mcl:
         for c in mcl.group(1).split():
@@ -54,11 +67,33 @@ tabbar = '<nav class="tabbar" id="tabbar" aria-label="画面の切りかえ">\n'
     f'  <a href="#{sid}" data-scr="{sid}">{name}</a>\n' for sid, name, _ in SCREENS) + '</nav>'
 s = re.sub(r'<div class="fixbar" id="fixbar">.*?</div>\n', tabbar + '\n', s, count=1, flags=re.S)
 
-# ---- 目印・題名・noindex はそのまま。og:url と注釈だけ変える
-s = s.replace('content="https://liftoff-hp.liftoff-358.workers.dev/shian/"', 'content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"')
-s = s.replace('<!-- 試しの版（2026/10/9）。本番に入れかえるまで検索に出さない -->',
-              '<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ を直して作り直す -->')
-s = s.replace('<body>', '<body class="switch">', 1)
+# ---- 題名・noindex はそのまま。og:url と注釈だけ変える
+must('content="https://liftoff-hp.liftoff-358.workers.dev/shian/"', 'content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"')
+must('<!-- 試しの版（2026/10/9）。本番に入れかえるまで検索に出さない -->',
+     '<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->')
+must('<body>', '<body class="switch">')
+
+# ---- 【1】最初の表示を速く
+# Google Fonts は BIZ UDPGothic だけ（Zen Kaku Gothic Antique・Michroma は外す）。preconnect はそのまま
+s = re.sub(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">',
+           '<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">', s, count=1)
+must('--head:"Zen Kaku Gothic Antique","Hiragino Sans",sans-serif;', '--head:"Hiragino Sans","BIZ UDPGothic","Yu Gothic",sans-serif;')
+s = s.replace('font-family:"Michroma",var(--head)', 'font-family:var(--head)')
+# 見出しの文字を JS で隠す仕組みをやめる（最初から見える）
+must('.anim .hero .rv{opacity:0}\n', '')
+# トップの飛行機の横切り（SVG と JS）はなくす。飛行機は下の「1機だけ」のものに
+s = re.sub(r'  <svg class="hero-plane" id="hero-plane".*?</svg>\n', '', s, count=1, flags=re.S)
+s = re.sub(r'<script>\n// ===== 最初：.*?</script>\n', '', s, count=1, flags=re.S)
+# 上の線の飛行機（SVG・left で動かす）→ 1機だけの飛行機（div・transform で動かす）に。使わなくなった CSS も消す
+s = re.sub(r'\.hero-plane[^\n]*\n', '', s)
+s = re.sub(r'\.prog-jet[^\n]*\n|\.anim \.prog-jet[^\n]*\n', '', s)
+s = re.sub(r'<svg class="prog-jet" id="prog-jet".*?</svg>', '', s, count=1, flags=re.S)
+must('.prog-bar{position:absolute;left:0;top:0;height:4px;width:0;background:var(--signal);border-radius:0 2px 2px 0}',
+     '.prog-bar{position:absolute;left:0;top:0;height:4px;width:100%;background:var(--signal);border-radius:0 2px 2px 0;-webkit-transform-origin:0 0;transform-origin:0 0;-webkit-transform:scaleX(0);transform:scaleX(0)}')
+must('<a class="skip" href="#main">本文へ</a>',
+     '<a class="skip" href="#main">本文へ</a>\n'
+     '<!-- 飛行機は1機だけ。ヘッダーのすぐ下の線の上を飛ぶ。位置は JS の変数に持ち、transform で動かす（top/left は動かさない） -->\n'
+     '<div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>')
 
 # ---- 切りかえ式だけの CSS
 css = '''
@@ -76,72 +111,35 @@ footer{padding-bottom:96px}
 @media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
-/* 切りかえのときに飛ぶ飛行機（上の線の飛行機が、押したボタンへ飛んで、次の画面の位置へ戻る） */
-.fly-jet{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:40;display:none}
-.fly-jet.on{display:block}
-.fly-jet .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-dasharray:6 9;stroke-linecap:round;opacity:.85}
+/* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
+.nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;will-change:transform;-webkit-transform:translate3d(-80px,68px,0);transform:translate3d(-80px,68px,0)}
+.nav-jet svg{display:block;width:60px;max-width:none;margin:-10px 0 0 -44px;overflow:visible}
 </style>'''
-s = s.replace('</style>', css, 1)
+must('</style>', css)
 
-# ---- 飛ぶ飛行機の SVG（固定）
-s = s.replace('<a class="skip" href="#main">本文へ</a>',
-              '<a class="skip" href="#main">本文へ</a>\n<svg class="fly-jet" id="fly-jet" aria-hidden="true" focusable="false"><path class="trail" id="fly-trail" d=""/><g id="fly-plane"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>', 1)
-
-# ---- 切りかえの JS（ほかの JS より先に動かして、最初の画面を出しておく）
+# ---- 切りかえの JS（共通の道具 tween などの次に入れて、最初の画面をすぐ出す）
 js = r'''
 <script>
 // ===== 切りかえ式：画面を1つずつ見せる。URL の #ryokin などで画面を覚え、スマホの「戻る」で前の画面に戻る =====
 (function(){
-  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null, busy = false;
-  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar'), pjet = document.getElementById('prog-jet');
-  var fsvg = document.getElementById('fly-jet'), fplane = document.getElementById('fly-plane'), ftrail = document.getElementById('fly-trail');
-  var STILL2 = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame;
+  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null;
+  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar');
   function el(id){ return document.getElementById(id); }
   function screenOf(node){ while (node && node !== document.body) { if (node.className && String(node.className).indexOf('scr') === 0) return node.id; node = node.parentNode; } return null; }
-  // 上の線：5つに区切って、今の画面の所まで黄色。飛行機は今の画面の位置
-  function progAt(i){
-    var W = document.documentElement.clientWidth, x = (i + .5) / IDS.length * W;
-    pbar.style.width = ((i + 1) / IDS.length * 100).toFixed(1) + '%';
-    if (pjet) pjet.style.left = (x - 9).toFixed(1) + 'px';
-    return x;
-  }
   for (var k = 1; k < IDS.length; k++) { var seg = document.createElement('i'); seg.className = 'prog-seg'; seg.style.left = (k / IDS.length * 100) + '%'; prog.appendChild(seg); }
   function render(id){
     for (var i = 0; i < IDS.length; i++) { var sc = el(IDS[i]); if (sc) sc.className = IDS[i] === id ? 'scr on' : 'scr'; }
     var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
-    cur = id; progAt(IDS.indexOf(id));
-    if (id === 'home' && window.heroStart) setTimeout(window.heroStart, 50);
+    cur = id;
+    setTf(pbar, 'scaleX(' + ((IDS.indexOf(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
+    if (window.jetGo) window.jetGo(IDS.indexOf(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
-    if (window.requestAnimationFrame) requestAnimationFrame(function(){ window.dispatchEvent(document.createEvent('Event').initEvent ? (function(){ var e = document.createEvent('Event'); e.initEvent('resize', true, false); return e; })() : new Event('resize')); });
   }
-  // 切りかえの動き：上の線の飛行機が、押したボタンへ飛び（黄色い飛行機雲）、次の画面が出てから新しい位置へ戻る
-  function fly(toId, btn, done){
-    if (STILL2 || !fsvg || !btn) { done(); return; }
-    var W = document.documentElement.clientWidth, H = window.innerHeight, b = btn.getBoundingClientRect();
-    fsvg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); fsvg.setAttribute('class', 'fly-jet on');
-    var x0 = parseFloat(pjet.style.left || '0') + 9, y0 = 68, x1 = b.left + b.width / 2, y1 = b.top + 10, x2 = (IDS.indexOf(toId) + .5) / IDS.length * W, y2 = 68;
-    if (pjet) pjet.style.visibility = 'hidden';
-    var pts = [];
-    function seg(a, b2, c, ms, next){
-      tween(ms, function(u){
-        var av = 1 - u, x = av * av * a[0] + 2 * av * u * b2[0] + u * u * c[0], y = av * av * a[1] + 2 * av * u * b2[1] + u * u * c[1];
-        var dx = 2 * av * (b2[0] - a[0]) + 2 * u * (c[0] - b2[0]), dy = 2 * av * (b2[1] - a[1]) + 2 * u * (c[1] - b2[1]);
-        fplane.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(.6)');
-        if (pts.length > 40) pts.shift(); pts.push([x, y]);
-        var d = ''; for (var i = 0; i < pts.length; i++) d += (i ? ' L' : 'M') + pts[i][0].toFixed(1) + ' ' + pts[i][1].toFixed(1); ftrail.setAttribute('d', d);
-      }, next, easeInOut);
-    }
-    seg([x0, y0], [(x0 + x1) / 2 + 60, (y0 + y1) / 2], [x1, y1], 420, function(){
-      done();
-      seg([x1, y1], [(x1 + x2) / 2 - 60, (y1 + y2) / 2], [x2, y2], 420, function(){ fsvg.setAttribute('class', 'fly-jet'); if (pjet) pjet.style.visibility = ''; });
-    });
-  }
-  function go(id, push, btn){
+  function go(id, push){
     if (IDS.indexOf(id) < 0) id = 'home';
     if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
     if (id === cur) return;
-    if (busy) return; busy = true;
-    fly(id, btn, function(){ render(id); window.scrollTo(0, 0); busy = false; });
+    render(id); window.scrollTo(0, 0);
   }
   // ページの中のリンク（#price-zero・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
   document.addEventListener('click', function(e){
@@ -149,12 +147,12 @@ js = r'''
     var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;
     e.preventDefault();
     var id = h.slice(1);
-    if (!id) { go('home', true, bar.querySelector('[data-scr=home]')); return; }
-    if (IDS.indexOf(id) >= 0) { go(id, true, bar.querySelector('[data-scr=' + id + ']')); return; }
+    if (!id) { go('home', true); return; }
+    if (IDS.indexOf(id) >= 0) { go(id, true); return; }
     var target = el(id); if (!target) return;
     var sid = screenOf(target) || cur;
-    var after = function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } };
-    if (sid !== cur) { go(sid, true, bar.querySelector('[data-scr=' + sid + ']')); setTimeout(after, STILL2 ? 30 : 500); } else after();
+    if (sid !== cur) go(sid, true);
+    setTimeout(function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } }, 30);
   });
   window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (IDS.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
   // 最初の画面：URL の # で決める（#option のような中の場所なら、その画面を出してから開く）
@@ -162,13 +160,65 @@ js = r'''
   if (IDS.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
   render(first);
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
-  window.addEventListener('resize', function(){ progAt(IDS.indexOf(cur)); });
+  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
+})();
+// ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を、ゆっくり一定の速さ（1秒に 60px）で飛ぶ =====
+// 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
+// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中。文字やボタンの上には来ない）。折り返しは半円を描いて、機首は進む向きに
+// 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
+(function(){
+  var jet = document.getElementById('nav-jet'); if (!jet) return;
+  var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
+  var pos = { x: -80, y: Y_R, a: 0 }, path = [], last = null, raf = 0;
+  function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
+  function apply(){ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg)'); }
+  function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
+  // いまの位置・向きから目標の x まで、なめらかな道筋を作る
+  function plan(tx){
+    path = [];
+    var dir = heading(), need = tx >= pos.x ? 1 : -1, y0 = pos.y, y1 = need > 0 ? Y_R : Y_L, i;
+    if (Math.abs(tx - pos.x) < 1 && Math.abs(y1 - y0) < 1) return;
+    if (dir !== need) {
+      // 折り返し：進んでいる方へふくらむ半円で、もう一方の高さへ（向きが 180 度なめらかに変わる）
+      var r = Math.abs(y1 - y0) / 2 || R, n = 16;
+      for (i = 1; i <= n; i++) { var t = Math.PI * i / n; path.push([pos.x + dir * Math.sin(t) * r, y0 + (y1 - y0) / 2 * (1 - Math.cos(t))]); }
+    } else if (Math.abs(y1 - y0) > 1) {
+      // 同じ向きのまま高さだけ違うとき：ゆるい S 字で高さを合わせる
+      var n2 = 12, len = Math.min(80, Math.abs(tx - pos.x) * .5);
+      for (i = 1; i <= n2; i++) { var u = i / n2; path.push([pos.x + need * len * u, y0 + (y1 - y0) * (u * u * (3 - 2 * u))]); }
+    }
+    path.push([tx, y1]);
+  }
+  function step(ts){
+    raf = 0;
+    if (last === null) last = ts;
+    var d = SPEED * Math.min(50, ts - last) / 1000; last = ts;
+    while (d > 0 && path.length) {
+      var p = path[0], dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
+      if (L < .01) { path.shift(); continue; }
+      var ang = Math.atan2(dy, dx) * 180 / Math.PI, da = ang - pos.a;
+      while (da > 180) da -= 360; while (da < -180) da += 360;
+      pos.a += da * Math.min(1, d / 6); // 向きは進む方向へ少しずつ（6px 進むあいだに合わせる）
+      if (L <= d) { pos.x = p[0]; pos.y = p[1]; d -= L; path.shift(); }
+      else { pos.x += dx / L * d; pos.y += dy / L * d; d = 0; }
+    }
+    apply();
+    if (path.length) raf = requestAnimationFrame(step); else last = null;
+  }
+  window.jetGo = function(i){
+    var tx = xOf(i);
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; path = []; apply(); return; } // 動きなし：その画面の位置に止めて置く
+    plan(tx);
+    if (!raf && path.length) { last = null; raf = requestAnimationFrame(step); }
+  };
+  apply();
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && path.length && !raf) { last = null; raf = requestAnimationFrame(step); } });
 })();
 </script>'''
-# 共通の道具（tween など）の次に入れる
-anchor = '<script>\n// ===== 最初：'
-if anchor not in s: sys.exit('入れる場所が見つからない')
-s = s.replace(anchor, js + '\n' + anchor, 1)
+anchor = '<script>\n// ===== こんなこと：'
+must(anchor, js + '\n' + anchor)
+# 最初の画面の飛行機は、切りかえの JS が出す（render → jetGo）。切りかえの JS は jetGo より前に動くので、最初の1回だけあとから呼ぶ
+must("  apply();\n  document.addEventListener('visibilitychange'", "  apply();\n  window.jetGo(['home', 'dekiru', 'ryokin', 'nagare', 'soudan'].indexOf(document.querySelector('.scr.on') ? document.querySelector('.scr.on').id : 'home'));\n  document.addEventListener('visibilitychange'")
 
 os.makedirs(os.path.dirname(DST), exist_ok=True)
 open(DST, 'w', encoding='utf-8').write(s)

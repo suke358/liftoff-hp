@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
 <meta name="description" content="山口県防府市で、お店・事業者のホームページを作り、毎月の更新まで引き受けます。料金はすべて税込。">
-<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ を直して作り直す -->
+<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->
 <meta name="robots" content="noindex">
 <meta property="og:title" content="Lift-Off｜防府のお店のホームページ制作・WEB担当者代行">
 <meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
@@ -21,7 +21,7 @@
 <link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700;900&family=Michroma&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -42,7 +42,6 @@ if (window.requestAnimationFrame && !(window.matchMedia && window.matchMedia('(p
 <style>
 /* 言葉の切れ目で折り返す（<wbr> は BudouX で入れた。足した文は手で入れた） */
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
-.anim .hero .rv{opacity:0}
 
 /* =========================================================
    Lift-Off ホームページ制作　試しの版（2026/10/9。前の版は v4/）
@@ -61,7 +60,7 @@ body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
   --line:#D2DEE6;
   --muted:#4A5F72;
   --chat:#06C755;
-  --head:"Zen Kaku Gothic Antique","Hiragino Sans",sans-serif;
+  --head:"Hiragino Sans","BIZ UDPGothic","Yu Gothic",sans-serif;
   --body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -85,9 +84,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 @media (max-width:760px){.sec{padding:48px 0}.sec-head{margin-bottom:20px}.sec-head p{font-size:16px}}
 /* ---------- 上の細い進み具合の線と小さな飛行機 ---------- */
 .prog{position:fixed;left:0;right:0;top:66px;height:4px;z-index:21;pointer-events:none}
-.prog-bar{position:absolute;left:0;top:0;height:4px;width:0;background:var(--signal);border-radius:0 2px 2px 0}
-.prog-jet{position:absolute;top:-8px;left:0;width:30px;height:15px;margin-left:-6px;display:none}
-.anim .prog-jet{display:block}
+.prog-bar{position:absolute;left:0;top:0;height:4px;width:100%;background:var(--signal);border-radius:0 2px 2px 0;-webkit-transform-origin:0 0;transform-origin:0 0;-webkit-transform:scaleX(0);transform:scaleX(0)}
 /* ---------- 上へ戻る：飛行機のマーク（押すと上へ飛んでいく） ---------- */
 .totop{position:fixed;right:14px;bottom:24px;width:46px;height:46px;border-radius:50%;background:#fff;border:2px solid var(--line);box-shadow:0 6px 16px rgba(23,40,58,.18);z-index:25;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;overflow:visible}
 .totop.on{display:flex}
@@ -147,7 +144,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .hero .sub{max-width:30em;font-size:17px;margin-bottom:22px}
 .from{display:flex;flex-wrap:wrap;align-items:baseline;margin:0 0 22px;font-family:var(--head);font-weight:700;color:var(--ink)}
 .from .from-k{font-size:14px;background:var(--ink);color:#fff;border-radius:6px;padding:2px 10px;margin-right:10px;-webkit-align-self:center;align-self:center}
-.from b{font-family:"Michroma",var(--head);font-size:36px;line-height:1;letter-spacing:-.01em}
+.from b{font-family:var(--head);font-size:36px;line-height:1;letter-spacing:-.01em}
 .from .from-u{font-size:17px;margin-left:4px}
 .from .from-u small{font-size:13px;color:var(--muted);font-weight:500}
 .from a{font-size:14px;margin-left:16px;color:var(--sea)}
@@ -156,9 +153,6 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .facts{margin-top:18px;font-size:13px;color:var(--muted)}
 .facts i{font-style:normal;margin:0 .5em;color:#b9c9d5}
 /* 紙飛行機（JS で動かす。JS がないときは出さない） */
-.hero-plane{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none;z-index:0}
-.hero-plane.on{display:block}
-.hero-plane .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-linecap:round;stroke-dasharray:6 10;opacity:.7}
 @media (max-width:760px){
   .hero{padding:40px 0 40px}
   .hero h1{font-size:30px}
@@ -271,7 +265,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .pass.rec .stub{background:var(--ink);color:#fff}
 .price-k{font-size:13px;color:var(--muted);display:block}
 .pass.rec .price-k,.pass.rec .price.init{color:#c9d6e0}
-.price{font-family:"Michroma",var(--head);font-weight:400;font-size:36px;line-height:1.15;display:block;letter-spacing:.01em}
+.price{font-family:var(--head);font-weight:400;font-size:36px;line-height:1.15;display:block;letter-spacing:.01em}
 .price small{font-family:var(--head);font-size:15px;font-weight:700;margin-left:2px}
 .price.init{font-family:var(--head);font-size:16px;font-weight:700;margin-top:8px;color:var(--muted)}
 @media (max-width:760px){
@@ -359,7 +353,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .steps-line{position:absolute;left:21px;top:24px;bottom:24px;width:4px;background:repeating-linear-gradient(180deg,var(--signal) 0 10px,transparent 10px 18px);border-radius:2px;-webkit-transform-origin:top;transform-origin:top}
 .steps li{counter-increment:s;position:relative;padding-left:62px}
 .steps li .acc{border-bottom:none}
-.steps li::before{content:counter(s);position:absolute;left:0;top:10px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Michroma",var(--head);font-size:15px;box-shadow:0 0 0 5px var(--sky);z-index:1}
+.steps li::before{content:counter(s);position:absolute;left:0;top:10px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:15px;box-shadow:0 0 0 5px var(--sky);z-index:1}
 .steps li:last-child::before{background:var(--signal);color:var(--ink)}
 .steps li .acc summary{font-size:17px;padding:14px 0}
 .steps li .acc summary .tag{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);margin-left:10px;margin-right:10px}
@@ -472,7 +466,7 @@ h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:
 .c-info dl{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:15px;color:#c3d2dd}
 .formbox{background:var(--ink-2);border-radius:20px;padding:0 24px 24px;overflow:hidden;position:relative}
 .form-top{display:flex;justify-content:space-between;align-items:center;margin:0 -24px 18px;padding:11px 24px;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px}
-.form-top .left{font-family:"Michroma",var(--head);font-weight:400;font-size:12px;letter-spacing:.06em}
+.form-top .left{font-family:var(--head);font-weight:400;font-size:12px;letter-spacing:.06em}
 .form-top .left b{font-family:var(--head);font-size:15px;margin-left:4px}
 form{display:grid;gap:16px}
 label{font-weight:700;font-size:15px;display:grid;gap:6px}
@@ -541,10 +535,9 @@ footer{padding-bottom:96px}
 @media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
 .totop{bottom:84px}
 .prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
-/* 切りかえのときに飛ぶ飛行機（上の線の飛行機が、押したボタンへ飛んで、次の画面の位置へ戻る） */
-.fly-jet{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:40;display:none}
-.fly-jet.on{display:block}
-.fly-jet .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-dasharray:6 9;stroke-linecap:round;opacity:.85}
+/* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
+.nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;will-change:transform;-webkit-transform:translate3d(-80px,68px,0);transform:translate3d(-80px,68px,0)}
+.nav-jet svg{display:block;width:60px;max-width:none;margin:-10px 0 0 -44px;overflow:visible}
 </style>
 </head>
 <body class="switch">
@@ -561,9 +554,10 @@ footer{padding-bottom:96px}
 </symbol>
 </defs></svg>
 <a class="skip" href="#main">本文へ</a>
-<svg class="fly-jet" id="fly-jet" aria-hidden="true" focusable="false"><path class="trail" id="fly-trail" d=""/><g id="fly-plane"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+<!-- 飛行機は1機だけ。ヘッダーのすぐ下の線の上を飛ぶ。位置は JS の変数に持ち、transform で動かす（top/left は動かさない） -->
+<div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>
 <!-- 上の細い進み具合の線。その上を小さな飛行機が進む（JS で動かす。動きを減らす設定の人は線だけ） -->
-<div class="prog" id="prog" aria-hidden="true"><i class="prog-bar" id="prog-bar"></i><svg class="prog-jet" id="prog-jet" viewBox="-32 -16 64 32"><use href="#jet" xlink:href="#jet"/></svg></div>
+<div class="prog" id="prog" aria-hidden="true"><i class="prog-bar" id="prog-bar"></i></div>
 
 <header class="top">
   <div class="wrap">
@@ -585,7 +579,6 @@ footer{padding-bottom:96px}
 <!-- ===== 画面 1：ホーム ===== -->
 <div class="scr" id="home" data-name="ホーム">
 <section class="hero">
-  <svg class="hero-plane" id="hero-plane" aria-hidden="true" focusable="false"><path class="trail" id="hero-trail" d=""/><g class="plane" id="hero-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
   <div class="wrap">
     <div class="hero-copy" id="hero-copy">
       <h1 class="rv"><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
@@ -1187,56 +1180,24 @@ function revealAll(items, gap, each, done){
 <script>
 // ===== 切りかえ式：画面を1つずつ見せる。URL の #ryokin などで画面を覚え、スマホの「戻る」で前の画面に戻る =====
 (function(){
-  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null, busy = false;
-  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar'), pjet = document.getElementById('prog-jet');
-  var fsvg = document.getElementById('fly-jet'), fplane = document.getElementById('fly-plane'), ftrail = document.getElementById('fly-trail');
-  var STILL2 = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame;
+  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], cur = null;
+  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar');
   function el(id){ return document.getElementById(id); }
   function screenOf(node){ while (node && node !== document.body) { if (node.className && String(node.className).indexOf('scr') === 0) return node.id; node = node.parentNode; } return null; }
-  // 上の線：5つに区切って、今の画面の所まで黄色。飛行機は今の画面の位置
-  function progAt(i){
-    var W = document.documentElement.clientWidth, x = (i + .5) / IDS.length * W;
-    pbar.style.width = ((i + 1) / IDS.length * 100).toFixed(1) + '%';
-    if (pjet) pjet.style.left = (x - 9).toFixed(1) + 'px';
-    return x;
-  }
   for (var k = 1; k < IDS.length; k++) { var seg = document.createElement('i'); seg.className = 'prog-seg'; seg.style.left = (k / IDS.length * 100) + '%'; prog.appendChild(seg); }
   function render(id){
     for (var i = 0; i < IDS.length; i++) { var sc = el(IDS[i]); if (sc) sc.className = IDS[i] === id ? 'scr on' : 'scr'; }
     var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
-    cur = id; progAt(IDS.indexOf(id));
-    if (id === 'home' && window.heroStart) setTimeout(window.heroStart, 50);
+    cur = id;
+    setTf(pbar, 'scaleX(' + ((IDS.indexOf(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
+    if (window.jetGo) window.jetGo(IDS.indexOf(id));
     if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
-    if (window.requestAnimationFrame) requestAnimationFrame(function(){ window.dispatchEvent(document.createEvent('Event').initEvent ? (function(){ var e = document.createEvent('Event'); e.initEvent('resize', true, false); return e; })() : new Event('resize')); });
   }
-  // 切りかえの動き：上の線の飛行機が、押したボタンへ飛び（黄色い飛行機雲）、次の画面が出てから新しい位置へ戻る
-  function fly(toId, btn, done){
-    if (STILL2 || !fsvg || !btn) { done(); return; }
-    var W = document.documentElement.clientWidth, H = window.innerHeight, b = btn.getBoundingClientRect();
-    fsvg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); fsvg.setAttribute('class', 'fly-jet on');
-    var x0 = parseFloat(pjet.style.left || '0') + 9, y0 = 68, x1 = b.left + b.width / 2, y1 = b.top + 10, x2 = (IDS.indexOf(toId) + .5) / IDS.length * W, y2 = 68;
-    if (pjet) pjet.style.visibility = 'hidden';
-    var pts = [];
-    function seg(a, b2, c, ms, next){
-      tween(ms, function(u){
-        var av = 1 - u, x = av * av * a[0] + 2 * av * u * b2[0] + u * u * c[0], y = av * av * a[1] + 2 * av * u * b2[1] + u * u * c[1];
-        var dx = 2 * av * (b2[0] - a[0]) + 2 * u * (c[0] - b2[0]), dy = 2 * av * (b2[1] - a[1]) + 2 * u * (c[1] - b2[1]);
-        fplane.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(.6)');
-        if (pts.length > 40) pts.shift(); pts.push([x, y]);
-        var d = ''; for (var i = 0; i < pts.length; i++) d += (i ? ' L' : 'M') + pts[i][0].toFixed(1) + ' ' + pts[i][1].toFixed(1); ftrail.setAttribute('d', d);
-      }, next, easeInOut);
-    }
-    seg([x0, y0], [(x0 + x1) / 2 + 60, (y0 + y1) / 2], [x1, y1], 420, function(){
-      done();
-      seg([x1, y1], [(x1 + x2) / 2 - 60, (y1 + y2) / 2], [x2, y2], 420, function(){ fsvg.setAttribute('class', 'fly-jet'); if (pjet) pjet.style.visibility = ''; });
-    });
-  }
-  function go(id, push, btn){
+  function go(id, push){
     if (IDS.indexOf(id) < 0) id = 'home';
     if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
     if (id === cur) return;
-    if (busy) return; busy = true;
-    fly(id, btn, function(){ render(id); window.scrollTo(0, 0); busy = false; });
+    render(id); window.scrollTo(0, 0);
   }
   // ページの中のリンク（#price-zero・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
   document.addEventListener('click', function(e){
@@ -1244,12 +1205,12 @@ function revealAll(items, gap, each, done){
     var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;
     e.preventDefault();
     var id = h.slice(1);
-    if (!id) { go('home', true, bar.querySelector('[data-scr=home]')); return; }
-    if (IDS.indexOf(id) >= 0) { go(id, true, bar.querySelector('[data-scr=' + id + ']')); return; }
+    if (!id) { go('home', true); return; }
+    if (IDS.indexOf(id) >= 0) { go(id, true); return; }
     var target = el(id); if (!target) return;
     var sid = screenOf(target) || cur;
-    var after = function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } };
-    if (sid !== cur) { go(sid, true, bar.querySelector('[data-scr=' + sid + ']')); setTimeout(after, STILL2 ? 30 : 500); } else after();
+    if (sid !== cur) go(sid, true);
+    setTimeout(function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } }, 30);
   });
   window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (IDS.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
   // 最初の画面：URL の # で決める（#option のような中の場所なら、その画面を出してから開く）
@@ -1257,51 +1218,60 @@ function revealAll(items, gap, each, done){
   if (IDS.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
   render(first);
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
-  window.addEventListener('resize', function(){ progAt(IDS.indexOf(cur)); });
+  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
 })();
-</script>
-<script>
-// ===== 最初：飛行機がゆっくり上昇しながら横切る（離陸のイメージ。約2.4秒）。見出し・説明・ボタンは飛行機を待たず 0.5 秒以内に出す =====
+// ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を、ゆっくり一定の速さ（1秒に 60px）で飛ぶ =====
+// 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
+// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中。文字やボタンの上には来ない）。折り返しは半円を描いて、機首は進む向きに
+// 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
-  var hero = document.querySelector('.hero'), svg = document.getElementById('hero-plane'), jet = document.getElementById('hero-jet'), trail = document.getElementById('hero-trail');
-  var copy = document.getElementById('hero-copy'), items = copy.querySelectorAll('.rv');
-  if (!svg || !jet) return;
-  var show = revealAll(items, 40); // 5つを 40ms ずつずらして、各 420ms → 全部で約 0.6 秒。最初の見出しは 0.4 秒で出る
-  if (STILL) return; // 動きなし：飛行機は出さず、文はそのまま
-  var W, H, p0, p1, p2, sc, started = false;
-  function pt(u){ var a = 1 - u; return [a * a * p0[0] + 2 * a * u * p1[0] + u * u * p2[0], a * a * p0[1] + 2 * a * u * p1[1] + u * u * p2[1]]; }
-  function setup(){
-    var r = hero.getBoundingClientRect(); W = Math.round(r.width); H = Math.round(r.height);
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px';
-    var mob = W < 760;
-    sc = mob ? .8 : 1.4;
-    // 左の下の外から、ゆっくり上がりながら右上の外へ（文のうしろを横切る）
-    p0 = [-70, H * .86]; p2 = [W + 70, H * .1]; p1 = [W * .55, H * .9];
+  var jet = document.getElementById('nav-jet'); if (!jet) return;
+  var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60;
+  var pos = { x: -80, y: Y_R, a: 0 }, path = [], last = null, raf = 0;
+  function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
+  function apply(){ setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg)'); }
+  function heading(){ return (pos.a > 90 || pos.a < -90) ? -1 : 1; } // 今の向き：1 右、-1 左
+  // いまの位置・向きから目標の x まで、なめらかな道筋を作る
+  function plan(tx){
+    path = [];
+    var dir = heading(), need = tx >= pos.x ? 1 : -1, y0 = pos.y, y1 = need > 0 ? Y_R : Y_L, i;
+    if (Math.abs(tx - pos.x) < 1 && Math.abs(y1 - y0) < 1) return;
+    if (dir !== need) {
+      // 折り返し：進んでいる方へふくらむ半円で、もう一方の高さへ（向きが 180 度なめらかに変わる）
+      var r = Math.abs(y1 - y0) / 2 || R, n = 16;
+      for (i = 1; i <= n; i++) { var t = Math.PI * i / n; path.push([pos.x + dir * Math.sin(t) * r, y0 + (y1 - y0) / 2 * (1 - Math.cos(t))]); }
+    } else if (Math.abs(y1 - y0) > 1) {
+      // 同じ向きのまま高さだけ違うとき：ゆるい S 字で高さを合わせる
+      var n2 = 12, len = Math.min(80, Math.abs(tx - pos.x) * .5);
+      for (i = 1; i <= n2; i++) { var u = i / n2; path.push([pos.x + need * len * u, y0 + (y1 - y0) * (u * u * (3 - 2 * u))]); }
+    }
+    path.push([tx, y1]);
   }
-  function draw(u){
-    var p = pt(u), q = pt(Math.min(1, u + .01)), a = Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI;
-    jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + a.toFixed(1) + ') scale(' + sc + ')');
-    // うしろに黄色い飛行機雲（通った所まで。飛び去ったあとも薄く残る）
-    var d = 'M' + pt(0)[0].toFixed(1) + ' ' + pt(0)[1].toFixed(1), i, n = Math.max(2, Math.round(u * 30));
-    for (i = 1; i <= n; i++) { var t = pt(u * i / n); d += ' L' + t[0].toFixed(1) + ' ' + t[1].toFixed(1); }
-    trail.setAttribute('d', d);
+  function step(ts){
+    raf = 0;
+    if (last === null) last = ts;
+    var d = SPEED * Math.min(50, ts - last) / 1000; last = ts;
+    while (d > 0 && path.length) {
+      var p = path[0], dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
+      if (L < .01) { path.shift(); continue; }
+      var ang = Math.atan2(dy, dx) * 180 / Math.PI, da = ang - pos.a;
+      while (da > 180) da -= 360; while (da < -180) da += 360;
+      pos.a += da * Math.min(1, d / 6); // 向きは進む方向へ少しずつ（6px 進むあいだに合わせる）
+      if (L <= d) { pos.x = p[0]; pos.y = p[1]; d -= L; path.shift(); }
+      else { pos.x += dx / L * d; pos.y += dy / L * d; d = 0; }
+    }
+    apply();
+    if (path.length) raf = requestAnimationFrame(step); else last = null;
   }
-  setup(); draw(0);
-  svg.setAttribute('class', 'hero-plane on');
-  function go(){
-    if (started) return; started = true;
-    show();
-    tween(2400, draw, function(){ trail.style.opacity = '.35'; jet.style.display = 'none'; }, function(u){ return u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; });
-  }
-  window.heroStart = go;
-  if (document.body.className.indexOf('switch') < 0) {
-    if (document.hidden) document.addEventListener('visibilitychange', function v(){ if (!document.hidden) { document.removeEventListener('visibilitychange', v); go(); } });
-    else if (document.readyState === 'complete') setTimeout(go, 100); else window.addEventListener('load', function(){ setTimeout(go, 100); });
-  }
-  // 念のため：4秒たっても始まっていなければ（裏で開いたままなど）、文だけは出しておく
-  setTimeout(function(){ if (!started) { started = true; draw(1); jet.style.display = 'none'; show(); } }, 4000);
-  var lastW = W, tm;
-  window.addEventListener('resize', function(){ clearTimeout(tm); tm = setTimeout(function(){ var w = Math.round(hero.getBoundingClientRect().width); if (w === lastW) return; lastW = w; setup(); draw(1); }, 200); });
+  window.jetGo = function(i){
+    var tx = xOf(i);
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; path = []; apply(); return; } // 動きなし：その画面の位置に止めて置く
+    plan(tx);
+    if (!raf && path.length) { last = null; raf = requestAnimationFrame(step); }
+  };
+  apply();
+  window.jetGo(['home', 'dekiru', 'ryokin', 'nagare', 'soudan'].indexOf(document.querySelector('.scr.on') ? document.querySelector('.scr.on').id : 'home'));
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && path.length && !raf) { last = null; raf = requestAnimationFrame(step); } });
 })();
 </script>
 <script>
