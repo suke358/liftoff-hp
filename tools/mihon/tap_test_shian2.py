@@ -9,7 +9,7 @@ headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで�
   2. python3 tools/mihon/tap_test_shian2.py             … このファイル。入り方（4秒待つ）→ 料金→ホーム→相談→できること→相談 と押して、
                                                            2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
   3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
-  3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=colore で店名が入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
+  3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=〇〇 の文字がそのまま店名に入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
   4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
   引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
 """
@@ -99,7 +99,7 @@ try:
     NAMES = {'home': 'ホーム', 'ryokin': '料金', 'soudan': '相談', 'dekiru': 'できること', 'nagare': '流れ'}
     if mode == 'irai':
         # 修正依頼：?shop=colore 付きで開き直す
-        call('Page.navigate', url=URL + ('&' if '?' in URL else '?') + 'shop=colore'); time.sleep(4.2)
+        call('Page.navigate', url=URL + ('&' if '?' in URL else '?') + 'shop=colore'); time.sleep(4.2)  # ?shop= の文字がそのまま店名の欄に入る
         d = state('開いて4秒（ホーム）'); allok = d['left'] == 0 and not d['entry']
         # ホームの帯を本当に押す
         rect = json.loads(js("JSON.stringify(document.getElementById('irai-band').getBoundingClientRect())"))
@@ -127,7 +127,7 @@ try:
         shot('修正依頼_2_メールを作る（飛行機が飛んでいる所）', 0, 844)
         time.sleep(1.2); m = js("document.getElementById('irai-msg').textContent"); href = js('window.iraiLastMailto') or ''
         import urllib.parse; dec = urllib.parse.unquote(href)
-        ok2 = flying and 'メールの画面を開きます' in m and dec.startswith('mailto:liftoff.358@gmail.com?subject=ホームページの修正のご依頼（colore）') and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
+        ok2 = flying and 'メールの画面を開きます' in m and dec.startswith('mailto:liftoff.358@gmail.com?subject=ホームページの修正のご依頼&body=お店：colore') and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
         print('   飛行機が飛んだ=%s 文=%s' % (flying, m)); print('   メール: %s' % dec.replace('\n', ' / ')[:200])
         shot('修正依頼_3_メールの文ができた', 0, 844)
         print('全部:', 'OK' if allok and ok1 and shopv == 'colore' and ok2 else 'NG')

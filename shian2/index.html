@@ -1289,20 +1289,21 @@ function revealAll(items, gap, each, done){
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
   window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(tabIndex(cur)); });
 })();
-// ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名の頭は今までと同じ「ホームページの修正のご依頼」） =====
-// URL に ?shop=colore のように付いていたら、お店の名前を最初から入れる（下の SHOPS の表で shop → 店名。お店が増えたらここに足す）
+// ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名は今までと同じ「ホームページの修正のご依頼」。店名は本文の1行目） =====
+// URL に ?shop=〇〇 のように付いていたら、その文字をそのままお店の名前の欄に入れる（日本語も可。実在のお店の名前はソースに書かない。長すぎる・おかしな文字は入れない）
 (function(){
   var form = document.getElementById('irai-form'); if (!form) return;
-  var SHOPS = { colore: 'colore' };
   var MAIL = 'liftoff.358@gmail.com', SUBJECT_HEAD = 'ホームページの修正のご依頼';
   var shop = document.getElementById('irai-shop'), msg = document.getElementById('irai-msg'), btn = document.getElementById('irai-btn'), box = document.getElementById('irai-box');
-  var m = /[?&]shop=([^&#]+)/.exec(location.search || ''); if (m) { var k = decodeURIComponent(m[1]); shop.value = SHOPS[k] || k; }
+  var m = /[?&]shop=([^&#]+)/.exec(location.search || '');
+  if (m) { var k = ''; try { k = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (err) { k = ''; }
+    k = k.replace(/[\x00-\x1f<>"'`\\]/g, '').replace(/^\s+|\s+$/g, ''); if (k.length > 40) k = ''; shop.value = k; }
   function build(){
     var what = [], els = form.querySelectorAll('input[name=what]'), i;
     for (i = 0; i < els.length; i++) if (els[i].checked) what.push(els[i].value);
     var name = shop.value.replace(/^\s+|\s+$/g, ''), note = document.getElementById('irai-note-in').value.replace(/^\s+|\s+$/g, '');
     var body = 'お店：' + name + '\n直したい所：' + (what.length ? what.join('、') : '（未選択）') + '\nひと言：' + (note || '（なし）') + '\n\n写真があるときは、このメールに付けて送ってください。';
-    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent(SUBJECT_HEAD + '（' + name + '）') + '&body=' + encodeURIComponent(body);
+    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent(SUBJECT_HEAD) + '&body=' + encodeURIComponent(body);
   }
   // 送るときの飛行機：相談のフォームと同じ動き（右上へ飛んで黄色い飛行機雲）。動きを減らす設定の人には飛ばさない
   function fly(done){
