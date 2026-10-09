@@ -31,6 +31,8 @@ with sync_playwright() as pw:
     browser = pw.webkit.launch()
     ctx = browser.new_context(**iphone)
     page = ctx.new_page()
+    # 「メールを作る」の mailto: を外に渡さない（Mac のメールアプリが開かないように。この道具は押さないが、念のため）
+    page.add_init_script("window.iraiOpenMail = function(href){ window.__mailto = href; };")
     t0 = time.time()
     page.goto(URL, wait_until='commit')
     results = []

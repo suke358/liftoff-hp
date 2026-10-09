@@ -10,7 +10,7 @@ headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで�
                                                            2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
   3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
   3''. python3 tools/mihon/tap_test_shian2.py fit       … 幅 320・390・1280 で、開いた直後と ホーム→料金→ホーム のあとに「帯の下と見出しの間 ≥ 16px」か（実機は ?debug=1 で数字を見る）
-  3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=〇〇 の文字がそのまま店名に入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛んでメールの文ができるか
+  3'. python3 tools/mihon/tap_test_shian2.py irai       … 修正依頼：?shop=〇〇 の文字がそのまま店名に入る・ホームの帯を押すと #irai（飛行機はホームの位置）・「メールを作る」で飛行機が飛び、開こうとしたメール（宛先・件名・本文1行目）が正しいか（mailto: は横取りして、メールアプリは開かない）
   4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
   引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
 """
@@ -77,6 +77,8 @@ try:
         return r.get('result', {}).get('value')
 
     call('Page.enable'); call('Runtime.enable')
+    # 「メールを作る」の mailto: を外に渡さない（Mac のメールアプリが開かないように）。開こうとした宛先・件名・本文を window.__mailto に記録するだけ
+    call('Page.addScriptToEvaluateOnNewDocument', source="window.iraiOpenMail = function(href){ window.__mailto = href; };")
     call('Emulation.setDeviceMetricsOverride', width=390, height=844, deviceScaleFactor=1, mobile=True)
     call('Page.navigate', url=URL)
     time.sleep(1.0)
@@ -144,10 +146,11 @@ try:
         call('Input.dispatchMouseEvent', type='mouseReleased', x=x, y=y, button='left', clickCount=1)
         time.sleep(0.5); flying = 'on' in (js("document.getElementById('irai-plane').getAttribute('class')") or '')
         shot('修正依頼_2_メールを作る（飛行機が飛んでいる所）', 0, 844)
-        time.sleep(1.2); m = js("document.getElementById('irai-msg').textContent"); href = js('window.iraiLastMailto') or ''
+        time.sleep(1.6); m = js("document.getElementById('irai-msg').textContent"); href = js('window.__mailto') or ''
         import urllib.parse; dec = urllib.parse.unquote(href)
-        ok2 = flying and 'メールの画面を開きます' in m and dec.startswith('mailto:liftoff.358@gmail.com?subject=ホームページの修正のご依頼&body=お店：colore') and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
-        print('   飛行機が飛んだ=%s 文=%s' % (flying, m)); print('   メール: %s' % dec.replace('\n', ' / ')[:200])
+        addr_ok = dec.startswith('mailto:liftoff.358@gmail.com?'); subj_ok = 'subject=ホームページの修正のご依頼&' in dec; body_ok = '&body=お店：colore\n' in dec
+        ok2 = flying and 'メールの画面を開きます' in m and addr_ok and subj_ok and body_ok and '直したい所：写真' in dec and 'ひと言：来週の水曜はお休みにします' in dec
+        print('   飛行機が飛んだ=%s 文=%s' % (flying, m)); print('   開こうとしたメール（横取り。アプリは開かない）: 宛先=%s 件名=%s 本文1行目=%s' % ('OK' if addr_ok else 'NG', 'OK' if subj_ok else 'NG', 'OK' if body_ok else 'NG')); print('   %s' % dec.replace('\n', ' / ')[:200])
         shot('修正依頼_3_メールの文ができた', 0, 844)
         # 「メールが開かないときは」：押したときだけ宛先と「コピー」が出て、店名が入る。コピーを押すと「コピーしました」
         call('Browser.grantPermissions', permissions=['clipboardReadWrite', 'clipboardSanitizedWrite'])
