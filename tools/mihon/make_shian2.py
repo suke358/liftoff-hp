@@ -17,6 +17,9 @@ import re, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, 'shian', 'index.html')
 DST = os.path.join(ROOT, 'shian2', 'index.html')
+# --top を付けると、本番のトップ（index.html）用に作る（2026/10/10 決定：shian2 を本番に入れかえ）。道のり（../）・og:url・canonical・注釈をトップ用に
+TOP = '--top' in sys.argv
+if TOP: DST = os.path.join(ROOT, 'index.html')
 
 # 画面の割り当て（左から順）。値は shian の <section> の id か class
 SCREENS = [
@@ -539,6 +542,13 @@ must(anchor, js + '\n' + anchor)
 # 最初の画面の飛行機は、切りかえの JS が出す（render → jetGo）。切りかえの JS は jetGo より前に動くので、最初の1回だけあとから呼ぶ
 # （最初の1回の jetGo は、飛行機の JS の中で呼ぶ）
 
+if TOP:
+    s = re.sub(r'(src|href)="\.\./(img/|samples/)', r'\1="\2', s)
+    must('content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"', 'content="https://liftoff-hp.liftoff-358.workers.dev/"')
+    must('<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">', '<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">\n<link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/">')
+    must('<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->',
+         '<!-- 本番のトップ（2026/10/10 に切りかえ式 shian2 を本番に入れかえた。前の版は v5/）。tools/mihon/make_shian2.py --top が shian/ から作る。直すときは shian/ か、その道具を直して作り直す。公開準備ができるまで検索に出さない（noindex。本公開時に外す） -->')
+    if '../' in s.replace('../samples', '').replace('../img', ''): print('注意：../ が残っている', s.count('../'))
 os.makedirs(os.path.dirname(DST), exist_ok=True)
 open(DST, 'w', encoding='utf-8').write(s)
 print('作った:', os.path.relpath(DST, ROOT), '画面', len(SCREENS), '／ section', len(secs))
