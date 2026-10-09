@@ -1,12 +1,27 @@
 #!/usr/bin/env python3
-"""headless Chrome を DevTools（CDP）でつないで、本当にタブを押して飛行機の位置を読む
-（jetSim・jetPose は使わない。requestAnimationFrame は本物が走る）
-使い方: cdp_test.py <ページのURL> <画像を置くフォルダ>
+"""shian2（切りかえ式）の飛行機を、本当にタブを押して確かめる  2026/10/10 作成
+
+headless Chrome を DevTools（CDP）でつなぎ、下のタブをマウスで本当に押して、requestAnimationFrame を本物で走らせたまま
+飛行機の位置（window.jetState()）を読む。jetSim・jetPose のような「JS で置く」確認は使わない。
+
+公開前チェック（マニュアル 17）での使い方：shian2/ を直して push する前に
+  1. python3 tools/mihon/make_shian2.py                 … shian/ から shian2/ を作り直す
+  2. python3 tools/mihon/tap_test_shian2.py             … このファイル。入り方（4秒待つ）→ 料金→ホーム→相談→できること→相談 と押して、
+                                                           2秒後に「その画面に切りかわった・タブの位置で止まった・背中が上（右向き a=0／左向き a=180）・残り 0」を確かめる
+  3. python3 tools/mihon/tap_test_shian2.py early       … 入り方の途中（1秒）で料金を押しても、入り方を終えてから料金の位置に着くか
+  4. 最後の行が「全部: OK」「結果: OK」なら合格。画像は ~/src/_確認画像/自社_<日付>_shian2_タブを押す/ に残る（git の外）
+  引数：python3 tools/mihon/tap_test_shian2.py [normal|early] [ページのURL] [画像を置くフォルダ]
 """
 import sys, os, json, time, socket, base64, subprocess, urllib.request, struct
 
 CH = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-URL, OUT = sys.argv[1], sys.argv[2]
+import datetime
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+args = [a for a in sys.argv[1:]]
+mode = args[0] if args and args[0] in ('normal', 'early') else 'normal'
+rest = [a for a in args if a not in ('normal', 'early')]
+URL = rest[0] if rest else 'file://' + os.path.join(ROOT, 'shian2', 'index.html')
+OUT = rest[1] if len(rest) > 1 else os.path.expanduser('~/src/_確認画像/自社_%s_shian2_タブを押す' % datetime.date.today().strftime('%Y%m%d'))
 os.makedirs(OUT, exist_ok=True)
 PORT = 9333
 prof = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chrome-prof')
@@ -81,22 +96,21 @@ try:
         return js("document.querySelector('.scr.on').id")
 
     NAMES = {'home': 'ホーム', 'ryokin': '料金', 'soudan': '相談', 'dekiru': 'できること', 'nagare': '流れ'}
-    mode = sys.argv[3] if len(sys.argv) > 3 else 'normal'
     if mode == 'early':
         state('開いて1秒（入り方の途中）'); shot('途中押し_0_開いて1秒', 0, 844)
         tap('ryokin'); print('→ 1秒の時点で 料金 を押した。画面=', scr())
         time.sleep(1.0); state('押して1秒後'); shot('途中押し_1_押して1秒後', 0, 844)
-        time.sleep(6.0); d = state('押して7秒後'); shot('途中押し_2_押して7秒後', 0, 130)
+        time.sleep(4.0); d = state('押して5秒後'); shot('途中押し_2_押して5秒後', 0, 130)
         ok = d['left'] == 0 and abs(d['x'] - 195) < 2 and d['dir'] == 1 and not d['entry']
-        print('結果:', 'OK' if ok else 'NG', '（料金の位置 195・右向き・残り 0 か）')
+        print('結果:', 'OK' if ok else 'NG', '（入り方3秒＋移動1.5秒のあと、料金の位置 195・右向き・残り 0 か）')
     else:
         time.sleep(3.2)
         d = state('開いて4秒（入り方が終わった）'); shot('0_開いて4秒_ホーム', 0, 130)
         allok = d['left'] == 0 and not d['entry']
         for i, s in enumerate(['ryokin', 'home', 'soudan', 'dekiru', 'soudan']):
             tap(s); time.sleep(0.1); sc = scr()
-            time.sleep(6.0)
-            d = state('%s を押して6秒後' % NAMES[s])
+            time.sleep(2.0)
+            d = state('%s を押して2秒後' % NAMES[s])
             tx = {'home': 39, 'dekiru': 117, 'ryokin': 195, 'nagare': 273, 'soudan': 351}[s]
             want_dir = 1 if d['x'] >= 0 and s in ('ryokin', 'soudan') else -1
             ok = sc == s and d['left'] == 0 and abs(d['x'] - tx) < 2 and d['dir'] == want_dir and (d['a'] == 0 if want_dir == 1 else abs(d['a']) == 180)

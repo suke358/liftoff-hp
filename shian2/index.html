@@ -1223,7 +1223,7 @@ function revealAll(items, gap, each, done){
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
   window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(IDS.indexOf(cur)); });
 })();
-// ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を、ゆっくり一定の速さ（1秒に 60px）で飛ぶ =====
+// ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を飛ぶ。切りかえの移動は「どこへでも約1.5秒で着く」（遠いほど速い。動き出しと止まる所は少しゆっくり。折り返しの旋回も1.5秒の中） =====
 // 開いたときは1回だけ、画面の右下の外から、画面の中ほどを通る大きなゆるいカーブで左上へ上がり、線に乗って今の画面のタブの位置で止まる（約3秒。動き出しと止まる所はゆっくり、途中は速め）
 // 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
 // 右へ飛ぶときは線の高さ、左へ飛ぶときはその 22px 下（余白の中）。折り返しは半円を描いて機首を 180 度なめらかに回す。向きは常に進む方向
@@ -1231,8 +1231,8 @@ function revealAll(items, gap, each, done){
 // 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
 (function(){
   var jet = document.getElementById('nav-jet'); if (!jet) return;
-  var N = 5, Y_R = 68, Y_L = 90, R = 11, SPEED = 60, ENTRY_MS = 3000;
-  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, speed = SPEED, turn = 0, moveDir = 1, entry = null;
+  var N = 5, Y_R = 68, Y_L = 90, R = 11, FLY_MS = 1500, ENTRY_MS = 3000;
+  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, turn = 0, moveDir = 1, entry = null, fly = null;
   function norm(a){ while (a > 180) a -= 360; while (a <= -180) a += 360; return a; }
   function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
   // 向き a で回したあと、上下を f 倍にする：右へ進んでいれば +（そのまま）、左へ進んでいれば -（上下反転＝背中が上・機首が進む向き）。
@@ -1266,22 +1266,28 @@ function revealAll(items, gap, each, done){
       for (i = 1; i <= n2; i++) { var u = i / n2; path.push([pos.x + need * len * u, y0 + (y1 - y0) * (u * u * (3 - 2 * u))]); }
     }
     path.push([tx, y1]);
+    // 道のりの長さを測って、約 FLY_MS で着くようにする（時間で進める）
+    var L = 0, prev = [pos.x, pos.y]; for (i = 0; i < path.length; i++) { L += Math.sqrt((path[i][0] - prev[0]) * (path[i][0] - prev[0]) + (path[i][1] - prev[1]) * (path[i][1] - prev[1])); prev = path[i]; }
+    fly = { t0: null, L: L, flown: 0 };
   }
-  // 線の上の飛び方：一定の速さで道筋をたどる（dt ミリ秒ぶん）
-  function advance(dt){
-    var d = speed * Math.min(50, dt) / 1000;
-    while (d > 0 && path.length) { var moved = moveTo(path[0], d); if (moved === 0) { path.shift(); continue; } d -= moved; if (moved < .01) break; if (Math.abs(path[0][0] - pos.x) < .01 && Math.abs(path[0][1] - pos.y) < .01) path.shift(); }
+  // 線の上の飛び方：時間で進める。進み具合は「ゆっくり→速め→ゆっくり」（smoothstep）。遠いほど速く飛んで、どこへでも約1.5秒
+  function advance(ts){
+    if (!fly) { path = []; return false; }
+    if (fly.t0 === null) fly.t0 = ts;
+    var u = Math.min(1, (ts - fly.t0) / FLY_MS), e = u * u * (3 - 2 * u), d = fly.L * e - fly.flown;
+    while (d > 0 && path.length) { var moved = moveTo(path[0], d); if (moved === 0) { path.shift(); continue; } fly.flown += moved; d -= moved; if (moved < .01) break; if (Math.abs(path[0][0] - pos.x) < .01 && Math.abs(path[0][1] - pos.y) < .01) path.shift(); }
     apply();
-    return path.length > 0;
+    if (u >= 1 || !path.length) { if (path.length) { var last2 = path[path.length - 1]; pos.x = last2[0]; pos.y = last2[1]; } path = []; fly = null; return false; }
+    return true;
   }
   function step(ts){
     raf = 0;
     if (last === null) last = ts;
     var more;
-    try { more = entry ? entryStep(ts) : advance(ts - last); }
+    try { more = entry ? entryStep(ts) : advance(ts); }
     catch (err) { if (entry) entryFinish(); path = []; more = false; }
     last = ts;
-    if (more) raf = requestAnimationFrame(step); else { last = null; speed = SPEED; turn = 0; if (!entry) pos.a = moveDir > 0 ? 0 : 180; apply(); } // 止まったら向きを線にぴったりそろえる
+    if (more) raf = requestAnimationFrame(step); else { last = null; turn = 0; if (!entry) pos.a = moveDir > 0 ? 0 : 180; apply(); } // 止まったら向きを線にぴったりそろえる
   }
   function kick(){ if (!raf) { last = null; raf = requestAnimationFrame(step); } }
   // ---- 開いたときの入り方：右下の外 → 画面の中ほど → 左上 → 線に乗って目標（3次ベジェ。長さで等分して、時間はゆっくり→速め→ゆっくり）
@@ -1314,15 +1320,15 @@ function revealAll(items, gap, each, done){
   }
   window.jetGo = function(i){
     var tx = xOf(i);
-    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; path = []; entry = null; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; path = []; fly = null; entry = null; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
     if (!entered) { entered = true; planEntry(tx); apply(); kick(); return; }
     if (entry) { entry.nextTx = tx; return; } // 入ってくる途中に切りかえた：入り方は最後まで飛んで、そのあと線にそって新しい行き先へ
     plan(tx); if (path.length) kick();
   };
   // 確かめる用（確認画像・JS での確認）
-  window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; entry = null; apply(); };
-  window.jetEntryPose = function(u, i){ planEntry(xOf(i || 0)); if (u >= 1) { entryFinish(); return; } var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; entry = null; path = []; apply(); }; // 置いたあとは入り方の動きを止める（画像を撮る用）
-  window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { advance(16); t += 16; } speed = SPEED; turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
+  window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; fly = null; entry = null; apply(); };
+  window.jetEntryPose = function(u, i){ planEntry(xOf(i || 0)); if (u >= 1) { entryFinish(); return; } var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; entry = null; path = []; fly = null; apply(); }; // 置いたあとは入り方の動きを止める（画像を撮る用）
+  window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { t += 16; advance(t); } turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
   window.jetTick = function(ts){ step(ts); return { raf: raf, last: last, entry: !!entry, left: path.length, x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a) }; }; // 確かめる用：描画の1コマを手で回す
   window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, dir: moveDir, turn: turn, left: path.length, entry: !!entry }; };
   apply();
