@@ -45,7 +45,7 @@ took=$(( $(date +%s) - start ))
 
 echo
 echo "確認用URL: $PREVIEW_URL"
-echo "  状態コード: $code（${took}秒後）"
+echo "  状態コード: ${code}（${took}秒後）"
 if [ "$same" = "yes" ]; then
   echo "  トップの中身: ✅ HEAD の index.html と同じ"
 elif [ "$code" = "200" ]; then
