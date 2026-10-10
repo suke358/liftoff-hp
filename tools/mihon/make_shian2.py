@@ -28,11 +28,12 @@ if TOP: DST = os.path.join(ROOT, 'index.html')
 
 # 画面の割り当て（左から順）。値は shian の <section> の id か class
 SCREENS = [
-    ('home',   'ホーム',     ['hero', 'worry', 'update', 'work']),
-    ('dekiru', 'できること', ['can', 'trust']),
+    # 2026/10/11 並びかえ（チャット決定）：ホームは「こんなこと」→ 見本（work）→「更新は」。「安心して」（trust）はできることから相談の上へ。前の並びは v6/
+    ('home',   'ホーム',     ['hero', 'worry', 'work', 'update']),
+    ('dekiru', 'できること', ['can']),
     ('ryokin', '料金',       ['price']),
     ('nagare', '流れ',       ['flow', 'faq', 'other']),
-    ('soudan', '相談',       ['contact']),
+    ('soudan', '相談',       ['trust', 'contact']),
 ]
 
 s = open(SRC, encoding='utf-8').read()
