@@ -12,6 +12,14 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">
 <link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/">
+<script>
+// アドレスバーに ?v=6 を足す（LINE に転送したとき新しいカードが出るように。カードを変えたら tools/mihon/make_shian2.py の CARD_V を次の数字に）
+(function(){ try {
+  var q = location.search || '';
+  if (/[?&]v=/.test(q)) return;
+  history.replaceState(history.state, '', location.pathname + (q ? q + '&' : '?') + 'v=6' + (location.hash || ''));
+} catch (e) {} })();
+</script>
 <meta property="og:image" content="https://liftoff-hp.liftoff-358.workers.dev/img/og-20261010.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
