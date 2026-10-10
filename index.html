@@ -1269,7 +1269,9 @@ function revealAll(items, gap, each, done){
     if (!band || !hero || !h1) return;
     hero.style.marginTop = '0px';
     if (cur !== 'home') return;
-    var y = window.pageYOffset || 0, need = (band.getBoundingClientRect().bottom + y) + 16 - (h1.getBoundingClientRect().top + y);
+    // 帯はヘッダーの中で sticky（画面に貼り付く）なので、帯の位置は画面から測ったまま使う（スクロール量 y を足さない）。見出しはページの上から測る（y を足す）
+    // （前は帯にも y を足していたので、スクロール中に resize が来ると y の分だけ余白が付き、iPhone でスクロールのたびに見出しの上に白い隙間が出ていた。2026/10/11）
+    var y = window.pageYOffset || 0, need = band.getBoundingClientRect().bottom + 16 - (h1.getBoundingClientRect().top + y);
     if (need > 0) hero.style.marginTop = Math.ceil(need) + 'px';
   }
   window.fitHome = fitHome;
@@ -1298,7 +1300,9 @@ function revealAll(items, gap, each, done){
   if (ALL.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
   render(first);
   if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
-  window.addEventListener('resize', function(){ if (window.jetGo) window.jetGo(tabIndex(cur)); fitHome(); });
+  // resize は横幅が変わったときだけ（iPhone はスクロールでブラウザのバーが出入りするたびに resize が出る。高さだけの変化では飛行機も見出しの位置も変わらない）
+  var lastW = document.documentElement.clientWidth;
+  window.addEventListener('resize', function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; if (window.jetGo) window.jetGo(tabIndex(cur)); fitHome(); });
   window.addEventListener('load', fitHome); setTimeout(fitHome, 300); // 書体が読み込まれて帯の高さが変わったあとにも合わせる
 })();
 // ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名は今までと同じ「ホームページの修正のご依頼」。店名は本文の1行目） =====
@@ -1602,7 +1606,8 @@ function revealAll(items, gap, each, done){
   function layout(){ setTf(track, 'translateX(' + pos + '%)'); uline(cur, 1); fit(); }
   layout();
   window.layoutPlan = layout;
-  window.addEventListener('resize', function(){ setTimeout(layout, 60); });
+  var lastW = document.documentElement.clientWidth; // 横幅が変わったときだけ並べ直す（iPhone はスクロールでバーが出入りするたびに resize が出るため）
+  window.addEventListener('resize', function(){ setTimeout(function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; layout(); }, 60); });
   window.addEventListener('load', layout);
   // タブの中のリンク（#price-web）に目次から来たとき
   if (location.hash === '#price-web') setTimeout(function(){ window.pickPlan(location.hash.slice(1)); }, 60);
@@ -1684,7 +1689,8 @@ function revealAll(items, gap, each, done){
   }
   setup(); cur = pts[0].slice(); seg = [cur.slice()]; put(cur, 0);
   q.addEventListener('change', update);
-  window.addEventListener('resize', function(){ setTimeout(function(){ setup(); cur = pts[stage].slice(); seg = [cur.slice()]; put(cur, 0); drawTrail(); }, 80); });
+  var lastW = document.documentElement.clientWidth; // 横幅が変わったときだけ作り直す（iPhone のバーの出入りによる resize では何もしない）
+  window.addEventListener('resize', function(){ setTimeout(function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; setup(); cur = pts[stage].slice(); seg = [cur.slice()]; put(cur, 0); drawTrail(); }, 80); });
 })();
 // ===== 上の細い進み具合の線。その上を小さな飛行機が進む（ページのどこまで読んだか） =====
 (function(){

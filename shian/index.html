@@ -1300,7 +1300,8 @@ function revealAll(items, gap, each, done){
   function layout(){ setTf(track, 'translateX(' + pos + '%)'); uline(cur, 1); fit(); }
   layout();
   window.layoutPlan = layout;
-  window.addEventListener('resize', function(){ setTimeout(layout, 60); });
+  var lastW = document.documentElement.clientWidth; // 横幅が変わったときだけ並べ直す（iPhone はスクロールでバーが出入りするたびに resize が出るため）
+  window.addEventListener('resize', function(){ setTimeout(function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; layout(); }, 60); });
   window.addEventListener('load', layout);
   // タブの中のリンク（#price-web）に目次から来たとき
   if (location.hash === '#price-web') setTimeout(function(){ window.pickPlan(location.hash.slice(1)); }, 60);
