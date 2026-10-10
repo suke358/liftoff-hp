@@ -13,6 +13,8 @@
   4. 画像・リンク先のファイルがあるか／ページ内リンク（#〜）の行き先があるか
   5. 画像の説明（alt）・外部リンクの rel・noindex・シェア用画像・文の折り返し
   6. 横にはみ出していないか（幅 320・360・390・768・1280）
+  7. LINE のカードの番号（?v=）が、アドレスバーに足す JS・canonical・og:url の3か所でそろっているか（2026/10/10 追加。欠け・ちがい → ❌、しくみ無し → ⚠️）
+     og:image の画像が同じ名前のまま中身だけ変わっていたら ⚠️（LINE が古い画像を覚えるので、名前も変える）
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -85,6 +87,43 @@ def check_css(path, css, base_line=0):
             found = True
             OLD_HITS.setdefault((path, name, fb), []).append(line)
     return found
+
+def check_card_v(src, rel):
+    """LINE のカードの番号（?v=）が3か所でそろっているか（2026/10/10 自社で再発防止。マニュアル 17）
+    iPhone の Safari の共有ボタンはアドレスバーではなく canonical の URL を LINE に送る。LINE はページの URL ごとにカードを覚えるので、
+    ①開いたときにアドレスバーに ?v= を足す JS ②canonical ③og:url の3つに同じ番号が要る。欠けている・番号がちがう → ❌。3つとも無い → ⚠️（しくみが入っていない）"""
+    def v_of(url): m = re.search(r'[?&]v=(\d+)', url or ''); return m.group(1) if m else None
+    js = re.search(r"replaceState\([^<]*?'v=(\d+)'", src)
+    can = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', src) or re.search(r'<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']', src)
+    ogu = re.search(r'property=["\']og:url["\'][^>]+content=["\']([^"\']+)', src)
+    got = {'アドレスバーの JS': js.group(1) if js else None, 'canonical': v_of(can.group(1)) if can else None, 'og:url': v_of(ogu.group(1)) if ogu else None}
+    if not any(got.values()):
+        add('⚠️', 'カード', f'{rel}：LINE のカードの番号（?v=）のしくみが入っていません（canonical・og:url・アドレスバーの JS。マニュアル 17）'); return
+    miss = [k for k, v in got.items() if v is None]
+    if miss: add('❌', 'カード', f'{rel}：LINE のカードの番号（?v=）が {"・".join(miss)} にありません（3か所そろえる。マニュアル 17）'); return
+    if len(set(got.values())) > 1:
+        add('❌', 'カード', f'{rel}：LINE のカードの番号（?v=）がそろっていません → ' + '／'.join(f'{k} v={v}' for k, v in got.items())); return
+    add('✅', 'カード', f'{rel}：LINE のカードの番号 ?v={js.group(1)}（アドレスバーの JS・canonical・og:url でそろっています）')
+
+def check_og_image_changed(root, img_path, rel):
+    """og:image の画像が、前のコミットから同じ名前のまま中身だけ変わっていたら ⚠️（まだコミットしていない変更も、直前のコミットでの変更も見る）"""
+    import subprocess
+    def git(*a):
+        try: return subprocess.run(['git', '-C', root] + list(a), capture_output=True, text=True)
+        except Exception: return None
+    r = git('rev-parse', '--is-inside-work-tree')
+    if not r or r.returncode != 0: return
+    p = os.path.relpath(img_path, root)
+    tracked = git('ls-files', '--error-unmatch', p)
+    if not tracked or tracked.returncode != 0: return  # 新しい名前の画像（まだ git に無い）→ 名前を変えてある
+    r = git('diff', '--quiet', 'HEAD', '--', p)
+    if r and r.returncode == 1:
+        add('⚠️', 'シェア', f'{rel}：og:image の画像 {p} が、同じ名前のまま中身だけ変わっています（コミット前）。LINE が古い画像を覚えるので、ファイル名も変える（例 og-日付b.jpg）'); return
+    r = git('diff', '--quiet', 'HEAD~1', 'HEAD', '--', p)
+    if r and r.returncode == 1:
+        was = git('cat-file', '-e', f'HEAD~1:{p}')
+        if was and was.returncode == 0:
+            add('⚠️', 'シェア', f'{rel}：og:image の画像 {p} が、直前のコミットで同じ名前のまま中身だけ変わっています。LINE が古い画像を覚えるので、ファイル名も変える（例 og-日付b.jpg）')
 
 def run_static(root):
     pages = sorted(glob.glob(os.path.join(root, '**', '*.html'), recursive=True))
@@ -161,6 +200,10 @@ def run_static(root):
                 cand = [os.path.join(root, u)] + [os.path.join(root, u.split('/', 3)[-1])] + [os.path.join(root, '/'.join(u.split('/')[-2:]))]
                 add('✅' if any(os.path.exists(c) for c in cand) else '⚠️', 'シェア', f'og:image：{u}' + ('' if any(os.path.exists(c) for c in cand) else '（ファイルが見つかりません）'))
                 if 'github.io' in u: add('⚠️', 'シェア', 'og:image が github.io を指しています（本公開のときに、独自ドメインか Cloudflare 版のURLに直す）')
+                # 同じ名前のまま中身だけ変わっていないか（LINE は画像の URL ごとに古い画像を覚えるので、変えるときは名前も変える。2026/10/10 自社で再発防止）
+                img_local = next((c for c in cand if os.path.exists(c)), None)
+                if img_local: check_og_image_changed(root, img_local, rel)
+            check_card_v(src, rel)
             if 'keep-all' in src and '<wbr>' in src: add('✅', '折り返し', f'言葉の切れ目で折り返す設定あり（<wbr> {src.count("<wbr>")} 個）')
             else: add('⚠️', '折り返し', '文の折り返しの調整（BudouX）がまだです（マニュアル 06）')
             soon = src.count('準備中')

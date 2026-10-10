@@ -14,6 +14,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   ・画像は設定に書いた場所（images/〜）に自分で入れる。ないときは「写真が入ります」の仮画像を入れる
   ・最後に check_site.py（公開前チェック）を自動で走らせる
 設定の書き方は templates/site_sample.json（山口造庭舎のデモ）を見る。分からない情報は書かない（空にすると、その行は出ない）
+  "url_base" … 公開URL（例 "https://〇〇.liftoff-358.workers.dev/"）。書くと og:url・canonical・LINE のカード画像（og_image）の URL が入る
+  "card_v"   … LINE のカードの番号（1から。url_base があるときだけ）。og:url・canonical・開いたときアドレスバーに足す ?v= の3か所に入る（2026/10/10 追加。マニュアル 17）。
+               カードの画像を変えたら、画像の名前を変え、card_v を次の数字にして作り直す（LINE はページの URL ごとにカードを覚えるため）
 
 部品（入れる／入れないを選べる。2026/10/9 追加）：設定に "parts": {...} を書く。全部入れた見本は templates/site_sample_parts.json
   "belt"    … 写真の帯（横にゆっくり流れる。さわると止まる。動きを減らす設定の人には流さない）
@@ -261,12 +264,26 @@ def build(c):
     # ---------- 頭 ----------
     desc = c.get('description', c.get('lead', ''))
     og = ''
+    card_js = ''
     if base:
-        og = f'''<meta property="og:url" content="{e(base)}">
+        # LINE のカードの番号（2026/10/10 自社で再発防止）：LINE はページの URL ごとにカードを覚える。iPhone の Safari の共有ボタンは canonical の URL を送るので、
+        # 設定の card_v（1か所）から、og:url・canonical・開いたときアドレスバーに足す JS の3つを作る。カードの画像を変えたら、画像の名前を変え、card_v を次の数字にして作り直す
+        card_v = int(c.get('card_v', 1))
+        og = f'''<meta property="og:url" content="{e(base)}?v={card_v}">
+<link rel="canonical" href="{e(base)}?v={card_v}">
 <meta property="og:image" content="{e(base + c.get('og_image','images/og.jpg'))}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">'''
+        card_js = f'''
+<!-- LINE のカードの番号 ?v={card_v}（設定の card_v。og:url・canonical・この JS の3か所でそろえる。カードの画像を変えたら、画像の名前を変えて card_v を次の数字に） -->
+<script>
+(function(){{ try {{
+  var q = location.search || '';
+  if (/[?&]v=/.test(q)) return;
+  history.replaceState(history.state, '', location.pathname + (q ? q + '&' : '?') + 'v={card_v}' + (location.hash || ''));
+}} catch (e) {{}} }})();
+</script>'''
     ld = {"@context": "https://schema.org", "@type": c.get('schema_type', 'LocalBusiness'), "name": name}
     if base: ld["url"] = base
     if tel: ld["telephone"] = '+81-' + tel.lstrip('0')
@@ -307,7 +324,7 @@ def build(c):
 <style>
 {css}
 </style>
-<script>document.documentElement.className = 'js';</script>
+<script>document.documentElement.className = 'js';</script>{card_js}
 </head>
 <body>
 <!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->
