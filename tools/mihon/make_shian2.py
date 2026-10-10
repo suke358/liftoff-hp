@@ -38,6 +38,12 @@ SCREENS = [
 
 s = open(SRC, encoding='utf-8').read()
 
+# ---- 見本の数（2026/10/11）：「業種ごとの見本（〇〇種）を見る」の数は、見本帳の元データ tools/mihon/samples_list.json の見本の数から自動で入れる（手で書かない）
+import json
+N_SAMPLES = len(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'samples_list.json'), encoding='utf-8'))['samples'])
+s, _n = re.subn(r'(業種ごとの<wbr>見本<wbr>（)\d+(種）)', lambda m: m.group(1) + str(N_SAMPLES) + m.group(2), s)
+if _n != 1: sys.exit('「業種ごとの見本（〇〇種）」が見つからない（shian/index.html）: ' + str(_n))
+
 def must(old, new, count=1):
     """必ずある文字列を置きかえる（なければ止まる。shian が変わったときに気づけるように）"""
     global s
