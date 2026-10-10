@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="../../img/favicon.png" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【前の版 2026/10/11】デザイン見本｜Lift-Off ホームページ制作</title>
+<meta name="description" content="Lift-Off ホームページ制作のデザイン見本です。同じ架空のお店で、雰囲気だけを変えています。">
+<!-- 公開準備ができるまで検索に出さない。本公開時に外す -->
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;900&display=swap" rel="stylesheet">
+<style>
+/* 言葉の切れ目で折り返す（ は BudouX で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
+/* 自社サイト（Lift-Off）と同じ色・文字 */
+:root{
+  --ink:#1B2A38;
+  --sea:#2F6F8F;
+  --sky:#E8F1F5;
+  --paper:#FFFFFF;
+  --signal:#F2C230;
+  --line:#C9D9E2;
+  --muted:#52677A;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:"BIZ UDPGothic",sans-serif;color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{width:min(1080px,100% - 40px);margin-left:auto;margin-right:auto;margin-inline:auto}
+h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-weight:900;letter-spacing:.02em}
+
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.logo{text-decoration:none;font-family:"Zen Kaku Gothic Antique",sans-serif;font-weight:900;font-size:22px;letter-spacing:.03em}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{height:40px;width:auto}
+.logo small{font-family:"BIZ UDPGothic";font-weight:400;font-size:12px;color:var(--muted);padding-left:10px;border-left:1px solid var(--line)}
+@media (max-width:420px){.logo small{display:none}}
+.back{font-size:15px;text-decoration:none;color:var(--sea);font-weight:700}
+
+.intro{padding:64px 0 40px}
+.intro .place{font-size:14px;color:var(--muted);margin-bottom:8px}
+.intro h1{font-size:clamp(30px,5vw,44px);margin-bottom:16px}
+.intro p.lead{color:var(--muted);max-width:40em}
+.points{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;padding:0;list-style:none}
+.points li{background:var(--sky);border-radius:999px;padding:6px 16px;font-size:15px}
+
+.list{display:grid;gap:40px;padding:24px 0 80px}
+.card{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;border:2px solid var(--ink);border-radius:20px;padding:28px;background:#fff}
+.card .shot{border-radius:12px;overflow:hidden;display:block;border:1px solid var(--line)}
+.card .shot img{width:100%;height:auto;transition:transform .3s}
+.card .shot:hover img{transform:scale(1.02)}
+.num{display:inline-block;background:var(--signal);font-weight:700;font-size:13px;padding:2px 12px;border-radius:6px;margin-bottom:10px}
+.card h2{font-size:clamp(22px,3vw,28px);margin-bottom:12px}
+.chips{display:flex;gap:6px;margin-bottom:14px}
+.chips span{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.card dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:15px;margin-bottom:22px}
+.card dt{color:var(--muted);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 26px;border:2px solid var(--ink);background:var(--ink);color:#fff;font-size:16px}
+.btn:hover{background:var(--sea);border-color:var(--sea)}
+@media (max-width:820px){.card{grid-template-columns:1fr;gap:22px;padding:18px}.btn{width:100%}}
+
+.howto{background:var(--sky);padding:64px 0}
+.howto .wrap{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}
+.howto h2{font-size:clamp(22px,3vw,28px);margin-bottom:14px}
+.howto ul{padding-left:1.2em;color:var(--ink)}
+.howto li{margin-bottom:6px}
+.qr{background:#fff;border-radius:16px;padding:16px;text-align:center;font-size:13px;color:var(--muted)}
+.qr img{width:180px;height:180px;margin:0 auto 6px}
+@media (max-width:820px){.howto .wrap{grid-template-columns:1fr}.qr{justify-self:center}}
+
+.foot{padding:40px 0;text-align:center;font-size:14px;color:var(--muted)}
+.foot a{color:var(--sea)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../../index.html" aria-label="Lift-Off トップへ"><img src="../../img/logo.svg" alt="Lift-Off" width="397" height="140"><small>ホームページ制作</small></a>
+    <a class="back" href="../../index.html#work">← トップにも<wbr>どる</a>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <div class="wrap">
+            <h1>デザイン見本</h1>
+      <p class="lead">見本1〜5は、<wbr>同じ<wbr>架空の<wbr>お店<wbr>（よもぎ蒸しサロン）で<wbr>雰囲気だけを<wbr>変えています。<wbr>見本6は、<wbr>手仕事の<wbr>お店向けに<wbr>架空の<wbr>造園屋さんで<wbr>作りました。<wbr>「この<wbr>感じが<wbr>いい」と<wbr>思う<wbr>ものを<wbr>選んでください。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。<wbr>いいところだけを<wbr>組み合わせる<wbr>こともできます。</p>
+      <ul class="points">
+        <li>スマホでも<wbr>そのまま<wbr>見られます</li>
+        <li>見本の<wbr>店名・住所・料金・写真は<wbr>架空です</li>
+      </ul>
+    </div>
+  </section>
+
+  <!--
+    見本を足すとき：
+    1. samples/ の中に新しいフォルダ（例：wafu）を作り、index.html を入れる（写真は ../img/ の「写真が入ります」画像を使う）
+    2. thumbs/ に一覧用の画像（1200×780）を入れる
+    3. 下の <article class="card"> をひとつコピーして、番号・名前・中身を書きかえる
+  -->
+  <div class="wrap list">
+
+    <article class="card">
+      <a class="shot" href="../homey/index.html"><img src="../thumbs/homey.jpg" alt="アットホームな見本の画面（パソコンとスマホ）" width="1200" height="780"></a>
+      <div>
+        <span class="num">見本 1</span>
+        <h2>アットホーム</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#24342b"></span><span style="background:#fe97b2"></span><span style="background:#c4a466"></span><span style="background:#faf5ee"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>やわらかい・あたたかい・親しみやすい</dd>
+          <dt>特徴</dt><dd>角の<wbr>丸い<wbr>写真、<wbr>ロゴの<wbr>♡を<wbr>見出しに。<wbr>ネット予約・LINE・SNSの<wbr>ボタンを<wbr>大きく</dd>
+          <dt>向いている<wbr>お店</dt><dd>サロン、<wbr>整体、<wbr>ネイル、<wbr>カフェ、<wbr>教室など、<wbr>常連さんとの<wbr>距離が<wbr>近い<wbr>お店</dd>
+        </dl>
+        <a class="btn" href="../homey/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../luxury/index.html"><img src="../thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 2</span>
+        <h2>ラグジュアリー</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1d2a23"></span><span style="background:#b89a5e"></span><span style="background:#eef0eb"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>上品・落ち着いた・<wbr>特別感</dd>
+          <dt>特徴</dt><dd>深い色と<wbr>金色、<wbr>縦書きの<wbr>見出し。<wbr>余白を<wbr>広く<wbr>とって、<wbr>ゆったり<wbr>見せる</dd>
+          <dt>向いている<wbr>お店</dt><dd>エステ、<wbr>プライベートサロン、<wbr>和食・割烹、<wbr>旅館など、<wbr>特別な<wbr>時間を<wbr>売る<wbr>お店</dd>
+        </dl>
+        <a class="btn" href="../luxury/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../pop/index.html"><img src="../thumbs/pop.jpg" alt="カラフルな見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 3</span>
+        <h2>カラフル</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#ee8aa2"></span><span style="background:#f2d24a"></span><span style="background:#7fae6a"></span><span style="background:#2e4634"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>明るい・元気・わかりやすい</dd>
+          <dt>特徴</dt><dd>白い<wbr>背景に<wbr>色の<wbr>四角を<wbr>重ねて、<wbr>手書き風の<wbr>見出し。<wbr>文字が<wbr>読みやすい</dd>
+          <dt>向いている<wbr>お店</dt><dd>子ども<wbr>向けの<wbr>教室、<wbr>パン屋、<wbr>雑貨屋、<wbr>地域の<wbr>お店など、<wbr>気軽に<wbr>来て<wbr>ほしい<wbr>お店</dd>
+        </dl>
+        <a class="btn" href="../pop/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../chic/index.html"><img src="../thumbs/chic.jpg" alt="シックな見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 4</span>
+        <h2>シック</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#141011"></span><span style="background:#c9a86e"></span><span style="background:#e89aae"></span><span style="background:#ece5d8"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>大人っぽい・落ち着いた・印象に<wbr>残る</dd>
+          <dt>特徴</dt><dd>黒い<wbr>背景に<wbr>金色の<wbr>文字。<wbr>ロゴを<wbr>真ん中に<wbr>大きく<wbr>置き、<wbr>絵や<wbr>写真に<wbr>頼らずに<wbr>見せる</dd>
+          <dt>向いている<wbr>お店</dt><dd>プライベートサロン、<wbr>バー、<wbr>美容室、<wbr>写真が<wbr>まだ<wbr>そろっていない<wbr>お店</dd>
+        </dl>
+        <a class="btn" href="../chic/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../photo/index.html"><img src="../thumbs/photo.jpg" alt="写真を大きく使った見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 5</span>
+        <h2>写真を<wbr>大きく<wbr>（フォトトップ）</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#141011"></span><span style="background:#c9a86e"></span><span style="background:#6b4a3a"></span><span style="background:#f3efe3"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>しっとり・雰囲気が<wbr>伝わる・印象に<wbr>残る</dd>
+          <dt>特徴</dt><dd>お店の<wbr>雰囲気の<wbr>写真を<wbr>大きく<wbr>使い、<wbr>見出しを<wbr>写真の<wbr>上に<wbr>重ねる。<wbr>パソコンでは<wbr>写真と<wbr>文字の<wbr>見開き</dd>
+          <dt>向いている<wbr>お店</dt><dd>お部屋や<wbr>料理など、<wbr>見せたい<wbr>写真が<wbr>ある<wbr>お店<wbr>（サロン、<wbr>カフェ、<wbr>宿など）</dd>
+        </dl>
+        <a class="btn" href="../photo/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../wa/index.html"><img src="../thumbs/wa.jpg" alt="和風・職人の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 6</span>
+        <h2>和風・職人</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#23221f"></span><span style="background:#3e5640"></span><span style="background:#a8432a"></span><span style="background:#f3eee3"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>落ち着いた・まじめ・手仕事の<wbr>確かさ</dd>
+          <dt>特徴</dt><dd>縦<wbr>書きの<wbr>見出しと、<wbr>朱色の<wbr>印。<wbr>作業の<wbr>前と<wbr>後を<wbr>並べる<wbr>施工例、<wbr>職人の<wbr>紹介、<wbr>下見から<wbr>支払いまでの<wbr>流れ</dd>
+          <dt>向いている<wbr>お店</dt><dd>造園、<wbr>大工・工務店、<wbr>畳、<wbr>左官、<wbr>和菓子など、<wbr>手仕事の<wbr>お店<wbr>（この<wbr>見本だけ、<wbr>架空の<wbr>造園屋さんです）</dd>
+        </dl>
+        <a class="btn" href="../wa/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../cafe/index.html"><img src="../thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 7</span>
+        <h2>喫茶・カフェ</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#2e2620"></span><span style="background:#b5683b"></span><span style="background:#d6a35c"></span><span style="background:#f8f3ec"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>落ち着いた・木の色・あたたかい</dd>
+          <dt>特徴</dt><dd>モーニング・ランチ・ケーキを写真つきで。営業時間・定休日・駐車場をすぐ分かるように</dd>
+          <dt>向いている<wbr>お店</dt><dd>喫茶店、カフェ、パン屋、定食屋、洋菓子店</dd>
+        </dl>
+        <a class="btn" href="../cafe/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../school/index.html"><img src="../thumbs/school.jpg" alt="教室・習いごとの見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 8</span>
+        <h2>教室・習いごと</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1f3550"></span><span style="background:#2f7fd1"></span><span style="background:#f2b84b"></span><span style="background:#f7fafd"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>明るい・わかりやすい・親しみやすい</dd>
+          <dt>特徴</dt><dd>クラスと月謝を並べ、体験レッスンへの入口を大きく。入会までの流れつき</dd>
+          <dt>向いている<wbr>お店</dt><dd>英会話、学習塾、ピアノ・書道・スポーツ教室</dd>
+        </dl>
+        <a class="btn" href="../school/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../reform/index.html"><img src="../thumbs/reform.jpg" alt="工務店・リフォームの見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 9</span>
+        <h2>工務店・リフォーム</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1d2a36"></span><span style="background:#c0662b"></span><span style="background:#2b5d8a"></span><span style="background:#f6f4f0"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>頼れる・きちんとした</dd>
+          <dt>特徴</dt><dd>仕事の内容と、下見からの流れ。料金は「下見のうえでお見積もり」</dd>
+          <dt>向いている<wbr>お店</dt><dd>工務店、リフォーム、水道・電気工事、塗装</dd>
+        </dl>
+        <a class="btn" href="../reform/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../hair/index.html"><img src="../thumbs/hair.jpg" alt="美容室の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 10</span>
+        <h2>美容室</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#232120"></span><span style="background:#8c7b6b"></span><span style="background:#c9a27e"></span><span style="background:#f5f3f0"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>静か・上品・大人っぽい</dd>
+          <dt>特徴</dt><dd>メニューと料金を見やすく。予約はLINE・電話へすぐ</dd>
+          <dt>向いている<wbr>お店</dt><dd>美容室、理容室、ネイル、まつげ</dd>
+        </dl>
+        <a class="btn" href="../hair/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../relax/index.html"><img src="../thumbs/relax.jpg" alt="整体の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 11</span>
+        <h2>整体</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#22393a"></span><span style="background:#4f8f86"></span><span style="background:#d9b26a"></span><span style="background:#f5f8f7"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>やさしい・安心できる</dd>
+          <dt>特徴</dt><dd>はじめての方の不安に答えるよくある質問。持病・妊娠中の方への案内</dd>
+          <dt>向いている<wbr>お店</dt><dd>整体、鍼灸、マッサージ、ヨガ教室</dd>
+        </dl>
+        <a class="btn" href="../relax/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../parts/index.html"><img src="../thumbs/parts.jpg" alt="部品入り（造園）の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 12</span>
+        <h2>部品入り<wbr>（造園）</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#23221f"></span><span style="background:#3e5640"></span><span style="background:#a8432a"></span><span style="background:#f3eee3"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>和風の<wbr>色で、<wbr>動きの<wbr>ある<wbr>部品を<wbr>5つ<wbr>入れた<wbr>見本</dd>
+          <dt>特徴</dt><dd>横に<wbr>流れる<wbr>写真の<wbr>帯、<wbr>つまみで<wbr>見比べる<wbr>作業の<wbr>前と後、<wbr>本数を<wbr>選ぶと<wbr>合計の<wbr>目安が<wbr>出る<wbr>料金、<wbr>施工例、<wbr>選んで<wbr>送るだけの<wbr>フォーム<wbr>（どれも<wbr>入れる・<wbr>入れないを<wbr>選べます）</dd>
+          <dt>向いている<wbr>お店</dt><dd>造園、<wbr>工務店・<wbr>リフォーム、<wbr>清掃など、<wbr>作業の<wbr>前と後を<wbr>見せたい<wbr>お店<wbr>（架空の<wbr>造園屋さん。<wbr>料金も<wbr>架空です）</dd>
+        </dl>
+        <a class="btn" href="../parts/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../izakaya/index.html"><img src="../thumbs/izakaya.jpg" alt="居酒屋・和食の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 13</span>
+        <h2>居酒屋・和食</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1f2430"></span><span style="background:#b8432e"></span><span style="background:#c9a85b"></span><span style="background:#f6f2ea"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>落ち着いた・藍と<wbr>朱・あたたかい</dd>
+          <dt>特徴</dt><dd>お品書きを<wbr>写真つきで。<wbr>コースは<wbr>「2名さまから」、<wbr>宴会の<wbr>人数を<wbr>よく<wbr>ある<wbr>質問に</dd>
+          <dt>向いている<wbr>お店</dt><dd>居酒屋、<wbr>和食、<wbr>割烹、<wbr>焼き鳥、<wbr>定食屋</dd>
+        </dl>
+        <a class="btn" href="../izakaya/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../bakery/index.html"><img src="../thumbs/bakery.jpg" alt="パン屋・洋菓子の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 14</span>
+        <h2>パン屋・洋菓子</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#3b2e24"></span><span style="background:#c98a3a"></span><span style="background:#7a9a5a"></span><span style="background:#fbf7f0"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>焼きたての<wbr>色・やさしい・親しみやすい</dd>
+          <dt>特徴</dt><dd>パンと<wbr>焼き菓子を<wbr>写真つきで。<wbr>ケーキは<wbr>「3日前までに<wbr>ご予約」、<wbr>取り<wbr>置きの<wbr>案内</dd>
+          <dt>向いている<wbr>お店</dt><dd>パン屋、<wbr>洋菓子店、<wbr>和菓子店、<wbr>お弁当・惣菜</dd>
+        </dl>
+        <a class="btn" href="../bakery/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../nail/index.html"><img src="../thumbs/nail.jpg" alt="ネイル・まつげの見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 15</span>
+        <h2>ネイル・まつげ</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#2d2628"></span><span style="background:#c47a8a"></span><span style="background:#b9a07a"></span><span style="background:#faf6f5"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>上品・<wbr>大人っぽい・落ち着いた</dd>
+          <dt>特徴</dt><dd>メニューと<wbr>料金を<wbr>見やすく。<wbr>目の<wbr>病気・治療中の<wbr>方への<wbr>案内を<wbr>ご予約の<wbr>前に</dd>
+          <dt>向いている<wbr>お店</dt><dd>ネイル、<wbr>まつげ、<wbr>エステ、<wbr>プライベートサロン</dd>
+        </dl>
+        <a class="btn" href="../nail/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../juku/index.html"><img src="../thumbs/juku.jpg" alt="学習塾の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 16</span>
+        <h2>学習塾</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1b2b40"></span><span style="background:#2f6fb5"></span><span style="background:#e9a23b"></span><span style="background:#f7f9fc"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>まじめ・<wbr>明るい・わかりやすい</dd>
+          <dt>特徴</dt><dd>コースと<wbr>月謝を<wbr>並べ、<wbr>無料の<wbr>体験授業への<wbr>入口を<wbr>大きく。<wbr>面談から<wbr>入塾までの<wbr>流れ</dd>
+          <dt>向いている<wbr>お店</dt><dd>学習塾、<wbr>英会話、<wbr>そろばん、<wbr>プログラミング教室</dd>
+        </dl>
+        <a class="btn" href="../juku/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../car/index.html"><img src="../thumbs/car.jpg" alt="自動車の整備・板金の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 17</span>
+        <h2>自動車の<wbr>整備・板金</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1e2328"></span><span style="background:#d9742b"></span><span style="background:#3b6ea5"></span><span style="background:#f5f4f1"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>頼れる・きちんとした・工場らしい</dd>
+          <dt>特徴</dt><dd>車検・点検・板金・タイヤ。<wbr>修理の<wbr>前と<wbr>後を<wbr>並べる<wbr>「修理の<wbr>例」と、<wbr>つまみで<wbr>見比べる<wbr>部品入り。<wbr>代車の<wbr>案内</dd>
+          <dt>向いている<wbr>お店</dt><dd>自動車整備、<wbr>板金塗装、<wbr>タイヤ店、<wbr>バイク店</dd>
+        </dl>
+        <a class="btn" href="../car/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../setsubi/index.html"><img src="../thumbs/setsubi.jpg" alt="電気工事・水道設備の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 18</span>
+        <h2>電気工事・水道設備</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1c2a35"></span><span style="background:#2d6b8f"></span><span style="background:#e0a627"></span><span style="background:#f6f6f3"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>頼れる・きちんとした・急ぎにも</dd>
+          <dt>特徴</dt><dd>コンセント1つからの<wbr>小さな<wbr>工事。<wbr>工事の<wbr>前と<wbr>後を<wbr>並べる<wbr>「工事の<wbr>例」と、<wbr>つまみで<wbr>見比べる<wbr>部品入り。<wbr>急な<wbr>水もれの<wbr>案内</dd>
+          <dt>向いている<wbr>お店</dt><dd>電気工事、<wbr>水道設備、<wbr>エアコン工事、<wbr>ガス設備</dd>
+        </dl>
+        <a class="btn" href="../setsubi/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../estate/index.html"><img src="../thumbs/estate.jpg" alt="不動産の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 19</span>
+        <h2>不動産</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1f2d28"></span><span style="background:#2f7a5a"></span><span style="background:#c9a35a"></span><span style="background:#f7f8f6"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>誠実・落ち着いた・相談しやすい</dd>
+          <dt>特徴</dt><dd>料金は<wbr>書かず<wbr>「先に<wbr>お見積もり」。<wbr>賃貸・売買・管理・<wbr>空き家の<wbr>相談を<wbr>同じ<wbr>重さで。<wbr>免許番号の<wbr>欄</dd>
+          <dt>向いている<wbr>お店</dt><dd>不動産、<wbr>賃貸管理、<wbr>司法書士・行政書士など<wbr>士業</dd>
+        </dl>
+        <a class="btn" href="../estate/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../farm/index.html"><img src="../thumbs/farm.jpg" alt="農家の直売所の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 20</span>
+        <h2>農家の直売所</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#26331f"></span><span style="background:#5a9a3c"></span><span style="background:#e8862e"></span><span style="background:#f8faf4"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>明るい・素朴・畑の<wbr>色</dd>
+          <dt>特徴</dt><dd>季節の<wbr>野菜・<wbr>お米・果物・加工品。<wbr>「とれた<wbr>分だけ」の<wbr>案内と、<wbr>入荷の<wbr>お知らせは<wbr>LINEで</dd>
+          <dt>向いている<wbr>お店</dt><dd>農家の<wbr>直売所、<wbr>八百屋、<wbr>果樹園、<wbr>養鶏・たまご</dd>
+        </dl>
+        <a class="btn" href="../farm/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../trimming/index.html"><img src="../thumbs/trimming.jpg" alt="ペットのトリミングの見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 21</span>
+        <h2>ペットの<wbr>トリミング</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#2f2a26"></span><span style="background:#e07b4a"></span><span style="background:#7fa88a"></span><span style="background:#fbf8f4"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>やさしい・あたたかい・親しみやすい</dd>
+          <dt>特徴</dt><dd>シャンプー・カット・部分ケア・送迎。<wbr>はじめての<wbr>子は<wbr>ワクチンの<wbr>証明書を、と<wbr>ご予約の<wbr>前に</dd>
+          <dt>向いている<wbr>お店</dt><dd>トリミング、<wbr>ペットホテル、<wbr>動物病院、<wbr>ドッグラン</dd>
+        </dl>
+        <a class="btn" href="../trimming/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../studio/index.html"><img src="../thumbs/studio.jpg" alt="写真館の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 22</span>
+        <h2>写真館</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#1f1d1b"></span><span style="background:#9a7b4f"></span><span style="background:#c9b07a"></span><span style="background:#f7f5f1"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>しっとり・上品・記念日らしい</dd>
+          <dt>特徴</dt><dd>七五三・成人式・家族写真・証明写真。<wbr>データと<wbr>台紙の<wbr>案内、<wbr>衣装の<wbr>持ち込みを<wbr>よく<wbr>ある<wbr>質問に</dd>
+          <dt>向いている<wbr>お店</dt><dd>写真館、<wbr>フォトスタジオ、<wbr>出張撮影、<wbr>着付け・貸衣装</dd>
+        </dl>
+        <a class="btn" href="../studio/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../shop/index.html"><img src="../thumbs/shop.jpg" alt="商品ページ（サロン）の見本の画面（パソコンとスマホ）" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">見本 23</span>
+        <h2>商品ページ<wbr>（サロン）</h2>
+        <div class="chips" aria-label="使っている色"><span style="background:#24342b"></span><span style="background:#fe97b2"></span><span style="background:#c4a466"></span><span style="background:#faf5ee"></span></div>
+        <dl>
+          <dt>雰囲気</dt><dd>やわらかい・<wbr>やさしい・<wbr>サロンらしい</dd>
+          <dt>特徴</dt><dd>ホームページの<wbr>中に<wbr>「商品」の<wbr>部分が<wbr>あり、<wbr>商品5点までを<wbr>写真・<wbr>値段・<wbr>「購入する」<wbr>ボタンで<wbr>並べます。<wbr>お支払いは<wbr>Square<wbr>（スクエア）の<wbr>画面。<wbr>下に<wbr>特定商取引法に<wbr>基づく<wbr>表示<wbr>（開閉式）が<wbr>付きます<wbr>（見本の<wbr>ボタンは<wbr>「準備中」）</dd>
+          <dt>向いている<wbr>お店</dt><dd>サロンの<wbr>ハーブや<wbr>小物、<wbr>ギフト券、<wbr>お菓子や<wbr>雑貨など、<wbr>いくつかの<wbr>商品を<wbr>ネットでも<wbr>売りたい<wbr>お店<wbr>（架空の<wbr>よもぎ蒸しサロン。<wbr>商品も<wbr>料金も<wbr>架空です）</dd>
+        </dl>
+        <a class="btn" href="../shop/index.html">見本を開く</a>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="intro" style="padding-top:8px">
+    <div class="wrap">
+      <h2 style="font-size:clamp(24px,3.4vw,32px);margin-bottom:10px">ホームページと<wbr>一緒に<wbr>作れる<wbr>もの</h2>
+      <p class="lead">ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>同じ色・雰囲気で<wbr>そろえて<wbr>作れます<wbr>（別料金。<wbr>料金は<wbr>トップの<wbr>「料金」を<wbr>ご覧ください）。</p>
+    </div>
+  </section>
+
+  <div class="wrap list">
+    <article class="card">
+      <a class="shot" href="../logo/index.html"><img src="../thumbs/logo.jpg" alt="ロゴの見本の画面" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">ロゴ</span>
+        <h2>ロゴの<wbr>見本<wbr>（6つ）</h2>
+        <dl>
+          <dt>中身</dt><dd>文字と<wbr>♡、<wbr>アーチの<wbr>額、<wbr>楕円の<wbr>メダル、<wbr>深い<wbr>色×金、<wbr>よもぎの<wbr>葉、<wbr>♡から<wbr>流れる<wbr>線</dd>
+          <dt>お渡し</dt><dd>「メインの<wbr>ロゴ」と<wbr>「小さい<wbr>場所用」の<wbr>2つで<wbr>1組。<wbr>看板や<wbr>印刷にも<wbr>使える<wbr>データで</dd>
+        </dl>
+        <a class="btn" href="../logo/index.html">見本を開く</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <a class="shot" href="../card/index.html"><img src="../thumbs/card.jpg" alt="名刺の見本の画面" width="1200" height="780" loading="lazy"></a>
+      <div>
+        <span class="num">名刺</span>
+        <h2>名刺の<wbr>見本<wbr>（2つ）</h2>
+        <dl>
+          <dt>中身</dt><dd>明る<wbr>い<wbr>地<wbr>（家の<wbr>プリンター向け）と、<wbr>濃い<wbr>地<wbr>（ネット印刷向け）。<wbr>両面</dd>
+          <dt>特徴</dt><dd>うらに<wbr>ホームページの<wbr>QRコード。<wbr>名刺を<wbr>渡した<wbr>人が、<wbr>そのまま<wbr>お店の<wbr>ページを<wbr>見られる</dd>
+        </dl>
+        <a class="btn" href="../card/index.html">見本を開く</a>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="howto">
+    <div class="wrap">
+      <div>
+        <h2>見たあとは</h2>
+        <ul>
+          <li>気に<wbr>入った<wbr>見本の<wbr>番号を<wbr>教えてください<wbr>（「1の<wbr>色で、<wbr>2の<wbr>見出し」なども<wbr>大丈夫です）</li>
+          <li>ロゴや<wbr>お店の<wbr>写真が<wbr>あれば、<wbr>それに<wbr>合わせて<wbr>色を<wbr>決めます</li>
+          <li>見本を<wbr>もとに、<wbr>お店の<wbr>情報を<wbr>入れた<wbr>試作を<wbr>作ってお見せします</li>
+        </ul>
+      </div>
+      <div class="qr">
+        <img src="../thumbs/qr.png" alt="このページを開くQRコード" width="180" height="180">
+        スマホで<wbr>この<wbr>ページを<wbr>開く
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p><a href="../../index.html">Lift-Off ホームページ制作</a>（山口県防府市）</p>
+</footer>
+
+<script>
+// 戻ったときに、見ていた場所に戻す（2026/10/7。押すと一番上に戻ってしまうため）
+(function(){
+  var key = 'y:' + location.pathname;
+  // 「もどる」リンク：同じサイトから来たときは、ブラウザの「戻る」と同じ動きにする（見ていた場所に戻る）
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || a.textContent.indexOf('もどる') < 0) return;
+    try {
+      if (document.referrer && document.referrer.indexOf(location.protocol + '//' + location.host) === 0 && history.length > 1) {
+        e.preventDefault(); history.back();
+      }
+    } catch (err) {}
+  });
+  // ブラウザの「戻る」で戻ってきたのに一番上に出たときは、前に見ていた場所へ
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) {
+      window.addEventListener('load', function(){
+        var y = parseInt(sessionStorage.getItem(key) || '0', 10);
+        if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y);
+      });
+    }
+  } catch (err) {}
+})();
+</script>
+<a href="../index.html" style="position:fixed;left:12px;bottom:12px;z-index:50;background:rgba(27,42,56,.9);color:#fff;font-size:13px;padding:8px 14px;border-radius:999px;text-decoration:none;font-family:'BIZ UDPGothic',sans-serif">前の版（2026/10/11）｜今の見本帳へ</a>
+</body>
+</html>
