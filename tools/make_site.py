@@ -1030,8 +1030,39 @@ def main():
     # 設定はサイトのフォルダに一緒に置く（次に作り直すときはこれを直す）
     keep = os.path.join(outdir, 'site.json')
     if os.path.abspath(conf) != os.path.abspath(keep): shutil.copy(conf, keep); print('設定を置きました：', keep)
+    write_cloudflare_files(outdir)
     chk = os.path.join(HERE, 'check_site.py')
     if os.path.exists(chk): subprocess.call([sys.executable, chk, outdir, '--no-browser'])
+
+def write_cloudflare_files(outdir):
+    """お店のサイトのフォルダに、Cloudflare の設定（wrangler.jsonc）と公開しないファイルの一覧（.assetsignore）を入れる（2026/10/10 決定）。
+    wrangler.jsonc には "previews": {} を入れる（確認用の preview ブランチのページを作るため。tools/preview_push.sh が使う）。
+    もうあるときは上書きしない。liftoff-hp の中（samples/ など、別のリポジトリの中）に作るときは入れない"""
+    outdir = os.path.abspath(outdir)
+    parent = os.path.dirname(outdir)
+    while parent and parent != os.path.dirname(parent):
+        if os.path.isdir(os.path.join(parent, '.git')): return  # 別のリポジトリの中（見本帳など）
+        parent = os.path.dirname(parent)
+    name = os.path.basename(outdir.rstrip('/'))
+    wr = os.path.join(outdir, 'wrangler.jsonc')
+    if not os.path.exists(wr):
+        open(wr, 'w', encoding='utf-8').write(f'''// Cloudflare（クラウドフレア）でこのサイトを公開するための設定ファイル
+// サイトのファイル（index.html・images など）をそのまま置くだけの設定
+{{
+  "name": "{name}",
+  "compatibility_date": "2026-10-01",
+  "assets": {{
+    "directory": "./"
+  }},
+  // ブランチごとの確認用ページ（プレビュー）を作るための設定。本番には関係しない
+  "previews": {{}}
+}}
+''')
+        print('Cloudflare の設定を置きました：', wr, f'（公開URL https://{name}.liftoff-358.workers.dev/ ・確認用 https://preview-{name}.liftoff-358.workers.dev/）')
+    ai = os.path.join(outdir, '.assetsignore')
+    if not os.path.exists(ai):
+        open(ai, 'w', encoding='utf-8').write('# 公開しないファイル（設定ファイルや説明書き）\n.git\n.gitignore\n.assetsignore\nwrangler.jsonc\nREADME.md\n.wrangler\n.DS_Store\nsite.json\nindex.old.html\n')
+        print('公開しないファイルの一覧を置きました：', ai)
 
 if __name__ == '__main__':
     main()

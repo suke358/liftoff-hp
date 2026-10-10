@@ -1,25 +1,41 @@
 #!/bin/bash
-# 今のコミット（HEAD）を、確認用の preview ブランチに出す  2026/10/10 作成（決定 2026/10/10）
+# 今のコミット（HEAD）を、確認用の preview ブランチに出す  2026/10/10 作成（決定 2026/10/10。同日、どのサイトでも使えるように）
 #
-# 流れ：直す → commit → bash tools/preview_push.sh → 確認用URL（下）で見る → OK なら main へ push（main は許可をもらってから）
-# 確認用URL：https://preview-liftoff-hp.liftoff-358.workers.dev/ （Cloudflare の Workers Builds が preview ブランチから作る）
+# 流れ：直す → commit → bash ~/src/liftoff-hp/tools/preview_push.sh → 確認用URLで見る → OK なら main へ push（main は許可をもらってから）
+# どのサイトでも：作業しているサイトのフォルダ（git のリポジトリ）で動かす。そのフォルダの wrangler.jsonc の "name" から
+#   確認用URL https://preview-<name>.liftoff-358.workers.dev/ を決める（Cloudflare の Workers Builds が preview ブランチから作る）
+#   例）~/src/liftoff-hp     → https://preview-liftoff-hp.liftoff-358.workers.dev/
+#       ~/src/colore-website → https://preview-colore-website.liftoff-358.workers.dev/
 #
-# 使い方:  bash tools/preview_push.sh [出ているか確かめる文字]
-#   例:    bash tools/preview_push.sh                 → 出して、トップが 200 で HEAD の index.html と同じ中身になるのを待つ
-#          bash tools/preview_push.sh 'id="irai-band"' → さらに、その文字がトップに何か所あるかも表示
+# 使い方:  cd サイトのフォルダ && bash ~/src/liftoff-hp/tools/preview_push.sh [出ているか確かめる文字]
+#   例:    bash ~/src/liftoff-hp/tools/preview_push.sh                 → 出して、トップが 200 で HEAD の index.html と同じ中身になるのを待つ
+#          bash ~/src/liftoff-hp/tools/preview_push.sh 'id="irai-band"' → さらに、その文字がトップに何か所あるかも表示
 #
 # 決まり：--force は、この道具の中で preview ブランチに出すときだけ使う（main には絶対に出さない。下の PREVIEW_BRANCH は変えない）
 set -u
 PREVIEW_BRANCH='preview'
-PREVIEW_URL='https://preview-liftoff-hp.liftoff-358.workers.dev/'
+DOMAIN='liftoff-358.workers.dev'
 WAIT_SEC=300
 
-cd "$(dirname "$0")/.." || exit 1
+# 今いるフォルダのリポジトリで動く（道具の置き場所ではなく）
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "❌ ここは git のフォルダではありません: $(pwd)。サイトのフォルダに cd してから動かしてください"; exit 1; }
+cd "$ROOT" || exit 1
 if [ "$PREVIEW_BRANCH" = "main" ] || [ "$PREVIEW_BRANCH" = "master" ]; then
   echo "❌ 出す先が $PREVIEW_BRANCH になっています。この道具は preview 以外に出しません"; exit 1
 fi
-if [ ! -d .git ]; then echo "❌ git のフォルダではありません: $(pwd)"; exit 1; fi
+if [ ! -f wrangler.jsonc ]; then echo "❌ wrangler.jsonc がありません（Cloudflare の設定）。このフォルダは Cloudflare に出すサイトではないようです: $ROOT"; exit 1; fi
 
+# wrangler.jsonc の "name" を読む（// の注釈は無視）
+NAME="$(sed 's#//.*$##' wrangler.jsonc | tr -d '\n' | sed -n 's/.*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
+if [ -z "$NAME" ]; then echo "❌ wrangler.jsonc に \"name\" が見つかりません"; exit 1; fi
+if ! sed 's#//.*$##' wrangler.jsonc | grep -q '"previews"'; then
+  echo "❌ wrangler.jsonc に \"previews\": {} がありません。これがないと Cloudflare が preview ブランチの確認用ページを作りません。"
+  echo "   wrangler.jsonc に  \"previews\": {}  を足して commit してから、もう一度動かしてください（本番の設定なので、main への push は許可をもらう）"
+  exit 1
+fi
+PREVIEW_URL="https://preview-${NAME}.${DOMAIN}/"
+
+echo "サイト: $NAME（$ROOT）"
 echo "出すコミット: $(git log --oneline -1)"
 if [ -n "$(git status --short | grep -v 'DS_Store' | grep -v '^??')" ]; then
   echo "⚠️ commit していない直しがあります（下）。出るのは commit した分だけです"
@@ -32,7 +48,7 @@ git push --force origin "HEAD:refs/heads/$PREVIEW_BRANCH" || { echo "❌ push �
 
 # Workers Builds が終わって、確認用URLのトップが HEAD の index.html と同じ中身になるのを待つ
 TMP="$(mktemp -d)"
-git show HEAD:index.html > "$TMP/head_index.html"
+git show HEAD:index.html > "$TMP/head_index.html" 2>/dev/null || { echo "❌ HEAD に index.html がありません"; exit 1; }
 echo "→ 確認用URLに出るのを待ちます（最大 ${WAIT_SEC} 秒）: $PREVIEW_URL"
 start=$(date +%s); code=000; same=no
 while :; do
