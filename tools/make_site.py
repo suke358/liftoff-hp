@@ -24,7 +24,14 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "calc"    … 本数・回数を選ぶと合計の目安が出る料金（JS がないときは料金表として出る）
   "cases"   … 施工例（作業前・作業後の写真を並べる）
   "form"    … 選んで送れるフォーム（Formspree。JS がないときもふつうのフォームとして送れる）
+  "shop"    … 商品（物販。2026/10/11 追加。決定事項：商品ページ＝ご契約のお店 22,000円〜・1ページ・商品5点まで・決済は Square）
+              商品5点まで（6点以上は ⚠️ を出して5点だけ出す）。「購入する」ボタンは buy_url（Square の購入ページ）へ新しいタブで。buy_url が空なら「準備中」（押せない）
+              商品の下に「特定商取引法に基づく表示」（開閉式）。書いていない項目は「お問い合わせください」（販売者・住所・電話はお店の設定から）
+              書き方：{"title":"商品","lead":"…","items":[{"name":"…","price":"2,200円","text":"…","image":"images/item-1.svg","alt":"…","buy_url":"https://square.link/u/…","note":"送料別"}],
+                      "note":"お支払いは Square の画面で…","tokushoho":{"seller":"…","address":"…","tel":"…","email":"…","price":"…","shipping":"…","payment":"…","delivery":"…","returns":"…"}}
+              見本：templates/site_sample_shop.json（架空のよもぎ蒸しサロン hiyori）→ samples/shop/
   それぞれ true と書くと決まった中身（メニューの写真など）で入る。{...} で中身を書ける。色・書体はお店の theme に合わせて出る
+  "sample_note" … 見本のとき、ページのいちばん上に出す注（例 "※画面は架空のお店の見本です"）。本物のお店では書かない
 """
 import sys, os, json, html, shutil, subprocess, urllib.parse
 
@@ -73,6 +80,7 @@ def build(c):
     if not first_btns: first_btns.append('<a class="btn btn-main" href="#reserve">お問い合わせ</a>')
 
     secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
+    if 'shop' in P: secs.append(('shop', P['shop'].get('title', '商品')))  # 商品はメニューのすぐ後ろ
     if 'calc' in P: secs.append(('calc', P['calc'].get('title', '料金の目安')))
     if 'cases' in P: secs.append(('cases', P['cases'].get('title', '施工例')))
     if c.get('flow'): secs.append(('flow', c.get('flow_title', 'ご依頼の流れ')))
@@ -298,7 +306,8 @@ def build(c):
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
     css = css.replace('{{head_font}}', head_font)
-    belt_html, calc_html, cases_html, compare_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx)
+    belt_html, calc_html, cases_html, compare_html, shop_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx), part_shop(ctx)
+    sample_note = f'<p class="sample-note" role="note">{e(c["sample_note"])}</p>' if c.get('sample_note') else ''
 
     out = f'''<!DOCTYPE html>
 <html lang="ja" class="no-js">
@@ -327,7 +336,7 @@ def build(c):
 <script>document.documentElement.className = 'js';</script>{card_js}
 </head>
 <body>
-<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->
+<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->{sample_note}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24">{mark}</symbol></svg>
 <header class="head">
   <div class="wrap">
@@ -336,7 +345,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{greet}{belt_html}{menu_html}{calc_html}{cases_html}{compare_html}{flow_html}{reserve_html}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{greet}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{flow_html}{reserve_html}{access_html}{faq_html}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -381,6 +390,8 @@ h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
 p{margin:0 0 1.2em}
 .muted{color:var(--muted)}
 .center{text-align:center}
+.sample-note{margin:0;padding:0 16px;height:34px;line-height:34px;background:#333;color:#fff;font-size:.78rem;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* 見本のときだけ出る注（sample_note）。1行に固定 */
+.sample-note ~ .head{top:34px} /* 注がある分、ヘッダー（absolute）を下げる */
 .mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
 .photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .photo img{width:100%;height:auto}
@@ -607,7 +618,8 @@ JS = r'''// スマホのメニュー（開く・閉じる）と、上へ戻る�
 # 設定の "parts": {"belt": true, "compare": {...}, "calc": {...}, "cases": {...}, "form": {...}}
 # それぞれの部品は、①動きを減らす設定の人には動かさない ②古いスマホ対策（マニュアル16の書き方）③JS がないときの代わりの表示 を入れている
 # 色・書体は :root の変数（--primary・--head など）だけを使う → お店の theme に自然に合う
-PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form']
+PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form', 'shop']
+SHOP_MAX = 5  # 商品は5点まで（決定事項 2026/10/10：商品ページ＝商品5点まで。6点以上は作る前に金額を伝える）
 
 def parts_conf(c):
     """設定の "parts" を {部品名: 中身の辞書} にそろえる。true → {}（決まった中身）、false / null → 入れない。中身が足りない部品は外す"""
@@ -623,6 +635,13 @@ def parts_conf(c):
         if cs: P['compare'].setdefault('before', cs[0]['before']); P['compare'].setdefault('after', cs[0]['after'])  # 施工例の1つ目を借りる
         else: print('⚠️ compare：前と後の写真（before・after）がないので入れません'); del P['compare']
     if 'calc' in P and not P['calc'].get('items'): print('⚠️ calc：項目（items）がないので入れません'); del P['calc']
+    if 'shop' in P:
+        items = [it for it in (P['shop'].get('items') or []) if it.get('name')]
+        if not items: print('⚠️ shop：商品（items）がないので入れません'); del P['shop']
+        elif len(items) > SHOP_MAX:
+            print(f'⚠️ shop：商品が {len(items)} 点あります。商品ページは {SHOP_MAX} 点までなので、はじめの {SHOP_MAX} 点だけ出します（6点以上は作る前に金額を伝える）')
+            P['shop']['items'] = items[:SHOP_MAX]
+        else: P['shop']['items'] = items
     c['_P'] = P
     return P
 
@@ -782,6 +801,52 @@ def part_form(x):
         </form>
       </div>'''
 
+def part_shop(x):
+    """商品（物販）：商品5点までをメニューと同じカードで並べ、「購入する」で Square の購入ページ（buy_url）へ（新しいタブ）。buy_url が空なら「準備中」（押せない）。
+    下に「特定商取引法に基づく表示」を開閉式（details）で。書いていない項目は「お問い合わせください」（販売者・住所・電話はお店の設定から取る）。JS は使わない"""
+    p = x['P'].get('shop')
+    if p is None: return ''
+    c, I = x['c'], x['I']
+    arts = []
+    for it in p['items']:
+        img = f'<div class="photo">{img_tag(it, alt=it["name"])}</div>' if it.get('image') else ''
+        price = f'<div class="price"><small>{e(it.get("price_note", "税込"))}</small><b>{e(it["price"])}</b></div>' if it.get('price') else '<div class="price"><span class="ask">価格は<wbr>お問い合わせください</span></div>'
+        note = f'<p class="item-note muted">{e(it["note"])}</p>' if it.get('note') else ''
+        if it.get('buy_url'): buy = f'<a class="btn btn-main buy" {ext(it["buy_url"])}>購入する</a>'
+        else: buy = '<span class="btn buy soon" aria-disabled="true">準備中</span>'
+        arts.append(f'''
+        <article class="card item">
+          {img}
+          <div class="card-body">
+            <h3>{e(it["name"])}</h3>
+            <p>{e(it.get("text", ""))}</p>
+            {price}
+            {note}
+            {buy}
+          </div>
+        </article>''')
+    t = p.get('tokushoho') or {}
+    ask = 'お問い合わせください'
+    rows = [('販売者', t.get('seller') or c['name']), ('住所', t.get('address') or c.get('address')), ('電話番号', t.get('tel') or c.get('tel')),
+            ('メールアドレス', t.get('email')), ('販売価格', t.get('price')), ('送料', t.get('shipping')), ('お支払い方法', t.get('payment')),
+            ('お届けの時期', t.get('delivery')), ('返品について', t.get('returns'))] + [(k, v) for k, v in t.get('extra', [])]
+    dl = ''.join(f'<div><dt>{e(k)}</dt><dd>{e(v or ask)}</dd></div>' for k, v in rows)
+    note = p.get('note', 'お支払いは Square（スクエア）の画面で行います。カードの情報はお店には届きません。')
+    return f'''
+  <section id="shop" class="sec shop-sec">
+    <div class="wrap">
+      {sec_head(I, p.get('eyebrow', 'shop'), p.get('title', '商品'))}
+      {sec_lead(p)}
+      <div class="shop-items n{len(arts)}">{''.join(arts)}
+      </div>
+      <p class="shop-note muted center">{e(note)}</p>
+      <details class="tokushoho" id="tokushoho">
+        <summary>{e(p.get('tokushoho_title', '特定商取引法に基づく表示'))}</summary>
+        <dl>{dl}</dl>
+      </details>
+    </div>
+  </section>'''
+
 PARTS_CSS = {
 'common': r'''/* ---------- 部品（parts）共通 ---------- */
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
@@ -899,6 +964,32 @@ PARTS_CSS = {
 .form-sent{text-align:center;padding:20px 0}
 .form-sent h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:10px}
 @media (max-width:640px){.form-top{padding:11px 18px}.formbox form{padding:18px 18px 22px}.form-sub{display:none}}''',
+'shop': r'''/* 部品：商品（物販）。カードはメニューと同じ作り。「購入する」は Square の購入ページへ。特定商取引法の表示は details で開閉（JS なし） */
+.shop-sec{background:var(--bg2)}
+.shop-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));grid-gap:24px;gap:24px;max-width:1040px;margin:0 auto}
+.shop-items.n1{max-width:380px}
+.shop-items.n2{max-width:720px}
+.shop-items .item h3{font-size:1.1rem}
+.shop-items .price{margin-top:auto}
+.item-note{font-size:.8rem;margin:8px 0 0;line-height:1.6}
+.shop-items .buy{margin-top:16px;width:100%;min-height:48px}
+.shop-items .buy.soon{background:var(--line);color:var(--muted);cursor:default;pointer-events:none}
+.shop-note{font-size:.85rem;margin:28px auto 0;max-width:760px}
+.tokushoho{max-width:760px;margin:40px auto 0;background:#fff;border-radius:var(--r);box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.tokushoho summary{cursor:pointer;position:relative;padding:18px 56px 18px 24px;min-height:44px;font-family:var(--head);font-weight:500;letter-spacing:.1em;list-style:none;line-height:1.6}
+.tokushoho summary::-webkit-details-marker{display:none}
+.tokushoho summary::after{content:"＋";position:absolute;right:22px;top:50%;margin-top:-.75em;font-size:1.2rem;line-height:1.5;color:var(--primary-deep)}
+.tokushoho[open] summary::after{content:"－"}
+.tokushoho dl{margin:0;padding:4px 24px 22px;border-top:1px solid var(--line)}
+.tokushoho dl div{display:grid;grid-template-columns:9em 1fr;grid-gap:12px;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.92rem;line-height:1.8}
+.tokushoho dl div:last-child{border-bottom:none}
+.tokushoho dt{font-family:var(--head);color:var(--dark);letter-spacing:.06em}
+.tokushoho dd{margin:0;color:var(--ink)}
+@media (max-width:640px){
+  .tokushoho dl div{grid-template-columns:1fr;grid-gap:2px;gap:2px}
+  .tokushoho summary{padding:16px 48px 16px 18px}
+  .tokushoho dl{padding:2px 18px 16px}
+}''',
 }
 
 PARTS_JS = {
@@ -1031,6 +1122,7 @@ def main():
     for it in cs.get('items', []):
         need(it.get('before'), cs.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
         need(it.get('after'), cs.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)
+    for it in (P.get('shop') or {}).get('items', []): need(it, it['name'] + 'の写真が入ります', 1000, 750)
     cp = P.get('compare') or {}
     need(cp.get('before'), cp.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
     need(cp.get('after'), cp.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d4136"/><stop offset="1" stop-color="#24342b"/></linearGradient></defs>
+<rect width="1200" height="1500" fill="url(#g)"/>
+<g fill="none" stroke="#e2cf9f" stroke-width="2.20" stroke-linecap="round" stroke-linejoin="round" opacity=".9"><g transform="translate(60.0 435.0) scale(4.800)"><path d="M80 18C44 18 22 36 22 62c0 6 2 12 4 16 4-18 18-32 34-40-16 12-24 26-28 42 4 2 10 2 14 2 26 0 34-30 34-64z"/></g><g transform="translate(660.0 435.0) scale(4.800)"><path d="M22 44h48v14a22 22 0 0 1-22 22h-4a22 22 0 0 1-22-22z"/><path d="M70 50h6a9 9 0 0 1 0 18h-8"/><path d="M16 86h64"/><path d="M36 34c-4-5 4-8 0-14M48 34c-4-5 4-8 0-14M60 34c-4-5 4-8 0-14"/></g></g>
+<text x="600.0" y="983" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="31" letter-spacing="3" fill="rgba(255,255,255,.55)">サロンの写真が入ります</text>
+</svg>
