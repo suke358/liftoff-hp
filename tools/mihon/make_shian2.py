@@ -552,17 +552,20 @@ must(anchor, js + '\n' + anchor)
 # 最初の画面の飛行機は、切りかえの JS が出す（render → jetGo）。切りかえの JS は jetGo より前に動くので、最初の1回だけあとから呼ぶ
 # （最初の1回の jetGo は、飛行機の JS の中で呼ぶ）
 
+# ---- LINE のカードの番号（2026/10/10）：LINE はページの URL ごとにカードを覚えているので、カードの画像を変えたら、画像の名前を変えるのに加えてこの数字を次にする
+#      （トップの canonical・og:url・開いたときに足す ?v= の3つに入る。QR の URL・ページの場所は変えない）
+CARD_V = 6
+TOP_URL = 'https://liftoff-hp.liftoff-358.workers.dev/'
 if TOP:
     s = re.sub(r'(src|href)="\.\./(img/|samples/)', r'\1="\2', s)
-    must('content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"', 'content="https://liftoff-hp.liftoff-358.workers.dev/"')
-    must('<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">', '<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/">\n<link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/">')
+    must('content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"', 'content="' + TOP_URL + '"')
+    # og:url と canonical は ?v= 付き（iPhone の Safari の共有ボタンはアドレスバーではなく canonical の URL を LINE に送るため。2026/10/10 実機で確認）
+    must('<meta property="og:url" content="' + TOP_URL + '">', '<meta property="og:url" content="%s?v=%d">\n<link rel="canonical" href="%s?v=%d">' % (TOP_URL, CARD_V, TOP_URL, CARD_V))
     must('<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->',
          '<!-- 本番のトップ（2026/10/10 に切りかえ式 shian2 を本番に入れかえた。前の版は v5/）。tools/mihon/make_shian2.py --top が shian/ から作る。直すときは shian/ か、その道具を直して作り直す。公開準備ができるまで検索に出さない（noindex。本公開時に外す） -->')
     if '../' in s.replace('../samples', '').replace('../img', ''): print('注意：../ が残っている', s.count('../'))
-    # ---- アドレスバーに ?v=6 を足す（2026/10/10）：LINE はページの URL ごとにカードを覚えているので、名刺の QR（https://liftoff-hp.liftoff-358.workers.dev/）から開いた人が
+    # ---- アドレスバーに ?v=6 を足す（2026/10/10）：名刺の QR（https://liftoff-hp.liftoff-358.workers.dev/）から開いた人が
     #      LINE に転送しても新しいカード（G3）が出るように、開いたときに history.replaceState で足す（再読みこみはしない。ほかの ? や # はそのまま。v がすでにあれば何もしない）
-    #      カードの画像を変えたら CARD_V を次の数字にする（QR の URL・ページの場所は変えない）
-    CARD_V = 6
     card_js = ('<script>\n'
                '// アドレスバーに ?v=%d を足す（LINE に転送したとき新しいカードが出るように。カードを変えたら tools/mihon/make_shian2.py の CARD_V を次の数字に）\n'
                "(function(){ try {\n"
@@ -571,7 +574,7 @@ if TOP:
                "  history.replaceState(history.state, '', location.pathname + (q ? q + '&' : '?') + 'v=%d' + (location.hash || ''));\n"
                "} catch (e) {} })();\n"
                '</script>') % (CARD_V, CARD_V)
-    must('<link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/">', '<link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/">\n' + card_js)
+    must('<link rel="canonical" href="%s?v=%d">' % (TOP_URL, CARD_V), '<link rel="canonical" href="%s?v=%d">\n' % (TOP_URL, CARD_V) + card_js)
 
 def hash_of(text):
     return hashlib.sha256(text.encode('utf-8')).hexdigest()
