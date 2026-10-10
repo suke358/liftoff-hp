@@ -132,8 +132,8 @@ h1,h2,h3{font-family:"Zen Kaku Gothic Antique",sans-serif;line-height:1.35;font-
 .cats button:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
 .count{font-size:14px;color:var(--muted);margin-top:10px;min-height:1.5em}
 
-/* 小さなカードを並べる：パソコン 3〜4枚、スマホ 2枚 */
-.list{display:grid;grid-template-columns:repeat(4,1fr);grid-gap:20px;gap:20px;padding:20px 0 56px}
+/* 小さなカードを並べる：パソコン 3〜4枚、スマホ 2枚。上ぞろえ（align-items:start）にして、「くわしく」を開いたカードだけが伸びる（隣は伸びない） */
+.list{display:grid;grid-template-columns:repeat(4,1fr);grid-gap:20px;gap:20px;padding:20px 0 56px;-webkit-align-items:start;align-items:start}
 @media (max-width:1000px){.list{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:640px){.list{grid-template-columns:1fr 1fr;grid-gap:12px;gap:12px;padding:16px 0 40px}}
 @@SHOW_CSS@@
