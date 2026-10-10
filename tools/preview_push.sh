@@ -35,7 +35,7 @@ if ! sed 's#//.*$##' wrangler.jsonc | grep -q '"previews"'; then
 fi
 PREVIEW_URL="https://preview-${NAME}.${DOMAIN}/"
 
-echo "サイト: $NAME（$ROOT）"
+echo "サイト: ${NAME}（${ROOT}）"
 echo "出すコミット: $(git log --oneline -1)"
 if [ -n "$(git status --short | grep -v 'DS_Store' | grep -v '^??')" ]; then
   echo "⚠️ commit していない直しがあります（下）。出るのは commit した分だけです"
