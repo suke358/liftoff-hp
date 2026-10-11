@@ -1,124 +1,625 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{{SHOP}} 初回の打ち合わせ入力シート</title>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{SHOP}} 初回ヒヤリングシート</title>
+<!-- 初回ヒヤリングシート（2026/10/11 作成。試作 ~/src/_下書き/初回ヒヤリングシート_試作/hearing.html から本番化）
+     new_client.py が作るときに、お店の名前・短い名前・PRICE_JS（お見積もりを作る.html の PRICE）・SAMPLES_JS（mihon/samples_list.json）の印を埋める。
+     料金の元は「お見積もりを作る.html」の1か所。見本の元は samples_list.json の1か所。ここには書かない。
+     前の入力シートは first_v1.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+Antique:wght@500;700&display=swap">
 <style>
-:root{--main:#5f7f68;--pale:#eef3ee;--ink:#2a332d;--sub:#66736a;--line:#d5ddd6;--acc:#c9825b}
+/* 左＝上から順に埋める用紙、右＝いつも見える金額と進み具合（Lift-Off の紺・白・飛行機雲の黄） */
+:root{
+  --bg:#f3f5f9; --paper:#ffffff; --ink:#16233b; --muted:#5b6780; --line:#d8deea;
+  --navy:#1d3461; --navy-soft:#e6ecf7; --yellow:#f2c230; --yellow-soft:#fdf3d2;
+  --ok:#2f7a52; --ok-soft:#e3f2ea; --extra:#a3561b; --extra-soft:#fbeadb;
+  --f-display:"Zen Kaku Gothic Antique","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --f-body:"BIZ UDPGothic","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1624; --paper:#172133; --ink:#e8edf6; --muted:#9aa6bd; --line:#2c3a52;
+  --navy:#9db8ec; --navy-soft:#1f2d47; --yellow:#f2c230; --yellow-soft:#3a3218;
+  --ok:#7fd0a3; --ok-soft:#173326; --extra:#f0a46a; --extra-soft:#3a2617; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1624; --paper:#172133; --ink:#e8edf6; --muted:#9aa6bd; --line:#2c3a52;
+  --navy:#9db8ec; --navy-soft:#1f2d47; --yellow:#f2c230; --yellow-soft:#3a3218;
+  --ok:#7fd0a3; --ok-soft:#173326; --extra:#f0a46a; --extra-soft:#3a2617; color-scheme:dark}
+
 *{box-sizing:border-box}
-body{margin:0;background:#f7f6f1;color:var(--ink);font-family:-apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans CJK JP",sans-serif;font-size:16px;line-height:1.6}
-.wrap{max-width:860px;margin:0 auto;padding:24px 20px 120px}
-h1{font-size:24px;margin:0 0 4px}
-.lead{color:var(--sub);margin:0 0 18px;font-size:14px}
-section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
-h2{font-size:18px;margin:0 0 12px;padding-left:10px;border-left:5px solid var(--main)}
-.f{padding:12px 0;border-top:1px dashed var(--line)}
-.f:first-of-type{border-top:none;padding-top:0}
-.lab{font-weight:700;display:block;margin-bottom:6px}
-.hint{font-weight:400;color:var(--sub);font-size:13px;margin-left:6px}
-input[type=text],input[type=email],input[type=date],textarea{width:100%;font:inherit;padding:9px 11px;border:1px solid #bfc9c1;border-radius:8px;background:#fcfdfc}
-textarea{min-height:84px;resize:vertical}
-input:focus,textarea:focus{outline:2px solid var(--main);border-color:var(--main)}
-.opts{display:flex;flex-wrap:wrap;gap:8px 18px}
-.opts label{display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 0}
-input[type=radio],input[type=checkbox]{width:20px;height:20px;accent-color:var(--main)}
-.row{display:flex;gap:10px;margin-top:8px}
-.row>*{flex:1}
-.tell{background:#fff8f0;border-color:#e6c3ab}
-.tell .opts{flex-direction:column;gap:4px}
-.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
-button{font:inherit;font-weight:700;border:none;border-radius:10px;padding:11px 18px;cursor:pointer}
-.b1{background:var(--main);color:#fff}.b2{background:var(--pale);color:var(--ink)}.b3{background:none;color:var(--sub);font-weight:400;font-size:13px;text-decoration:underline}
-#msg{font-size:14px;color:var(--main);min-width:10em}
-</style></head><body><div class="wrap">
-<h1>{{SHOP}} さん 初回の打ち合わせ入力シート</h1>
-<p class="lead">話しながらそのまま入力してください。入力した内容はこのMacの中（開いたブラウザ）に自動で保存されます。終わったら下の「Claudeに渡す用にコピー」を押して、チャットに貼り付けてください。</p>
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7;padding:0 16px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 60px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:3px solid var(--navy);margin-bottom:20px}
+.brand{display:flex;flex-direction:column;gap:2px}
+.brand small{font-size:12px;letter-spacing:.12em;color:var(--muted)}
+h1{font-family:var(--f-display);font-size:26px;margin:0;line-height:1.3;text-wrap:balance}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:7px 14px;border-radius:6px;font-size:14px}
+.btn:hover{border-color:var(--navy)}
+.btn.primary{background:var(--navy);color:var(--paper);border-color:var(--navy);font-weight:700}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.note-trial{font-size:13px;color:var(--muted);background:var(--yellow-soft);border-radius:6px;padding:8px 12px;margin-bottom:18px}
+.note-ng{font-size:14px;background:var(--extra-soft);color:var(--extra);border-radius:6px;padding:10px 12px;margin-bottom:18px;font-weight:700}
 
-<section><h2>基本</h2>
-  <div class="f"><span class="lab">打ち合わせ日</span><input type="date" name="日付"></div>
-</section>
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}}
+main{display:flex;flex-direction:column;gap:18px;min-width:0}
+section.step{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.step-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.num{font-family:var(--f-display);font-weight:700;color:var(--navy);font-size:15px;min-width:1.6em}
+h2{font-family:var(--f-display);font-size:19px;margin:0;line-height:1.4}
+.done-mark{margin-left:auto;font-size:12px;padding:2px 10px;border-radius:99px;background:var(--navy-soft);color:var(--muted);white-space:nowrap}
+.done-mark.on{background:var(--ok-soft);color:var(--ok);font-weight:700}
+.say{font-size:13.5px;color:var(--muted);margin:0 0 12px 2.6em}
+.say b{color:var(--ink);font-weight:700}
+.body{margin-left:2.6em}
+@media (max-width:520px){.say,.body{margin-left:0}}
 
-<section class="tell"><h2>最初に伝えること（伝えたらチェック）</h2>
-  <div class="opts">
-    <label><input type="checkbox" name="伝えた_料金"> 料金表でプランを説明した（税込・ドメインとフォームは月額に込み）</label>
-    <label><input type="checkbox" name="伝えた_名義"> ドメイン・Googleマップ・予約はお店の名義。パスワードはお店が決めて控える</label>
-    <label><input type="checkbox" name="伝えた_データ"> やめるときはホームページのデータを全部渡す</label>
-    <label><input type="checkbox" name="伝えた_約束"> 「検索1位」「お客さんが必ず増える」などの約束はしない</label>
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px}
+.chip span{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:6px 14px;background:var(--paper);font-size:14px;line-height:1.5}
+.chip input:checked + span{background:var(--navy);color:var(--paper);border-color:var(--navy)}
+.chip input:focus-visible + span{outline:3px solid var(--yellow);outline-offset:2px}
+.hint{font-size:13px;margin-top:10px;padding:8px 12px;border-radius:6px;background:var(--navy-soft)}
+.hint:empty{display:none}
+
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 16px}
+@media (max-width:620px){.grid2{grid-template-columns:minmax(0,1fr)}}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);min-width:0}
+label.f input,label.f select,label.f textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:6px 10px;width:100%}
+label.f textarea{min-height:64px;resize:vertical}
+.full{grid-column:1/-1}
+
+/* 範囲と金額 */
+.scope{display:flex;flex-direction:column;gap:6px}
+.scope-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;border:1px solid var(--line)}
+.scope-row.in{background:var(--ok-soft);border-color:transparent}
+.scope-row.picked.extra{background:var(--extra-soft);border-color:transparent}
+.scope-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--navy)}
+.scope-row .nm{min-width:0}
+.scope-row .nm small{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.tag{font-size:12px;padding:2px 9px;border-radius:99px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tag.in{background:var(--paper);color:var(--ok);font-weight:700}
+.tag.ex{background:var(--paper);color:var(--extra);font-weight:700}
+.qty{width:58px;font:inherit;padding:2px 6px;border:1px solid var(--line);border-radius:5px;background:var(--paper);color:var(--ink)}
+.sub-h{font-size:13px;font-weight:700;color:var(--muted);margin:10px 0 2px;letter-spacing:.04em}
+
+/* 右の欄 */
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:14px}
+@media (max-width:900px){aside{position:static}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px}
+.panel h3{font-family:var(--f-display);font-size:15px;margin:0 0 8px}
+.money{font-variant-numeric:tabular-nums}
+.money .row{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:3px 0}
+.money .row.total{border-top:2px solid var(--navy);margin-top:6px;padding-top:8px;font-weight:700;font-size:16px}
+.money .row.total .v{color:var(--navy);font-family:var(--f-display);font-size:20px}
+.money .row.month .v{font-family:var(--f-display);font-size:17px;font-weight:700}
+.money .mini{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6}
+.prog{display:flex;flex-direction:column;gap:4px;font-size:13px}
+.prog a{color:var(--ink);text-decoration:none;display:flex;gap:8px;align-items:center}
+.prog a:hover{color:var(--navy)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+.dot.on{background:var(--ok)}
+.bar{height:6px;background:var(--navy-soft);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.bar i{display:block;height:100%;background:var(--yellow);width:0;transition:width .3s}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* 確認書 */
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:24px 26px;overflow-x:auto}
+.sheet h2{font-size:21px;border-bottom:2px solid var(--navy);padding-bottom:6px;margin-bottom:12px}
+.sheet table{border-collapse:collapse;width:100%;min-width:480px;font-size:14px}
+.sheet th,.sheet td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+.sheet th{width:9em;background:var(--navy-soft);font-weight:700;white-space:nowrap}
+.sheet .sign{display:flex;flex-wrap:wrap;gap:24px;margin-top:16px;font-size:14px}
+.sheet .sign span{border-bottom:1px solid var(--muted);min-width:180px;display:inline-block}
+.sheet .small{font-size:12px;color:var(--muted);margin-top:10px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translateX(-50%);background:var(--navy);color:var(--paper);padding:8px 18px;border-radius:99px;font-size:14px}
+/* 見本を選ぶ */
+.cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.cats button{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:99px;padding:4px 12px;font-size:13px}
+.cats button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cats .cnt{font-variant-numeric:tabular-nums;opacity:.7;margin-left:4px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.mcard{position:relative;border:2px solid var(--line);border-radius:10px;background:var(--paper);overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0;color:var(--ink)}
+.mcard img{display:block;width:100%;aspect-ratio:1200/780;object-fit:cover;max-width:100%;background:var(--navy-soft);font-size:12px;color:var(--muted);text-align:center;padding:0}
+.mcard img.ng{object-fit:contain;padding:10px}  /* ネットがないとき：画像の代わりに文字（番号・名前・色・雰囲気で選べる） */
+.mcard .mt{padding:8px 10px 10px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.mcard .mn{font-weight:700;font-size:14px;display:flex;gap:6px;align-items:baseline}
+.mcard .mn em{font-style:normal;font-family:var(--f-display);color:var(--navy);font-variant-numeric:tabular-nums}
+.mcard .mood{font-size:12px;color:var(--muted);line-height:1.5}
+.mcard .sw{display:flex;gap:4px}
+.mcard .sw i{width:14px;height:14px;border-radius:50%;border:1px solid var(--line)}
+.mcard.sel{border-color:var(--navy);box-shadow:0 0 0 2px var(--yellow)}
+.mcard .badge{position:absolute;top:8px;left:8px;background:var(--navy);color:var(--paper);font-weight:700;font-size:12px;border-radius:99px;padding:2px 10px}
+.mcard:not(.sel) .badge{display:none}
+.mdetail{margin-top:12px;font-size:13px;background:var(--navy-soft);border-radius:8px;padding:10px 12px}
+.mdetail:empty{display:none}
+.mdetail p{margin:0}
+.mcard .acts{display:flex;gap:6px;margin-top:4px}
+.mcard .acts button{flex:1;font-size:12.5px;padding:5px 6px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.mcard .acts .see{background:var(--navy);border-color:var(--navy);color:var(--paper);font-weight:700}
+.mcard.sel .acts .pk{background:var(--yellow-soft);border-color:var(--yellow)}
+.mcard img{cursor:zoom-in}
+/* 見本をのぞく（本物の見本帳 https://liftoff-hp.liftoff-358.workers.dev/samples/ をこの画面の中で動かす） */
+.viewer{position:fixed;inset:0;z-index:50;background:rgba(10,18,32,.72);display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px calc(env(safe-area-inset-bottom,0px) + 12px)}
+.viewer[hidden]{display:none}  /* display:flex が hidden に勝ってしまい、窓がずっと画面をおおう（試作のバグ）のを防ぐ */
+.vbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--paper);border-radius:10px 10px 0 0;padding:10px 12px}
+.vbar .vt{font-family:var(--f-display);font-weight:700;font-size:16px;margin-right:auto;min-width:0}
+.vbar .vt em{font-style:normal;color:var(--navy);margin-right:6px}
+.vbar .seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.vbar .seg button{border:0;background:var(--paper);color:var(--ink);padding:5px 12px;font-size:13px}
+.vbar .seg button[aria-pressed="true"]{background:var(--navy);color:var(--paper)}
+.vbar a.btn{text-decoration:none;font-size:13px}
+.vstage{flex:1;min-height:0;background:var(--navy-soft);border-radius:0 0 10px 10px;display:flex;justify-content:center;overflow:auto;padding:12px}
+.vstage iframe{border:0;background:#fff;height:100%;width:100%;max-width:100%;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.vstage.sp iframe{width:390px;border-radius:18px;border:8px solid #1b2232}
+.vinfo{font-size:12.5px;color:var(--muted);flex-basis:100%}
+textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-top:8px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);padding:8px}
+
+/* 印刷 / PDF：作るもの確認書だけを A4 に（お見積もりを作る.html と同じやり方） */
+@page{size:A4;margin:14mm 14mm 12mm}
+@media print{
+  :root{--bg:#fff;--paper:#fff;--ink:#000;--muted:#444;--line:#999;--navy:#1d3461;--navy-soft:#eef1f6;color-scheme:light}
+  body{background:#fff;padding:0;font-size:13px}
+  .wrap{max-width:none;padding:0}
+  header.top,.note-trial,.note-ng,main>section.step,aside,#sheet-wrap .panel,.viewer,.toast{display:none !important}
+  .layout{display:block}
+  .sheet{border:none;border-radius:0;padding:0;overflow:visible;box-shadow:none}
+  .sheet table{min-width:0;font-size:12.5px}
+  .sheet th,.sheet td{padding:5px 8px}
+  .sheet .sign{margin-top:22px}
+  .sheet .sign span{min-width:60mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <small>LIFT-OFF ｜ 初回の打ち合わせ ｜ {{SHOP}} さん</small>
+      <h1>初回ヒヤリングシート</h1>
+    </div>
+    <div class="toolbar">
+      <button class="btn" id="btn-sample" type="button">見本を入れる</button>
+      <button class="btn" id="btn-clear" type="button">空にする</button>
+      <button class="btn primary" id="btn-sheet" type="button">作るもの確認書を見る</button>
+    </div>
+  </header>
+
+  <p class="note-trial">{{SHOP}} さんとの初回の打ち合わせ用です。お店の人と一緒に画面を見て、上から順にチェックしていきます。入れた内容は、このブラウザに自動で残ります（いつも同じアプリで開く）。「見本を入れる」は練習用で、架空のお店の答えが入ります。最後に「作るもの確認書を見る」→ 印刷 / PDF と「Claude に渡す用にコピー」。</p>
+  <p class="note-ng" id="note-ng" hidden></p>
+
+  <div class="layout">
+    <main>
+      <!-- 1 -->
+      <section class="step" id="s1">
+        <div class="step-head"><span class="num">1</span><h2>今いちばん困っていること</h2><span class="done-mark" data-done="1">まだ</span></div>
+        <p class="say">言い方：「<b>いま、お店のことで困っていることはありますか？</b>当てはまるものを全部教えてください」</p>
+        <div class="body">
+          <div class="chips" id="trouble"></div>
+          <div class="hint" id="trouble-hint"></div>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section class="step" id="s2">
+        <div class="step-head"><span class="num">2</span><h2>見た人に、一番してほしいこと</h2><span class="done-mark" data-done="2">まだ</span></div>
+        <p class="say">言い方：「ホームページを見た人に、<b>まず何をしてほしいですか？</b>1つだけ選ぶなら」</p>
+        <div class="body">
+          <div class="chips" id="goal"></div>
+          <div class="hint" id="goal-hint"></div>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section class="step" id="s3">
+        <div class="step-head"><span class="num">3</span><h2>雰囲気</h2><span class="done-mark" data-done="3">まだ</span></div>
+        <p class="say">言い方：「この中から、<b>雰囲気が近いものを選んでください</b>。2つまででいいです」（業種でしぼると早い。「中を見る」で見本のページをこの画面の中で動かして見られる。スマホ・パソコンの見え方も切りかえられる。ネットがないときは画像が出ないので、番号・名前・色・雰囲気で選ぶ）</p>
+        <div class="body">
+          <div class="cats" id="cats" role="group" aria-label="業種でしぼる"></div>
+          <div class="mgrid" id="mgrid"></div>
+          <div class="mdetail" id="mdetail"></div>
+        </div>
+        <div class="body grid2" style="margin-top:14px">
+          <label class="f">選んだ見本（押すと自動で入る・手で直してもよい）<input id="mihon" type="text"></label>
+          <label class="f">好きな色<input id="color-like" type="text"></label>
+          <label class="f">使いたくない色<input id="color-ng" type="text"></label>
+          <label class="f">今のロゴ<select id="logo"><option value="">選ぶ</option><option>あり（そのまま使う）</option><option>あり（作り直したい）</option><option>なし（作りたい）</option><option>なし（なくてよい）</option></select></label>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section class="step" id="s4">
+        <div class="step-head"><span class="num">4</span><h2>やりたいこと・範囲と金額</h2><span class="done-mark" data-done="4">まだ</span></div>
+        <p class="say">言い方：「<b>緑は初期費用に入っています。茶色を選ぶと別料金</b>で、右に合計が出ます。作る前に、きっちり金額をお伝えします」</p>
+        <div class="body">
+          <label class="f" style="max-width:340px;margin-bottom:10px">プラン<select id="plan"></select></label>
+          <div class="sub-h">初期費用に入っているもの</div>
+          <div class="scope" id="scope-in"></div>
+          <div class="sub-h">選ぶもの</div>
+          <div class="scope" id="scope-ex"></div>
+          <div class="hint" id="scope-hint"></div>
+        </div>
+      </section>
+
+      <!-- 5 -->
+      <section class="step" id="s5">
+        <div class="step-head"><span class="num">5</span><h2>必ず聞くこと</h2><span class="done-mark" data-done="5">まだ</span></div>
+        <p class="say">分からないものは空のまま。ホームページには「お問い合わせください」と出します。料金はメニュー表でもらう</p>
+        <div class="body grid2">
+          <label class="f">店名（正式な書き方）<input id="shop" type="text" placeholder="{{SHOP}}"></label>
+          <label class="f">読み方<input id="yomi" type="text"></label>
+          <label class="f full">住所（郵便番号から・部屋番号を載せてよいか）<input id="addr" type="text"></label>
+          <label class="f">電話番号（ほかのサイトと同じか）<input id="tel" type="text" inputmode="tel"></label>
+          <label class="f">お店用のメール<input id="mail" type="text" inputmode="email"></label>
+          <label class="f">営業時間<input id="hours" type="text"></label>
+          <label class="f">定休日<input id="holiday" type="text"></label>
+          <label class="f">駐車場<input id="parking" type="text"></label>
+          <label class="f">支払い方法（予定も）<input id="pay" type="text"></label>
+          <label class="f full">予約の受け方（当日・何時間前まで・キャンセル料）<input id="reserve" type="text"></label>
+          <label class="f full">公式LINE・Instagram などの URL（その場でスマホから共有してもらう）<textarea id="sns"></textarea></label>
+          <label class="f">Googleマップを管理している Google アカウント<input id="gmap" type="text"></label>
+          <label class="f">来てほしい人・お断りする人<input id="who" type="text"></label>
+          <label class="f full">載せてよいもの・だめなもの（写真・顔・ロゴ・修了証）<input id="photo" type="text"></label>
+        </div>
+      </section>
+
+      <!-- 6 -->
+      <section class="step" id="s6">
+        <div class="step-head"><span class="num">6</span><h2>決める人・公開したい日・直し</h2><span class="done-mark" data-done="6">まだ</span></div>
+        <p class="say">言い方：「最後に決めるのは<b>どなたですか？</b>」「<b>いつごろまでに</b>公開したいですか？」</p>
+        <div class="body grid2">
+          <label class="f">決める人<select id="decider"><option value="">選ぶ</option><option>本人だけ</option><option>本人と家族</option><option>共同経営者・スタッフも</option><option>本部・オーナーが別にいる</option></select></label>
+          <label class="f">公開したい時期<select id="when"><option value="">選ぶ</option><option>1か月以内</option><option>2か月以内</option><option>3か月以内</option><option>急がない</option><option>決まった日がある</option></select></label>
+          <label class="f">決まった日があれば<input id="when-date" type="date"></label>
+          <label class="f">直しの回数（仮。まだ決めていない）<select id="fix"><option>試作のあと2回まで</option><option>試作のあと3回まで</option></select></label>
+        </div>
+      </section>
+
+      <!-- 7 -->
+      <section class="step" id="s7">
+        <div class="step-head"><span class="num">7</span><h2>聞き返したこと（あいまいな言葉）</h2><span class="done-mark" data-done="7">任意</span></div>
+        <p class="say">あいまいな言葉は、その場で選択肢にして聞き返し、答えをここに書く（例：「普通の色」→「金の箔なしの色、で合っていますか？」→ はい）</p>
+        <div class="body">
+          <label class="f"><textarea id="ask-back"></textarea></label>
+        </div>
+      </section>
+
+      <!-- 確認書 -->
+      <section id="sheet-wrap" hidden>
+        <div class="sheet" id="sheet"></div>
+        <div class="panel" style="margin-top:14px">
+          <h3>確認書を印刷する・Claude に渡す</h3>
+          <p style="margin:0;font-size:13px;color:var(--muted)">「印刷 / PDFにする」は上の確認書だけを A4 に出します。PDF にするときは、左下の「PDF」→「PDFとして保存」。「Claude に渡す用にコピー」を押してチャットに貼ると、お客さんのファイル・見積もり・試作の設定まで Claude が進めます。</p>
+          <div class="toolbar" style="margin-top:10px">
+            <button class="btn primary" id="btn-print" type="button">印刷 / PDFにする</button>
+            <button class="btn primary" id="btn-copy" type="button">Claude に渡す用にコピー</button>
+          </div>
+          <textarea id="copybox" hidden readonly></textarea>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="panel money" id="money">
+        <h3>金額の目安（税込）</h3>
+        <div id="money-rows"></div>
+        <p class="mini">「〜」は最低の金額です。作る前に、きっちり金額をお伝えします。ドメイン代はお店の名義・お店のカードで直接（.com は年1,700円くらい〜）。</p>
+      </div>
+      <div class="panel">
+        <h3>進み具合</h3>
+        <div class="bar"><i id="bar"></i></div>
+        <div class="prog" id="prog"></div>
+      </div>
+    </aside>
   </div>
-</section>
-
-<section><h2>A. お願いごと</h2>
-  <div class="f"><span class="lab">制作例として紹介してよいか<span class="hint">打ち合わせで直接見せる形。サイトや料金表には載せない</span></span>
-    <div class="opts"><label><input type="radio" name="制作例として紹介" value="OK">OK</label><label><input type="radio" name="制作例として紹介" value="NG">NG</label><label><input type="radio" name="制作例として紹介" value="条件つき">条件つき</label></div>
-    <input type="text" name="制作例_メモ" placeholder="条件やひとことメモ"></div>
-  <div class="f"><span class="lab">感想コメントをもらえるか<span class="hint">公開後でOK</span></span>
-    <div class="opts"><label><input type="radio" name="感想コメント" value="OK">OK</label><label><input type="radio" name="感想コメント" value="NG">NG</label><label><input type="radio" name="感想コメント" value="考えておく">考えておく</label></div></div>
-  <div class="f"><span class="lab">紹介できそうな人<span class="hint">話の流れで出たら</span></span><textarea name="紹介できそうな人" placeholder="例）〇〇さん／まつげサロン／HPなし"></textarea></div>
-</section>
-
-<section><h2>B. お店の情報</h2>
-  <div class="f"><span class="lab">店名の正式な書き方・読み方</span><input type="text" name="店名の正式な書き方・読み方" placeholder="例）よもぎ蒸しサロン 〇〇（まるまる）"></div>
-  <div class="f"><span class="lab">電話番号<span class="hint">ネット上の他のサイト（Googleマップ・予約サイト）の番号と同じか</span></span><input type="text" name="電話番号" placeholder="例）080-0000-0000"></div>
-  <div class="f"><span class="lab">住所と郵便番号<span class="hint">郵便物の住所で確認。Googleマップの表記と合っているか一緒に見る</span></span><input type="text" name="住所と郵便番号" placeholder="〒　　　　 住所"></div>
-<div class="f"><span class="lab">部屋番号</span><div class="opts"><label><input type="radio" name="部屋番号" value="載せてよい">載せてよい</label><label><input type="radio" name="部屋番号" value="伏せる（予約時に伝える）">伏せる（予約時に伝える）</label><label><input type="radio" name="部屋番号" value="部屋番号なし">部屋番号なし</label></div></div>
-  <div class="f"><span class="lab">営業時間<span class="hint">「要相談」なら、時間外も受けるという意味か</span></span><input type="text" name="営業時間" placeholder="例）10:00〜18:00（最終受付17:00）"></div>
-  <div class="f"><span class="lab">定休日<span class="hint">不定休なら、休みをどこで知らせているか</span></span><input type="text" name="定休日" placeholder="例）水曜／不定休（休みはInstagramで知らせる）"></div>
-<div class="f"><span class="lab">駐車場</span><div class="opts"><label><input type="radio" name="駐車場" value="あり">あり</label><label><input type="radio" name="駐車場" value="なし">なし</label><label><input type="radio" name="駐車場" value="近くのコインパーキング">近くのコインパーキング</label></div><input type="text" name="駐車場_詳細" placeholder="台数か番号か・どこに停めるか（数字だけにしない）"></div>
-  <div class="f"><span class="lab">メニュー（名前・時間・料金・税込か）</span><textarea name="メニュー（名前・時間・料金・税込か）" placeholder="例）〇〇 60分 5,500円（税込）\n全部のメニューを表で。メニュー表に全部載っているとは限らない"></textarea></div>
-  <div class="f"><span class="lab">支払い方法</span><input type="text" name="支払い方法" placeholder="例）現金・PayPay（導入予定のものも）"></div>
-  <div class="f"><span class="lab">予約の受け方<span class="hint">ネット予約を入れるなら RESERVA 無料（月50件まで）。電話・DMの予約も RESERVA に入れてもらう</span></span><input type="text" name="予約の受け方" placeholder="当日OKか・何時間前まで・キャンセル料・連絡なしのキャンセル"></div>
-  <div class="f"><span class="lab">来てほしい人・お断りする人</span><input type="text" name="来てほしい人・お断りする人" placeholder="例）女性専用／男性も可／お子さま連れOK"></div>
-</section>
-
-<section><h2>C. SNS・連絡・アカウント（本人しか分からないので、その場でスマホから共有してもらう）</h2>
-  <div class="f"><span class="lab">公式LINE（友だち追加URL）<span class="hint">個人のLINEのIDではないか確かめる（ID検索で「検索を許可していません」なら個人）</span></span><input type="text" name="公式LINE（友だち追加URL）" placeholder="管理アプリ → 友だち追加ガイド → URLをコピー"></div>
-  <div class="f"><span class="lab">Instagram・Threads・X のURL</span><textarea name="Instagram・Threads・X のURL" placeholder="載せないものは「載せない」と書く"></textarea></div>
-  <div class="f"><span class="lab">連絡に使うLINEアカウント</span><input type="text" name="連絡に使うLINEアカウント" placeholder="オーナーさんが2つ持っていることがある"></div>
-  <div class="f"><span class="lab">お店用のメールアドレス<span class="hint">予約・Googleマップ・ドメインの登録に使う</span></span><input type="text" name="お店用のメールアドレス" placeholder="なければ2回目の打ち合わせまでに作ってもらう"></div>
-  <div class="f"><span class="lab">Googleマップを管理しているGoogleアカウント<span class="hint">本人が管理画面の場所を分かっていないことが多い</span></span><input type="text" name="Googleマップを管理しているGoogleアカウント" placeholder="思い当たるGmail"></div>
-</section>
-
-<section><h2>D. デザイン・文章・写真</h2>
-  <div class="f"><span class="lab">好きな雰囲気（見本帳の番号）<span class="hint">デザイン見本帳を一緒に見る</span></span><input type="text" name="好きな雰囲気（見本帳の番号）" placeholder="例）1 アットホーム／4 シック"></div>
-  <div class="f"><span class="lab">使いたい色・ロゴ</span><input type="text" name="使いたい色・ロゴ" placeholder="ロゴの有無・好きな色"></div>
-  <div class="f"><span class="lab">ごあいさつ文の材料</span><textarea name="ごあいさつ文の材料" placeholder="言ったことをそのままメモでOK。文章はこちらで整える"></textarea></div>
-  <div class="f"><span class="lab">トップの見出しにしたい言葉</span><input type="text" name="トップの見出しにしたい言葉" placeholder="オーナーさんの言い方のまま"></div>
-  <div class="f"><span class="lab">写真・ロゴ<span class="hint">横で撮ったものを多めに。人や縦長のものは縦でもOK。メニュー表の中の人物写真は素材のことがあるので使わない</span></span>
-    <div class="opts"><label><input type="radio" name="写真の受け取り" value="その場でAirDrop">その場でAirDrop</label><label><input type="radio" name="写真の受け取り" value="後日LINE">後日LINEで送ってもらう</label></div>
-    <div class="opts" style="margin-top:6px"><span>もらえた：</span><label><input type="checkbox" name="写真_店内">店内</label><label><input type="checkbox" name="写真_施術スペース">施術・作業スペース</label><label><input type="checkbox" name="写真_外観">外観・入口・駐車場</label><label><input type="checkbox" name="写真_オーナー">オーナーさん</label><label><input type="checkbox" name="写真_ロゴ">ロゴ</label></div></div>
-  <div class="f"><span class="lab">載せてよいもの・よくないもの</span><textarea name="載せてよいもの・よくないもの" placeholder="顔写真・資格の修了証・お客さんの写り込み など"></textarea></div>
-</section>
-
-<section><h2>E. 検索・ドメイン</h2>
-<div class="f"><span class="lab">Googleマップにお店が出ているか<span class="hint">スマホで「店名 防府」と検索して一緒に確認</span></span><div class="opts"><label><input type="radio" name="Googleマップにお店が出ているか" value="出ている">出ている</label><label><input type="radio" name="Googleマップにお店が出ているか" value="出ていない">出ていない</label><label><input type="radio" name="Googleマップにお店が出ているか" value="わからない">わからない</label></div></div>
-<div class="f"><span class="lab">SNSや掲載サイトにホームページのリンクを貼ってもらう</span><div class="opts"><label><input type="radio" name="SNSや掲載サイトにホームページのリンクを貼ってもらう" value="OK">OK</label><label><input type="radio" name="SNSや掲載サイトにホームページのリンクを貼ってもらう" value="NG">NG</label></div></div>
-<div class="f"><span class="lab">ドメイン（ホームページの住所）</span><div class="opts"><label><input type="radio" name="ドメイン（ホームページの住所）" value="取る">取る</label><label><input type="radio" name="ドメイン（ホームページの住所）" value="今は取らない">今は取らない</label></div><input type="text" name="ドメイン_希望" placeholder="希望の名前（例：店名-hofu）"></div>
-</section>
-
-<section><h2>F. 次の約束・メモ</h2>
-  <div class="f"><span class="lab">試作を見てもらう日（連絡する日）</span><input type="date" name="次に連絡する日"></div>
-  <div class="f"><span class="lab">連絡の手段</span><input type="text" name="連絡の手段" placeholder="例）LINE（〇〇のアカウント）"></div>
-  <div class="f"><span class="lab">そのほかメモ</span><textarea name="その他メモ" style="min-height:120px"></textarea></div>
-</section>
 </div>
-
-<div class="bar">
-  <button class="b1" id="copy">Claudeに渡す用にコピー</button>
-  <button class="b2" id="dl">ファイルに書き出す</button>
-  <button class="b3" id="clear">入力を全部消す</button>
-  <span id="msg"></span>
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="vt">
+  <div class="vbar">
+    <span class="vt" id="vt"></span>
+    <div class="seg" role="group" aria-label="見え方">
+      <button type="button" id="v-sp" aria-pressed="true">スマホ</button>
+      <button type="button" id="v-pc" aria-pressed="false">パソコン</button>
+    </div>
+    <button class="btn" type="button" id="v-prev" aria-label="前の見本">← 前</button>
+    <button class="btn" type="button" id="v-next" aria-label="次の見本">次 →</button>
+    <button class="btn primary" type="button" id="v-pick">この見本を選ぶ</button>
+    <a class="btn" id="v-out" href="#" target="_blank" rel="noopener">別の画面で開く</a>
+    <button class="btn" type="button" id="v-close">閉じる</button>
+    <span class="vinfo" id="vinfo"></span>
+  </div>
+  <div class="vstage sp" id="vstage"><iframe id="vframe" title="見本のページ"></iframe></div>
 </div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
-var KEY='{{SLUG}}-first-meeting-v1';
-var els=function(){return Array.prototype.slice.call(document.querySelectorAll('input,textarea'));};
-function save(){var d={};els().forEach(function(e){if(e.type==='radio'){if(e.checked)d[e.name]=e.value;}else if(e.type==='checkbox'){d[e.name]=e.checked;}else{d[e.name]=e.value;}});try{localStorage.setItem(KEY,JSON.stringify(d));}catch(x){}}
-function load(){var d=null;try{d=JSON.parse(localStorage.getItem(KEY)||'null');}catch(x){}if(!d)return;els().forEach(function(e){if(!(e.name in d))return;if(e.type==='radio'){e.checked=(d[e.name]===e.value);}else if(e.type==='checkbox'){e.checked=!!d[e.name];}else{e.value=d[e.name];}});}
-function text(){var out=['【{{SHOP}} 初回の打ち合わせ結果】'];document.querySelectorAll('section').forEach(function(s){out.push('');out.push('■ '+s.querySelector('h2').textContent);var seen={};s.querySelectorAll('input,textarea').forEach(function(e){if(seen[e.name])return;var v='';if(e.type==='radio'){seen[e.name]=1;var c=s.querySelector('input[name="'+e.name+'"]:checked');v=c?c.value:'';}else if(e.type==='checkbox'){v=e.checked?'済':'';}else{v=e.value.trim();}if(v)out.push('・'+e.name+'：'+v);});});return out.join('\n');}
-function flash(m){var el=document.getElementById('msg');el.textContent=m;setTimeout(function(){el.textContent='';},3000);}
-document.addEventListener('input',save);document.addEventListener('change',save);
-document.getElementById('copy').onclick=function(){var t=text();var done=function(){flash('コピーしました');};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fallback(t);});}else{fallback(t);}};
-function fallback(t){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');flash('コピーしました');}catch(x){flash('コピーできませんでした。書き出しを使ってください');}document.body.removeChild(a);}
-document.getElementById('dl').onclick=function(){var b=new Blob([text()],{type:'text/plain;charset=utf-8'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='{{SHOP}}_初回の打ち合わせ結果.txt';document.body.appendChild(a);a.click();a.remove();flash('ダウンロードに保存しました');};
-document.getElementById('clear').onclick=function(){var ok=document.getElementById('clear').dataset.ok;if(!ok){document.getElementById('clear').dataset.ok='1';flash('もう一度押すと全部消えます');setTimeout(function(){delete document.getElementById('clear').dataset.ok;},3000);return;}try{localStorage.removeItem(KEY);}catch(x){}els().forEach(function(e){if(e.type==='radio'||e.type==='checkbox')e.checked=false;else e.value='';});delete document.getElementById('clear').dataset.ok;flash('消しました');};
-load();
+// 料金：new_client.py が「お見積もりを作る.html」の PRICE をそのまま入れる（元は1か所。ここに金額を書かない）
+{{PRICE_JS}}
 </script>
-</body></html>
+<script>
+// 見本の一覧：new_client.py が tools/mihon/samples_list.json から入れる（見本を足せば自動で増える）
+{{SAMPLES_JS}}
+</script>
+<script>
+(function(){
+  var SAMPLES_ = window.SAMPLES || [], CATS_ = window.CATS || [['all','すべて']];
+  var MIHON_URL = 'https://liftoff-hp.liftoff-358.workers.dev/samples/';  // 一覧画像と「中を見る」は本物の見本帳
+  var pick = [], cat = 'all';
+  var KEY = 'liftoff-hearing-{{SLUG}}-v1';  // お店ごとに分ける。道具を直しても前の答えが消えないよう、この名前は変えない
+
+  function $(id){return document.getElementById(id)}
+  function yen(n){return n.toLocaleString('ja-JP')+'円'}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  // 料金を PRICE から組む（名前・言い方はこのシートのもの。金額は PRICE のもの）
+  var P = window.PRICE;
+  if(!P || !P.plans || !P.plans.std || !P.plans.web || !P.opts){ $('note-ng').hidden=false; $('note-ng').textContent='料金が入っていません。new_client.py で作り直してください（お見積もりを作る.html の PRICE が元）。'; return; }
+  function opt(k){ var o=null; P.opts.forEach(function(x){ if(x.k===k) o=x; }); if(!o){ throw new Error('料金が見つかりません：'+k); } return o.member; }
+  var PLAN = { std:{name:P.plans.std.name, init:P.plans.std.init, month:P.plans.std.month}, dai:{name:P.plans.web.name, init:P.plans.web.init, month:P.plans.web.month} };
+  var INCLUDED = [
+    ['1ページのホームページ（スマホ・パソコン）','古いスマホでも崩れない作り'],
+    ['予約・相談の入口','LINE・電話・ネット予約のボタン。スマホの下に固定'],
+    ['メニュー・料金の見やすい表',''],
+    ['よくある質問',''],
+    ['地図と「道順を見る」ボタン',''],
+    ['LINE で送ったときのカード画像',''],
+    ['ネット予約（RESERVA）につなぐ','お店の名義の無料プラン（月50件まで）にボタンでつなぐ'],
+    ['名刺の見本10枚','裏に試作の QR。本番の名刺は別'],
+    ['更新（月の回数まで）','スタンダード 月2回・代行 月4回']
+  ];
+  var EXTRA = [
+    {id:'form', name:'お問い合わせフォーム', note:'お店のメールに届く', month:P.form, label:'月'+yen(P.form)},
+    {id:'shop', name:'商品ページ（ネットで売る）', note:'商品5点まで・購入するボタン（Square）・特定商取引法の表示', init:opt('goods'), from:true},
+    {id:'page', name:'ページの追加', note:'1ページごと', init:P.page, qty:true},
+    {id:'logo', name:'ロゴ', note:'メインと小さい場所用の2つで1組・直し2回まで', init:opt('logo'), from:true},
+    {id:'meishi', name:'名刺のデザイン（本番）', note:'印刷代は実費', init:opt('card'), from:true},
+    {id:'flyer', name:'チラシ（A4片面）', note:'印刷代は実費', init:opt('flyer'), from:true},
+    {id:'menu', name:'メニュー表（A4片面）', note:'印刷代は実費', init:opt('menu'), from:true},
+    {id:'gmap', name:'Googleマップの最初の整備', note:'WEB担当者代行は、そのあとの投稿（月4回）も', init:opt('gmap'), from:true},
+    {id:'motion', name:'お店に合わせた特別な動き', note:'1か所ごと・直し2回まで', init:opt('anim'), from:true, qty:true}
+  ];
+  function exBy(id){return EXTRA.filter(function(x){return x.id===id})[0]}
+  var TROUBLE = [
+    ['newc','新しいお客さんが来ない','見つけてもらう：Googleマップの整備と、検索に出る設定を一緒に'],
+    ['search','ネットで調べても出てこない','Googleマップの整備（別料金）と、ホームページの検索の設定（初期費用に込み）'],
+    ['notice','お休みやメニューの知らせが面倒','LINE で一言 → こちらで直す（月の回数まで込み）'],
+    ['reserve','予約の管理が大変','ネット予約（RESERVA）に入口をまとめる'],
+    ['old','ホームページが古いまま','作り直し＋そのあとの更新を引き受ける'],
+    ['sns','Instagram だけで、情報がまとまっていない','料金・場所・予約を1ページにまとめ、Instagram からつなぐ'],
+    ['sell','商品を売りたい','商品ページ（別料金 '+yen(exBy('shop').init)+'〜）'],
+    ['look','見た目・ロゴに自信がない','見本帳で雰囲気を決める。ロゴ（別料金）も']
+  ];
+  var GOAL = [
+    ['reserve','ネットで予約','トップの一番前に「ネットで予約する」'],
+    ['line','LINE で相談','トップの一番前に「LINE で相談」。各メニューにも'],
+    ['tel','電話','トップの一番前に電話番号のボタン'],
+    ['visit','お店に来る','地図・道順・駐車場を上のほうに'],
+    ['buy','商品を買う','商品ページを目立つ所に（別料金）'],
+    ['know','まず知ってもらう','写真とお店の雰囲気を大きく']
+  ];
+  var FIELDS = ['mihon','color-like','color-ng','logo','plan','shop','yomi','addr','tel','mail','hours','holiday','parking','pay','reserve','sns','gmap','who','photo','decider','when','when-date','fix','ask-back'];
+  // 「見本を入れる」で入る練習用の答え（架空のお店 hiyori。最初からは入れない）
+  var SAMPLE = {
+    trouble:['sns','notice','sell'], goal:'line',
+    pick:[1,15], mihon:'', 'color-like':'ピンクベージュ・アイボリー', 'color-ng':'真っ黒', logo:'あり（そのまま使う）', plan:'std',
+    ex:{shop:1, form:1}, qty:{page:1, motion:1},
+    shop:'（例）よもぎ蒸しサロン hiyori', yomi:'ひより', addr:'（例）防府市〇〇町1-2-3（部屋番号は載せない）', tel:'（例）090-0000-0000', mail:'（例）未定（2回目までに作る）',
+    hours:'10:00〜18:00', holiday:'不定休（Instagram で知らせる）', parking:'2台（店の前）', pay:'現金（QR 決済は予定）',
+    reserve:'当日OK・2時間前まで・当日キャンセルは全額', sns:'Instagram：（例）@hiyori_sample\n公式LINE：（例）未定', gmap:'分からない（2回目に確かめる）',
+    who:'女性専用', photo:'お部屋の写真はOK・顔はイラストで', decider:'本人だけ', when:'2か月以内', 'when-date':'', fix:'試作のあと2回まで',
+    'ask-back':'「インスタっぽく」→「写真を大きく並べる感じ、で合っていますか？」→ はい'
+  };
+  var EMPTY = {trouble:[],ex:{},qty:{}};
+
+  // 部品を作る
+  function chip(name,type,val,text){
+    return '<label class="chip"><input type="'+type+'" name="'+name+'" value="'+val+'" id="'+name+'-'+val+'"><span>'+esc(text)+'</span></label>';
+  }
+  $('trouble').innerHTML = TROUBLE.map(function(t){return chip('trouble','checkbox',t[0],t[1])}).join('');
+  $('goal').innerHTML = GOAL.map(function(t){return chip('goal','radio',t[0],t[1])}).join('');
+  $('plan').innerHTML = ['std','dai'].map(function(k){var p=PLAN[k];return '<option value="'+k+'">'+esc(p.name)+'（初期'+yen(p.init)+'＋月'+yen(p.month)+'）</option>'}).join('');
+  $('scope-in').innerHTML = INCLUDED.map(function(t){
+    return '<div class="scope-row in"><span aria-hidden="true">✓</span><span class="nm">'+esc(t[0])+(t[1]?'<small>'+esc(t[1])+'</small>':'')+'</span><span class="tag in">込み</span></div>';
+  }).join('');
+  $('scope-ex').innerHTML = EXTRA.map(function(x){
+    var price = x.label || (yen(x.init)+(x.from?'〜':''));
+    return '<label class="scope-row extra" id="row-'+x.id+'"><input type="checkbox" id="ex-'+x.id+'"><span class="nm">'+esc(x.name)+'<small>'+esc(x.note)+'</small></span>'+
+      '<span style="display:flex;gap:6px;align-items:center">'+(x.qty?'<input class="qty" type="number" min="1" max="20" value="1" id="qty-'+x.id+'" aria-label="'+esc(x.name)+'の数">':'')+'<span class="tag ex">'+price+'</span></span></label>';
+  }).join('');
+
+  // 見本の一覧
+  function sampleBy(n){return SAMPLES_.filter(function(x){return x.num===n})[0]}
+  function pickText(){return pick.map(function(n){var x=sampleBy(n);return x?n+' '+x.name:''}).join('、')}
+  function renderCats(){
+    $('cats').innerHTML = CATS_.map(function(c){
+      var n = c[0]==='all'?SAMPLES_.length:SAMPLES_.filter(function(x){return x.cats.indexOf(c[0])>=0}).length;
+      return '<button type="button" data-cat="'+c[0]+'" aria-pressed="'+(cat===c[0])+'">'+esc(c[1])+'<span class="cnt">'+n+'</span></button>';
+    }).join('');
+  }
+  function renderGrid(){
+    var list = SAMPLES_.filter(function(x){return cat==='all'||x.cats.indexOf(cat)>=0});
+    $('mgrid').innerHTML = list.map(function(x){
+      var i = pick.indexOf(x.num), sel = i>=0;
+      return '<div class="mcard'+(sel?' sel':'')+'" data-num="'+x.num+'">'+
+        '<span class="badge">'+(sel?(i+1)+'つ目':'')+'</span>'+
+        '<img src="'+MIHON_URL+'thumbs/'+esc(x.thumb)+'" alt="見本'+x.num+' '+esc(x.name)+'（画像はネットがあるときだけ）" loading="lazy" onerror="this.classList.add(\'ng\')">'+
+        '<span class="mt"><span class="mn"><em>'+x.num+'</em>'+esc(x.name)+'</span>'+
+        '<span class="sw">'+x.colors.map(function(c){return '<i style="background:'+esc(c)+'"></i>'}).join('')+'</span>'+
+        '<span class="mood">'+esc(x.mood)+'</span>'+
+        '<span class="acts"><button type="button" class="see" data-see="'+x.num+'">中を見る</button><button type="button" class="pk" data-pk="'+x.num+'">'+(sel?'選んだ ✓':'選ぶ')+'</button></span></span></div>';
+    }).join('');
+    $('mdetail').innerHTML = pick.map(function(n){var x=sampleBy(n);if(!x)return '';return '<p><b>'+n+' '+esc(x.name)+'</b>：'+esc(x.feature)+'（向いているお店：'+esc(x.fit)+'）</p>'}).join('');
+  }
+  function togglePick(n){
+    var i=pick.indexOf(n);
+    if(i>=0) pick.splice(i,1);
+    else { if(pick.length>=2){ toast('2つまでです。先に選んだものを外してください'); return; } pick.push(n); }
+    $('mihon').value = pickText();
+    renderGrid(); render();
+  }
+  $('cats').addEventListener('click',function(e){var b=e.target.closest('button[data-cat]');if(!b)return;cat=b.getAttribute('data-cat');renderCats();renderGrid()});
+  $('mgrid').addEventListener('click',function(e){
+    var p=e.target.closest('[data-pk]'); if(p){ togglePick(+p.getAttribute('data-pk')); return; }
+    var s=e.target.closest('[data-see]'); if(s){ openViewer(+s.getAttribute('data-see')); return; }
+    if(e.target.tagName==='IMG'){ var c=e.target.closest('.mcard'); if(c) openViewer(+c.getAttribute('data-num')); }
+  });
+
+  // 見本をのぞく（この画面の中で本物の見本のページを動かす）
+  var vNum=0, vList=[], lastFocus=null;
+  function visibleList(){return SAMPLES_.filter(function(x){return cat==='all'||x.cats.indexOf(cat)>=0}).map(function(x){return x.num})}
+  function showViewer(){
+    var x=sampleBy(vNum); if(!x) return;
+    $('vt').innerHTML='<em>'+x.num+'</em>'+esc(x.name);
+    $('vinfo').textContent=x.mood+' ／ 向いているお店：'+x.fit+'（見本の店名・料金・写真は架空。ネットがないときは表示されません）';
+    $('vframe').src=MIHON_URL+x.dir+'/';
+    $('v-out').href=MIHON_URL+x.dir+'/';
+    var sel=pick.indexOf(x.num)>=0; $('v-pick').textContent = sel?'選んだ ✓（押すと外す）':'この見本を選ぶ';
+  }
+  function openViewer(n){ vList=visibleList(); vNum=n; lastFocus=document.activeElement; $('viewer').hidden=false; document.body.style.overflow='hidden'; showViewer(); $('v-close').focus(); }
+  function closeViewer(){ $('viewer').hidden=true; $('vframe').src='about:blank'; document.body.style.overflow=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+  function step(d){ var i=vList.indexOf(vNum); if(i<0) i=0; vNum=vList[(i+d+vList.length)%vList.length]; showViewer(); }
+  function setView(sp){ $('vstage').classList.toggle('sp',sp); $('v-sp').setAttribute('aria-pressed',sp); $('v-pc').setAttribute('aria-pressed',!sp); }
+  $('v-close').addEventListener('click',closeViewer);
+  $('v-prev').addEventListener('click',function(){step(-1)});
+  $('v-next').addEventListener('click',function(){step(1)});
+  $('v-sp').addEventListener('click',function(){setView(true)});
+  $('v-pc').addEventListener('click',function(){setView(false)});
+  $('v-pick').addEventListener('click',function(){ togglePick(vNum); showViewer(); });
+  $('viewer').addEventListener('click',function(e){ if(e.target===this) closeViewer(); });
+  document.addEventListener('keydown',function(e){ if($('viewer').hidden) return; if(e.key==='Escape') closeViewer(); else if(e.key==='ArrowRight') step(1); else if(e.key==='ArrowLeft') step(-1); });
+
+  // 状態
+  function read(){
+    var s={trouble:[],goal:'',ex:{},qty:{},pick:pick.slice()};
+    document.querySelectorAll('input[name=trouble]:checked').forEach(function(e){s.trouble.push(e.value)});
+    var g=document.querySelector('input[name=goal]:checked'); s.goal=g?g.value:'';
+    EXTRA.forEach(function(x){ if($('ex-'+x.id).checked) s.ex[x.id]=1; if(x.qty) s.qty[x.id]=Math.max(1,parseInt($('qty-'+x.id).value,10)||1); });
+    FIELDS.forEach(function(f){s[f]=$(f).value});
+    return s;
+  }
+  function write(s){
+    document.querySelectorAll('input[name=trouble]').forEach(function(e){e.checked=(s.trouble||[]).indexOf(e.value)>=0});
+    document.querySelectorAll('input[name=goal]').forEach(function(e){e.checked=(s.goal===e.value)});
+    EXTRA.forEach(function(x){ $('ex-'+x.id).checked=!!(s.ex&&s.ex[x.id]); if(x.qty) $('qty-'+x.id).value=(s.qty&&s.qty[x.id])||1; });
+    FIELDS.forEach(function(f){ var el=$(f); if(f==='plan') el.value=s.plan||'std'; else if(f==='fix') el.value=s.fix||'試作のあと2回まで'; else el.value=s[f]||''; });
+    pick = (s.pick||[]).slice(0,2);
+    if(pick.length && !s.mihon) $('mihon').value = pickText();
+    renderGrid();
+  }
+  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  function load(){try{var t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
+
+  // 金額
+  function calc(s){
+    var p=PLAN[s.plan||'std'], init=p.init, month=p.month, rows=[['初期費用（'+p.name+'）',yen(p.init)]], from=false;
+    EXTRA.forEach(function(x){
+      if(!s.ex[x.id]) return;
+      var q=x.qty?(s.qty[x.id]||1):1;
+      if(x.month){ month+=x.month; rows.push([x.name,'月'+yen(x.month)]); }
+      else { init+=x.init*q; if(x.from) from=true; rows.push([x.name+(x.qty?' ×'+q:''), yen(x.init*q)+(x.from?'〜':'')]); }
+    });
+    return {rows:rows, init:init, month:month, from:from, plan:p};
+  }
+
+  function done(s){
+    return {
+      1:s.trouble.length>0, 2:!!s.goal, 3:!!(s.mihon||s['color-like']),
+      4:true, 5:['shop','addr','tel','hours'].filter(function(f){return s[f]}).length>=3,
+      6:!!(s.decider&&s.when), 7:!!s['ask-back']
+    };
+  }
+  var TITLES={1:'困っていること',2:'一番してほしいこと',3:'雰囲気',4:'範囲と金額',5:'必ず聞くこと',6:'決める人・公開日',7:'聞き返したこと'};
+
+  function render(){
+    var s=read(); save(s);
+    // ヒント
+    $('trouble-hint').innerHTML = s.trouble.map(function(k){var t=TROUBLE.filter(function(x){return x[0]===k})[0];return '→ '+esc(t[2])}).join('<br>');
+    var g=GOAL.filter(function(x){return x[0]===s.goal})[0];
+    $('goal-hint').textContent = g ? '→ '+g[2] : '';
+    // 範囲の色
+    EXTRA.forEach(function(x){ $('row-'+x.id).classList.toggle('picked', !!s.ex[x.id]); });
+    var tips=[];
+    if(s.trouble.indexOf('sell')>=0 && !s.ex.shop) tips.push('「商品を売りたい」にチェックがあります。商品ページ（'+yen(exBy('shop').init)+'〜）を入れますか？');
+    if(s.goal==='buy' && !s.ex.shop) tips.push('一番してほしいことが「商品を買う」です。商品ページが要ります。');
+    if((s.trouble.indexOf('newc')>=0||s.trouble.indexOf('search')>=0) && !s.ex.gmap && s.plan!=='dai') tips.push('「見つけてもらう」が困りごとです。Googleマップの最初の整備（'+yen(exBy('gmap').init)+'〜）か、WEB担当者代行が合います。');
+    if(s.logo==='なし（作りたい）'||s.logo==='あり（作り直したい）'){ if(!s.ex.logo) tips.push('ロゴを作りたいとのことです。ロゴ（'+yen(exBy('logo').init)+'〜）を入れますか？'); }
+    $('scope-hint').innerHTML = tips.map(esc).join('<br>');
+    // 金額
+    var m=calc(s);
+    $('money-rows').innerHTML = m.rows.map(function(r){return '<div class="row"><span>'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>'}).join('')+
+      '<div class="row total"><span>最初にかかる合計</span><span class="v">'+yen(m.init)+(m.from?'〜':'')+'</span></div>'+
+      '<div class="row month"><span>毎月</span><span class="v">'+yen(m.month)+'</span></div>';
+    // 進み具合
+    var d=done(s), n=0, keys=[1,2,3,4,5,6,7];
+    $('prog').innerHTML = keys.map(function(k){ if(d[k]) n++; return '<a href="#s'+k+'"><span class="dot'+(d[k]?' on':'')+'"></span>'+k+'. '+TITLES[k]+(k===7?'（任意）':'')+'</a>'; }).join('');
+    $('bar').style.width = Math.round(n/keys.length*100)+'%';
+    document.querySelectorAll('[data-done]').forEach(function(el){ var k=el.getAttribute('data-done'); el.classList.toggle('on',!!d[k]); el.textContent = d[k]?'済み':(k==='7'?'任意':'まだ'); });
+    if(!$('sheet-wrap').hidden) renderSheet(s,m);
+  }
+
+  function labelOf(list,k){var t=list.filter(function(x){return x[0]===k})[0];return t?t[1]:''}
+  function sheetData(s,m){
+    var extras = EXTRA.filter(function(x){return s.ex[x.id]}).map(function(x){var q=x.qty?(s.qty[x.id]||1):1;return x.name+(x.qty?' ×'+q:'')+'（'+(x.month?'月'+yen(x.month):yen(x.init*q)+(x.from?'〜':''))+'）'});
+    return [
+      ['お店', s.shop||'（未記入）'],
+      ['困っていること', s.trouble.map(function(k){return labelOf(TROUBLE,k)}).join('、')||'（未記入）'],
+      ['一番してほしいこと', labelOf(GOAL,s.goal)||'（未記入）'],
+      ['雰囲気', ['見本 '+(s.mihon||'—'),'好きな色 '+(s['color-like']||'—'),'使いたくない色 '+(s['color-ng']||'—'),'ロゴ '+(s.logo||'—')].join(' ／ ')],
+      ['プラン', m.plan.name],
+      ['初期費用に入るもの', '1ページ（スマホ対応）・予約や相談の入口・メニューと料金・よくある質問・地図と道順・LINE のカード・ネット予約へのボタン・名刺の見本10枚'],
+      ['別料金で頼むもの', extras.join('、')||'なし'],
+      ['金額の目安（税込）', '最初に '+yen(m.init)+(m.from?'〜':'')+' ／ 毎月 '+yen(m.month)+'（ドメイン代はお店が直接）'],
+      ['公開したい時期', (s.when||'（未記入）')+(s['when-date']?'（'+s['when-date']+'）':'')],
+      ['決める人', s.decider||'（未記入）'],
+      ['直しの回数', s.fix],
+      ['聞き返したこと', s['ask-back']||'—']
+    ];
+  }
+  function renderSheet(s,m){
+    var rows=sheetData(s,m);
+    var today=new Date(); var ds=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+    $('sheet').innerHTML = '<h2>作るもの確認書</h2><p style="margin:0 0 10px;font-size:13px;color:var(--muted)">'+ds+'　Lift-Off</p><table><tbody>'+
+      rows.map(function(r){return '<tr><th>'+esc(r[0])+'</th><td>'+esc(r[1]).replace(/\n/g,'<br>')+'</td></tr>'}).join('')+
+      '</tbody></table><p class="small">この内容で作り始めます。ここにないものを足すときは、作る前に金額をお伝えします。「〜」の金額は、中身が決まったときに正式にお伝えします。</p>'+
+      '<div class="sign"><div>お店：<span></span></div><div>Lift-Off：<span></span></div></div>';
+  }
+  function copyText(s,m){
+    var lines=['【{{SHOP}} 初回ヒヤリング】'];
+    sheetData(s,m).forEach(function(r){lines.push('■ '+r[0]+'：'+r[1])});
+    lines.push('■ 住所：'+(s.addr||'—'),'■ 電話：'+(s.tel||'—'),'■ メール：'+(s.mail||'—'),'■ 営業時間：'+(s.hours||'—')+' ／ 定休日：'+(s.holiday||'—'),
+      '■ 駐車場：'+(s.parking||'—'),'■ 支払い：'+(s.pay||'—'),'■ 予約の受け方：'+(s.reserve||'—'),'■ SNS：'+(s.sns||'—').replace(/\n/g,' ／ '),
+      '■ Googleマップのアカウント：'+(s.gmap||'—'),'■ 来てほしい人・お断り：'+(s.who||'—'),'■ 載せてよいもの：'+(s.photo||'—'),'■ 読み方：'+(s.yomi||'—'));
+    return lines.join('\n');
+  }
+
+  function toast(t){var el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){el.hidden=true},1800)}
+
+  document.addEventListener('input',render);
+  document.addEventListener('change',render);
+  $('btn-sample').addEventListener('click',function(){write(SAMPLE);render();toast('練習用の見本を入れました（架空のお店）')});
+  var clearArmed=false;
+  $('btn-clear').addEventListener('click',function(){
+    if(!clearArmed){clearArmed=true;this.textContent='もう一度押すと空にします';var b=this;setTimeout(function(){clearArmed=false;b.textContent='空にする'},3000);return}
+    clearArmed=false;this.textContent='空にする';write(EMPTY);render();toast('空にしました');
+  });
+  $('btn-sheet').addEventListener('click',function(){var w=$('sheet-wrap');w.hidden=false;render();w.scrollIntoView({behavior:'smooth',block:'start'})});
+  $('btn-print').addEventListener('click',function(){ render(); window.print(); });
+  $('btn-copy').addEventListener('click',function(){
+    var s=read(), t=copyText(s,calc(s)), box=$('copybox');
+    function fallback(){box.hidden=false;box.value=t;box.focus();box.select();toast('下の欄を選んでコピーしてください')}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('コピーしました')},fallback)}else fallback();
+  });
+
+  renderCats();
+  write(load()||EMPTY);
+  render();
+})();
+</script>
+</body>
+</html>

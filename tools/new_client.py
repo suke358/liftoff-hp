@@ -11,26 +11,62 @@
     python3 new_client.py <英字の短い名前> <お店の名前> [<置く場所>] --second
 
   料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
+  初回の入力シート（初回ヒヤリングシート。templates/first.html）には、作るときに
+    ・料金：「お見積もりを作る.html」の PRICE をそのまま埋める（料金の元は1か所）
+    ・見本の一覧：mihon/samples_list.json を埋める（見本を足せば自動で増える。画像と「中を見る」は公開の見本帳）
+  どちらかが見つからないときは ⚠️ を出して止まる（2026/10/11）
 
 できるもの:
   <お店の名前>_今日の打ち合わせ/
-    1 次の打ち合わせで使うもの/ … 入力シート（Mac で入力・自動保存・「Claudeに渡す用にコピー」）、見本帳のリンク、料金表
+    1 次の打ち合わせで使うもの/ … 初回ヒヤリングシート（Mac で入力・自動保存・見本を選ぶ・金額・作るもの確認書の印刷・「Claudeに渡す用にコピー」）、見本帳のリンク、料金表
     2 名刺の見本/  3 ロゴ案/  4 もらった写真/  5 済んだ打ち合わせ/  6 LINEの下書き/  7 古いもの（使わない）/
     はじめに読む（フォルダの中身）.txt
   ＋ 画面に「お客さんのファイル（claude/お客さん/〇〇.md）のひな形」と「顧客管理シートに足す1行」を出す
 """
-import sys, os, shutil, datetime
+import sys, os, re, json, shutil, datetime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TPL = os.path.join(HERE, 'templates')
 SAMPLES = 'https://liftoff-hp.liftoff-358.workers.dev/samples/'
+ESTIMATE = os.path.join(HERE, 'お見積もりを作る.html')          # 料金の元（var PRICE = {...};）
+SAMPLES_JSON = os.path.join(HERE, 'mihon', 'samples_list.json')  # 見本の一覧の元
+PRICE_KEYS = ('plans:', 'std:', 'web:', 'page:', 'form:', 'opts:', "k: 'logo'", "k: 'card'", "k: 'flyer'", "k: 'menu'", "k: 'gmap'", "k: 'anim'", "k: 'goods'")  # シートが使う料金
 BASE_DEFAULT = '~/Desktop/03_Lift-off事業/1_HP制作/2_お客さん'  # 打ち合わせフォルダを作る場所（置く場所を省いたとき）
 PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
 DIRS = ['1 次の打ち合わせで使うもの', '2 名刺の見本', '3 ロゴ案', '4 もらった写真', '5 済んだ打ち合わせ', '6 LINEの下書き', '7 古いもの（使わない）']
 
+def price_js():
+    """「お見積もりを作る.html」の var PRICE = {...}; をそのまま取り出す（料金の元は1か所）。見つからなければ止まる"""
+    if not os.path.exists(ESTIMATE):
+        print(f'⚠️ 料金の元「お見積もりを作る.html」が見つかりません。止まります：{ESTIMATE}'); sys.exit(1)
+    s = open(ESTIMATE, encoding='utf-8').read()
+    m = re.search(r'^var PRICE = \{.*?^\};', s, re.S | re.M)
+    if not m:
+        print('⚠️ 「お見積もりを作る.html」の中に var PRICE = {...}; が見つかりません。止まります'); sys.exit(1)
+    js = m.group(0)
+    lack = [k for k in PRICE_KEYS if k not in js]
+    if lack:
+        print(f'⚠️ PRICE の中に、シートが使う料金がありません：{"・".join(lack)}。止まります（お見積もりを作る.html か templates/first.html を直す）'); sys.exit(1)
+    return js
+
+def samples_js():
+    """見本の一覧（mihon/samples_list.json）を var SAMPLES / var CATS にする。見つからなければ止まる"""
+    if not os.path.exists(SAMPLES_JSON):
+        print(f'⚠️ 見本の一覧が見つかりません。止まります：{SAMPLES_JSON}'); sys.exit(1)
+    d = json.load(open(SAMPLES_JSON, encoding='utf-8'))
+    if not d.get('samples') or not d.get('cats'):
+        print('⚠️ samples_list.json に samples か cats がありません。止まります'); sys.exit(1)
+    return 'var SAMPLES = %s;\nvar CATS = %s;' % (json.dumps(d['samples'], ensure_ascii=False), json.dumps(d['cats'], ensure_ascii=False))
+
 def fill(name, slug, shop):
     s = open(os.path.join(TPL, name), encoding='utf-8').read()
-    return s.replace('{{SHOP}}', shop).replace('{{SLUG}}', slug)
+    s = s.replace('{{SHOP}}', shop).replace('{{SLUG}}', slug)
+    if '{{PRICE_JS}}' in s: s = s.replace('{{PRICE_JS}}', price_js())
+    if '{{SAMPLES_JS}}' in s: s = s.replace('{{SAMPLES_JS}}', samples_js())
+    left = re.findall(r'\{\{[A-Z_]+\}\}', s)
+    if left:
+        print(f'⚠️ ひな形 {name} に埋めていない印が残っています：{" ".join(sorted(set(left)))}。止まります'); sys.exit(1)
+    return s
 
 def webloc(path, url):
     open(path, 'w', encoding='utf-8').write(
@@ -43,7 +79,7 @@ def readme(root, shop, second):
              '   2 取り決めメモ（2部印刷する）… Claude が作って入れる\n'
              '   3 予約メニュー入力シート（Macで開く）.html … その場で入力 →「Claudeに渡す用にコピー」→ チャットに貼る\n'
              '   4 Googleマップに入れる文.txt ／ 5 Googleマップ用の写真 … Claude が作って入れる\n') if second else (
-             '   1 初回の打ち合わせ_入力シート（Macで開く）.html … 話しながら入力 →「Claudeに渡す用にコピー」→ チャットに貼る\n'
+             '   1 初回の打ち合わせ_入力シート（Macで開く）.html … 初回ヒヤリングシート。お店の人と一緒に上から順にチェック（困りごと → 見本を選ぶ → 範囲と金額 → 必ず聞くこと）→「作るもの確認書を見る」→ 印刷 / PDF と「Claudeに渡す用にコピー」→ チャットに貼る\n'
              '   2 デザイン見本帳を開く.webloc … テイストを番号で選んでもらう\n'
              '   3 料金表_A4.pdf … 印刷して持っていく（「1_お客さまに渡す資料」の料金表を自動でコピー）\n'
              '   4 お見積もり（Macで開く・印刷やPDFにできる）.html … その場で選ぶと金額が出る →「印刷 / PDFにする」（マニュアル 22）\n')
