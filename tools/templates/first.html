@@ -234,6 +234,15 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
         </div>
       </section>
 
+      <!-- 最初に伝えること（番号なし） -->
+      <section class="step" id="s-tell">
+        <div class="step-head"><span class="num" aria-hidden="true">✓</span><h2>最初に伝えること</h2><span class="done-mark" data-done="tell">まだ</span></div>
+        <p class="say">言い方：「金額の話の前に、<b>4つだけお伝えします</b>」（伝えたらチェック。4つ全部で済み）</p>
+        <div class="body">
+          <div class="chips" id="tell"></div>
+        </div>
+      </section>
+
       <!-- 4 -->
       <section class="step" id="s4">
         <div class="step-head"><span class="num">4</span><h2>やりたいこと・範囲と金額</h2><span class="done-mark" data-done="4">まだ</span></div>
@@ -267,6 +276,13 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
           <label class="f">Googleマップを管理している Google アカウント<input id="gmap" type="text"></label>
           <label class="f">来てほしい人・お断りする人<input id="who" type="text"></label>
           <label class="f full">載せてよいもの・だめなもの（写真・顔・ロゴ・修了証）<input id="photo" type="text"></label>
+          <label class="f full">メニューの名前・時間・料金・税込か（メニュー表でもらう。表に足りない所だけここに）<textarea id="menu-note"></textarea></label>
+          <label class="f">連絡に使う LINE<select id="contact"><option value="">選ぶ</option><option>お店の公式LINE</option><option>個人の LINE</option><option>電話・メール</option></select></label>
+          <label class="f">ごあいさつ文に入れたい言葉（キーワード）<input id="greet" type="text"></label>
+          <label class="f full">トップの見出しにしたい言葉（お店の人の言い方のまま）<input id="headline" type="text"></label>
+          <label class="f">写真の受け取り方<select id="photo-how"><option value="">選ぶ</option><option>AirDrop</option><option>LINE のアルバム</option><option>あとで</option></select></label>
+          <label class="f">「この雰囲気で」と渡された画像<select id="photo-ref"><option value="">選ぶ</option><option>本物として使う</option><option>雰囲気の見本</option><option>渡されていない</option></select></label>
+          <div class="full"><span style="font-size:13px;color:var(--muted)">ある写真（あるものにチェック）</span><div class="chips" id="photo-have" style="margin-top:4px"></div></div>
         </div>
       </section>
 
@@ -284,7 +300,20 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
 
       <!-- 7 -->
       <section class="step" id="s7">
-        <div class="step-head"><span class="num">7</span><h2>聞き返したこと（あいまいな言葉）</h2><span class="done-mark" data-done="7">任意</span></div>
+        <div class="step-head"><span class="num">7</span><h2>お願いと次の約束</h2><span class="done-mark" data-done="7">まだ</span></div>
+        <p class="say">言い方：「最後に、<b>お願いが2つと、次の約束</b>です」「できたら、ほかのお店に<b>見本として見せてもいいですか？</b>」「<b>次は〇日に試作をお見せします</b>」</p>
+        <div class="body grid2">
+          <label class="f">制作例として紹介してよいか（打ち合わせで直接見せる形）<select id="intro"><option value="">選ぶ</option><option>はい</option><option>いいえ</option><option>公開のあとで決める</option></select></label>
+          <label class="f">感想コメントをもらえるか（公開のあとで）<select id="review"><option value="">選ぶ</option><option>はい</option><option>いいえ</option><option>考えておく</option></select></label>
+          <label class="f full">紹介できそうな人（話の流れで出たらメモ）<textarea id="refer"></textarea></label>
+          <label class="f">試作を見てもらう日<input id="next-date" type="date"></label>
+          <label class="f">連絡の手段<input id="next-how" type="text" placeholder="例）お店の公式LINE"></label>
+        </div>
+      </section>
+
+      <!-- 8 -->
+      <section class="step" id="s8">
+        <div class="step-head"><span class="num">8</span><h2>聞き返したこと（あいまいな言葉）</h2><span class="done-mark" data-done="8">任意</span></div>
         <p class="say">あいまいな言葉は、その場で選択肢にして聞き返し、答えをここに書く（例：「普通の色」→「金の箔なしの色、で合っていますか？」→ はい）</p>
         <div class="body">
           <label class="f"><textarea id="ask-back"></textarea></label>
@@ -310,7 +339,7 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
       <div class="panel money" id="money">
         <h3>金額の目安（税込）</h3>
         <div id="money-rows"></div>
-        <p class="mini">「〜」は最低の金額です。作る前に、きっちり金額をお伝えします。ドメイン代はお店の名義・お店のカードで直接（.com は年1,700円くらい〜）。</p>
+        <p class="mini">「〜」は最低の金額です。作る前に、きっちり金額をお伝えします。ドメイン代はお店の名義・お店のカードで直接（年2,000円前後〜）。</p>
       </div>
       <div class="panel">
         <h3>進み具合</h3>
@@ -403,7 +432,16 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
     ['buy','商品を買う','商品ページを目立つ所に（別料金）'],
     ['know','まず知ってもらう','写真とお店の雰囲気を大きく']
   ];
-  var FIELDS = ['mihon','color-like','color-ng','logo','plan','shop','yomi','addr','tel','mail','hours','holiday','parking','pay','reserve','sns','gmap','who','photo','decider','when','when-date','fix','ask-back'];
+  // 最初に伝えること（4つ全部で済み）
+  var TELL = [
+    ['price','料金：税込。作る前に金額を伝える'],
+    ['name','名義：ドメイン・Googleマップ・予約はお店の名前'],
+    ['data','データ：やめるときは全部渡す。お店のお客さんの個人情報はこちらで持たない'],
+    ['promise','約束しないこと：検索の順位・お客さんが増えること']
+  ];
+  var PHOTO_HAVE = [['gaikan','外観'],['iriguchi','入口'],['parking','駐車場']];
+  var FIELDS = ['mihon','color-like','color-ng','logo','plan','shop','yomi','addr','tel','mail','hours','holiday','parking','pay','reserve','sns','gmap','who','photo',
+    'menu-note','contact','greet','headline','photo-how','photo-ref','decider','when','when-date','fix','intro','review','refer','next-date','next-how','ask-back'];
   // 「見本を入れる」で入る練習用の答え（架空のお店 hiyori。最初からは入れない）
   var SAMPLE = {
     trouble:['sns','notice','sell'], goal:'line',
@@ -413,9 +451,12 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
     hours:'10:00〜18:00', holiday:'不定休（Instagram で知らせる）', parking:'2台（店の前）', pay:'現金（QR 決済は予定）',
     reserve:'当日OK・2時間前まで・当日キャンセルは全額', sns:'Instagram：（例）@hiyori_sample\n公式LINE：（例）未定', gmap:'分からない（2回目に確かめる）',
     who:'女性専用', photo:'お部屋の写真はOK・顔はイラストで', decider:'本人だけ', when:'2か月以内', 'when-date':'', fix:'試作のあと2回まで',
+    tell:['price','name','data','promise'], 'menu-note':'よもぎ蒸し 40分 3,500円（税込）／脱毛は表のとおり', contact:'お店の公式LINE', greet:'（例）体の中からあたたまる・女性専用・初めてでも', headline:'（例）今日はがんばった自分に',
+    'photo-how':'AirDrop', 'photo-have':['gaikan','iriguchi'], 'photo-ref':'雰囲気の見本',
+    intro:'はい', review:'考えておく', refer:'（例）〇〇さん／まつげサロン／HPなし', 'next-date':'', 'next-how':'お店の公式LINE',
     'ask-back':'「インスタっぽく」→「写真を大きく並べる感じ、で合っていますか？」→ はい'
   };
-  var EMPTY = {trouble:[],ex:{},qty:{}};
+  var EMPTY = {trouble:[],tell:[],'photo-have':[],ex:{},qty:{}};
 
   // 部品を作る
   function chip(name,type,val,text){
@@ -423,6 +464,8 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
   }
   $('trouble').innerHTML = TROUBLE.map(function(t){return chip('trouble','checkbox',t[0],t[1])}).join('');
   $('goal').innerHTML = GOAL.map(function(t){return chip('goal','radio',t[0],t[1])}).join('');
+  $('tell').innerHTML = TELL.map(function(t){return chip('tell','checkbox',t[0],t[1])}).join('');
+  $('photo-have').innerHTML = PHOTO_HAVE.map(function(t){return chip('photo-have','checkbox',t[0],t[1])}).join('');
   $('plan').innerHTML = ['std','dai'].map(function(k){var p=PLAN[k];return '<option value="'+k+'">'+esc(p.name)+'（初期'+yen(p.init)+'＋月'+yen(p.month)+'）</option>'}).join('');
   $('scope-in').innerHTML = INCLUDED.map(function(t){
     return '<div class="scope-row in"><span aria-hidden="true">✓</span><span class="nm">'+esc(t[0])+(t[1]?'<small>'+esc(t[1])+'</small>':'')+'</span><span class="tag in">込み</span></div>';
@@ -496,8 +539,10 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
 
   // 状態
   function read(){
-    var s={trouble:[],goal:'',ex:{},qty:{},pick:pick.slice()};
+    var s={trouble:[],tell:[],'photo-have':[],goal:'',ex:{},qty:{},pick:pick.slice()};
     document.querySelectorAll('input[name=trouble]:checked').forEach(function(e){s.trouble.push(e.value)});
+    document.querySelectorAll('input[name=tell]:checked').forEach(function(e){s.tell.push(e.value)});
+    document.querySelectorAll('input[name=photo-have]:checked').forEach(function(e){s['photo-have'].push(e.value)});
     var g=document.querySelector('input[name=goal]:checked'); s.goal=g?g.value:'';
     EXTRA.forEach(function(x){ if($('ex-'+x.id).checked) s.ex[x.id]=1; if(x.qty) s.qty[x.id]=Math.max(1,parseInt($('qty-'+x.id).value,10)||1); });
     FIELDS.forEach(function(f){s[f]=$(f).value});
@@ -505,6 +550,8 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
   }
   function write(s){
     document.querySelectorAll('input[name=trouble]').forEach(function(e){e.checked=(s.trouble||[]).indexOf(e.value)>=0});
+    document.querySelectorAll('input[name=tell]').forEach(function(e){e.checked=(s.tell||[]).indexOf(e.value)>=0});
+    document.querySelectorAll('input[name=photo-have]').forEach(function(e){e.checked=(s['photo-have']||[]).indexOf(e.value)>=0});
     document.querySelectorAll('input[name=goal]').forEach(function(e){e.checked=(s.goal===e.value)});
     EXTRA.forEach(function(x){ $('ex-'+x.id).checked=!!(s.ex&&s.ex[x.id]); if(x.qty) $('qty-'+x.id).value=(s.qty&&s.qty[x.id])||1; });
     FIELDS.forEach(function(f){ var el=$(f); if(f==='plan') el.value=s.plan||'std'; else if(f==='fix') el.value=s.fix||'試作のあと2回まで'; else el.value=s[f]||''; });
@@ -529,12 +576,13 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
 
   function done(s){
     return {
-      1:s.trouble.length>0, 2:!!s.goal, 3:!!(s.mihon||s['color-like']),
+      1:s.trouble.length>0, 2:!!s.goal, 3:!!(s.mihon||s['color-like']), tell:s.tell.length===TELL.length,
       4:true, 5:['shop','addr','tel','hours'].filter(function(f){return s[f]}).length>=3,
-      6:!!(s.decider&&s.when), 7:!!s['ask-back']
+      6:!!(s.decider&&s.when), 7:!!(s.intro&&s['next-date']), 8:!!s['ask-back']
     };
   }
-  var TITLES={1:'困っていること',2:'一番してほしいこと',3:'雰囲気',4:'範囲と金額',5:'必ず聞くこと',6:'決める人・公開日',7:'聞き返したこと'};
+  var TITLES={1:'困っていること',2:'一番してほしいこと',3:'雰囲気',tell:'最初に伝えること',4:'範囲と金額',5:'必ず聞くこと',6:'決める人・公開日',7:'お願いと次の約束',8:'聞き返したこと'};
+  var KEYS=[1,2,3,'tell',4,5,6,7,8];  // 進み具合の並び（画面の上から順）
 
   function render(){
     var s=read(); save(s);
@@ -556,10 +604,10 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
       '<div class="row total"><span>最初にかかる合計</span><span class="v">'+yen(m.init)+(m.from?'〜':'')+'</span></div>'+
       '<div class="row month"><span>毎月</span><span class="v">'+yen(m.month)+'</span></div>';
     // 進み具合
-    var d=done(s), n=0, keys=[1,2,3,4,5,6,7];
-    $('prog').innerHTML = keys.map(function(k){ if(d[k]) n++; return '<a href="#s'+k+'"><span class="dot'+(d[k]?' on':'')+'"></span>'+k+'. '+TITLES[k]+(k===7?'（任意）':'')+'</a>'; }).join('');
+    var d=done(s), n=0, keys=KEYS;
+    $('prog').innerHTML = keys.map(function(k){ if(d[k]) n++; var id=(k==='tell'?'s-tell':'s'+k), num=(k==='tell'?'✓':k+'.'); return '<a href="#'+id+'"><span class="dot'+(d[k]?' on':'')+'"></span>'+num+' '+TITLES[k]+(k===8?'（任意）':'')+'</a>'; }).join('');
     $('bar').style.width = Math.round(n/keys.length*100)+'%';
-    document.querySelectorAll('[data-done]').forEach(function(el){ var k=el.getAttribute('data-done'); el.classList.toggle('on',!!d[k]); el.textContent = d[k]?'済み':(k==='7'?'任意':'まだ'); });
+    document.querySelectorAll('[data-done]').forEach(function(el){ var k=el.getAttribute('data-done'); el.classList.toggle('on',!!d[k]); el.textContent = d[k]?'済み':(k==='8'?'任意':'まだ'); });
     if(!$('sheet-wrap').hidden) renderSheet(s,m);
   }
 
@@ -575,9 +623,18 @@ textarea#copybox{width:100%;min-height:120px;font:inherit;font-size:13px;margin-
       ['初期費用に入るもの', '1ページ（スマホ対応）・予約や相談の入口・メニューと料金・よくある質問・地図と道順・LINE のカード・ネット予約へのボタン・名刺の見本10枚'],
       ['別料金で頼むもの', extras.join('、')||'なし'],
       ['金額の目安（税込）', '最初に '+yen(m.init)+(m.from?'〜':'')+' ／ 毎月 '+yen(m.month)+'（ドメイン代はお店が直接）'],
+      ['最初に伝えたこと', s.tell.length===TELL.length?'4つとも伝えた（料金・名義・データ・約束しないこと）':(s.tell.length?'伝えた：'+s.tell.map(function(k){return labelOf(TELL,k).split('：')[0]}).join('・')+'（残りは次回）':'（まだ）')],
+      ['メニューの補足', s['menu-note']||'メニュー表のとおり'],
+      ['連絡に使う LINE', s.contact||'（未記入）'],
+      ['言葉', ['ごあいさつ '+(s.greet||'—'),'見出し '+(s.headline||'—')].join(' ／ ')],
+      ['写真', ['受け取り '+(s['photo-how']||'—'),'ある写真 '+(s['photo-have'].length?s['photo-have'].map(function(k){return labelOf(PHOTO_HAVE,k)}).join('・'):'—'),'渡された画像 '+(s['photo-ref']||'—')].join(' ／ ')],
       ['公開したい時期', (s.when||'（未記入）')+(s['when-date']?'（'+s['when-date']+'）':'')],
       ['決める人', s.decider||'（未記入）'],
       ['直しの回数', s.fix],
+      ['制作例として紹介', s.intro||'（未記入）'],
+      ['感想コメント', s.review||'（未記入）'],
+      ['紹介できそうな人', s.refer||'—'],
+      ['次の約束', '試作を見てもらう日 '+(s['next-date']||'（未定）')+' ／ 連絡 '+(s['next-how']||'—')],
       ['聞き返したこと', s['ask-back']||'—']
     ];
   }
