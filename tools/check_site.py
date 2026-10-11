@@ -171,6 +171,16 @@ def run_static(root):
                 ctx = flat[max(0, m.start()-14): m.end()+14]
                 add('⚠️', '言葉', f'{rel}：「{w}」（{why}）… …{ctx}…')
 
+        # パスワードを打つ欄があったら止める（2026/10/12 決定。台本・入力シート・お店のサイトにパスワードの欄は作らない）
+        for t, d, line in par.tags:
+            if t in ('input', 'textarea') and (d.get('type') == 'password' or 'パスワード' in ''.join(d.get(a, '') for a in ('placeholder', 'name', 'id', 'aria-label', 'data-v'))):
+                add('❌', 'パスワード', f'{rel} {line}行目：パスワードを打つ欄があります（作らない決まり。言い方を変えるか欄を消す）')
+        for m in re.finditer(r'<label[^>]*>([^<]*パスワード[^<]*)</label>\s*<(?:input|textarea)\b', src):
+            add('❌', 'パスワード', f'{rel} {src.count(chr(10), 0, m.start()) + 1}行目：「{m.group(1).strip()[:30]}」の欄があります（パスワードの欄は作らない決まり）')
+        # JS で欄を作る道具（進行台本など）：欄の名前の一覧（"vals": [...]）にパスワードがあっても止める
+        for m in re.finditer(r'"vals"\s*:\s*\[([^\]]*パスワード[^\]]*)\]', src):
+            add('❌', 'パスワード', f'{rel} {src.count(chr(10), 0, m.start()) + 1}行目：入力欄の名前に「パスワード」があります → {m.group(1).strip()[:40]}（言い方を変える）')
+
         # 画像・リンク
         for t, d, line in par.tags:
             for attr in ('src', 'href'):
