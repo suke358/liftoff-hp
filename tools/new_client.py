@@ -115,6 +115,15 @@ def main():
         out = [('second.html', '1 2回目の打ち合わせ_チェック表（Macで書き込める・印刷も可）.html'),
                ('menu.html', f'3 {shop}_予約メニュー入力シート（Macで開く）.html')]
         os.makedirs(os.path.join(nxt, '5 Googleマップ用の写真'), exist_ok=True)
+        # 進行台本の設定（2回に分ける。2026/10/12 決定）：ひな形は ~/src/liftoff-buhin/settei/（公開しない道具）。あればコピーして名前を埋める
+        hin = os.path.expanduser('~/src/liftoff-buhin/settei')
+        tool = os.path.join(nxt, '進行台本の道具'); os.makedirs(tool, exist_ok=True)
+        for src, dst in (('ひな形_1回目.json', f'{slug}_settei_1回目.json'), ('ひな形_2回目.json', f'{slug}_settei_2回目.json')):
+            s, p = os.path.join(hin, src), os.path.join(tool, dst)
+            if not os.path.exists(s): print(f'⚠️ 台本の設定のひな形が見つかりません：{s}'); continue
+            if os.path.exists(p): made.append(f'（そのまま）進行台本の道具/{dst}'); continue
+            t = open(s, encoding='utf-8').read().replace('〈slug〉', slug).replace('〈お店の名前〉', shop)
+            open(p, 'w', encoding='utf-8').write(t); made.append(f'進行台本の道具/{dst} … 〈 〉を埋めて python3 ~/src/liftoff-buhin/tools/make_daihon.py で台本を作る')
     else:
         out = [('first.html', '1 初回の打ち合わせ_入力シート（Macで開く）.html')]
         webloc(os.path.join(nxt, '2 デザイン見本帳を開く.webloc'), SAMPLES); made.append('2 デザイン見本帳を開く.webloc')
