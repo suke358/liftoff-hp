@@ -1,0 +1,28 @@
+進行台本と手順書を作る道具（2026/10/9 作成・2026/10/17 ここ ~/src/liftoff-hp/tools/daihon/ に引っ越し）
+
+■ ここにあるもの（公開リポジトリ liftoff-hp の中。お店の情報は入れない）
+  make_daihon.py        … 台本を作る（手順書と画像を中に埋めこむ。パスワードの欄があると止まる）
+  make_nagare.py        … 実行までの流れ（A4 1枚）を作る
+  make_tejun.py         … 部品の .md から手順書を作る（split → one / mix / all）
+  daihon_parts.json     … 台本の部品（文。お店の名前は {owner} {shop} などで埋める）
+  daihon_template.html  … 台本の見た目
+  daihon_settei.json    … 部品の .md と画像の置き場所（"buhin"。今は ~/src/liftoff-buhin）
+  tejun_parts.json      … make_tejun.py split が作る写し（git には入れない。.gitignore）
+
+■ ほかの場所にあるもの（お店の情報が入るので、公開リポジトリには置かない）
+  ~/src/liftoff-buhin/buhin/*.md   … 部品 A〜H と組み立て表（手順の下に「画像：〜」の行）
+  ~/src/liftoff-buhin/gazou/       … 画面の画像（印つき）と marks.json
+  ~/src/liftoff-buhin/settei/      … 台本の設定のひな形（1回目・2回目）
+  お店の設定（〇〇_settei.json）    … そのお店の打ち合わせフォルダ（colore は 2回目/99 控え・元データ/進行台本の道具/）
+
+■ 作り方（ターミナル）
+  cd ~/src/liftoff-hp/tools/daihon
+  python3 make_tejun.py split ~/src/liftoff-buhin/buhin/            … 部品を直したら毎回
+  python3 make_daihon.py "お店の設定.json" "出力/03 進行台本（日付版）.html"
+  python3 make_nagare.py "お店の設定.json" "出力/実行までの流れ.html"
+  python3 make_tejun.py one E "出力/手順書_E.html"                     … 手順書を1つだけ
+  部品の置き場所を変えるとき：daihon_settei.json の "buhin" を直す（または環境変数 LIFTOFF_BUHIN）
+
+■ 注意
+  ・liftoff-buhin/tools にも同じ名前の道具が残っている（10/12〜10/16 に使っていたもの）。直すのはここ（liftoff-hp/tools/daihon）だけにする
+  ・画像を足す・印を直すのは liftoff-buhin/tools/make_gazou.py（gazou/marks.json）。記入用紙は make_kinyu.py、かんたん版の3枚は make_kantan.py（どちらも liftoff-buhin/tools）
