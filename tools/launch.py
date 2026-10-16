@@ -89,9 +89,13 @@ def main():
             if not n: s = s.replace('</title>\n', f'</title>\n<link rel="canonical" href="{url}">\n', 1)
             todo.append(f'{p}：canonical を足す（{url}）')
         # og:url は各ページの住所に
+        # （LINE のカードの番号 ?v=番号 が付いていたら残す。canonical・JS と3か所でそろえる決まり。2026/10/16 colore で落としてしまったので）
         m = re.search(r'<meta property="og:url" content="([^"]*)">', s)
-        if m and m.group(1) != url:
-            s = s.replace(m.group(0), f'<meta property="og:url" content="{url}">'); todo.append(f'{p}：og:url を {url} に')
+        if m:
+            v = re.search(r'[?&]v=\d+', m.group(1))
+            want = url + (v.group(0) if v else '')
+            if m.group(1) != want:
+                s = s.replace(m.group(0), f'<meta property="og:url" content="{want}">'); todo.append(f'{p}：og:url を {want} に')
         for left in re.findall(r'https://[^"\'\s<>]*(?:github\.io|workers\.dev)[^"\'\s<>]*', s):
             warn.append(f'{p}：まだ仮のURLが残っている → {left}')
         if apply and s != o: open(path, 'w', encoding='utf-8').write(s)
