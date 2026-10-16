@@ -1,2 +1,4 @@
 # 台本の道具が作る部品の写し（お店の情報が混ざるので公開リポジトリに入れない。2026/10/17）
 tools/daihon/tejun_parts.json
+# Python が作る一時ファイル
+__pycache__/
