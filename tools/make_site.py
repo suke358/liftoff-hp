@@ -18,6 +18,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "card_v"   … LINE のカードの番号（1から。url_base があるときだけ）。og:url・canonical・開いたときアドレスバーに足す ?v= の3か所に入る（2026/10/10 追加。マニュアル 17）。
                カードの画像を変えたら、画像の名前を変え、card_v を次の数字にして作り直す（LINE はページの URL ごとにカードを覚えるため）
 
+404 ページ（2026/10/21 決定事項 08）：index.html と一緒に 404.html も作る（店名・色・印・LINE・電話は設定から）。
+  wrangler.jsonc に not_found_handling を入れるので、Cloudflare が無い住所のときに 404 の印のまま返す。メニューのボタンは /menu（転送で /#menu へ）
 部品（入れる／入れないを選べる。2026/10/9 追加）：設定に "parts": {...} を書く。全部入れた見本は templates/site_sample_parts.json
   "belt"    … 写真の帯（横にゆっくり流れる。さわると止まる。動きを減らす設定の人には流さない）
   "compare" … 作業の前と後を、つまみで見比べる（JS がないときは2枚を並べて出す）
@@ -1136,12 +1138,89 @@ def main():
     if os.path.exists(p): shutil.copy(p, os.path.join(outdir, 'index.old.html'))
     open(p, 'w', encoding='utf-8').write(s)
     print('作りました：', p)
+    # 「ページが見つかりません」ページ（404.html）。2026/10/21 決定事項 08
+    p404 = os.path.join(outdir, '404.html')
+    open(p404, 'w', encoding='utf-8').write(build_404(c))
+    print('作りました：', p404, '（Cloudflare が無い住所のときに返す。wrangler.jsonc の not_found_handling）')
     # 設定はサイトのフォルダに一緒に置く（次に作り直すときはこれを直す）
     keep = os.path.join(outdir, 'site.json')
     if os.path.abspath(conf) != os.path.abspath(keep): shutil.copy(conf, keep); print('設定を置きました：', keep)
     write_cloudflare_files(outdir)
     chk = os.path.join(HERE, 'check_site.py')
     if os.path.exists(chk): subprocess.call([sys.executable, chk, outdir, '--no-browser'])
+
+def build_404(c):
+    """「ページが見つかりません」ページ（404.html）。2026/10/21 決定事項 08「404 ページを置く」。
+    店名・色・印（ロゴ）・LINE・電話は設定から。道は全部サイトの根から（/ や /images/…）にする（無い住所がどの深さでも同じ所を指すため）。
+    外に貼るリンクは # を使わない決まりなので、メニューは /menu（Cloudflare の転送で /#menu へ）。動きは付けない"""
+    t = dict(THEMES[c.get('theme_base', 'salon')]); t.update(c.get('theme', {}))
+    name, short = c['name'], c.get('short_name', c['name'])
+    mark = MARKS.get(c.get('mark', 'heart'), MARKS['heart'])
+    head_font = 'var(--mincho)' if c.get('font', 'mincho') == 'mincho' else 'var(--gothic)'
+    tel = c.get('tel', ''); tel_d = ''.join(ch for ch in tel if ch.isdigit())
+    logo = c.get('logo', '')
+    if logo and not re.match(r'(https?:|/)', logo): logo = '/' + logo
+    brand_img = f'<img src="{e(logo)}" alt="{e(short)}" width="46" height="46">' if logo else '<svg class="mk" viewBox="0 0 24 24" aria-hidden="true">' + mark + '</svg>'
+    btns = ['<a class="btn btn-main" href="/">トップへ<wbr>戻る</a>', '<a class="btn btn-ghost" href="/menu">メニューを<wbr>見る</a>']
+    if c.get('line_url'): btns.append(f'<a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}LINE で<wbr>相談</a>')
+    tel_html = f'<div class="tel-box">お電話での<wbr>ご相談<a class="tel" href="tel:{tel_d}">{e(tel)}</a></div>' if tel else ''
+    return f'''<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ページが見つかりません｜{e(name)}</title>
+<!-- 「ページが見つかりません」ページ（404）。make_site.py が作る（決定事項 08）。Cloudflare が無い住所のときに 404 の印のまま返す（wrangler.jsonc の assets.not_found_handling） -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{{
+  --primary:{t['primary']};--primary-deep:{t['primary_deep']};--accent-soft:{t['accent_soft']};--dark:{t['dark']};--bg:{t['bg']};--ink:{t['ink']};--muted:{t['muted']};--line:{t['line']};
+  --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
+  --latin:"Cormorant Garamond","Shippori Mincho B1",serif;
+  --head:{head_font};
+}}
+*{{box-sizing:border-box}}
+body{{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:2;letter-spacing:.06em;word-break:keep-all;overflow-wrap:anywhere;line-break:strict}}
+img{{max-width:100%;display:block}}
+a{{color:inherit}}
+:focus-visible{{outline:2px solid var(--primary);outline-offset:4px}}
+.top{{background:var(--dark);padding:14px 20px}}
+.brand{{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center;text-decoration:none;width:-webkit-fit-content;width:fit-content;margin:0 auto;color:#f3efe6}}
+.brand img,.brand .mk{{width:46px;height:46px;border-radius:10px;margin-right:12px}}
+.brand .mk{{fill:var(--primary)}}
+.bn{{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}}
+.wrap{{max-width:560px;margin:0 auto;padding:48px 20px 64px;text-align:center}}
+.mark{{font-family:var(--latin);font-style:italic;font-size:2.4rem;color:var(--primary-deep);line-height:1;letter-spacing:.1em}}
+h1{{font-family:var(--head);font-weight:500;font-size:1.35rem;line-height:1.8;margin:10px 0 16px}}
+p{{margin:0 0 1.2em;color:var(--muted);font-size:.95rem}}
+.btns{{margin-top:22px}}
+.btn{{display:-webkit-inline-box;display:-webkit-inline-flex;display:inline-flex;-webkit-box-align:center;-webkit-align-items:center;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center;text-decoration:none;font-weight:500;letter-spacing:.12em;padding:.95em 1.8em;border-radius:999px;line-height:1.4;text-align:center;width:100%;max-width:320px;margin:0 auto 12px}}
+.btn svg{{width:1.25em;height:1.25em;margin-right:.5em}}
+.btn-main{{background:var(--primary);color:#fff}}
+.btn-ghost{{border:1px solid var(--ink);color:var(--ink);background:transparent}}
+.btn-line{{background:#06c755;color:#fff}}
+.tel-box{{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}}
+.tel{{display:block;font-family:var(--latin);font-size:1.9rem;letter-spacing:.06em;text-decoration:none;color:var(--ink);line-height:1.3;margin-top:4px}}
+footer{{text-align:center;font-size:.75rem;color:var(--muted);padding:0 20px 32px;letter-spacing:.1em}}
+</style>
+</head>
+<body>
+<div class="top"><a href="/" class="brand" aria-label="{e(short)} トップへ">{brand_img}<span class="bn">{e(short)}</span></a></div>
+<main class="wrap">
+  <div class="mark" aria-hidden="true">404</div>
+  <h1>お探しのページが<wbr>見つかりませんでした</h1>
+  <p>住所が<wbr>変わったか、<wbr>入力が<wbr>まちがっている<wbr>かもしれません。</p>
+  <div class="btns">{''.join(btns)}</div>
+  {tel_html}
+</main>
+<footer>{e(name)}</footer>
+</body>
+</html>
+'''
 
 def write_cloudflare_files(outdir):
     """お店のサイトのフォルダに、Cloudflare の設定（wrangler.jsonc）と公開しないファイルの一覧（.assetsignore）を入れる（2026/10/10 決定）。
@@ -1161,7 +1240,9 @@ def write_cloudflare_files(outdir):
   "name": "{name}",
   "compatibility_date": "2026-10-01",
   "assets": {{
-    "directory": "./"
+    "directory": "./",
+    // 無い住所のときは 404.html を「404」の印のまま返す（決定事項 08）
+    "not_found_handling": "404-page"
   }},
   // ブランチごとの確認用ページ（プレビュー）を作るための設定。本番には関係しない
   "previews": {{}}

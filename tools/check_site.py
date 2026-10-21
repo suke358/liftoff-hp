@@ -222,7 +222,14 @@ def run_static(root):
                 if not u or t == 'a' and attr == 'src': continue
                 if re.match(r'(https?:|mailto:|tel:|data:|#|//|javascript:)', u): continue
                 if t == 'link' and d.get('rel') in ('preconnect', 'dns-prefetch'): continue
-                f = os.path.normpath(os.path.join(os.path.dirname(p), u.split('#')[0].split('?')[0]))
+                path_only = u.split('#')[0].split('?')[0]
+                if path_only.startswith('/'):
+                    # サイトの根からの道（404.html など、どの深さでも同じ所を指すページで使う。2026/10/21）
+                    # 「/」や「/menu」のような拡張子のない道は、トップや転送（Cloudflare）なのでファイルの有無は調べない
+                    if not os.path.splitext(path_only.rstrip('/'))[1]: continue
+                    f = os.path.normpath(os.path.join(root, path_only.lstrip('/')))
+                else:
+                    f = os.path.normpath(os.path.join(os.path.dirname(p), path_only))
                 if f.endswith(os.sep) or os.path.isdir(f): f = os.path.join(f, 'index.html')
                 if not os.path.exists(f): add('❌', 'ファイル', f'{rel} {line}行目：{u} がありません')
             if t == 'a' and d.get('href', '').startswith('#') and len(d['href']) > 1 and d['href'][1:] not in par.ids:
