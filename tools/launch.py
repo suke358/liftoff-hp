@@ -17,6 +17,7 @@
         ほかにも検索に出さないフォルダがあれば --keep-noindex=samples,〇〇 で指定
   5. 消すフォルダ（前の版 v1/・別案 new/ など）を一覧にし、push のときに消すコマンドを出す
      （Claude の作業場所からは消せないので、担当者のターミナルで消す）
+  6. 最後に「本公開の日にやること（ファイルの外）」の一覧を出す（Cloudflare の転送 など。2026/10/21 決定事項 08）
 """
 import sys, os, re, datetime
 
@@ -125,6 +126,12 @@ def main():
     if rm:
         print('  → push のコマンドの前にこれを足す（担当者のターミナル）：')
         print('    git rm -r -q --ignore-unmatch ' + ' '.join(f'"{r}"' for r in rm) + ' &&')
+    # 本公開の日に、ファイルの外（Cloudflare など）でやること。決定事項 08（2026/10/21 colore）：外に貼るリンクには # を使わない → /menu で貼れるように転送を作る
+    print('\n■ 本公開の日にやること（ファイルの外・チャットか担当者）')
+    print(f'  ・Cloudflare の転送「/menu・/menu/・/%23menu → {domain}/#menu（302）」を作る（Rules → Redirect Rules。外に貼るリンクは {domain}/menu にする。決定事項 08）')
+    print(f'    → できたか：python3 check_site.py <サイトのフォルダ>（canonical が {domain} なら自動で調べる）')
+    print(f'  ・Custom Domain {domain.replace("https://", "")} を Worker につなぐ（まだなら）')
+    print('  ・LINE のカード：iPhone で名刺の QR → 共有 → LINE で新しいカードが出るか試す')
     if not apply: print('\nよければ --apply を付けてもう一度。')
     else: print('\nこのあと：公開前チェック（check_site.py）→ push → 新しいドメインで確認（マニュアル 10）')
 

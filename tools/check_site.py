@@ -15,6 +15,9 @@
   6. 横にはみ出していないか（幅 320・360・390・768・1280）
   7. LINE のカードの番号（?v=）が、アドレスバーに足す JS・canonical・og:url の3か所でそろっているか（2026/10/10 追加。欠け・ちがい → ❌、しくみ無し → ⚠️）
      og:image の画像が同じ名前のまま中身だけ変わっていたら ⚠️（LINE が古い画像を覚えるので、名前も変える）
+  8. 公開URL（canonical が独自ドメインのとき）：外に貼るリンク用の転送があるか（決定事項 08「外に貼るリンクには # を使わない」2026/10/21 colore）
+     ①「ドメイン/menu」と「/menu/」が転送で「/#menu」に着く ②「ドメイン/%23menu」が 404 でない（転送で /#menu へ）→ だめなら ❌。ネットが使えないときは ⚠️
+     canonical が workers.dev・github.io のサイト（まだ本公開前）は調べない。--url=https://ドメイン を付けると、そのURLで調べる
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -104,6 +107,37 @@ def check_card_v(src, rel):
     if len(set(got.values())) > 1:
         add('❌', 'カード', f'{rel}：LINE のカードの番号（?v=）がそろっていません → ' + '／'.join(f'{k} v={v}' for k, v in got.items())); return
     add('✅', 'カード', f'{rel}：LINE のカードの番号 ?v={js.group(1)}（アドレスバーの JS・canonical・og:url でそろっています）')
+
+def check_redirects(src, rel):
+    """外に貼るリンク用の転送（決定事項 08。2026/10/21 colore で「Googleマップに /#menu を貼ったら #menu が消えた」の再発防止）。
+    /menu・/menu/ → https://ドメイン/#menu（302 など）、/%23menu → 404 でない（同じ転送）。canonical が独自ドメインのときだけ調べる（--url で指定もできる）"""
+    import urllib.request, urllib.error
+    url = next((a[len('--url='):] for a in sys.argv if a.startswith('--url=')), None)
+    if not url:
+        can = re.search(r'rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', src)
+        if not can: return
+        url = can.group(1)
+        if re.search(r'workers\.dev|github\.io|localhost|127\.0\.0\.1', url): return   # まだ本公開前（仮のURL）
+    m = re.match(r'(https?://[^/]+)', url)
+    if not m: return
+    origin = m.group(1)
+    want = origin + '/#menu'
+    class NoRedirect(urllib.request.HTTPRedirectHandler):
+        def redirect_request(self, *a, **k): return None
+    opener = urllib.request.build_opener(NoRedirect)
+    bad = []
+    for path in ('/menu', '/menu/', '/%23menu'):
+        try:
+            r = opener.open(urllib.request.Request(origin + path, method='HEAD'), timeout=10)
+            code, loc = r.status, r.headers.get('Location', '')
+        except urllib.error.HTTPError as e:
+            code, loc = e.code, e.headers.get('Location', '')
+        except Exception as e:
+            add('⚠️', '転送', f'{origin}{path} を調べられませんでした（ネットの状態を確かめる）：{e}'); return
+        if code in (301, 302, 307, 308) and loc.rstrip('/') == want: continue
+        bad.append(f'{path} → {code}' + (f' {loc}' if loc else ''))
+    if bad: add('❌', '転送', f'{origin}：外に貼るリンク用の転送がありません → ' + '／'.join(bad) + f'（Cloudflare の転送「/menu・/menu/・/%23menu → {want}（302）」を作る。決定事項 08）')
+    else: add('✅', '転送', f'{origin}：/menu・/menu/・/%23menu が {want} に転送されます（外に貼るリンクは /menu を使う）')
 
 def check_og_image_changed(root, img_path, rel):
     """og:image の画像が、前のコミットから同じ名前のまま中身だけ変わっていたら ⚠️（まだコミットしていない変更も、直前のコミットでの変更も見る）"""
@@ -214,6 +248,7 @@ def run_static(root):
                 img_local = next((c for c in cand if os.path.exists(c)), None)
                 if img_local: check_og_image_changed(root, img_local, rel)
             check_card_v(src, rel)
+            check_redirects(src, rel)
             if 'keep-all' in src and '<wbr>' in src: add('✅', '折り返し', f'言葉の切れ目で折り返す設定あり（<wbr> {src.count("<wbr>")} 個）')
             else: add('⚠️', '折り返し', '文の折り返しの調整（BudouX）がまだです（マニュアル 06）')
             soon = src.count('準備中')
