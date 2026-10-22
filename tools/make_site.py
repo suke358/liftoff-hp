@@ -28,9 +28,13 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "form"    … 選んで送れるフォーム（Formspree。JS がないときもふつうのフォームとして送れる）
   "shop"    … 商品（物販。2026/10/11 追加。決定事項：商品ページ＝ご契約のお店 22,000円〜・1ページ・商品5点まで・決済は Square）
               商品5点まで（6点以上は ⚠️ を出して5点だけ出す）。「購入する」ボタンは buy_url（Square の購入ページ）へ新しいタブで。buy_url が空なら「準備中」（押せない）
-              商品の下に「特定商取引法に基づく表示」（開閉式）。書いていない項目は「お問い合わせください」（販売者・住所・電話はお店の設定から）
-              書き方：{"title":"商品","lead":"…","items":[{"name":"…","price":"2,200円","text":"…","image":"images/item-1.svg","alt":"…","buy_url":"https://square.link/u/…","note":"送料別"}],
-                      "note":"お支払いは Square の画面で…","tokushoho":{"seller":"…","address":"…","tel":"…","email":"…","price":"…","shipping":"…","payment":"…","delivery":"…","returns":"…"}}
+              商品の下に「特定商取引法に基づく表示」（開閉式）。販売者・住所・電話はお店の設定から取る
+              本物のお店（sample_note がない）では shipping・payment・pay_timing・delivery・returns が空だと ❌ で止まる（「お問い合わせください」のまま公開しない。2026/10/22 マニュアル K）。見本は ⚠️
+              書き方：{"title":"商品","lead":"…","items":[{"name":"…","amount":"30g×5包","price":"2,200円","text":"…","image":"images/item-1.svg","alt":"…","buy_url":"https://square.link/u/…","note":"送料別"}],
+                      "note":"お支払いは Square の画面で…",
+                      "tokushoho":{"seller":"…","manager":"（法人の責任者。空なら出さない）","address":"…","tel":"…","email":"…","disclose":false,
+                                   "price":"…","shipping":"…","payment":"…","pay_timing":"（支払いの時期）","delivery":"…","period":"（申込みの期限。空なら出さない）","returns":"…"}}
+              disclose を true にすると、名前・住所・電話の代わりに「ご請求があれば遅滞なく開示します」と連絡先のメールを出す（個人事業の人向け）
               見本：templates/site_sample_shop.json（架空のよもぎ蒸しサロン hiyori）→ samples/shop/
   それぞれ true と書くと決まった中身（メニューの写真など）で入る。{...} で中身を書ける。色・書体はお店の theme に合わせて出る
   "sample_note" … 見本のとき、ページのいちばん上に出す注（例 "※画面は架空のお店の見本です"）。本物のお店では書かない
@@ -644,6 +648,15 @@ def parts_conf(c):
             print(f'⚠️ shop：商品が {len(items)} 点あります。商品ページは {SHOP_MAX} 点までなので、はじめの {SHOP_MAX} 点だけ出します（6点以上は作る前に金額を伝える）')
             P['shop']['items'] = items[:SHOP_MAX]
         else: P['shop']['items'] = items
+        # 特商法の表示：本物のお店は必須の項目が空だと止める（見本は ⚠️）。2026/10/22 マニュアル K
+        tk = P['shop'].get('tokushoho') or {}
+        need = [('shipping', '送料'), ('payment', 'お支払い方法'), ('pay_timing', 'お支払いの時期'), ('delivery', 'お届けの時期'), ('returns', '返品について')]
+        miss = [jp for k, jp in need if not str(tk.get(k) or '').strip()]
+        if miss:
+            if c.get('sample_note'): print('⚠️ shop：特定商取引法の表示が空の項目があります（見本なので「お問い合わせください」で出します）：' + '・'.join(miss))
+            else: sys.exit('❌ shop：特定商取引法の表示に空の項目があります → ' + '・'.join(miss) + '。本物のお店では「お問い合わせください」のまま公開できません。設定の parts.shop.tokushoho に書いてから作り直してください')
+        if tk.get('disclose') and not str(tk.get('email') or '').strip():
+            sys.exit('❌ shop：tokushoho.disclose が true のときは、連絡先のメール（tokushoho.email）が要ります')
     c['_P'] = P
     return P
 
@@ -821,6 +834,7 @@ def part_shop(x):
           {img}
           <div class="card-body">
             <h3>{e(it["name"])}</h3>
+            {f'<p class="item-amount muted">{e(it["amount"])}</p>' if it.get('amount') else ''}
             <p>{e(it.get("text", ""))}</p>
             {price}
             {note}
@@ -829,9 +843,17 @@ def part_shop(x):
         </article>''')
     t = p.get('tokushoho') or {}
     ask = 'お問い合わせください'
-    rows = [('販売者', t.get('seller') or c['name']), ('住所', t.get('address') or c.get('address')), ('電話番号', t.get('tel') or c.get('tel')),
-            ('メールアドレス', t.get('email')), ('販売価格', t.get('price')), ('送料', t.get('shipping')), ('お支払い方法', t.get('payment')),
-            ('お届けの時期', t.get('delivery')), ('返品について', t.get('returns'))] + [(k, v) for k, v in t.get('extra', [])]
+    if t.get('disclose'):
+        # 個人事業：名前・住所・電話は「請求があれば開示」でよい（連絡先のメールは出す）
+        rows = [('販売者の氏名・住所・電話番号', 'ご請求があれば遅滞なく開示します。お問い合わせは下のメールアドレスへ'), ('メールアドレス', t.get('email'))]
+    else:
+        rows = [('販売者', t.get('seller') or c['name'])]
+        if t.get('manager'): rows.append(('運営責任者', t['manager']))
+        rows += [('住所', t.get('address') or c.get('address')), ('電話番号', t.get('tel') or c.get('tel')), ('メールアドレス', t.get('email'))]
+    rows += [('販売価格', t.get('price')), ('送料', t.get('shipping')), ('お支払い方法', t.get('payment')), ('お支払いの時期', t.get('pay_timing')),
+             ('お届けの時期', t.get('delivery'))]
+    if t.get('period'): rows.append(('申込みの期限', t['period']))
+    rows += [('返品について', t.get('returns'))] + [(k, v) for k, v in t.get('extra', [])]
     dl = ''.join(f'<div><dt>{e(k)}</dt><dd>{e(v or ask)}</dd></div>' for k, v in rows)
     note = p.get('note', 'お支払いは Square（スクエア）の画面で行います。カードの情報はお店には届きません。')
     return f'''
@@ -972,6 +994,7 @@ PARTS_CSS = {
 .shop-items.n1{max-width:380px}
 .shop-items.n2{max-width:720px}
 .shop-items .item h3{font-size:1.1rem}
+.shop-items .item .item-amount{font-size:.82rem;margin:-6px 0 8px;letter-spacing:.04em}
 .shop-items .price{margin-top:auto}
 .item-note{font-size:.8rem;margin:8px 0 0;line-height:1.6}
 .shop-items .buy{margin-top:16px;width:100%;min-height:48px}

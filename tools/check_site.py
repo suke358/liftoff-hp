@@ -15,6 +15,7 @@
   6. 横にはみ出していないか（幅 320・360・390・768・1280）
   7. LINE のカードの番号（?v=）が、アドレスバーに足す JS・canonical・og:url の3か所でそろっているか（2026/10/10 追加。欠け・ちがい → ❌、しくみ無し → ⚠️）
      og:image の画像が同じ名前のまま中身だけ変わっていたら ⚠️（LINE が古い画像を覚えるので、名前も変える）
+  9. 商品ページの「特定商取引法に基づく表示」に「お問い合わせください」が残っていたら ❌（見本は ⚠️）。2026/10/22
   8. 公開URL（canonical が独自ドメインのとき）：外に貼るリンク用の転送があるか（決定事項 08「外に貼るリンクには # を使わない」2026/10/21 colore）
      ①「ドメイン/menu」と「/menu/」が転送で「/#menu」に着く ②「ドメイン/%23menu」が 404 でない（転送で /#menu へ）→ だめなら ❌。ネットが使えないときは ⚠️
      canonical が workers.dev・github.io のサイト（まだ本公開前）は調べない。--url=https://ドメイン を付けると、そのURLで調べる
@@ -260,6 +261,14 @@ def run_static(root):
             else: add('⚠️', '折り返し', '文の折り返しの調整（BudouX）がまだです（マニュアル 06）')
             soon = src.count('準備中')
             if soon: add('⚠️', '準備中', f'「準備中」が {soon} か所あります（本公開までにURLを入れる）')
+        # 商品ページの「特定商取引法に基づく表示」に「お問い合わせください」が残っていないか（本物のお店は ❌・見本（sample-note あり）は ⚠️。2026/10/22 マニュアル K）
+        tk = re.search(r'<details class="tokushoho".*?</details>', src, re.S)
+        if tk:
+            n_ask = tk.group(0).count('お問い合わせください')
+            if n_ask:
+                if 'class="sample-note"' in src: add('⚠️', '特商法', f'{rel}：特定商取引法の表示に「お問い合わせください」が {n_ask} か所（見本なのでOK。本物のお店では設定に書く）')
+                else: add('❌', '特商法', f'{rel}：特定商取引法の表示に「お問い合わせください」が {n_ask} か所あります（送料・支払い方法・支払いの時期・お届けの時期・返品 などを設定に書いて作り直す。このまま公開しない）')
+            else: add('✅', '特商法', f'{rel}：特定商取引法の表示に空の項目なし')
     for (path, name, fb), lines in OLD_HITS.items():
         ls = sorted(set(lines))
         add('⚠️', '古いスマホ', f'{os.path.relpath(path, root)}：{name} が {len(ls)} か所（{"・".join(map(str, ls[:8]))}{"…" if len(ls)>8 else ""}行目）… 予備：{fb}')
