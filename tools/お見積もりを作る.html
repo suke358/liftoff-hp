@@ -159,14 +159,16 @@ var PRICE = {
   },
   page: 22000,
   form: 550, // お問い合わせフォームの管理（付けるお店だけ・月額に加算）
+  yoyaku_month: 1100, // ネット予約（予約カレンダー）の月額（付けるお店だけ・月額に加算。2026/10/21 決定・03）
   opts: [
     { k: 'logo', name: 'ロゴ', normal: 33000, member: 22000, note: 'メインのロゴと小さい場所用の2つで1組' },
     { k: 'card', name: '名刺（デザイン）', normal: 11000, member: 5500, note: '印刷用のデータでお渡し' },
     { k: 'flyer', name: 'チラシ（A4片面）', normal: 22000, member: 16500, note: '印刷用のデータでお渡し' },
     { k: 'menu', name: 'メニュー表（A4片面）', normal: 22000, member: 16500, note: '印刷用のデータでお渡し' },
-    { k: 'gmap', name: 'Googleマップの最初の整備', normal: 22000, member: 11000, note: '説明文・写真・営業時間など' },
+    { k: 'gmap', name: 'Googleマップの最初の整備（口コミQRカード込み）', normal: 24200, member: 13200, note: '説明文・写真・営業時間など。口コミをお願いするQRカードのデータ込み（カードだけは受けません）。2026/10/21 決定' },
     { k: 'anim', name: 'ホームページの動きの演出（1か所）', normal: 16500, member: 16500, note: 'ロゴや絵に合わせたオリジナルの動き。ホームページをご契約のお店のみ' },
-    { k: 'goods', name: '商品ページの追加（1ページ・商品5点まで）', normal: 22000, member: 22000, note: '「購入する」ボタンと特定商取引法の表示のページ込み。ホームページをご契約のお店のみ。商品の追加・入れかえは更新1回。6点以上や配送・在庫の管理が要るときは作る前に金額をお伝えします（2026/10/10 決定）' }
+    { k: 'goods', name: '商品ページの追加（1ページ・商品5点まで）', normal: 22000, member: 22000, note: '「購入する」ボタンと特定商取引法の表示のページ込み。ホームページをご契約のお店のみ。商品の追加・入れかえは更新1回。6点以上や配送・在庫の管理が要るときは作る前に金額をお伝えします（2026/10/10 決定）' },
+    { k: 'yoyaku', name: 'ネット予約（予約カレンダー）の設置', normal: 22000, member: 22000, note: 'お客さまが空いている時間を選んで予約できるページ。ホームページをご契約のお店のみ。別に月 1,100円（2026/10/21 決定）' }
   ]
 };
 var KEY = 'liftoff-estimate-v1', $ = function(id){ return document.getElementById(id); };
@@ -205,9 +207,11 @@ function draw(){
     if ($('o-' + o.k).checked) { var v = Math.max(0, parseInt(a.value || '0', 10)); first.push([o.name + '（' + o.note + '・直し2回まで）', '1式', v, '']); firstSum += v; }
   });
   $('tFirst').innerHTML = first.length ? first.map(function(r){ return '<tr><td>' + esc(r[0]) + (r[3] ? '<br><small style="color:#4A5F72">' + esc(r[3]) + '</small>' : '') + '</td><td class="n">' + r[1] + '</td><td class="n">' + yen(r[2]) + '</td></tr>'; }).join('') + '<tr class="sub"><td>はじめにお支払い 合計</td><td></td><td class="n">' + yen(firstSum) + '</td></tr>' : '<tr><td class="empty" colspan="3">なし</td></tr>';
-  var month = p ? p.month + (hasForm ? PRICE.form : 0) : 0;
+  var hasYoyaku = !!(p && $('o-yoyaku').checked);
+  var month = p ? p.month + (hasForm ? PRICE.form : 0) + (hasYoyaku ? PRICE.yoyaku_month : 0) : 0;
   $('tMonth').innerHTML = p ? '<tr><td>' + esc(p.name) + ' 月額<br><small style="color:#4A5F72">' + esc(p.items) + '</small></td><td class="n">' + yen(p.month) + '</td></tr>' +
-    (hasForm ? '<tr><td>お問い合わせフォームの管理 月額<br><small style="color:#4A5F72">フォームを付けるお店だけ。毎月の月額と一緒にご請求</small></td><td class="n">' + yen(PRICE.form) + '</td></tr>' : '') : '<tr><td class="empty" colspan="2">なし</td></tr>';
+    (hasForm ? '<tr><td>お問い合わせフォームの管理 月額<br><small style="color:#4A5F72">フォームを付けるお店だけ。毎月の月額と一緒にご請求</small></td><td class="n">' + yen(PRICE.form) + '</td></tr>' : '') +
+    (hasYoyaku ? '<tr><td>ネット予約（予約カレンダー） 月額<br><small style="color:#4A5F72">ネット予約を付けるお店だけ。毎月の月額と一緒にご請求</small></td><td class="n">' + yen(PRICE.yoyaku_month) + '</td></tr>' : '') : '<tr><td class="empty" colspan="2">なし</td></tr>';
   function total(m){ var t = firstSum + month * m; return t; }
   $('tTotal').innerHTML = p ? [12, 24].map(function(m){ return '<tr><td>公開から' + (m / 12) + '年（' + m + 'か月）使うと</td><td class="n">' + yen(total(m)) + '</td></tr>'; }).join('') : '<tr><td>合計</td><td class="n">' + yen(firstSum) + '</td></tr>';
   $('sumFirst').textContent = yen(firstSum); $('sumMonth').textContent = p ? yen(month) : 'なし';

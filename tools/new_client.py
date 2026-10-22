@@ -10,7 +10,7 @@
   2回目の打ち合わせの前（初回の資料を「5 済んだ打ち合わせ」に移し、2回目の道具を入れる）：
     python3 new_client.py <英字の短い名前> <お店の名前> [<置く場所>] --second
 
-  料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
+  料金表は ~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月22日版）.pdf からコピーする（見つからないときは ⚠️ を出して先へ進む）
   初回の入力シート（初回ヒヤリングシート。templates/first.html）には、作るときに
     ・料金：「お見積もりを作る.html」の PRICE をそのまま埋める（料金の元は1か所）
     ・見本の一覧：mihon/samples_list.json を埋める（見本を足せば自動で増える。画像と「中を見る」は公開の見本帳）
@@ -32,7 +32,7 @@ ESTIMATE = os.path.join(HERE, 'お見積もりを作る.html')          # 料金
 SAMPLES_JSON = os.path.join(HERE, 'mihon', 'samples_list.json')  # 見本の一覧の元
 PRICE_KEYS = ('plans:', 'std:', 'web:', 'page:', 'form:', 'opts:', "k: 'logo'", "k: 'card'", "k: 'flyer'", "k: 'menu'", "k: 'gmap'", "k: 'anim'", "k: 'goods'")  # シートが使う料金
 BASE_DEFAULT = '~/Desktop/03_Lift-off事業/1_HP制作/2_お客さん'  # 打ち合わせフォルダを作る場所（置く場所を省いたとき）
-PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月10日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
+PRICE_PDF = '~/Desktop/03_Lift-off事業/1_HP制作/1_お客さまに渡す資料/1_料金表（10月22日版）.pdf'  # 料金表のコピー元（版が変わったらここを直す）
 DIRS = ['1 次の打ち合わせで使うもの', '2 名刺の見本', '3 ロゴ案', '4 もらった写真', '5 済んだ打ち合わせ', '6 LINEの下書き', '7 古いもの（使わない）']
 
 def price_js():
