@@ -82,7 +82,7 @@ def build_html(shop, month, cur, prev, todo):
 <meta charset="UTF-8">
 <title>{e(shop)} {e(jp_month(month))}の報告</title>
 <style>
-:root{{--ink:#17283A;--signal:#F2C230;--paper:#FBF9F4;--mu:#6B7A8C;--line:#DCE1E8;--up:#2F7A42;--down:#B04A4A}}
+:root{{--ink:#17283A;--signal:#F2C230;--paper:#FBF9F4;--mu:#6B7A8C;--line:#DCE1E8;--up:#2F7A42;--down:#5A6B82}}  /* 減った月は赤にせず、落ち着いた青灰色（責めない）2026/10/22 */
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{font-family:"Hiragino Sans","Noto Sans CJK JP","Yu Gothic",sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}}
 /* LINE 用：1080×1350（px） */
