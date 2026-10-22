@@ -15,6 +15,7 @@
   6. 横にはみ出していないか（幅 320・360・390・768・1280）
   7. LINE のカードの番号（?v=）が、アドレスバーに足す JS・canonical・og:url の3か所でそろっているか（2026/10/10 追加。欠け・ちがい → ❌、しくみ無し → ⚠️）
      og:image の画像が同じ名前のまま中身だけ変わっていたら ⚠️（LINE が古い画像を覚えるので、名前も変える）
+  10. Cloudflare Web Analytics：設定（site.json）に analytics_token があるのに一文がなければ ❌。一文があれば ✅（2026/10/22）
   9. 商品ページの「特定商取引法に基づく表示」に「お問い合わせください」が残っていたら ❌（見本は ⚠️）。2026/10/22
   8. 公開URL（canonical が独自ドメインのとき）：外に貼るリンク用の転送があるか（決定事項 08「外に貼るリンクには # を使わない」2026/10/21 colore）
      ①「ドメイン/menu」と「/menu/」が転送で「/#menu」に着く ②「ドメイン/%23menu」が 404 でない（転送で /#menu へ）→ だめなら ❌。ネットが使えないときは ⚠️
@@ -261,6 +262,17 @@ def run_static(root):
             else: add('⚠️', '折り返し', '文の折り返しの調整（BudouX）がまだです（マニュアル 06）')
             soon = src.count('準備中')
             if soon: add('⚠️', '準備中', f'「準備中」が {soon} か所あります（本公開までにURLを入れる）')
+        # Cloudflare Web Analytics（2026/10/22）：設定（site.json）に analytics_token があるのに、数える一文がないページは ❌
+        if is_top:
+            tok = ''
+            sj = os.path.join(root, 'site.json')
+            if os.path.exists(sj):
+                try:
+                    import json as _json; tok = str(_json.load(open(sj, encoding='utf-8')).get('analytics_token') or '').strip()
+                except Exception: tok = ''
+            has = 'cloudflareinsights.com/beacon' in src
+            if tok and not has: add('❌', '集計', f'{rel}：設定に analytics_token があるのに、Cloudflare Web Analytics の一文がありません（make_site.py で作り直す）')
+            elif has: add('✅', '集計', f'{rel}：Cloudflare Web Analytics の一文あり')
         # 商品ページの「特定商取引法に基づく表示」に「お問い合わせください」が残っていないか（本物のお店は ❌・見本（sample-note あり）は ⚠️。2026/10/22 マニュアル K）
         tk = re.search(r'<details class="tokushoho".*?</details>', src, re.S)
         if tk:

@@ -38,6 +38,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
               見本：templates/site_sample_shop.json（架空のよもぎ蒸しサロン hiyori）→ samples/shop/
   それぞれ true と書くと決まった中身（メニューの写真など）で入る。{...} で中身を書ける。色・書体はお店の theme に合わせて出る
   "sample_note" … 見本のとき、ページのいちばん上に出す注（例 "※画面は架空のお店の見本です"）。本物のお店では書かない
+  "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
 import sys, os, json, html, shutil, subprocess, urllib.parse
 
@@ -68,6 +69,9 @@ def ext(url): return f'href="{e(url)}" target="_blank" rel="noopener"'
 
 def build(c):
     t = dict(THEMES[c.get('theme_base', 'salon')]); t.update(c.get('theme', {}))
+    # Cloudflare Web Analytics（2026/10/22）：設定に analytics_token があれば </body> の直前に入れる。空なら入れない（独自ドメインを Cloudflare につないだお店は自動で数えるので不要）
+    tok = str(c.get('analytics_token') or '').strip()
+    analytics = ('<!-- Cloudflare Web Analytics --><script defer src=\'https://static.cloudflareinsights.com/beacon.min.js\' data-cf-beacon=\'{"token": "' + e(tok) + '"}\'></script><!-- End Cloudflare Web Analytics -->') if tok else ''
     name, short = c['name'], c.get('short_name', c['name'])
     mark = MARKS.get(c.get('mark', 'heart'), MARKS['heart'])
     head_font = 'var(--mincho)' if c.get('font', 'mincho') == 'mincho' else 'var(--gothic)'
@@ -367,6 +371,7 @@ def build(c):
 <script>
 {js}
 </script>
+{analytics}
 </body>
 </html>
 '''

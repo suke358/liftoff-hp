@@ -597,6 +597,12 @@ if TOP:
             print('   → その直しを shian/index.html に写してから、もう一度 --top で作り直してください。')
             print('   → 消えてよいと分かっているときだけ、--top --uwagaki を付けて動かすと上書きします。')
             sys.exit(1)
+# ---- Cloudflare Web Analytics（2026/10/22 決定・毎月の報告.md）：作るページ（--top も shian2 も）の </body> の直前に入れる。トップは手で直さない
+# Cloudflare の画面では type='module' だが、古いスマホでも読めるよう defer にする
+CF_ANALYTICS = """<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b06c475a618149c5a4266a7eeb4775e7"}'></script><!-- End Cloudflare Web Analytics -->"""
+if 'cloudflareinsights.com/beacon' not in s:
+    assert s.count('</body>') == 1, '</body> が1つではない'
+    s = s.replace('</body>', CF_ANALYTICS + '\n</body>', 1)
 os.makedirs(os.path.dirname(DST), exist_ok=True)
 open(DST, 'w', encoding='utf-8').write(s)
 if TOP:
