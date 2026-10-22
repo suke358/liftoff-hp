@@ -5,6 +5,8 @@
 
 使い方:
   python3 make_report.py <お店のフォルダ名> <月>        例）python3 make_report.py hiyori 2026-11
+  python3 make_report.py <お店のフォルダ名> <月> --auto … 「サイトを見た人」が空なら、Cloudflare Web Analytics の数（fetch_cf.py）を入れて数字.csv に書き戻す（2026/10/22）
+      そのお店のホスト名は ~/src/houkoku/<お店>/サイト.txt（1行。例 colore-yomogi.com）。ほかの数字は今までどおり手で入れる
   数字の元は1か所：~/src/houkoku/<お店>/数字.csv（月ごとに1行。1行目は見出し）
     月,サイトを見た人,検索に出た回数,押された回数,地図_電話,地図_道順,地図_サイト,来月やること
     2026-10,120,900,45,6,14,9,写真を3枚足す
@@ -141,6 +143,22 @@ def main():
     rows = read_rows(os.path.join(d, '数字.csv'))
     by = {r['月'].strip(): r for r in rows}
     if month not in by: die(f'{month} の行が 数字.csv にありません（月ごとに1行。見出しは「月」）')
+    if '--auto' in sys.argv and not str(by[month].get('サイトを見た人') or '').strip():
+        site_file = os.path.join(d, 'サイト.txt')
+        if not os.path.exists(site_file): die(f'--auto には {site_file}（ホスト名を1行）が要ります')
+        host = open(site_file, encoding='utf-8').read().strip().split('\n')[0].strip()
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import fetch_cf
+        n = fetch_cf.counts(host, month)['visits']
+        by[month]['サイトを見た人'] = str(n)
+        # 数字.csv に書き戻す（元は1か所）
+        csv_path = os.path.join(d, '数字.csv')
+        with open(csv_path, encoding='utf-8-sig', newline='') as f: rd = csv.DictReader(f); fields = rd.fieldnames; allrows = list(rd)
+        for r in allrows:
+            if r['月'].strip() == month: r['サイトを見た人'] = str(n)
+        with open(csv_path, 'w', encoding='utf-8', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(allrows)
+        print(f'Cloudflare から「サイトを見た人」を入れました：{host} {month} → {n:,} 人（数字.csv に書き戻し）')
     cur = {c: to_int(by[month][c], c, month) for c in COLS}
     pm = prev_month(month)
     prev = {c: to_int(by[pm][c], c, pm) for c in COLS} if pm in by else None
