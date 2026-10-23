@@ -97,6 +97,7 @@ tr.sub td{background:#fafcfd;font-weight:700}
       <label class="row"><input type="radio" name="plan" value="std" checked>スタンダード<small>初期98,000円＋月5,500円</small></label>
       <label class="row"><input type="radio" name="plan" value="web">WEB担当者代行<small>初期98,000円＋月19,800円</small></label>
       <label class="row"><input type="radio" name="plan" value="none">ホームページなし<small>ロゴなどだけ</small></label>
+      <label class="row"><input type="checkbox" id="remake">作り直し<small>他の人が作った今のホームページを、Lift-Off の形で作り直す。初期費用は新規と同じ 98,000円・月額はプランのまま。見立て（約1.5時間）は無料。ドメインの移しかえなど手間が増えるときは、作る前に金額をお伝えします（2026/10/23 決定）</small></label>
       <label class="row" style="display:block">ページの追加（1ページ 22,000円）<input type="number" id="pages" min="0" max="20" value="0"> ページ</label>
       <label class="row"><input type="checkbox" id="form">お問い合わせフォームを付ける<small>フォームの管理 月550円（月額に加算。2026/10/9 決定）</small></label>
     </fieldset>
@@ -160,6 +161,7 @@ var PRICE = {
   page: 22000,
   form: 550, // お問い合わせフォームの管理（付けるお店だけ・月額に加算）
   yoyaku_month: 1100, // ネット予約（予約カレンダー）の月額（付けるお店だけ・月額に加算。2026/10/21 決定・03）
+  remake: { name: '作り直し', init: 98000, note: '他の人が作った今のホームページを、Lift-Off の形で作り直す。見立て（約1.5時間）は無料。ドメインの移しかえなど手間が増えるときは、作る前に金額をお伝えします' }, // 初期費用は新規制作と同じ。月額はプランのまま（2026/10/23 決定・03「作り直し」）
   opts: [
     { k: 'logo', name: 'ロゴ', normal: 33000, member: 22000, note: 'メインのロゴと小さい場所用の2つで1組' },
     { k: 'card', name: '名刺（デザイン）', normal: 11000, member: 5500, note: '印刷用のデータでお渡し' },
@@ -201,7 +203,8 @@ function draw(){
   $('to').textContent = $('shop').value || '　　　　　　　　';
   var first = [], firstSum = 0;
   var hasForm = !!(p && $('form').checked);
-  if (p) { first.push([p.name + ' 初期費用', '1式', p.init, p.init === 0 ? '初期費用は月額に分けてお支払い' : 'デザイン・ページづくり・' + (hasForm ? 'フォームの設置・' : '') + '独自ドメインの取得と設定・Googleの検索に登録する設定・地図を載せる']); firstSum += p.init; }
+  var remake = !!(p && $('remake').checked);
+  if (p) { first.push([p.name + (remake ? ' 初期費用（' + PRICE.remake.name + '）' : ' 初期費用'), '1式', p.init, remake ? PRICE.remake.note : (p.init === 0 ? '初期費用は月額に分けてお支払い' : 'デザイン・ページづくり・' + (hasForm ? 'フォームの設置・' : '') + '独自ドメインの取得と設定・Googleの検索に登録する設定・地図を載せる')]); firstSum += p.init; }
   if (pages > 0) { first.push(['ページの追加', pages + 'ページ', PRICE.page * pages, '']); firstSum += PRICE.page * pages; }
   PRICE.opts.forEach(function(o){
     $('b-' + o.k).textContent = (member() ? 'ご契約 ' : '通常 ') + yen(base(o)) + '〜';
@@ -228,11 +231,11 @@ function draw(){
 }
 
 // 入力を残す（ブラウザに）
-function save(){ try { var o = { shop: $('shop').value, date: $('date').value, seq: $('seq').value, plan: plan(), pages: $('pages').value, form: $('form').checked, memo: $('memo').value, opts: {} };
+function save(){ try { var o = { shop: $('shop').value, date: $('date').value, seq: $('seq').value, plan: plan(), pages: $('pages').value, form: $('form').checked, remake: $('remake').checked, memo: $('memo').value, opts: {} };
   PRICE.opts.forEach(function(x){ o.opts[x.k] = { on: $('o-' + x.k).checked, v: $('a-' + x.k).value, auto: $('a-' + x.k).getAttribute('data-auto') }; });
   localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
 function load(){ try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (!o) return;
-  $('shop').value = o.shop || ''; $('date').value = o.date || ''; $('seq').value = o.seq || 1; $('pages').value = o.pages || 0; $('form').checked = !!o.form; $('memo').value = o.memo || '';
+  $('shop').value = o.shop || ''; $('date').value = o.date || ''; $('seq').value = o.seq || 1; $('pages').value = o.pages || 0; $('form').checked = !!o.form; $('remake').checked = !!o.remake; $('memo').value = o.memo || '';
   var r = document.querySelector('input[name=plan][value="' + o.plan + '"]'); if (r) r.checked = true;
   PRICE.opts.forEach(function(x){ var s = o.opts && o.opts[x.k]; if (!s) return; $('o-' + x.k).checked = s.on; $('a-' + x.k).value = s.v; $('a-' + x.k).setAttribute('data-auto', s.auto || ''); }); } catch (e) {} }
 

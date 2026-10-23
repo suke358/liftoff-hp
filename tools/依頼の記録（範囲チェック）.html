@@ -117,6 +117,7 @@ td:first-child{white-space:nowrap;font-size:12.5px}
 var PRICE = {
   plans: { std: { name: 'スタンダード', init: 98000, upd: 2 }, web: { name: 'WEB担当者代行', init: 98000, upd: 4 }, none: { name: 'ホームページなし', init: 0, upd: 0 } },
   over: 3300, page: 22000, fixes: 2,
+  remake: { name: '作り直し', init: 98000 }, // 今のホームページを Lift-Off の形で作り直す。初期費用は新規と同じ（2026/10/23 決定・03）
   opts: { logo: ['ロゴ', 33000, 22000], card: ['名刺（デザイン）', 11000, 5500], flyer: ['チラシ（A4片面）', 22000, 16500], menu: ['メニュー表（A4片面）', 22000, 16500], gmap: ['Googleマップの最初の整備（口コミQRカード込み）', 24200, 13200], anim: ['ホームページの動きの演出（1か所）', 16500, 16500], goods: ['商品ページの追加（1ページ・商品5点まで）', 22000, 22000], yoyaku: ['ネット予約（予約カレンダー）の設置', 22000, 22000], netshop: ['ネットショップの手直し（見立て書＋商品5点までの直し）', 33000, 22000], dealer: ['取扱店を増やす資料（A4 2枚＋申し込みの入口）', 33000, 22000] } // 2026/10/21：gmap を 24,200／13,200 に（口コミQRカード込み）。yoyaku は別に月 1,100円
 };
 var KEY = 'liftoff-requests-v1', $ = function(i){ return document.getElementById(i); };
@@ -131,10 +132,10 @@ function save(){ try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e
 function load(){ try { var o = JSON.parse(localStorage.getItem(KEY) || 'null'); if (o && o.shops) db = o; } catch (e) {} }
 
 // 範囲の作り方：見積もりの道具の内容（liftoff-estimate-v1）から
-function makeShop(name, plan, pages, opts, extra){
+function makeShop(name, plan, pages, opts, extra, remake){
   var s = { name: name, plan: plan, member: plan !== 'none', items: [], log: [], memo: extra || '' };
   var P = PRICE.plans[plan];
-  if (plan !== 'none') s.items.push({ k: 'hp', name: P.name + ' 初期費用（ホームページ制作・公開まで）', price: P.init, done: false });
+  if (plan !== 'none') s.items.push({ k: 'hp', name: P.name + (remake ? ' 初期費用（' + PRICE.remake.name + '：今のホームページを Lift-Off の形で作り直す・公開まで）' : ' 初期費用（ホームページ制作・公開まで）'), price: remake ? PRICE.remake.init : P.init, done: false });
   if (pages > 0) s.items.push({ k: 'page', name: 'ページの追加 ' + pages + 'ページ', price: PRICE.page * pages, done: false });
   Object.keys(PRICE.opts).forEach(function(k){ var o = opts[k]; if (o && o.on) s.items.push({ k: k, name: PRICE.opts[k][0] + '（直し' + PRICE.fixes + '回まで）', price: parseInt(o.v, 10) || 0, done: false }); });
   return s;
@@ -143,7 +144,7 @@ $('fromEst').addEventListener('click', function(){
   var e = null; try { e = JSON.parse(localStorage.getItem('liftoff-estimate-v1') || 'null'); } catch (x) {}
   if (!e || !e.shop) { alert('見積もりの内容が見つかりませんでした（同じブラウザで「お見積もりを作る.html」を開いて、お店の名前を入れたときだけ読めます）'); return; }
   if (db.shops[e.shop] && !confirm(e.shop + ' はもうあります。見積もりの内容で作り直しますか？（依頼の記録は残します）')) return;
-  var s = makeShop(e.shop, e.plan || 'std', parseInt(e.pages || '0', 10), e.opts || {});
+  var s = makeShop(e.shop, e.plan || 'std', parseInt(e.pages || '0', 10), e.opts || {}, '', !!e.remake);
   if (db.shops[e.shop]) s.log = db.shops[e.shop].log;
   db.shops[e.shop] = s; db.cur = e.shop; save(); all();
 });
