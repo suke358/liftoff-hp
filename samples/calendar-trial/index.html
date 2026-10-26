@@ -30,13 +30,16 @@ body{margin:0;background:var(--forest);color:var(--txt);font-family:var(--gothic
 .avail{background:var(--forest2);border:1px solid var(--line);border-radius:18px;padding:28px 10px 24px;text-align:center}
 .avail h2{font-family:var(--gothic);font-size:16px;letter-spacing:.2em;color:var(--gold);margin:0 0 6px;font-weight:500}
 .av-lead{font-size:13.5px;margin:0 6px 18px;color:#cdd0c6}
-.menus{display:block;margin:0 6px 14px;border-top:1px solid var(--line);text-align:left}
-.menus button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:62px;margin:0;padding:10px 12px 10px 14px;border:0;border-bottom:1px solid var(--line);border-left:3px solid transparent;background:transparent;color:var(--txt);border-radius:0;font:inherit;text-align:left;cursor:pointer;-webkit-appearance:none}
-.menus button .mn{font-family:var(--mincho);font-size:17px;letter-spacing:.06em}
-.menus button small{font-size:12.5px;color:var(--sub);line-height:1.4;text-align:right;margin-left:12px}
-.menus button.on{background:rgba(254,151,178,.16);border-left-color:var(--pink);color:#fff}.menus button.on small{color:var(--gold)}
+.menus{display:block;margin:0 4px 6px;text-align:left}
+.menus button{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:70px;margin:0 0 10px;padding:10px 14px 10px 16px;border:1.5px solid rgba(226,207,159,.5);background:rgba(255,255,255,.08);color:var(--txt);border-radius:16px;font:inherit;text-align:left;cursor:pointer;-webkit-appearance:none}
+.menus button .tx{display:block;text-align:left;min-width:0}
+.menus button .mn{display:block;font-family:var(--mincho);font-size:17.5px;letter-spacing:.06em;line-height:1.5}
+.menus button small{display:block;font-size:12.5px;color:var(--sub);line-height:1.5;margin-top:1px}
+.menus button .pick{flex:none;margin-left:10px;border:1.5px solid var(--pink);color:var(--pink);border-radius:20px;padding:5px 14px;font-size:13.5px;font-weight:700;line-height:1.3;white-space:nowrap}
+.menus button:active{background:rgba(254,151,178,.22)}
+.menus button.on{background:rgba(254,151,178,.18);border-color:var(--pink);color:#fff}.menus button.on small{color:var(--gold)}.menus button.on .pick{background:var(--pink);color:#3a2830}
+.menus button.sub{min-height:58px;margin:0 0 10px 18px;width:calc(100% - 18px);background:rgba(0,0,0,.18);border-style:dashed}.menus button.sub.on{background:rgba(254,151,178,.18);border-style:solid}.menus button.sub .mn{font-family:var(--gothic);font-size:16px;letter-spacing:.04em}
 .plink{color:var(--gold);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.plink-demo{color:var(--gold);margin:8px 6px 0}.note.mnote{background:rgba(254,151,178,.14);border:1px solid var(--pink);border-radius:10px;padding:9px 12px;color:#fbf7ef;font-size:13.5px;line-height:1.7;margin:8px 0 18px;text-align:left}
-.menus button.sub{min-height:54px;padding-left:30px;background:rgba(0,0,0,.16)}.menus button.sub.on{background:rgba(254,151,178,.16)}.menus button.sub .mn{font-family:var(--gothic);font-size:15.5px;letter-spacing:.04em}
 .menus button:focus-visible,.cd:focus-visible,.tm:focus-visible,.btn:focus-visible,.nv:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .hint{font-size:14px;color:var(--gold);margin:0 0 14px;line-height:1.7}
 .cal{background:var(--cream);border-radius:14px;padding:12px 6px;color:var(--ink);text-align:center}
@@ -88,13 +91,13 @@ button.cd{cursor:pointer}
 
   <section class="avail" aria-labelledby="av-t">
     <h2 id="av-t">ネット予約</h2>
-    <p class="av-lead">メニューを選ぶと、そのメニューの空きが出ます。日にちを押して、ご予約へ進めます。</p>
+    <p class="av-lead">ご希望のメニューを押すと、そのメニューの空きが出ます。</p>
     <div class="menus" id="menus" role="group" aria-label="メニュー"></div>
     <div class="menus subs" id="subs" role="group" aria-label="ボディケアの長さ" hidden></div>
     <p class="note" style="margin:0 0 6px">※料金はすべて税込です　<a class="plink" id="plink" href="#menu">料金表を見る</a></p>
     <p class="note plink-demo" id="pdemo" hidden>（試作：本番では、ここから HP の「メニュー・料金」へ移ります。「もどる」で、ここに戻れます）</p>
     <p class="note mnote" id="mnote" hidden></p>
-    <p class="hint" id="hint">① まず、メニューを選んでください</p>
+    <p class="hint" id="hint">① 上のメニューを、1つ押してください</p>
     <div id="calbox" hidden>
       <p class="dur" id="dur"></p>
       <div class="cal"><div class="ch"><button class="nv" id="prev" type="button" aria-label="前の月">‹</button><b id="mt"></b><button class="nv" id="next" type="button" aria-label="次の月">›</button></div><div class="g" id="g"></div></div>
@@ -153,11 +156,12 @@ button.cd{cursor:pointer}
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   function drawMenus(){
     var h='';
-    for(var i=0;i<MENUS.length;i++){var m=MENUS[i];
-      h+='<button type="button" data-i="'+i+'"'+(st.top===m?' class="on" aria-pressed="true"':' aria-pressed="false"')+'><span class="mn">'+m.n+'</span><small>'+(m.note||m.min+'分')+(m.price?'・'+m.price:'')+'</small></button>';
-      if(st.top===m&&m.group){
-        for(var k=0;k<m.group.length;k++){var g=m.group[k],on=st.menu&&st.menu.min===g.min;
-          h+='<button type="button" class="sub'+(on?' on':'')+'" data-j="'+k+'" aria-pressed="'+(on?'true':'false')+'"><span class="mn">'+g.min+'分</span><small>'+g.price+'</small></button>';}
+    for(var i=0;i<MENUS.length;i++){var m=MENUS[i],on=(st.top===m);
+      var pk=m.group?(on?'選択中 ▴':'長さを選ぶ ▾'):(on?'選択中':'選ぶ');
+      h+='<button type="button" data-i="'+i+'"'+(on?' class="on" aria-pressed="true"':' aria-pressed="false"')+'><span class="tx"><span class="mn">'+m.n+'</span><small>'+(m.note||m.min+'分')+(m.price?'・'+m.price:'')+'</small></span><span class="pick">'+pk+'</span></button>';
+      if(on&&m.group){
+        for(var k=0;k<m.group.length;k++){var g=m.group[k],so=st.menu&&st.menu.min===g.min;
+          h+='<button type="button" class="sub'+(so?' on':'')+'" data-j="'+k+'" aria-pressed="'+(so?'true':'false')+'"><span class="tx"><span class="mn">'+g.min+'分</span><small>'+g.price+'</small></span><span class="pick">'+(so?'選択中':'選ぶ')+'</span></button>';}
       }
     }
     $('menus').innerHTML=h;
@@ -234,7 +238,7 @@ button.cd{cursor:pointer}
         if(t.id==='plink'){e.preventDefault();$('pdemo').hidden=false; /* 試作だけ。本番ではこの行を消し、リンクをそのまま使う */ return;}
         if(t.id==='prev'||t.id==='next'){st.month=new Date(st.month.getFullYear(),st.month.getMonth()+(t.id==='prev'?-1:1),1);drawCal();return;}
         if(t.id==='go'){showDone();return;}
-        if(t.id==='again'){st.top=null;st.menu=null;st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent='① まず、メニューを選んでください';drawMenus();drawSubs();hideBelow(0);window.scrollTo(0,0);return;}
+        if(t.id==='again'){st.top=null;st.menu=null;st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent='① 上のメニューを、1つ押してください';drawMenus();drawSubs();hideBelow(0);window.scrollTo(0,0);return;}
       }
       t=t.parentNode;i++;
     }
