@@ -11,6 +11,7 @@
   2. 電話番号がページ内でそろっているか
   3. 使ってはいけない言葉（効果を言い切る・一番だと言い切る）
   4. 画像・リンク先のファイルがあるか／ページ内リンク（#〜）の行き先があるか
+  4b. 土台の 3 行（<!doctype html>・<meta charset="utf-8">・viewport）があるか（2026/10/26。無いと iPhone で文字化け・縮小表示）
   5. 画像の説明（alt）・外部リンクの rel・noindex・シェア用画像・文の折り返し
   6. 横にはみ出していないか（幅 320・360・390・768・1280）
   7. LINE のカードの番号（?v=）が、アドレスバーに足す JS・canonical・og:url の3か所でそろっているか（2026/10/10 追加。欠け・ちがい → ❌、しくみ無し → ⚠️）
@@ -186,6 +187,15 @@ def run_static(root):
         par = TextAndTags(); par.feed(src)
         text = ''.join(t for t, _ in par.text)
         is_top = (p == top)
+
+        # 土台の 3 つ（doctype・文字コード・viewport）。2026/10/26 samples/calendar-trial/ で charset が無く iPhone で文字化けしたが ❌ 0 だったので足した
+        head = src[:4000]
+        base_miss = []
+        if not re.search(r'<!doctype\s+html', head, re.I): base_miss.append('<!doctype html>')
+        if not re.search(r'<meta[^>]+charset\s*=\s*["\']?utf-8', head, re.I): base_miss.append('<meta charset="utf-8">')
+        if not re.search(r'<meta[^>]+name\s*=\s*["\']viewport["\'][^>]*width=device-width', head, re.I): base_miss.append('viewport（width=device-width）')
+        if base_miss: add('❌', '土台', f'{rel}：{"・".join(base_miss)} がありません（先頭の 3 行。無いと iPhone で文字化け・縮小表示になる）')
+        elif is_top: add('✅', '土台', f'{rel}：doctype・charset・viewport あり')
 
         for m in re.finditer(r'<style[^>]*>(.*?)</style>', src, re.S):
             old_found |= check_css(p, m.group(1), src.count('\n', 0, m.start(1)))
