@@ -27,23 +27,23 @@ body{margin:0;background:var(--forest);color:var(--txt);font-family:var(--gothic
 .sec-head i{display:block;font-style:italic;color:var(--pink);letter-spacing:.1em;font-size:14px}
 .sec-head h1{font-family:var(--mincho);font-weight:500;font-size:26px;letter-spacing:.14em;margin:2px 0 0;color:#fbf7ef}
 .lead{text-align:center;font-size:14px;margin:0 0 26px;color:var(--sub)}
-.avail{background:var(--forest2);border:1px solid var(--line);border-radius:18px;padding:28px 18px 24px;text-align:center}
+.avail{background:var(--forest2);border:1px solid var(--line);border-radius:18px;padding:28px 10px 24px;text-align:center}
 .avail h2{font-family:var(--gothic);font-size:16px;letter-spacing:.2em;color:var(--gold);margin:0 0 6px;font-weight:500}
-.av-lead{font-size:13.5px;margin:0 0 16px;color:#cdd0c6}
-.menus{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px}
-.menus button{min-height:52px;border:1.5px solid var(--line);background:transparent;color:var(--txt);border-radius:26px;padding:6px 16px;font:inherit;font-size:14.5px;cursor:pointer}
+.av-lead{font-size:13.5px;margin:0 6px 18px;color:#cdd0c6}
+.menus{display:flex;flex-wrap:wrap;justify-content:center;margin:0 -4px 10px}
+.menus button{min-height:58px;margin:7px 6px;border:1.5px solid var(--line);background:transparent;color:var(--txt);border-radius:29px;padding:8px 20px;font:inherit;font-size:14.5px;cursor:pointer}
 .menus button small{display:block;font-size:11.5px;color:var(--sub);line-height:1.3}
 .menus button.on{background:var(--pink);border-color:var(--pink);color:#3a2830;font-weight:700}.menus button.on small{color:#5a3e48}
-.plink{color:var(--gold);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.plink-demo{color:var(--gold)}.mnote{background:rgba(254,151,178,.14);border:1px solid var(--pink);border-radius:10px;padding:9px 12px;color:#fbf7ef;font-size:13.5px;line-height:1.7;margin:4px 0 14px;text-align:left}
-.subs{margin-top:-4px}.subs button{min-height:48px;border-style:dashed}
+.plink{color:var(--gold);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.plink-demo{color:var(--gold);margin:8px 6px 0}.note.mnote{background:rgba(254,151,178,.14);border:1px solid var(--pink);border-radius:10px;padding:9px 12px;color:#fbf7ef;font-size:13.5px;line-height:1.7;margin:8px 0 18px;text-align:left}
+.subs{margin-top:-4px}.subs button{min-height:54px;border-style:dashed}
 .menus button:focus-visible,.cd:focus-visible,.tm:focus-visible,.btn:focus-visible,.nv:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-.hint{font-size:13px;color:var(--gold);margin:0 0 10px}
-.cal{background:var(--cream);border-radius:14px;padding:12px 10px;color:var(--ink);text-align:center}
+.hint{font-size:14px;color:var(--gold);margin:0 0 14px;line-height:1.7}
+.cal{background:var(--cream);border-radius:14px;padding:12px 6px;color:var(--ink);text-align:center}
 .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.ch b{font-size:16px}
 .nv{width:44px;height:44px;border:0;background:none;color:var(--pink-deep);font-size:24px;cursor:pointer;border-radius:10px}.nv[disabled]{color:var(--off);cursor:default}
-.g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.g{display:grid;grid-template-columns:repeat(7,1fr);gap:8px 5px}
 .cw{font-size:12px;color:var(--stone);padding:2px 0}
-.cd{min-height:52px;border-radius:9px;border:1px solid transparent;padding:5px 0 0;display:block;font:inherit;background:none;color:var(--ink)}
+.cd{min-height:60px;border-radius:9px;border:1px solid transparent;padding:5px 0 0;display:block;font:inherit;background:none;color:var(--ink)}
 .cd i{display:block;font-style:normal;font-size:12px;line-height:15px}.cd u{display:block;text-decoration:none;font-size:17px;font-weight:700;line-height:24px}
 button.cd{cursor:pointer}
 .cd.ok{background:var(--ok-bg);border-color:var(--ok-line);color:var(--ok-fg)}
@@ -51,7 +51,7 @@ button.cd{cursor:pointer}
 .cd.off{color:var(--off)}.cd.off u{font-size:12px;font-weight:400}
 .cd.pad{visibility:hidden}
 .cd.sel{outline:3px solid var(--pink-deep);outline-offset:-1px}
-.leg{display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:center;font-size:12.5px;color:#cdd0c6;margin-top:12px}.leg b{color:#fbf7ef;margin-right:4px}
+.leg{display:flex;flex-wrap:wrap;justify-content:center;font-size:12.5px;color:#cdd0c6;margin-top:12px}.leg span{margin:3px 9px}.leg b{color:#fbf7ef;margin-right:4px}.dur{margin:0 6px 14px;font-size:13.5px;line-height:1.7;color:#fbf7ef}
 .note{font-size:12.5px;color:var(--sub);margin:10px 0 0}
 .panel{background:var(--cream);color:var(--ink);border-radius:14px;padding:16px 14px;margin-top:14px;text-align:left}
 .panel h3{margin:0 0 8px;font-size:15.5px;font-family:var(--gothic)}
@@ -60,7 +60,7 @@ button.cd{cursor:pointer}
 .chip{display:inline-block;background:var(--ok-bg);color:var(--ok-fg);border-radius:14px;padding:2px 12px;font-size:13px;margin-bottom:8px}
 .fld{display:block;font-size:13px;color:var(--stone);margin-bottom:10px}
 .fld input{display:block;width:100%;margin-top:4px;padding:12px;border:1px solid #d9cdbd;border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:16px}
-.chk{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;margin:4px 0 12px}.chk input{width:22px;height:22px;flex:none;margin-top:1px}
+.chk{display:flex;align-items:flex-start;font-size:13.5px;margin:4px 0 12px}.chk input{width:22px;height:22px;flex:none;margin:1px 10px 0 0}
 .btn{display:block;width:100%;min-height:50px;border:0;border-radius:26px;background:var(--pink-deep);color:#fff;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
 .btn[disabled]{background:#cfc8bf;color:#fff;cursor:default}.btn.line{background:#fff;color:var(--pink-deep);border:2px solid var(--pink-deep);margin-top:10px}
 .done{background:var(--ok-bg);border-radius:12px;padding:12px;margin:8px 0;font-size:14px}
@@ -95,6 +95,7 @@ button.cd{cursor:pointer}
     <p class="note mnote" id="mnote" hidden></p>
     <p class="hint" id="hint">① まず、メニューを選んでください</p>
     <div id="calbox" hidden>
+      <p class="dur" id="dur"></p>
       <div class="cal"><div class="ch"><button class="nv" id="prev" type="button" aria-label="前の月">‹</button><b id="mt"></b><button class="nv" id="next" type="button" aria-label="次の月">›</button></div><div class="g" id="g"></div></div>
       <div class="leg"><span><b>○</b>空きあり（押せます）</span><span><b>×</b>空きなし</span><span><b>休</b>お休み</span></div>
       <p class="note">※空きは、選んだメニューの目安です。タクティールケアは、公式LINEでご相談ください。</p>
@@ -147,6 +148,7 @@ button.cd{cursor:pointer}
       if(!hit)out.push(s);}
     return out;
   }
+  function setDur(){var m=st.menu;$('dur').textContent='施術 '+m.min+'分（カウンセリング・お片づけを含め、ご来店から約'+len(m)+'分）';}
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   function drawMenus(){
     var h='';
@@ -205,7 +207,7 @@ button.cd{cursor:pointer}
   }
   function showDone(){
     var dt=st.date;
-    $('dpanel').innerHTML='<h3>ご予約を受け付けました（という画面です）</h3><div class="done">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜<br>'+esc(st.menu.n)+'（約'+len(st.menu)+'分・カウンセリングとお片づけを含む）</div>'+
+    $('dpanel').innerHTML='<h3>ご予約を受け付けました（という画面です）</h3><div class="done">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜<br>'+esc(st.menu.n)+'<br>ご来店から約'+len(st.menu)+'分です（カウンセリング・お片づけを含む）</div>'+
      '<p class="note" style="color:#75695f">本物なら、確認メールが届き、その時間は他の人には選べなくなります。この試作では何も保存・送信しません。</p><button type="button" class="btn line" id="again">もう一度ためす</button>';
     $('dpanel').hidden=false;
     $('dpanel').scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -220,12 +222,12 @@ button.cd{cursor:pointer}
           st.menu=st.top;
           $('mnote').textContent=(st.top.n==='脱毛')?'脱毛の料金は、部位によって変わります。上の「料金表を見る」からご覧ください。':'';$('mnote').hidden=!$('mnote').textContent;
           $('hint').textContent='② 行きたい日を押してください（'+st.menu.n+'の空きです）';
-          $('calbox').hidden=false;drawMenus();drawSubs();drawCal();return;}
+          $('calbox').hidden=false;setDur();drawMenus();drawSubs();drawCal();return;}
         if(t.parentNode&&t.parentNode.id==='subs'&&t.getAttribute('data-j')!==null){
           var g=st.top.group[+t.getAttribute('data-j')];
           st.menu={n:st.top.n+' '+g.min+'分',min:g.min,price:g.price};st.date=null;st.time=null;hideBelow(0);
           $('hint').textContent='③ 行きたい日を押してください（'+st.menu.n+'の空きです）';
-          $('calbox').hidden=false;drawSubs();drawCal();return;}
+          $('calbox').hidden=false;setDur();drawSubs();drawCal();return;}
         if(t.getAttribute('data-d')!==null&&t.className.indexOf('cd')>-1){
           st.date={y:st.month.getFullYear(),m:st.month.getMonth(),d:+t.getAttribute('data-d')};st.time=null;
           drawCal();showTimes();return;}
