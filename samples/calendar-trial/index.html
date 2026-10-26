@@ -34,6 +34,8 @@ body{margin:0;background:var(--forest);color:var(--txt);font-family:var(--gothic
 .menus button{min-height:52px;border:1.5px solid var(--line);background:transparent;color:var(--txt);border-radius:26px;padding:6px 16px;font:inherit;font-size:14.5px;cursor:pointer}
 .menus button small{display:block;font-size:11.5px;color:var(--sub);line-height:1.3}
 .menus button.on{background:var(--pink);border-color:var(--pink);color:#3a2830;font-weight:700}.menus button.on small{color:#5a3e48}
+.plink{color:var(--gold);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.plink-demo{color:var(--gold)}.mnote{background:rgba(254,151,178,.14);border:1px solid var(--pink);border-radius:10px;padding:9px 12px;color:#fbf7ef;font-size:13.5px;line-height:1.7;margin:4px 0 14px;text-align:left}
+.subs{margin-top:-4px}.subs button{min-height:48px;border-style:dashed}
 .menus button:focus-visible,.cd:focus-visible,.tm:focus-visible,.btn:focus-visible,.nv:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .hint{font-size:13px;color:var(--gold);margin:0 0 10px}
 .cal{background:var(--cream);border-radius:14px;padding:12px 10px;color:var(--ink);text-align:center}
@@ -87,11 +89,15 @@ button.cd{cursor:pointer}
     <h2 id="av-t">ネット予約</h2>
     <p class="av-lead">メニューを選ぶと、そのメニューの空きが出ます。日にちを押して、ご予約へ進めます。</p>
     <div class="menus" id="menus" role="group" aria-label="メニュー"></div>
+    <div class="menus subs" id="subs" role="group" aria-label="ボディケアの長さ" hidden></div>
+    <p class="note" style="margin:0 0 6px">※料金はすべて税込です　<a class="plink" id="plink" href="#menu">料金表を見る</a></p>
+    <p class="note plink-demo" id="pdemo" hidden>（試作：本番では、ここから HP の「メニュー・料金」へ移ります。「もどる」で、ここに戻れます）</p>
+    <p class="note mnote" id="mnote" hidden></p>
     <p class="hint" id="hint">① まず、メニューを選んでください</p>
     <div id="calbox" hidden>
       <div class="cal"><div class="ch"><button class="nv" id="prev" type="button" aria-label="前の月">‹</button><b id="mt"></b><button class="nv" id="next" type="button" aria-label="次の月">›</button></div><div class="g" id="g"></div></div>
       <div class="leg"><span><b>○</b>空きあり（押せます）</span><span><b>×</b>空きなし</span><span><b>休</b>お休み</span></div>
-      <p class="note">※空きは、選んだメニューの目安です。脱毛・バストアップはLINEかお電話でご相談ください。</p>
+      <p class="note">※空きは、選んだメニューの目安です。タクティールケアは、公式LINEでご相談ください。</p>
     </div>
     <div class="panel" id="tpanel" hidden></div>
     <div class="panel" id="fpanel" hidden></div>
@@ -113,7 +119,13 @@ button.cd{cursor:pointer}
 <script>
 (function(){
   var PRE=10,BUF=10,OPEN=600,CLOSE=1080,STEP=30;
-  var MENUS=[{n:'よもぎ蒸し',min:40},{n:'フェイシャル',min:30},{n:'ボディケア',min:120,note:'15〜120分'}];
+  var MENUS=[
+    {n:'よもぎ蒸し',min:40,slot:60,price:'5,500円'},
+    {n:'フェイシャル',min:30,slot:60,price:'5,500円'},
+    {n:'ボディケア',note:'15〜120分',price:'2,200円〜',group:[{min:15,price:'2,200円'},{min:30,price:'3,300円'},{min:60,price:'6,600円'},{min:90,price:'9,900円'},{min:120,price:'13,200円'}]},
+    {n:'脱毛',min:60,price:''},
+    {n:'バストアップ',min:60,price:''}
+  ];
   var BOOK={};
   function ab(k,s,e){(BOOK[k]=BOOK[k]||[]).push([s,e]);}
   ['2026-11-07','2026-11-14','2026-11-21','2026-12-05'].forEach(function(k){ab(k,OPEN,CLOSE);});
@@ -121,12 +133,12 @@ button.cd{cursor:pointer}
   ['2026-11-05','2026-11-12','2026-11-19','2026-11-26'].forEach(function(k){ab(k,600,720);});
   ['2026-11-02','2026-11-04','2026-11-06','2026-11-09','2026-11-13','2026-11-16','2026-11-18','2026-11-20','2026-11-25','2026-11-27','2026-12-02','2026-12-04','2026-12-08'].forEach(function(k){ab(k,720,780);ab(k,900,960);});
   var TODAY=new Date(2026,9,26);
-  var st={menu:null,month:new Date(2026,10,1),date:null,time:null};
+  var st={top:null,menu:null,month:new Date(2026,10,1),date:null,time:null};
   function $(i){return document.getElementById(i);}
   function pad(n){return n<10?'0'+n:''+n;}
   function key(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d);}
   function hm(x){return pad(Math.floor(x/60))+':'+pad(x%60);}
-  function len(m){return PRE+m.min+BUF;}
+  function len(m){return m.slot?m.slot:PRE+m.min+BUF;}
   function closed(y,m,d){return new Date(y,m,d).getDay()===3||key(y,m,d)==='2026-11-01'||key(y,m,d)==='2026-12-31';}
   function starts(y,m,d,menu){
     var out=[],L=len(menu),b=BOOK[key(y,m,d)]||[];
@@ -139,8 +151,16 @@ button.cd{cursor:pointer}
   function drawMenus(){
     var h='';
     for(var i=0;i<MENUS.length;i++){var m=MENUS[i];
-      h+='<button type="button" data-i="'+i+'"'+(st.menu===m?' class="on" aria-pressed="true"':' aria-pressed="false"')+'>'+m.n+'<small>'+(m.note||m.min+'分')+'</small></button>';}
+      h+='<button type="button" data-i="'+i+'"'+(st.top===m?' class="on" aria-pressed="true"':' aria-pressed="false"')+'>'+m.n+'<small>'+(m.note||m.min+'分')+(m.price?'・'+m.price:'')+'</small></button>';}
     $('menus').innerHTML=h;
+  }
+  function drawSubs(){
+    var g=st.top&&st.top.group,h='';
+    if(!g){$('subs').hidden=true;return;}
+    for(var j=0;j<g.length;j++){
+      var on=st.menu&&st.menu.min===g[j].min;
+      h+='<button type="button" data-j="'+j+'"'+(on?' class="on" aria-pressed="true"':' aria-pressed="false"')+'>'+g[j].min+'分<small>'+g[j].price+'</small></button>';}
+    $('subs').innerHTML=h;$('subs').hidden=false;
   }
   function drawCal(){
     var y=st.month.getFullYear(),mo=st.month.getMonth();
@@ -166,7 +186,7 @@ button.cd{cursor:pointer}
   }
   function wk(dt){return '日月火水木金土'.charAt(new Date(dt.y,dt.m,dt.d).getDay());}
   function showTimes(){
-    var dt=st.date,ts=starts(dt.y,dt.m,dt.d,st.menu),h='<h3>② '+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）の開始時間</h3><div class="tms">';
+    var dt=st.date,ts=starts(dt.y,dt.m,dt.d,st.menu),h='<h3>'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）の開始時間</h3><div class="tms">';
     for(var i=0;i<ts.length;i++)h+='<button type="button" class="tm" data-t="'+ts[i]+'">'+hm(ts[i])+'</button>';
     h+='</div><p class="note" style="color:#75695f">※カウンセリング・お片づけの時間を含めて、少し長めにお時間をいただきます。</p>';
     $('tpanel').innerHTML=h;$('tpanel').hidden=false;hideBelow(1);
@@ -174,7 +194,7 @@ button.cd{cursor:pointer}
   }
   function showForm(){
     var dt=st.date;
-    $('fpanel').innerHTML='<h3>③ お名前などを入力してください</h3><span class="chip">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜 '+esc(st.menu.n)+'</span>'+
+    $('fpanel').innerHTML='<h3>お名前などを入力してください</h3><span class="chip">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜 '+esc(st.menu.n)+'</span>'+
      '<label class="fld" for="nm">お名前（必須）<input id="nm" type="text" autocomplete="off" placeholder="例：山田 花子（架空でOK）"></label>'+
      '<label class="fld" for="tl">電話番号（必須）<input id="tl" type="tel" autocomplete="off" placeholder="例：090-0000-0000"></label>'+
      '<label class="fld" for="ml">メール（必須・確認メールのため）<input id="ml" type="email" autocomplete="off" placeholder="例：sample@example.com"></label>'+
@@ -195,16 +215,25 @@ button.cd{cursor:pointer}
     while(t&&t!==document&&i<6){
       if(t.getAttribute){
         if(t.parentNode&&t.parentNode.id==='menus'&&t.getAttribute('data-i')!==null){
-          st.menu=MENUS[+t.getAttribute('data-i')];st.date=null;st.time=null;
+          st.top=MENUS[+t.getAttribute('data-i')];st.date=null;st.time=null;hideBelow(0);$('mnote').hidden=true;$('pdemo').hidden=true;
+          if(st.top.group){st.menu=null;$('calbox').hidden=true;$('hint').textContent='② ボディケアの長さを選んでください';drawMenus();drawSubs();return;}
+          st.menu=st.top;
+          $('mnote').textContent=(st.top.n==='脱毛')?'脱毛の料金は、部位によって変わります。上の「料金表を見る」からご覧ください。':'';$('mnote').hidden=!$('mnote').textContent;
           $('hint').textContent='② 行きたい日を押してください（'+st.menu.n+'の空きです）';
-          $('calbox').hidden=false;drawMenus();drawCal();hideBelow(0);return;}
+          $('calbox').hidden=false;drawMenus();drawSubs();drawCal();return;}
+        if(t.parentNode&&t.parentNode.id==='subs'&&t.getAttribute('data-j')!==null){
+          var g=st.top.group[+t.getAttribute('data-j')];
+          st.menu={n:st.top.n+' '+g.min+'分',min:g.min,price:g.price};st.date=null;st.time=null;hideBelow(0);
+          $('hint').textContent='③ 行きたい日を押してください（'+st.menu.n+'の空きです）';
+          $('calbox').hidden=false;drawSubs();drawCal();return;}
         if(t.getAttribute('data-d')!==null&&t.className.indexOf('cd')>-1){
           st.date={y:st.month.getFullYear(),m:st.month.getMonth(),d:+t.getAttribute('data-d')};st.time=null;
           drawCal();showTimes();return;}
         if(t.getAttribute('data-t')!==null){st.time=+t.getAttribute('data-t');showForm();return;}
+        if(t.id==='plink'){e.preventDefault();$('pdemo').hidden=false; /* 試作だけ。本番ではこの行を消し、リンクをそのまま使う */ return;}
         if(t.id==='prev'||t.id==='next'){st.month=new Date(st.month.getFullYear(),st.month.getMonth()+(t.id==='prev'?-1:1),1);drawCal();return;}
         if(t.id==='go'){showDone();return;}
-        if(t.id==='again'){st.menu=null;st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent='① まず、メニューを選んでください';drawMenus();hideBelow(0);window.scrollTo(0,0);return;}
+        if(t.id==='again'){st.top=null;st.menu=null;st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent='① まず、メニューを選んでください';drawMenus();drawSubs();hideBelow(0);window.scrollTo(0,0);return;}
       }
       t=t.parentNode;i++;
     }
@@ -213,5 +242,7 @@ button.cd{cursor:pointer}
   drawMenus();
 })();
 </script>
+<!-- 見比べ用だけ：本番の HP には #menu（メニュー・料金）があるので、この見えない目印は本番では要らない -->
+<div id="menu" hidden></div>
 </body>
 </html>
