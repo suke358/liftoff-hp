@@ -91,13 +91,13 @@ button.cd{cursor:pointer}
 
   <section class="avail" aria-labelledby="av-t">
     <h2 id="av-t">ネット予約</h2>
-    <p class="av-lead">ご希望のメニューを押すと、そのメニューの空きが出ます。</p>
+    <p class="av-lead">ご希望のメニューを押すと、そのメニューの空きが出ます。<br>複数のメニューもいっしょに選べます（施術の合計 180分まで）。</p>
     <div class="menus" id="menus" role="group" aria-label="メニュー"></div>
     <div class="menus subs" id="subs" role="group" aria-label="ボディケアの長さ" hidden></div>
     <p class="note" style="margin:0 0 6px">※料金はすべて税込です　<a class="plink" id="plink" href="#menu">料金表を見る</a></p>
     <p class="note plink-demo" id="pdemo" hidden>（試作：本番では、ここから HP の「メニュー・料金」へ移ります。「もどる」で、ここに戻れます）</p>
     <p class="note mnote" id="mnote" hidden></p>
-    <p class="hint" id="hint">① 上のメニューを、1つ押してください</p>
+    <p class="hint" id="hint">① 上のメニューを押してください</p>
     <div id="calbox" hidden>
       <p class="dur" id="dur"></p>
       <div class="cal"><div class="ch"><button class="nv" id="prev" type="button" aria-label="前の月">‹</button><b id="mt"></b><button class="nv" id="next" type="button" aria-label="次の月">›</button></div><div class="g" id="g"></div></div>
@@ -126,11 +126,12 @@ button.cd{cursor:pointer}
   var PRE=10,BUF=10,OPEN=600,CLOSE=1080,STEP=30;
   var MENUS=[
     {n:'よもぎ蒸し',min:40,slot:60,price:'5,500円'},
-    {n:'フェイシャル',min:30,slot:60,price:'5,500円'},
+    {n:'フェイシャル',min:30,slot:60,price:'5,500円',extraMin:10,extraNote:'お化粧落とし'},   // extraMin＝複数のとき所要に足す分（本番は予約システムの shop.jsonc から来る）
     {n:'ボディケア',note:'15〜120分',price:'2,200円〜',group:[{min:15,price:'2,200円'},{min:30,price:'3,300円'},{min:60,price:'6,600円'},{min:90,price:'9,900円'},{min:120,price:'13,200円'}]},
     {n:'脱毛',min:60,price:''},
     {n:'バストアップ',min:60,price:''}
   ];
+  var MAXT=180;   // 施術の合計の上限（分）。本番は予約システムの /api/days の maxTotalMin から読む（試作だけの仮の値）
   var BOOK={};
   function ab(k,s,e){(BOOK[k]=BOOK[k]||[]).push([s,e]);}
   ['2026-11-07','2026-11-14','2026-11-21','2026-12-05'].forEach(function(k){ab(k,OPEN,CLOSE);});
@@ -138,29 +139,49 @@ button.cd{cursor:pointer}
   ['2026-11-05','2026-11-12','2026-11-19','2026-11-26'].forEach(function(k){ab(k,600,720);});
   ['2026-11-02','2026-11-04','2026-11-06','2026-11-09','2026-11-13','2026-11-16','2026-11-18','2026-11-20','2026-11-25','2026-11-27','2026-12-02','2026-12-04','2026-12-08'].forEach(function(k){ab(k,720,780);ab(k,900,960);});
   var TODAY=new Date(2026,9,26);
-  var st={top:null,menu:null,month:new Date(2026,10,1),date:null,time:null};
+  var st={top:null,sel:[],month:new Date(2026,10,1),date:null,time:null};   // sel＝選んだメニューの並び（複数可。2026/10/28）。top＝開いているグループ
   function $(i){return document.getElementById(i);}
   function pad(n){return n<10?'0'+n:''+n;}
   function key(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d);}
   function hm(x){return pad(Math.floor(x/60))+':'+pad(x%60);}
   function len(m){return m.slot?m.slot:PRE+m.min+BUF;}
+  /* 複数メニュー（2026/10/28。本番の HP・予約システムと同じ計算）：1 つなら len、2 つ以上なら 前＋施術の合計＋extraMin＋後 */
+  function minOf(ms){var t=0;for(var i=0;i<ms.length;i++)t+=+ms[i].min;return t;}
+  function extraOf(ms){var t=0;for(var i=0;i<ms.length;i++)t+=+ms[i].extraMin||0;return t;}
+  function lenOf(ms){if(ms.length===1)return len(ms[0]);return PRE+minOf(ms)+extraOf(ms)+BUF;}
+  function extraNotes(ms){var o=[];for(var i=0;i<ms.length;i++){var n=String(ms[i].extraNote||'');if(+ms[i].extraMin>0&&n&&o.indexOf(n)<0)o.push(n);}return o;}
+  function yen(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'円';}
+  function isYen(p){return /^([0-9,]+)\s*円(〜)?$/.test(String(p||''));}
+  function priceOf(ms){if(ms.length===1)return ms[0].price||'';var sum=0,from=false,ask=false;for(var i=0;i<ms.length;i++){var x=/^([0-9,]+)\s*円(〜)?$/.exec(String(ms[i].price||''));if(x){sum+=+x[1].replace(/,/g,'');if(x[2])from=true;}else ask=true;}return ask?'お問い合わせください':yen(sum)+(from?'〜':'');}
+  function askNames(ms){var o=[];for(var i=0;i<ms.length;i++)if(!isYen(ms[i].price))o.push(ms[i].n);return o;}
+  function namesOf(ms){var o=[];for(var i=0;i<ms.length;i++)o.push(ms[i].n);return o.join('＋');}
+  function selIdx(m){for(var i=0;i<st.sel.length;i++)if(st.sel[i].n===m.n)return i;return -1;}
+  function selOfGroup(g){for(var i=0;i<st.sel.length;i++)if(st.sel[i].base===g.n)return st.sel[i];return null;}
+  function canAdd(m,without){if(!MAXT)return true;var t=0;for(var i=0;i<st.sel.length;i++)if(st.sel[i]!==without)t+=+st.sel[i].min;return t+(+m.min)<=MAXT;}
   function closed(y,m,d){return new Date(y,m,d).getDay()===3||key(y,m,d)==='2026-11-01'||key(y,m,d)==='2026-12-31';}
-  function starts(y,m,d,menu){
-    var out=[],L=len(menu),b=BOOK[key(y,m,d)]||[];
+  function starts(y,m,d,ms){
+    var out=[],L=lenOf(ms),b=BOOK[key(y,m,d)]||[];
     for(var s=OPEN;s+L<=CLOSE;s+=STEP){var hit=false;
       for(var j=0;j<b.length;j++){if(s<b[j][1]+BUF&&s+L>b[j][0]){hit=true;break;}}
       if(!hit)out.push(s);}
     return out;
   }
-  function setDur(){var m=st.menu;$('dur').textContent='施術 '+m.min+'分（カウンセリング・お片づけを含め、ご来店から約'+len(m)+'分）';}
+  function setDur(){
+    var ms=st.sel;
+    if(ms.length===1){var m=ms[0];$('dur').textContent='施術 '+m.min+'分（カウンセリング・お片づけを含め、ご来店から約'+len(m)+'分）';return;}
+    var ex=extraNotes(ms),pr=priceOf(ms);
+    var t=namesOf(ms)+'\n施術 合計'+minOf(ms)+'分（カウンセリング・お片づけ'+(ex.length?'・'+ex.join('・'):'')+'を含め、ご来店から約'+lenOf(ms)+'分）\n';
+    t+=/円/.test(pr)?'料金の目安　合計 '+pr+'（税込）':'料金はお問い合わせください（'+askNames(ms).join('・')+'の料金は部位などで変わるため）';
+    $('dur').textContent=t;$('dur').style.whiteSpace='pre-line';
+  }
   function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
   function drawMenus(){
     var h='';
-    for(var i=0;i<MENUS.length;i++){var m=MENUS[i],on=(st.top===m);
-      var pk=m.group?(on?'選択中 ▴':'長さを選ぶ ▾'):(on?'選択中':'選ぶ');
+    for(var i=0;i<MENUS.length;i++){var m=MENUS[i],gs=m.group?selOfGroup(m):null,open=(st.top===m),on=m.group?(open||!!gs):selIdx(m)>=0;
+      var pk=m.group?(open?(gs?'✓ '+gs.min+'分 ▴':'閉じる ▴'):(gs?'✓ '+gs.min+'分 ▾':'長さを選ぶ ▾')):(on?'✓ 選択中':'選ぶ');
       h+='<button type="button" data-i="'+i+'"'+(on?' class="on" aria-pressed="true"':' aria-pressed="false"')+'><span class="tx"><span class="mn">'+m.n+'</span><small>'+(m.note||m.min+'分')+(m.price?'・'+m.price:'')+'</small></span><span class="pick">'+pk+'</span></button>';
-      if(on&&m.group){
-        for(var k=0;k<m.group.length;k++){var g=m.group[k],so=st.menu&&st.menu.min===g.min;
+      if(open&&m.group){
+        for(var k=0;k<m.group.length;k++){var g=m.group[k],so=!!(gs&&gs.min===g.min);
           h+='<button type="button" class="sub'+(so?' on':'')+'" data-j="'+k+'" aria-pressed="'+(so?'true':'false')+'"><span class="tx"><span class="mn">'+g.min+'分</span><small>'+g.price+'</small></span><span class="pick">'+(so?'選択中':'選ぶ')+'</span></button>';}
       }
     }
@@ -178,7 +199,7 @@ button.cd{cursor:pointer}
       var past=new Date(y,mo,d)<TODAY;
       if(past){h+='<div class="cd off"><i>'+d+'</i><u>–</u></div>';continue;}
       if(closed(y,mo,d)){h+='<div class="cd off"><i>'+d+'</i><u>休</u></div>';continue;}
-      var n=starts(y,mo,d,st.menu).length;
+      var n=starts(y,mo,d,st.sel).length;
       var sel=(st.date&&st.date.y===y&&st.date.m===mo&&st.date.d===d)?' sel':'';
       if(n>0)h+='<button type="button" class="cd ok'+sel+'" data-d="'+d+'" aria-label="'+(mo+1)+'月'+d+'日 空きあり"><i>'+d+'</i><u>○</u></button>';
       else h+='<div class="cd ng" aria-label="'+(mo+1)+'月'+d+'日 空きなし"><i>'+d+'</i><u>×</u></div>';
@@ -191,7 +212,7 @@ button.cd{cursor:pointer}
   }
   function wk(dt){return '日月火水木金土'.charAt(new Date(dt.y,dt.m,dt.d).getDay());}
   function showTimes(){
-    var dt=st.date,ts=starts(dt.y,dt.m,dt.d,st.menu),h='<h3>'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）の開始時間</h3><div class="tms">';
+    var dt=st.date,ts=starts(dt.y,dt.m,dt.d,st.sel),h='<h3>'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）の開始時間</h3><div class="tms">';
     for(var i=0;i<ts.length;i++)h+='<button type="button" class="tm" data-t="'+ts[i]+'">'+hm(ts[i])+'</button>';
     h+='</div><p class="note" style="color:#75695f">※カウンセリング・お片づけの時間を含めて、少し長めにお時間をいただきます。</p>';
     $('tpanel').innerHTML=h;$('tpanel').hidden=false;hideBelow(1);
@@ -199,7 +220,7 @@ button.cd{cursor:pointer}
   }
   function showForm(){
     var dt=st.date;
-    $('fpanel').innerHTML='<h3>お名前などを入力してください</h3><span class="chip">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜 '+esc(st.menu.n)+'</span>'+
+    $('fpanel').innerHTML='<h3>お名前などを入力してください</h3><span class="chip">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜 '+esc(namesOf(st.sel))+'</span>'+
      '<label class="fld" for="nm">お名前（必須）<input id="nm" type="text" autocomplete="off" placeholder="例：山田 花子（架空でOK）"></label>'+
      '<label class="fld" for="tl">電話番号（必須）<input id="tl" type="tel" autocomplete="off" placeholder="例：090-0000-0000"></label>'+
      '<label class="fld" for="ml">メール（必須・確認メールのため）<input id="ml" type="email" autocomplete="off" placeholder="例：sample@example.com"></label>'+
@@ -210,27 +231,37 @@ button.cd{cursor:pointer}
   }
   function showDone(){
     var dt=st.date;
-    $('dpanel').innerHTML='<h3>ご予約を受け付けました（という画面です）</h3><div class="done">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜<br>'+esc(st.menu.n)+'<br>ご来店から約'+len(st.menu)+'分です（カウンセリング・お片づけを含む）</div>'+
+    $('dpanel').innerHTML='<h3>ご予約を受け付けました（という画面です）</h3><div class="done">'+(dt.m+1)+'月'+dt.d+'日（'+wk(dt)+'）'+hm(st.time)+'〜<br>'+esc(namesOf(st.sel))+(st.sel.length>1?'<br>施術 合計'+minOf(st.sel)+'分':'')+'<br>ご来店から約'+lenOf(st.sel)+'分です（カウンセリング・お片づけ'+(st.sel.length>1&&extraNotes(st.sel).length?'・'+esc(extraNotes(st.sel).join('・')):'')+'を含む）</div>'+
      '<p class="note" style="color:#75695f">本物なら、確認メールが届き、その時間は他の人には選べなくなります。この試作では何も保存・送信しません。</p><button type="button" class="btn line" id="again">もう一度ためす</button>';
     $('dpanel').hidden=false;
     $('dpanel').scrollIntoView({behavior:'smooth',block:'nearest'});
   }
+  var HINT1='① 上のメニューを押してください';
+  function afterSel(){   // メニューを選んだ・外したあと：選んだ並びで空きを出し直す
+    st.date=null;st.time=null;hideBelow(0);drawMenus();
+    var ms=st.sel;
+    if(!ms.length){$('calbox').hidden=true;$('mnote').hidden=true;$('hint').textContent=HINT1;return;}
+    $('mnote').textContent=(askNames(ms).indexOf('脱毛')>=0)?'脱毛の料金は、部位によって変わります。上の「料金表を見る」からご覧ください。':'';$('mnote').hidden=!$('mnote').textContent;
+    $('hint').textContent=(st.top?'③':'②')+' 行きたい日を押してください（'+(ms.length>1?'選んだメニュー':ms[0].n)+'の空きです）';
+    $('calbox').hidden=false;setDur();drawCal();
+  }
+  function overMax(){$('mnote').textContent='施術の合計は '+MAXT+' 分までです。組み合わせを減らすか、LINE かお電話でご相談ください。';$('mnote').hidden=false;}
   document.addEventListener('click',function(e){
     var t=e.target,i=0;
     while(t&&t!==document&&i<6){
       if(t.getAttribute){
         if(t.parentNode&&t.parentNode.id==='menus'&&t.getAttribute('data-i')!==null){
-          st.top=MENUS[+t.getAttribute('data-i')];st.date=null;st.time=null;hideBelow(0);$('mnote').hidden=true;$('pdemo').hidden=true;
-          if(st.top.group){st.menu=null;$('calbox').hidden=true;$('hint').textContent='② ボディケアの長さを選んでください';drawMenus();drawSubs();return;}
-          st.menu=st.top;
-          $('mnote').textContent=(st.top.n==='脱毛')?'脱毛の料金は、部位によって変わります。上の「料金表を見る」からご覧ください。':'';$('mnote').hidden=!$('mnote').textContent;
-          $('hint').textContent='② 行きたい日を押してください（'+st.menu.n+'の空きです）';
-          $('calbox').hidden=false;setDur();drawMenus();drawSubs();drawCal();return;}
+          var m=MENUS[+t.getAttribute('data-i')];$('pdemo').hidden=true;
+          if(m.group){st.top=(st.top===m)?null:m;drawMenus();if(st.top&&!selOfGroup(m)){$('mnote').hidden=true;$('hint').textContent='② '+m.n+'の長さを選んでください';}return;}   // グループは開く・閉じる
+          var at=selIdx(m);
+          if(at>=0)st.sel.splice(at,1);   // もう一度押すと外す
+          else{if(!canAdd(m,null)){overMax();return;}st.sel.push(m);}
+          afterSel();return;}
         if(t.parentNode&&t.parentNode.id==='menus'&&t.getAttribute('data-j')!==null){
-          var g=st.top.group[+t.getAttribute('data-j')];
-          st.menu={n:st.top.n+' '+g.min+'分',min:g.min,price:g.price};st.date=null;st.time=null;hideBelow(0);
-          $('hint').textContent='③ 行きたい日を押してください（'+st.menu.n+'の空きです）';
-          $('calbox').hidden=false;setDur();drawSubs();drawCal();return;}
+          var g0=st.top.group[+t.getAttribute('data-j')],g={n:st.top.n+' '+g0.min+'分',min:g0.min,price:g0.price,base:st.top.n},cur=selOfGroup(st.top),gi=selIdx(g);
+          if(gi>=0)st.sel.splice(gi,1);   // 同じ長さをもう一度押すと外す
+          else{if(!canAdd(g,cur)){overMax();return;}if(cur)st.sel.splice(selIdx(cur),1,g);else st.sel.push(g);}   // 同じグループは 1 つだけ（長さを入れかえる）
+          afterSel();return;}
         if(t.getAttribute('data-d')!==null&&t.className.indexOf('cd')>-1){
           st.date={y:st.month.getFullYear(),m:st.month.getMonth(),d:+t.getAttribute('data-d')};st.time=null;
           drawCal();showTimes();return;}
@@ -238,7 +269,7 @@ button.cd{cursor:pointer}
         if(t.id==='plink'){e.preventDefault();$('pdemo').hidden=false; /* 試作だけ。本番ではこの行を消し、リンクをそのまま使う */ return;}
         if(t.id==='prev'||t.id==='next'){st.month=new Date(st.month.getFullYear(),st.month.getMonth()+(t.id==='prev'?-1:1),1);drawCal();return;}
         if(t.id==='go'){showDone();return;}
-        if(t.id==='again'){st.top=null;st.menu=null;st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent='① 上のメニューを、1つ押してください';drawMenus();drawSubs();hideBelow(0);window.scrollTo(0,0);return;}
+        if(t.id==='again'){st.top=null;st.sel=[];st.date=null;st.time=null;$('calbox').hidden=true;$('hint').textContent=HINT1;drawMenus();drawSubs();hideBelow(0);window.scrollTo(0,0);return;}
       }
       t=t.parentNode;i++;
     }
