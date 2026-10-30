@@ -58,7 +58,13 @@ def main():
         s = open(p, encoding='utf-8').read()
         if '<wbr>' in s:
             if '--force' not in sys.argv:
-                print('飛ばした（もう入っている）:', p); continue
+                # 2026/10/30：ひな形（make_site.py）で作ったページは最初から <wbr> が10個ほど入っているので、ここで必ず飛ばされる。次の手を出す
+                n0 = s.count('<wbr>')
+                if 'tools/make_site.py で作った' in s:
+                    print(f'飛ばした（もう入っている・{n0}個）: {p}\n  → このページはひな形（make_site.py）で作ったものです。budoux を入れたあとは、同じ設定で make_site.py を実行して作り直すと、文の折り返しが全部入ります（例：cd サイトのフォルダ && python3 ~/src/liftoff-hp/tools/make_site.py site.json .）')
+                else:
+                    print(f'飛ばした（もう入っている・{n0}個）: {p}\n  → 入れ直すときは --force を付けます（先に <wbr> を消してから入れ直す）')
+                continue
             s = s.replace('<wbr>', '')
         s, n = add_wbr(s)
         open(p, 'w', encoding='utf-8').write(s)
