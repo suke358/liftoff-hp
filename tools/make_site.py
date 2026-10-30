@@ -40,7 +40,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "sample_note" … 見本のとき、ページのいちばん上に出す注（例 "※画面は架空のお店の見本です"）。本物のお店では書かない
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
-import sys, os, json, html, shutil, subprocess, urllib.parse
+import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
