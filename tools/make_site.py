@@ -96,7 +96,13 @@ def build(c):
     if c.get('flow'): secs.append(('flow', c.get('flow_title', 'ご依頼の流れ')))
     secs += [('reserve', c.get('reserve_title', 'ご予約・ご相談')), ('access', c.get('info_title', '店舗情報')), ('faq', 'よくある質問')]
     if c.get('greeting'): secs.insert(0, ('greeting', 'ごあいさつ'))
-    nav = ''.join(f'<a href="#{k}">{e(v)}</a>' for k, v in secs if k != 'reserve')
+    def _ins(before, item):  # 追加の部品をメニューの順番のよい所に入れる
+        for n, (k, _v) in enumerate(secs):
+            if k == before: secs.insert(n, item); return
+        secs.append(item)
+    if 'voices' in P: _ins('flow' if c.get('flow') else 'reserve', ('voices', P['voices'].get('title', 'お客様の声')))
+    if 'news' in P: _ins('reserve', ('news', P['news'].get('title', 'お知らせ')))
+    nav = ''.join(f'<a href="#{k}">{e(v)}</a>' for k, v in secs if k not in ('reserve', 'voices', 'news'))  # 上の案内が長くなりすぎないよう、お客様の声・お知らせは目次（toc）だけに出す
     toc = ''.join(f'<li><a href="#{k}">{e(v)}</a></li>' for k, v in secs)
 
     # ---------- トップ ----------
@@ -317,6 +323,7 @@ def build(c):
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
     css = css.replace('{{head_font}}', head_font)
     belt_html, calc_html, cases_html, compare_html, shop_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx), part_shop(ctx)
+    xp = parts_extra.render(ctx)  # 追加の部品の HTML（notice・credentials・strengths・news・voices・hours・areas・video）
     sample_note = f'<p class="sample-note" role="note">{e(c["sample_note"])}</p>' if c.get('sample_note') else ''
 
     out = f'''<!DOCTYPE html>
@@ -346,7 +353,7 @@ def build(c):
 <script>document.documentElement.className = 'js';</script>{card_js}
 </head>
 <body>
-<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->{sample_note}
+<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->{sample_note}{xp["notice"]}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24">{mark}</symbol></svg>
 <header class="head">
   <div class="wrap">
@@ -355,7 +362,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{greet}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{flow_html}{reserve_html}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{xp["credentials"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -422,7 +429,8 @@ p{margin:0 0 1.2em}
 .bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
 .bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
 .nav{display:flex;align-items:center;font-size:.86rem}
-.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px;white-space:nowrap}
+@media (min-width:861px) and (max-width:1180px){.bk{display:none}.nav a{margin-left:16px}}
 .nav a:hover{opacity:1;color:var(--accent-soft)}
 .nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
 .menubtn{display:none}
@@ -629,7 +637,8 @@ JS = r'''// スマホのメニュー（開く・閉じる）と、上へ戻る�
 # 設定の "parts": {"belt": true, "compare": {...}, "calc": {...}, "cases": {...}, "form": {...}}
 # それぞれの部品は、①動きを減らす設定の人には動かさない ②古いスマホ対策（マニュアル16の書き方）③JS がないときの代わりの表示 を入れている
 # 色・書体は :root の変数（--primary・--head など）だけを使う → お店の theme に自然に合う
-PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form', 'shop']
+import parts_extra  # 追加の部品（お知らせの帯・実績・選ばれる理由・お知らせ・お客様の声・営業時間・対応エリア・動画・写真の拡大。2026/10/30）
+PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form', 'shop'] + parts_extra.NAMES
 SHOP_MAX = 5  # 商品は5点まで（決定事項 2026/10/10：商品ページ＝商品5点まで。6点以上は作る前に金額を伝える）
 
 def parts_conf(c):
@@ -662,6 +671,7 @@ def parts_conf(c):
             else: sys.exit('❌ shop：特定商取引法の表示に空の項目があります → ' + '・'.join(miss) + '。本物のお店では「お問い合わせください」のまま公開できません。設定の parts.shop.tokushoho に書いてから作り直してください')
         if tk.get('disclose') and not str(tk.get('email') or '').strip():
             sys.exit('❌ shop：tokushoho.disclose が true のときは、連絡先のメール（tokushoho.email）が要ります')
+    parts_extra.validate(P, c)  # 追加の部品の中身を調べる（足りないものは外す）
     c['_P'] = P
     return P
 
@@ -1121,6 +1131,8 @@ PARTS_JS = {
   });
 })();''',
 }
+
+PARTS_CSS.update(parts_extra.CSS); PARTS_JS.update(parts_extra.JS)  # 追加の部品の見た目と動き（parts_extra.py）
 
 def placeholder(path, w, h, label, colors=('#ece5da', '#d9cfc0')):
     os.makedirs(os.path.dirname(path), exist_ok=True)
