@@ -111,9 +111,16 @@ def build(c):
         hero_vis = f'<figure class="poster"><img src="{e(hero["image"])}" alt="{e(hero.get("alt","イメージ"))}" width="{hero.get("w",1600)}" height="{hero.get("h",1000)}" fetchpriority="high"></figure>'
     else:
         hero_vis = f'<div class="poster plain"><p class="plain-name">{e(short)}</p></div>'
+    # 横長のヘッダー画像（hero.banner：全幅で最上部に出す。店のFacebookのカバーなど）。あるときは hero.image の大きな写真は出さない（2026/10/30）
+    hb_cls = ''
+    hb_html = ''
+    if hero.get('banner'):
+        hero_vis = ''
+        hb_cls = ' has-banner'
+        hb_html = f'<div class="hero-banner"><img src="{e(hero["banner"])}" alt="{e(hero.get("alt", short))}" width="{hero.get("w", 1170)}" height="{hero.get("h", 424)}" fetchpriority="high"></div>\n    '
     hero_html = f'''
-  <section class="hero">
-    <div class="wrap">
+  <section class="hero{hb_cls}">
+    {hb_html}<div class="wrap">
       {hero_vis}
       <div class="hero-info">
         <p class="eyebrow">{e(c.get("kind",""))}</p>
@@ -456,6 +463,11 @@ p{margin:0 0 1.2em}
 .eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
 .hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
 .hero .lead{color:#ddd8cc;line-height:2.1}
+.hero.has-banner{padding-top:74px;background:#000}
+.hero-banner{background:#000}
+.hero-banner img{display:block;width:100%;height:auto;max-width:1000px;margin:0 auto}
+.hero.has-banner .wrap{display:block;min-height:0}
+.hero.has-banner .hero-info{max-width:720px;margin:0 auto;padding:34px clamp(20px,6vw,90px) 70px}
 .addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
 .addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
 .hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}

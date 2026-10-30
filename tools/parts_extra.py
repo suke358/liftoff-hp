@@ -82,8 +82,8 @@ def validate(P, c):
                         raise SystemExit(f'❌ hours：schedule の {k} の書き方が違います（例 "09:00-18:00" または "09:00-12:00,13:00-18:00"。休みは空 ""）：{part}')
     if 'areas' in P and not (P['areas'].get('main') or P['areas'].get('also')):
         drop('areas', '市町（main か also）がない')
-    if 'video' in P and not re.match(r'^[\w-]{6,20}$', str(P['video'].get('youtube') or '')):
-        drop('video', 'YouTube の動画ID（youtube）がない')
+    if 'video' in P and not P['video'].get('src') and not re.match(r'^[\w-]{6,20}$', str(P['video'].get('youtube') or '')):
+        drop('video', 'YouTube の動画ID（youtube）か、動画ファイル（src）がない')
 
 
 # ---------- 画面（HTML） ----------
@@ -203,10 +203,22 @@ def render(x):
 
     if 'video' in P:
         p = P['video']
-        vid = p['youtube']
+        vid = p.get('youtube') or ''
         ttl = p.get('title', '動画')
         thumb = p.get('poster') or f'https://i.ytimg.com/vi/{vid}/hqdefault.jpg'
         cap = f'<p class="vid-cap center muted">{e(p["caption"])}</p>' if p.get('caption') else ''
+        if p.get('src'):
+            # 自分のサイトに置いた動画ファイル（mp4）。押して再生・くり返し・音なし。動きを減らす設定の人にも勝手には動かさない（自動再生しない）
+            pw = f' poster="{e(p["poster"])}"' if p.get('poster') else ''
+            out['video'] = f'''
+  <section id="video" class="sec vid-sec">
+    <div class="wrap narrow">
+      {_head(x, p.get("eyebrow", "movie"), ttl)}
+      {_lead(p)}
+      <div class="vid-file"><video controls playsinline muted loop preload="metadata"{pw} aria-label="{e(ttl)}"><source src="{e(p["src"])}" type="video/mp4"></video></div>{cap}
+    </div>
+  </section>'''
+            return out
         out['video'] = f'''
   <section id="video" class="sec vid-sec">
     <div class="wrap narrow">
@@ -287,7 +299,9 @@ CSS = {
 .vid-btn img{width:100%;height:100%;object-fit:cover;opacity:.85}
 .vid-play{position:absolute;top:50%;left:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:rgba(255,255,255,.92)}
 .vid-play::after{content:"";position:absolute;left:30px;top:22px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent var(--primary-deep)}
-.vid-cap{font-size:.86rem;margin:14px 0 0}''',
+.vid-cap{font-size:.86rem;margin:14px 0 0}
+.vid-file{background:#000;border-radius:var(--r);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.12);max-width:560px;margin:0 auto}
+.vid-file video{display:block;width:100%;height:auto;max-height:80vh}''',
 'lightbox': r'''/* 部品：写真の拡大 */
 .b-shot img,.case figure img,.card .photo img{cursor:-webkit-zoom-in;cursor:zoom-in}
 .lb{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:rgba(0,0,0,.88);-webkit-box-align:center;align-items:center;-webkit-box-pack:center;justify-content:center;padding:16px}
