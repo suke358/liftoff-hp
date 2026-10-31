@@ -537,7 +537,7 @@ p{margin:0 0 1.2em}
 .ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
 .ask-line:hover{background:#06c755;color:#fff}
 .ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
-.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary);font-family:inherit;font-size:.85rem;margin-top:14px}
 .ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
 .ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
 .ptable h3 .mk{margin-right:.45em}
