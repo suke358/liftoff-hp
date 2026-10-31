@@ -13,6 +13,8 @@
 #   4. commit していない直しがある（.DS_Store と未追跡 ?? は除く）  5. origin/main..HEAD の commit が 4つ以上（0 のときも止める）
 #   6. 変えたファイルに、削除・名前の変更／wrangler.jsonc .assetsignore _redirects _headers package.json package-lock.json／
 #      tools/ .github/ gas/ src/ yoyaku* の中／拡張子 .css .js .mjs .ts .py .sh .php .yml .yaml .jsonc .toml がある
+#      例外は tools/mihon/top_hash.txt（自社トップ index.html の指紋。make_shian2.py --top が書く）の1つだけ：同じ差分に index.html があり、
+#      中身が HEAD の index.html の sha256 と一致するときだけ通す（2026/10/31 決定。どれか欠けたら止まる）
 #   7. HTML の変更行数（追加＋削除）が 30 行を超える  8. check_site.py（この道具と同じ tools/ のもの）で ❌ が 1つでもある・結果が読み取れない
 #   9. 「何を変えたか」が空
 #  10. check_site.py に「⚠️ [言葉]」（効果をうたう言葉・言い切る言葉）が 1つでもある（2026/10/31 ユーザー決定。他の ⚠️ は止めず、作業メモに書くだけ）
@@ -123,6 +125,15 @@ done <<EOF
 $(git -c core.quotepath=false diff --name-status -M origin/main HEAD)
 EOF
 FILES="$(git -c core.quotepath=false diff --name-only -M origin/main HEAD)"
+# 例外（2026/10/31 決定）：tools/mihon/top_hash.txt だけは、同じ差分に index.html があり、
+#   中身（前後の空白を除く）が HEAD の index.html の sha256 と一致するときに限って通す。どれか欠けたら 1 を返す（＝止まる）
+top_hash_ok() {
+  printf '%s\n' "$FILES" | grep -qx 'index.html' || return 1
+  want="$(git show HEAD:tools/mihon/top_hash.txt 2>/dev/null | tr -d '[:space:]')"
+  [ -n "$want" ] || return 1
+  got="$(git show HEAD:index.html 2>/dev/null | shasum -a 256 | cut -c1-64)"
+  [ -n "$got" ] && [ "$want" = "$got" ]
+}
 while IFS= read -r f; do
   [ -n "$f" ] || continue
   base="${f##*/}"
@@ -131,8 +142,13 @@ while IFS= read -r f; do
   公開の設定ファイル：$f" ;;
   esac
   case "/$f" in
-    */tools/*|*/.github/*|*/gas/*|*/src/*|*/yoyaku*/*) BAD="$BAD
-  道具・予約システムの中：$f" ;;
+    */tools/*|*/.github/*|*/gas/*|*/src/*|*/yoyaku*/*)
+      if [ "$f" = "tools/mihon/top_hash.txt" ] && top_hash_ok; then
+        echo "  tools/mihon/top_hash.txt：index.html の指紋と一致（例外で通す）"
+      else
+        BAD="$BAD
+  道具・予約システムの中：$f"
+      fi ;;
   esac
   case "$base" in
     *.css|*.js|*.mjs|*.ts|*.py|*.sh|*.php|*.yml|*.yaml|*.jsonc|*.toml) BAD="$BAD
