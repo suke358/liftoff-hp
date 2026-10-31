@@ -71,12 +71,14 @@ class TextAndTags(HTMLParser):
 def norm_tel(t): return re.sub(r'\D', '', t.replace('+81', '0'))
 
 # ---- 色の差（2026/10/31）-------------------------------------------------
-COLOR_PAIRS = [  # (説明, 色A, 色B, 最低の比)。色は :root の変数名か、固定の色
-    ('ボタンの白い文字とボタン（primary）', '#ffffff', 'primary', 2.0),
-    ('ボタン（primary）とトップの背景（dark）', 'primary', 'dark', 1.5),
+COLOR_PAIRS = [  # (説明, 色A, 色B, 最低の比)。色は :root の変数名か、固定の色。hero＝上の部分の背景（dark か、明るいときは pale）
+    ('ボタンの白い文字とボタン（primary）', '#ffffff', 'primary', 3.0),  # 大きな文字の見やすさの目安（WCAG）。2026/10/31 ユーザー決定
+    ('ボタン（primary）と上の部分の背景', 'primary', 'hero', 1.5),
     ('ボタン（primary）とページの背景（bg）', 'primary', 'bg', 1.5),
-    ('地図の印・道順の印（primary）と背景（dark）', 'primary', 'dark', 1.5),
-    ('小見出しの文字（accent_soft）とトップの背景（dark）', 'accent_soft', 'dark', 2.0),
+    ('ボタン（primary）と相談の背景（dark）', 'primary', 'dark', 1.5),
+    ('道順の印（primary）と背景（dark）', 'primary', 'dark', 1.5),
+    ('上の部分の文字と背景', 'hero_ink', 'hero', 4.5),
+    ('小見出しの文字と上の部分の背景', 'hero_sub', 'hero', 2.0),
     ('札の文字（primary_deep）と札の背景（pale）', 'primary_deep', 'pale', 2.0),
     ('本文の文字（ink）とページの背景（bg）', 'ink', 'bg', 4.5),
 ]
@@ -100,6 +102,11 @@ def check_colors(src, rel):
     v = dict((k, c.lower()) for k, c in re.findall(r'--([a-z0-9_-]+)\s*:\s*(#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?)\b', m.group(1)))
     v = {k.replace('-', '_'): c for k, c in v.items()}
     if 'primary' not in v or 'dark' not in v or 'bg' not in v: return
+    # 上の部分（トップ）：明るい（--hero-style:light）なら背景 pale・文字 ink・小見出し primary_deep。濃いなら dark・#f3efe6・accent_soft
+    if re.search(r'--hero-style\s*:\s*light', src):
+        v['hero'], v['hero_ink'], v['hero_sub'] = v.get('pale', '#ffffff'), v.get('ink', '#000000'), v.get('primary_deep', v['primary'])
+    else:
+        v['hero'], v['hero_ink'], v['hero_sub'] = v['dark'], '#f3efe6', v.get('accent_soft', '#ffffff')
     bad = []
     for label, a, b, need in COLOR_PAIRS:
         ca, cb = v.get(a, a), v.get(b, b)

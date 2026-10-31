@@ -47,14 +47,17 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def e(t): return html.escape(str(t or ''), quote=True)
 
 THEMES = {  # 色の組み合わせ。設定の "theme" で上書きできる
-    'salon': dict(primary='#fe97b2', primary_deep='#ef6386', accent='#c4a466', accent_soft='#e2cf9f', pale='#fdeef2', dark='#24342b', dark2='#2d4136', bg='#faf5ee', bg2='#f3ebe0', ink='#3a3330', muted='#75695f', line='#e6dccd'),
-    'wa':    dict(primary='#a8432a', primary_deep='#8f3822', accent='#3e5640', accent_soft='#c9b98f', pale='#efe6d6', dark='#23221f', dark2='#33312c', bg='#f3eee3', bg2='#e9e2d3', ink='#23221f', muted='#6d675c', line='#cfc6b4'),
-    'fresh': dict(primary='#2f8f6f', primary_deep='#22735a', accent='#f2b84b', accent_soft='#f7d99a', pale='#e6f3ee', dark='#1f3b33', dark2='#2a4a41', bg='#f7faf8', bg2='#eaf2ee', ink='#22302b', muted='#5d6e67', line='#d5e2dc'),
-    # 2026/10/31 追加（設計書 04：雰囲気 シンプル・上品・元気）。どの組も、ボタンの白い文字／ボタンとトップの背景（dark）／地図の印（primary）と dark／
-    # 小見出し（accent_soft）と dark／札（primary_deep と pale）の差を、check_site.py の「色」の検査と同じ基準で確かめてある
-    'simple': dict(primary='#4f7488', primary_deep='#3c5b6c', accent='#b89b5a', accent_soft='#dccda4', pale='#eaf0f3', dark='#2b2e31', dark2='#3b3f43', bg='#f7f7f5', bg2='#ecece8', ink='#2a2a2a', muted='#6a6a6a', line='#dcdcd8'),  # シンプル：灰色＋青灰
-    'jouhin': dict(primary='#8e3f55', primary_deep='#722f42', accent='#b3975e', accent_soft='#dfcf9f', pale='#f4e9ed', dark='#2a2226', dark2='#3c3137', bg='#faf7f3', bg2='#f1ebe4', ink='#332b2e', muted='#776b70', line='#e3d9d4'),  # 上品：えんじ＋金＋生成り
-    'genki':  dict(primary='#c9571c', primary_deep='#a3430f', accent='#f5c33b', accent_soft='#fde28a', pale='#fff0e4', dark='#2d2a26', dark2='#403b35', bg='#fffaf3', bg2='#fdefdc', ink='#2f2a25', muted='#7a6d62', line='#ecdccb'),  # 元気：だいだい＋黄
+    # hero_style（2026/10/31）：上の部分（トップ）を 'light'（明るい。背景は pale・文字は ink）か 'dark'（濃い。今までどおり）にする。
+    #   書いていなければ dark（今あるサイトの見た目は変えない）。お店の設定の "hero_style" が THEMES より優先
+    # salon の primary は 2026/10/31 に #fe97b2 → #e8557d（白い文字との差 2.04 → 3.48。check_site の基準 3.0）。前の色を使う見本は site.json の theme に前の色を書いてある
+    'salon': dict(primary='#e8557d', primary_deep='#cf3d66', accent='#c4a466', accent_soft='#e2cf9f', pale='#fdeef2', dark='#24342b', dark2='#2d4136', bg='#faf5ee', bg2='#f3ebe0', ink='#3a3330', muted='#75695f', line='#e6dccd', hero_style='light'),
+    'wa':    dict(primary='#a8432a', primary_deep='#8f3822', accent='#3e5640', accent_soft='#c9b98f', pale='#efe6d6', dark='#23221f', dark2='#33312c', bg='#f3eee3', bg2='#e9e2d3', ink='#23221f', muted='#6d675c', line='#cfc6b4', hero_style='dark'),
+    'fresh': dict(primary='#2f8f6f', primary_deep='#22735a', accent='#f2b84b', accent_soft='#f7d99a', pale='#e6f3ee', dark='#1f3b33', dark2='#2a4a41', bg='#f7faf8', bg2='#eaf2ee', ink='#22302b', muted='#5d6e67', line='#d5e2dc', hero_style='light'),
+    # 2026/10/31 追加（設計書 04：雰囲気 シンプル・上品・元気）。どの組も、ボタンの白い文字／ボタンとトップの背景／地図の印（primary）と背景／
+    # 小見出しと背景／札（primary_deep と pale）の差を、check_site.py の「色」の検査と同じ基準で確かめてある
+    'simple': dict(primary='#4f7488', primary_deep='#3c5b6c', accent='#b89b5a', accent_soft='#dccda4', pale='#eaf0f3', dark='#2b2e31', dark2='#3b3f43', bg='#f7f7f5', bg2='#ecece8', ink='#2a2a2a', muted='#6a6a6a', line='#dcdcd8', hero_style='light'),  # シンプル：灰色＋青灰
+    'jouhin': dict(primary='#8e3f55', primary_deep='#722f42', accent='#b3975e', accent_soft='#dfcf9f', pale='#f4e9ed', dark='#2a2226', dark2='#3c3137', bg='#faf7f3', bg2='#f1ebe4', ink='#332b2e', muted='#776b70', line='#e3d9d4', hero_style='dark'),  # 上品：えんじ＋金＋生成り
+    'genki':  dict(primary='#c9571c', primary_deep='#a3430f', accent='#f5c33b', accent_soft='#fde28a', pale='#fff0e4', dark='#2d2a26', dark2='#403b35', bg='#fffaf3', bg2='#fdefdc', ink='#2f2a25', muted='#7a6d62', line='#ecdccb', hero_style='light'),  # 元気：だいだい＋黄
 }
 THEME_LABELS = {'salon': 'やわらか', 'wa': '和', 'fresh': 'さわやか', 'simple': 'シンプル', 'jouhin': '上品', 'genki': '元気'}  # フォームの「雰囲気」の答え → theme_base
 LINE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>'
@@ -330,6 +333,8 @@ def build(c):
     if sns: ld["sameAs"] = [s['url'] for s in sns]
 
     css = CSS
+    # 上の部分の明るさ（2026/10/31）：設定の hero_style ＞ THEMES の hero_style ＞ dark。light のときだけ、明るい色の上書きを足す（dark は今までどおり）
+    if (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light': css += '\n' + LIGHT_HERO_CSS
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -626,6 +631,30 @@ p{margin:0 0 1.2em}
 .totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .totop.show{opacity:.92;visibility:visible}
 @media (max-width:860px){.totop{bottom:76px;right:12px}}'''
+
+# 上の部分（トップ）を明るくする上書き（hero_style: light。2026/10/31）。背景は pale・文字は ink・小見出しと印は primary_deep。
+# :root の --hero-style は check_site.py が「明るい上の部分」と見分けるための印。スマホのメニュー（開いたとき）は濃い色のまま
+LIGHT_HERO_CSS = r'''/* 明るい上の部分（hero_style: light） */
+:root{--hero-style:light}
+.head .wrap{color:var(--ink)}
+.bk{color:var(--primary-deep)}
+.nav a:hover{color:var(--primary-deep)}
+@media (max-width:860px){
+  .menubtn{background:rgba(255,255,255,.75);color:var(--ink);border-color:var(--line)}
+  .head.open .nav{color:#f3efe6}
+}
+.hero{background:var(--pale);color:var(--ink)}
+.poster::after{background:linear-gradient(90deg,rgba(255,255,255,0),var(--pale))}
+.poster.plain{background:radial-gradient(70% 60% at 50% 45%,#fff,var(--bg2))}
+.plain-name{color:var(--primary-deep)}
+.eyebrow{color:var(--primary-deep)}
+.eyebrow::before{background:var(--primary-deep)}
+.hero .lead{color:var(--muted)}
+.addr{color:var(--ink);border-top-color:var(--line)}
+.toc a{color:var(--ink);background:#fff;border-color:var(--line)}
+.toc a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.hero .btn-ghost{border-color:var(--primary-deep);color:var(--primary-deep);background:#fff}
+.hero .btn-ghost:hover{border-color:var(--primary)}'''
 
 JS = r'''// スマホのメニュー（開く・閉じる）と、上へ戻るボタン
 (function(){

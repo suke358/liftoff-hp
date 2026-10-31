@@ -272,18 +272,20 @@ def convert(qs, ans):
     elif not A('16'): note['photo'].append('写真の掲載：答えなし → 了承を確かめてから使う')
 
     # 4. 好み・伝えたいこと
+    sys.path.insert(0, HERE)
+    try:
+        from make_site import THEMES
+        T = THEMES[tb]
+    except Exception:
+        T = {'dark': '#23221f', 'pale': '#ffffff', 'hero_style': 'dark'}
     c['theme_base'] = tb; c['font'] = FONT_OF[tb]
+    c['hero_style'] = T.get('hero_style', 'dark')  # 上の部分の明るさは雰囲気から（やわらか・さわやか・シンプル・元気＝light、和・上品＝dark）
     col = A('18')
     if col and col != '白・黒':
         if col in COLORS:
             pr, pd, pl = COLORS[col]
-            sys.path.insert(0, HERE)
-            try:
-                from make_site import THEMES
-                dark = THEMES[tb]['dark']
-            except Exception:
-                dark = '#23221f'
-            if contrast('#ffffff', pr) >= 2.0 and contrast(pr, dark) >= 1.5:
+            hero_bg = T['pale'] if c['hero_style'] == 'light' else T['dark']
+            if contrast('#ffffff', pr) >= 3.0 and contrast(pr, hero_bg) >= 1.5 and contrast(pr, T['dark']) >= 1.5:
                 c['theme'] = {'primary': pr, 'primary_deep': pd, 'pale': pl}
             else:
                 note['other'].append(f'好きな色「{col}」は雰囲気「{A("17")}」の色と見分けにくい（上書きしていない）→ 打ち合わせで決める')
