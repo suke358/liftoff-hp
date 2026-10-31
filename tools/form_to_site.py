@@ -100,6 +100,8 @@ def parse_hours(text):
         line = raw.strip()
         if not line: continue
         s = line.replace('～', '〜').replace('−', '-').replace('ー', '-').replace('　', ' ')
+        s = re.sub(r'[（(][^）)]*[）)]', '', s).strip()  # 「(L.O.20:30)」のようなかっこ書きは読み取りから外す（site.json の hours の文にはそのまま残る）
+        if re.match(r'^\d{1,2}[:：時]', s): s = '毎日 ' + s  # 曜日がなく時間だけの行は毎日とみなす（convert が確かめたい所に出す）
         days = []
         head = re.match(r'^(毎日|年中無休|([月火水木金土日祝][〜\-・、,～]?)+)', s)
         if not head: bad.append(line); continue
@@ -116,6 +118,7 @@ def parse_hours(text):
                     a, b = DAYS.index(m.group(1)), DAYS.index(m.group(2))
                     days += list(DAYS[a:b + 1]) if a <= b else list(DAYS[a:] + DAYS[:b + 1])
                 elif len(part) == 1 and part in DAYS: days.append(part)
+                elif len(part) > 1 and all(ch in DAYS for ch in part): days += list(part)  # 「土日」
             days = [x for i, x in enumerate(days) if x not in days[:i]]
         if not days: bad.append(line); continue
         if re.search(r'休|定休|閉', rest) or not rest:
@@ -218,6 +221,7 @@ def convert(qs, ans):
         c['hours'] = ' / '.join(l.strip() for l in hours.splitlines() if l.strip())
         opening, sched, bad_hours = parse_hours(hours)
         if opening: c['opening_hours'] = opening
+        if any(re.match(r'^\s*\d{1,2}[:：時]', l) for l in hours.splitlines()): note['other'].append('営業時間：曜日がない行は「毎日」と読みました → 合っているか確かめる')
         if bad_hours: note['other'].append('営業時間で読めなかった行（検索用の形にできない）：' + '／'.join(bad_hours))
     hol = A('07')
     if hol:
@@ -281,6 +285,7 @@ def convert(qs, ans):
     c['theme_base'] = tb; c['font'] = FONT_OF[tb]
     c['hero_style'] = T.get('hero_style', 'dark')  # 上の部分の明るさは雰囲気から（やわらか・さわやか・シンプル・元気＝light、和・上品＝dark）
     col = A('18')
+    if col == '白・黒': note['other'].append('好きな色「白・黒」→ 雰囲気の色のまま（上書きしていない）。白・黒でよいか打ち合わせで聞く')
     if col and col != '白・黒':
         if col in COLORS:
             pr, pd, pl = COLORS[col]
@@ -363,10 +368,10 @@ def write_notes(path, qs, note, row_no, src):
     def sec(title, items, empty):
         L.append('## ' + title)
         L.extend(['- ' + x for x in items] if items else ['- ' + empty]); L.append('')
-    sec('① ★の質問の空欄', [qs.get(k, k) for k in note['blank']], 'なし')
+    sec('① ★の質問の空欄', [qs.get(k, k) for k in dict.fromkeys(note['blank'])], 'なし')
     sec('② 食い違い（作る前に決める・金額を伝える）', note['conflict'], 'なし')
     sec('③ 分けられなかった行（メニューは「名前/料金/時間/ひとこと」）', note['menu'], 'なし')
-    sec('④ 「わからない・あとで」の質問', [qs.get(k, k) for k in note['skip']], 'なし')
+    sec('④ 「わからない・あとで」の質問', [qs.get(k, k) for k in dict.fromkeys(note['skip'])], 'なし')
     sec('⑤ 写真・ロゴの送り方', note['photo'], 'なし')
     sec('⑥ 文を作る項目（(案) を付けて入れた）', note['text'], 'なし')
     sec('⑦ そのほか確かめること', note['other'], 'なし')
