@@ -7,7 +7,8 @@ HERE=os.path.dirname(os.path.abspath(__file__))
 ROOT=os.path.expanduser(sys.argv[1]) if len(sys.argv)>1 else os.path.dirname(os.path.dirname(HERE))
 S=tempfile.mkdtemp()
 COMMON=dict(area='〇〇県〇〇市', tel='0000-00-0000', line_url='#reserve', address='〒000-0000 〇〇県〇〇市〇〇町1-2-3',
-            line_msg='ホームページを見ました。{name}について相談したいです。', info_eyebrow='about')
+            line_msg='ホームページを見ました。{name}について相談したいです。', info_eyebrow='about',
+            hero_style='dark')  # 2026/10/31：上の部分は濃いまま（salon・fresh の明るい上は新しいサイトだけ）
 def menu(id,name,text,price=None,note=None,items=None,icon=None):
     m=dict(id=id,name=name,text=text,image=f'images/menu-{id}.svg',w=1000,h=750,alt=name+'の写真',_icon=icon)
     if price: m['price']=price
@@ -122,7 +123,7 @@ SAMPLES={
   catch_html='<span class="nw">朝いちばんに焼いた</span><br><span class="nw">パンと焼き菓子。</span>',
   lead='〇〇市の小さなパン屋です。食パン・惣菜パン・焼き菓子を、毎朝お店で焼いています。',
   title_place='〇〇市のパン屋・洋菓子',description='〇〇市のパン屋「ことり」のホームページです（デザイン見本・架空のお店）。',
-  theme_base='salon',theme=dict(primary='#c98a3a',primary_deep='#a86f2a',accent='#7a9a5a',accent_soft='#d9e2c3',pale='#f9efe0',dark='#3b2e24',dark2='#4a3b2f',bg='#fbf7f0',bg2='#f2ebdf',ink='#3a3129',muted='#7a6e62',line='#e6dccb'),
+  theme_base='salon',theme=dict(primary='#c38638',primary_deep='#a86f2a',accent='#7a9a5a',accent_soft='#d9e2c3',pale='#f9efe0',dark='#3b2e24',dark2='#4a3b2f',bg='#fbf7f0',bg2='#f2ebdf',ink='#3a3129',muted='#7a6e62',line='#e6dccb'),
   mark='dot',font='gothic',menu_title='パンと焼き菓子',menu_word='商品',menu_lead='料金は見本です。',
   menu_note='日によって並ぶものが変わります。売り切れのときはごめんなさい。',
   menus=[menu('shoku','食パン','毎日食べても飽きない、やわらかい食パン。','380円','1斤',icon=['bread']),
@@ -251,7 +252,7 @@ SAMPLES={
   catch_html='<span class="nw">その子のペースで、</span><br><span class="nw">きれいに、やさしく。</span>',
   lead='〇〇市のトリミングサロンです。1頭ずつ、ゆっくり時間をとって。はじめての子も、年をとった子も。',
   title_place='〇〇市のペットのトリミング',description='〇〇市のトリミングサロン「てくてく」のホームページです（デザイン見本・架空のお店）。',
-  theme_base='salon',theme=dict(primary='#e07b4a',primary_deep='#bf6235',accent='#7fa88a',accent_soft='#cfe0d2',pale='#fbeee6',dark='#2f2a26',dark2='#3d3732',bg='#fbf8f4',bg2='#f2ece4',ink='#33302b',muted='#75706a',line='#e6ddd2'),
+  theme_base='salon',theme=dict(primary='#dc7949',primary_deep='#bf6235',accent='#7fa88a',accent_soft='#cfe0d2',pale='#fbeee6',dark='#2f2a26',dark2='#3d3732',bg='#fbf8f4',bg2='#f2ece4',ink='#33302b',muted='#75706a',line='#e6ddd2'),
   mark='heart',font='gothic',menu_title='メニュー・料金',menu_word='メニュー',menu_lead='料金は見本です。',
   menu_note='犬種・大きさ・毛の状態で変わります。',
   menus=[menu('shampoo','シャンプーコース','シャンプー・爪切り・耳そうじ・足まわりのカット。','3,300円〜','小型犬',icon=['bath']),

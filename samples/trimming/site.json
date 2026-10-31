@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "dark",
  "slug": "tekuteku",
  "name": "トリミングサロン てくてく",
  "short_name": "てくてく",
@@ -15,7 +16,7 @@
  "description": "〇〇市のトリミングサロン「てくてく」のホームページです（デザイン見本・架空のお店）。",
  "theme_base": "salon",
  "theme": {
-  "primary": "#e07b4a",
+  "primary": "#dc7949",
   "primary_deep": "#bf6235",
   "accent": "#7fa88a",
   "accent_soft": "#cfe0d2",
@@ -107,6 +108,5 @@
   "h": 1500,
   "alt": "お店の写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

@@ -24,7 +24,7 @@
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
-  --primary:#c98a3a;--primary-deep:#a86f2a;--accent:#7a9a5a;--accent-soft:#d9e2c3;--pale:#f9efe0;
+  --primary:#c38638;--primary-deep:#a86f2a;--accent:#7a9a5a;--accent-soft:#d9e2c3;--pale:#f9efe0;
   --dark:#3b2e24;--dark2:#4a3b2f;--bg:#fbf7f0;--bg2:#f2ebdf;--ink:#3a3129;--muted:#7a6e62;--line:#e6dccb;
   --r:18px;
   --mincho:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
@@ -44,6 +44,8 @@ h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
 p{margin:0 0 1.2em}
 .muted{color:var(--muted)}
 .center{text-align:center}
+.sample-note{margin:0;padding:0 16px;height:34px;line-height:34px;background:#333;color:#fff;font-size:.78rem;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* 見本のときだけ出る注（sample_note）。1行に固定 */
+.sample-note ~ .head{top:34px} /* 注がある分、ヘッダー（absolute）を下げる */
 .mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
 .photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .photo img{width:100%;height:auto}
@@ -63,7 +65,8 @@ p{margin:0 0 1.2em}
 .bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
 .bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
 .nav{display:flex;align-items:center;font-size:.86rem}
-.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px;white-space:nowrap}
+@media (min-width:861px) and (max-width:1180px){.bk{display:none}.nav a{margin-left:16px}}
 .nav a:hover{opacity:1;color:var(--accent-soft)}
 .nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
 .menubtn{display:none}
@@ -89,6 +92,11 @@ p{margin:0 0 1.2em}
 .eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
 .hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
 .hero .lead{color:#ddd8cc;line-height:2.1}
+.hero.has-banner{padding-top:74px;background:#000}
+.hero-banner{background:#000}
+.hero-banner img{display:block;width:100%;height:auto;max-width:1000px;margin:0 auto}
+.hero.has-banner .wrap{display:block;min-height:0}
+.hero.has-banner .hero-info{max-width:720px;margin:0 auto;padding:34px clamp(20px,6vw,90px) 70px}
 .addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
 .addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
 .hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}
@@ -384,6 +392,7 @@ p{margin:0 0 1.2em}
   } catch (err) {}
 })();
 </script>
+
 <a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
 </body>
 </html>
