@@ -214,6 +214,7 @@ def run_static(root):
         flat = re.sub(r'\s+', '', text)
         for w, why in NG_WORDS.items():
             for m in re.finditer(re.escape(w), flat):
+                if promised_not(flat, m.start(), m.end()): continue
                 ctx = flat[max(0, m.start()-14): m.end()+14]
                 add('⚠️', '言葉', f'{rel}：「{w}」（{why}）… …{ctx}…')
 
@@ -317,6 +318,15 @@ def run_browser(root):
         b.close()
     if bad: add('❌', 'はみ出し', '横にはみ出しています → ' + '、'.join(bad))
     else: add('✅', 'はみ出し', '幅 ' + '・'.join(map(str, WIDTHS)) + ' ではみ出しなし')
+
+def promised_not(flat, start, end):
+    """言葉が「…」の中にあり、その 」 の直後（「などの」があってもよい）が「約束はしません」なら True
+    ＝「必ずお客さんが増える」などの約束はしません、のように約束しない側の文（2026/10/31 決定。このときだけ ⚠️ を出さない）"""
+    o = flat.rfind('「', 0, start)
+    if o < 0 or '」' in flat[o:start]: return False
+    c = flat.find('」', end)
+    if c < 0 or '「' in flat[end:c]: return False
+    return re.match(r'(などの)?約束はしません', flat[c + 1:]) is not None
 
 def main():
     if len(sys.argv) < 2: print(__doc__); sys.exit(1)
