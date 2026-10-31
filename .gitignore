@@ -2,3 +2,4 @@
 tools/daihon/tejun_parts.json
 # Python が作る一時ファイル
 __pycache__/
+*.pyc
