@@ -184,6 +184,20 @@ def parse_faq_line(line):
     return line.strip(), ''
 
 
+SNS_URL = {'instagram': ('Instagram', 'https://www.instagram.com/%s/'), 'インスタ': ('Instagram', 'https://www.instagram.com/%s/'),
+           'x': ('X', 'https://x.com/%s'), 'twitter': ('X', 'https://x.com/%s'), 'ツイッター': ('X', 'https://x.com/%s'),
+           'facebook': ('Facebook', 'https://www.facebook.com/%s'), 'フェイスブック': ('Facebook', 'https://www.facebook.com/%s'),
+           'tiktok': ('TikTok', 'https://www.tiktok.com/@%s'), 'ティックトック': ('TikTok', 'https://www.tiktok.com/@%s')}
+
+
+def sns_from_handle(line):
+    """「Instagram @name」「X: name」→ {'name','url'}。読めなければ None"""
+    m = re.match(r'^\s*([A-Za-zぁ-んァ-ヶ]+)\s*[:：]?\s*@?([A-Za-z0-9_.]+)\s*$', line)
+    if not m: return None
+    k = SNS_URL.get(m.group(1).lower())
+    return {'name': k[0], 'url': k[1] % m.group(2)} if k else None
+
+
 def sns_name(url):
     for k, n in (('instagram', 'Instagram'), ('facebook', 'Facebook'), ('twitter', 'X'), ('x.com', 'X'), ('tiktok', 'TikTok'),
                  ('youtube', 'YouTube'), ('youtu.be', 'YouTube'), ('line.me', 'LINE'), ('lin.ee', 'LINE'), ('threads', 'Threads')):
@@ -255,14 +269,21 @@ def convert(qs, ans):
         l = l.strip()
         if not l: continue
         if l.startswith('http'): sns.append({'name': sns_name(l), 'url': l})
-        else: note['other'].append(f'SNS の行が URL ではない（{l}）→ URL を聞く')
+        else:
+            u = sns_from_handle(l)  # 「Instagram @name」のようなユーザー名だけの行
+            if u: sns.append(u); note['other'].append(f'SNS「{l}」→ {u["url"]} と読みました。合っているか確かめる')
+            else: note['other'].append(f'SNS の行が URL ではない（{l}）→ URL を聞く')
     if sns: c['sns'] = sns
     # 11 は使わない（Lift-Off との連絡先。site.json にも確かめたい所にも書かない）
 
     # 2. メニューと料金
     q_blank('12')
     menus, rows = [], []
-    for i, l in enumerate([l for l in A('12').splitlines() if l.strip()], 1):
+    menu_lines = [l for l in A('12').splitlines() if l.strip()]
+    if any(re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l) for l in menu_lines):
+        note['other'].append('12 メニュー：「別送」→ メニューの写真・データを受け取ってから menus と料金を作る（今は menus なし）')
+        menu_lines = [l for l in menu_lines if not re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l)]
+    for i, l in enumerate(menu_lines, 1):
         nm, price, tm, text, ok = parse_menu_line(l)
         if not ok: note['menu'].append(l.strip())
         mid = 'm%d' % i
@@ -304,7 +325,7 @@ def convert(qs, ans):
         T = {'dark': '#23221f', 'pale': '#ffffff', 'hero_style': 'dark'}
     c['theme_base'] = tb; c['font'] = FONT_OF[tb]
     c['hero_style'] = T.get('hero_style', 'dark')  # 上の部分の明るさは雰囲気から（やわらか・さわやか・シンプル・元気＝light、和・上品＝dark）
-    col = A('18')
+    col = re.sub(r'^[^A-Za-z0-9ぁ-んァ-ヶ一-龥]+', '', A('18')).strip()  # 選択肢の頭の色の四角(🟥など)を外す
     if col == '白・黒': note['other'].append('好きな色「白・黒」→ 雰囲気の色のまま（上書きしていない）。白・黒でよいか打ち合わせで聞く')
     if col and col != '白・黒':
         if col in COLORS:
