@@ -277,9 +277,11 @@ def convert(qs, ans):
     # 11 は使わない（Lift-Off との連絡先。site.json にも確かめたい所にも書かない）
 
     # 2. メニューと料金
-    q_blank('12')
+    if not A('12') and not A('12b'): note['blank'].append('12')  # 12 は書くか、12b「別に送る」にチェックのどちらか
     menus, rows = [], []
     menu_lines = [l for l in A('12').splitlines() if l.strip()]
+    if A('12b') and not menu_lines:
+        note['other'].append('12 メニュー：「メニュー表の写真・データを別に送る」にチェック → 受け取ってから menus と料金を作る（今は menus なし）')
     if any(re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l) for l in menu_lines):
         note['other'].append('12 メニュー：「別送」→ メニューの写真・データを受け取ってから menus と料金を作る（今は menus なし）')
         menu_lines = [l for l in menu_lines if not re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l)]
