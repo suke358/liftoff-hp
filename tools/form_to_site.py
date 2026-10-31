@@ -99,7 +99,7 @@ def parse_hours(text):
     for raw in re.split(r'[\n/／]', text):
         line = raw.strip()
         if not line: continue
-        s = line.replace('～', '〜').replace('−', '-').replace('ー', '-').replace('　', ' ')
+        s = line.replace('~', '〜').replace('～', '〜').replace('−', '-').replace('ー', '-').replace('　', ' ')
         s = re.sub(r'[（(][^）)]*[）)]', '', s).strip()  # 「(L.O.20:30)」のようなかっこ書きは読み取りから外す（site.json の hours の文にはそのまま残る）
         if re.match(r'^\d{1,2}[:：時]', s): s = '毎日 ' + s  # 曜日がなく時間だけの行は毎日とみなす（convert が確かめたい所に出す）
         days = []
@@ -144,9 +144,28 @@ def parse_hours(text):
     return opening, sched, bad
 
 
+def build_opening(sched):
+    """曜日ごとの schedule（''=休み）→ 検索用 openingHours。連続した曜日は Mo-Fr にまとめる"""
+    out, by_span = [], {}
+    for x in DAYS:
+        sp = sched.get(DAY_KEY[x], '')
+        if sp: by_span.setdefault(sp, []).append(DAYS.index(x))
+    for sp, idx in by_span.items():
+        runs, start = [], idx[0]
+        for i, v in enumerate(idx):
+            if i == len(idx) - 1 or idx[i + 1] != v + 1:
+                runs.append((start, v)); start = idx[i + 1] if i + 1 < len(idx) else None
+        for a, b in runs:
+            dd = DAY_JP[DAYS[a]] if a == b else DAY_JP[DAYS[a]] + '-' + DAY_JP[DAYS[b]]
+            for one in sp.split(','): out.append(dd + ' ' + one)
+    return out
+
+
 def parse_holiday_days(text):
     """定休日の文に出てくる曜日（「日曜・祝日」→ ['日']）"""
-    return [x for x in DAYS if re.search(x + r'(曜|・|、|$|\s|と)', text)]
+    t = re.sub(r'第\s*[0-9０-９一二三四五]\s*[月火水木金土日]曜日?', '', text)  # 「第3月曜日」は毎週の休みではない
+    t = re.sub(r'(雨の日|祝日|平日|休日|毎日|定休日|不定休)', '', t).replace('曜日', '曜')  # 「火曜日」の日を日曜と読まない
+    return [x for x in DAYS if re.search(x + r'(曜|・|、|$|\s|と|[月火水木金土日])', t)]
 
 
 def parse_menu_line(line):
@@ -226,7 +245,8 @@ def convert(qs, ans):
     hol = A('07')
     if hol:
         c['holiday'] = hol
-        for d in parse_holiday_days(hol): sched.setdefault(DAY_KEY[d], '')
+        for d in parse_holiday_days(hol): sched[DAY_KEY[d]] = ''  # 定休日は休み（営業時間の行と食い違うときも定休日を優先）
+        if c.get('opening_hours'): c['opening_hours'] = build_opening(sched) or c['opening_hours']
     if A('08'): c['parking'] = A('08')
     pay = [p.strip() for p in A('09').split(',') if p.strip() and p.strip() != SKIP]
     if pay: c['payment'] = '・'.join(pay)
