@@ -50,7 +50,13 @@ THEMES = {  # 色の組み合わせ。設定の "theme" で上書きできる
     'salon': dict(primary='#fe97b2', primary_deep='#ef6386', accent='#c4a466', accent_soft='#e2cf9f', pale='#fdeef2', dark='#24342b', dark2='#2d4136', bg='#faf5ee', bg2='#f3ebe0', ink='#3a3330', muted='#75695f', line='#e6dccd'),
     'wa':    dict(primary='#a8432a', primary_deep='#8f3822', accent='#3e5640', accent_soft='#c9b98f', pale='#efe6d6', dark='#23221f', dark2='#33312c', bg='#f3eee3', bg2='#e9e2d3', ink='#23221f', muted='#6d675c', line='#cfc6b4'),
     'fresh': dict(primary='#2f8f6f', primary_deep='#22735a', accent='#f2b84b', accent_soft='#f7d99a', pale='#e6f3ee', dark='#1f3b33', dark2='#2a4a41', bg='#f7faf8', bg2='#eaf2ee', ink='#22302b', muted='#5d6e67', line='#d5e2dc'),
+    # 2026/10/31 追加（設計書 04：雰囲気 シンプル・上品・元気）。どの組も、ボタンの白い文字／ボタンとトップの背景（dark）／地図の印（primary）と dark／
+    # 小見出し（accent_soft）と dark／札（primary_deep と pale）の差を、check_site.py の「色」の検査と同じ基準で確かめてある
+    'simple': dict(primary='#4f7488', primary_deep='#3c5b6c', accent='#b89b5a', accent_soft='#dccda4', pale='#eaf0f3', dark='#2b2e31', dark2='#3b3f43', bg='#f7f7f5', bg2='#ecece8', ink='#2a2a2a', muted='#6a6a6a', line='#dcdcd8'),  # シンプル：灰色＋青灰
+    'jouhin': dict(primary='#8e3f55', primary_deep='#722f42', accent='#b3975e', accent_soft='#dfcf9f', pale='#f4e9ed', dark='#2a2226', dark2='#3c3137', bg='#faf7f3', bg2='#f1ebe4', ink='#332b2e', muted='#776b70', line='#e3d9d4'),  # 上品：えんじ＋金＋生成り
+    'genki':  dict(primary='#c9571c', primary_deep='#a3430f', accent='#f5c33b', accent_soft='#fde28a', pale='#fff0e4', dark='#2d2a26', dark2='#403b35', bg='#fffaf3', bg2='#fdefdc', ink='#2f2a25', muted='#7a6d62', line='#ecdccb'),  # 元気：だいだい＋黄
 }
+THEME_LABELS = {'salon': 'やわらか', 'wa': '和', 'fresh': 'さわやか', 'simple': 'シンプル', 'jouhin': '上品', 'genki': '元気'}  # フォームの「雰囲気」の答え → theme_base
 LINE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>'
 PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>'
 MARKS = {

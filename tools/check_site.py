@@ -21,6 +21,9 @@
   8. 公開URL（canonical が独自ドメインのとき）：外に貼るリンク用の転送があるか（決定事項 08「外に貼るリンクには # を使わない」2026/10/21 colore）
      ①「ドメイン/menu」と「/menu/」が転送で「/#menu」に着く ②「ドメイン/%23menu」が 404 でない（転送で /#menu へ）→ だめなら ❌。ネットが使えないときは ⚠️
      canonical が workers.dev・github.io のサイト（まだ本公開前）は調べない。--url=https://ドメイン を付けると、そのURLで調べる
+  11. 色の差（2026/10/31）：:root の --primary・--dark・--bg などから、ボタンの白い文字とボタン／ボタンと周りの背景（トップの dark・ページの bg）／
+     地図の印（primary）と dark／小見出し（accent_soft）と dark／札の文字（primary_deep）と pale／本文（ink）と bg の差（WCAG のコントラスト比）を計算し、
+     小さすぎたら ⚠️（10/31 に色を一部だけ上書きして「ご相談」ボタンと地図の印が背景に溶けたのを二度と起こさない）。make_site.py で作ったページだけ
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -66,6 +69,47 @@ class TextAndTags(HTMLParser):
         if not s.skip: s.text.append((d, s.getpos()[0]))
 
 def norm_tel(t): return re.sub(r'\D', '', t.replace('+81', '0'))
+
+# ---- 色の差（2026/10/31）-------------------------------------------------
+COLOR_PAIRS = [  # (説明, 色A, 色B, 最低の比)。色は :root の変数名か、固定の色
+    ('ボタンの白い文字とボタン（primary）', '#ffffff', 'primary', 2.0),
+    ('ボタン（primary）とトップの背景（dark）', 'primary', 'dark', 1.5),
+    ('ボタン（primary）とページの背景（bg）', 'primary', 'bg', 1.5),
+    ('地図の印・道順の印（primary）と背景（dark）', 'primary', 'dark', 1.5),
+    ('小見出しの文字（accent_soft）とトップの背景（dark）', 'accent_soft', 'dark', 2.0),
+    ('札の文字（primary_deep）と札の背景（pale）', 'primary_deep', 'pale', 2.0),
+    ('本文の文字（ink）とページの背景（bg）', 'ink', 'bg', 4.5),
+]
+
+def _lum(h):
+    h = h.lstrip('#')
+    if len(h) == 3: h = ''.join(ch * 2 for ch in h)
+    r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+def contrast(a, b):
+    """WCAG のコントラスト比（1〜21。大きいほど見分けやすい）"""
+    la, lb = _lum(a), _lum(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+def check_colors(src, rel):
+    """make_site.py で作ったページの :root の色（--primary など）を読み、見分けにくい組み合わせがあれば ⚠️。変数がないページ（手で作ったサイト）は調べない"""
+    m = re.search(r':root\s*{([^}]*)}', src)
+    if not m: return
+    v = dict((k, c.lower()) for k, c in re.findall(r'--([a-z0-9_-]+)\s*:\s*(#[0-9a-fA-F]{3}(?:[0-9a-fA-F]{3})?)\b', m.group(1)))
+    v = {k.replace('-', '_'): c for k, c in v.items()}
+    if 'primary' not in v or 'dark' not in v or 'bg' not in v: return
+    bad = []
+    for label, a, b, need in COLOR_PAIRS:
+        ca, cb = v.get(a, a), v.get(b, b)
+        if not (str(ca).startswith('#') and str(cb).startswith('#')): continue  # 変数が無い・hex でない → 調べない
+        r = contrast(ca, cb)
+        if r < need: bad.append(f'{label}：{r:.2f}（{need} 以上にする。{ca}／{cb}）')
+    if bad:
+        for b in bad: add('⚠️', '色', f'{rel}：色の差が小さい → {b}。theme の色を見直す（ボタンや印が背景に溶ける）')
+    else:
+        add('✅', '色', f'{rel}：ボタン・印・文字の色が背景と見分けられます（コントラスト比 OK）')
 
 results = []  # (mark, area, message)
 OLD_HITS = {}  # (file, name, fallback) -> [lines]
@@ -199,6 +243,8 @@ def run_static(root):
 
         for m in re.finditer(r'<style[^>]*>(.*?)</style>', src, re.S):
             old_found |= check_css(p, m.group(1), src.count('\n', 0, m.start(1)))
+
+        if is_top: check_colors(src, rel)  # 色の差（2026/10/31）
 
         # 電話番号
         tels = set()
