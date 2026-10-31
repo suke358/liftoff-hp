@@ -15,6 +15,7 @@
 #      tools/ .github/ gas/ src/ yoyaku* の中／拡張子 .css .js .mjs .ts .py .sh .php .yml .yaml .jsonc .toml がある
 #   7. HTML の変更行数（追加＋削除）が 30 行を超える  8. check_site.py（この道具と同じ tools/ のもの）で ❌ が 1つでもある・結果が読み取れない
 #   9. 「何を変えたか」が空
+#  10. check_site.py に「⚠️ [言葉]」（効果をうたう言葉・言い切る言葉）が 1つでもある（2026/10/31 ユーザー決定。他の ⚠️ は止めず、作業メモに書くだけ）
 #
 # 通ったら：git push origin main（--force は絶対に付けない）→ 公開URL https://<name>.liftoff-358.workers.dev/ の index.html と
 #   変えた画像（images/・img/ の中）が HEAD と同じ中身になるまで最大 5 分待つ → 作業メモ（~/src/作業メモ.md）に書く
@@ -170,6 +171,12 @@ echo "  check_site.py: ${CHECK_SUMMARY}"
 if [ "$N_NG" != "0" ] || [ "$CHECK_RC" != "0" ]; then
   stop "check_site.py で ❌ が ${N_NG}（終了コード ${CHECK_RC}）。直してから：
 $NG_ITEMS"
+fi
+# ---- 10. ⚠️ [言葉]（効果をうたう言葉など）は止める。他の ⚠️ は止めない ----
+KOTOBA_ITEMS="$(grep '^⚠️ \[言葉\]' "$TMP/check.txt" | sed 's/^/  /')"
+if [ -n "$KOTOBA_ITEMS" ]; then
+  stop "効果をうたう言葉などの ⚠️ があります。preview から出して、チャットで確かめてください：
+$KOTOBA_ITEMS"
 fi
 
 # ---- push（--force は絶対に付けない）----
