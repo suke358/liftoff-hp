@@ -1,0 +1,711 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>colore 台帳(試作)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* 構成: スマホ1画面の道具。上に帯、タブ4つ(お客さん・今日・売り上げ・経費)、1人のページ・記録・経費の入力は重ねて開く(戻る操作で閉じる) */
+:root{
+  --bg:#f6f7f3; --surface:#ffffff; --line:#dfe3d8; --line-strong:#a9b29c; --fg:#25291f; --muted:#5f6656;
+  --accent:#55733a; --accent-soft:#e7eedc; --auto:#2f6f73; --auto-soft:#dcecec; --warn:#9a4c28; --warn-soft:#f6e6dc; --idle:#6b6b6b; --idle-soft:#ececea;
+  --display:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#171a14; --surface:#20241c; --line:#353b2e; --line-strong:#5d6650; --fg:#e8ebe2; --muted:#a8af9b;
+  --accent:#9fc173; --accent-soft:#2c3822; --auto:#7fc4c8; --auto-soft:#1f3536; --warn:#e3a07a; --warn-soft:#3a2a20; --idle:#b9b9b4; --idle-soft:#2d2d2a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171a14; --surface:#20241c; --line:#353b2e; --line-strong:#5d6650; --fg:#e8ebe2; --muted:#a8af9b;
+  --accent:#9fc173; --accent-soft:#2c3822; --auto:#7fc4c8; --auto-soft:#1f3536; --warn:#e3a07a; --warn-soft:#3a2a20; --idle:#b9b9b4; --idle-soft:#2d2d2a; color-scheme:dark}
+[hidden]{display:none!important}
+html,body{background:var(--bg)}
+body{color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 96px}
+.note{font-size:13px;color:var(--muted);background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:0}
+h1{font-family:var(--display);font-size:21px;margin:12px 0 2px;text-wrap:balance}
+.sub{font-size:13px;color:var(--muted);margin:0 0 12px}
+.tabs{display:flex;gap:6px;margin:12px 0}
+.tab{flex:1;min-width:0;font:inherit;font-weight:700;padding:11px 2px;white-space:nowrap;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg);border-radius:10px;cursor:pointer;font-size:14px}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+input[type=search],input[type=text],textarea{font:inherit;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);color:var(--fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{font:inherit;font-size:15px;min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg);cursor:pointer}
+.chip small{color:var(--muted);font-size:12px;margin-left:4px}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.chip[aria-pressed="true"]::before{content:"✓ "}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;text-align:left;font:inherit;color:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer;box-sizing:border-box}
+.row .l{min-width:0;flex:1}
+.nm{font-weight:700;font-size:17px}
+.kana{font-size:12px;color:var(--muted)}
+.last{font-size:13px;color:var(--muted)}
+.row .r{text-align:right;flex-shrink:0;font-size:13px;font-variant-numeric:tabular-nums}
+.days{font-weight:700;font-size:15px}
+.days.old{color:var(--warn)}
+.row.flash{border-color:var(--auto);box-shadow:0 0 0 3px var(--auto-soft)}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;margin-left:6px;vertical-align:middle;font-weight:500;white-space:nowrap}
+.tag.auto{background:var(--auto-soft);color:var(--auto)}
+.tag.care{background:var(--warn-soft);color:var(--warn)}
+.tag.idle{background:var(--idle-soft);color:var(--idle)}
+.tag.ok{background:var(--accent-soft);color:var(--accent)}
+.empty{color:var(--muted);text-align:center;padding:24px}
+.trow{display:flex;gap:8px;align-items:stretch}
+.trow .row{flex:1;min-width:0}
+.trow .tm{font-family:var(--display);font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.recbtn{font:inherit;font-weight:700;flex-shrink:0;width:74px;border-radius:12px;border:0;background:var(--accent);color:var(--bg);cursor:pointer;font-size:14px;line-height:1.3}
+.recbtn.done{background:var(--surface);color:var(--accent);border:1px solid var(--accent)}
+.sec{margin-top:18px}
+.sec h2{font-family:var(--display);font-size:15px;margin:0 0 8px;color:var(--muted);letter-spacing:.04em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+dl{display:grid;grid-template-columns:6.5em 1fr;gap:6px 10px;margin:0}
+dt{color:var(--muted);font-size:14px} dd{margin:0;min-width:0}
+.care{background:var(--warn-soft);border-color:transparent;color:var(--fg)}
+.hist{padding:4px 6px}
+.hist .h{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 8px;cursor:pointer;border-radius:8px}
+.hist .h:last-child{border-bottom:0}
+.hist .d{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;display:flex;justify-content:space-between;gap:8px}
+.hist .edit{font-size:12px;color:var(--accent);font-weight:700}
+.yen{font-variant-numeric:tabular-nums;font-weight:700}
+.btn{font:inherit;font-weight:700;min-height:50px;padding:12px 16px;border-radius:12px;border:0;background:var(--accent);color:var(--bg);cursor:pointer;width:100%;font-size:16px}
+.btn.auto{background:var(--auto)}
+.btn.line{background:var(--surface);color:var(--warn);border:1px solid var(--warn)}
+.btn.danger{background:var(--warn)}
+.btn.plain{background:var(--surface);color:var(--fg);border:1px solid var(--line-strong)}
+.back{font:inherit;background:none;border:0;color:var(--accent);padding:10px 0;min-height:44px;cursor:pointer;font-weight:700}
+.sheet{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:5}
+.sheet .wrap{padding-top:calc(8px + env(safe-area-inset-top,0px));padding-bottom:24px}
+.lines{display:flex;flex-direction:column;gap:8px}
+.ln{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.ln .n{min-width:0;flex:1}
+.ln .a{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ln input{width:7.5em;text-align:right;font-variant-numeric:tabular-nums;padding:9px 10px}
+.ln input.need{border-color:var(--warn);background:var(--warn-soft)}
+.ln input:disabled{opacity:.6}
+.hint{font-size:13px;margin:6px 0 0;color:var(--muted)}
+.hint.w{color:var(--warn);font-weight:700}
+.savebar{position:-webkit-sticky;position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);margin-top:18px;display:flex;gap:12px;align-items:center}
+.savebar .tot{flex-shrink:0;font-size:13px;color:var(--muted);line-height:1.2}
+.savebar .tot .yen{display:block;font-size:22px;color:var(--fg)}
+.savebar .btn{flex:1}
+.confirm{border:2px solid var(--warn);border-radius:12px;padding:12px 14px;margin-top:12px;background:var(--warn-soft)}
+.confirm p{margin:0 0 10px;font-weight:700}
+.confirm .two{display:flex;gap:8px}
+.toast{position:fixed;left:16px;right:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));margin:0 auto;max-width:440px;background:var(--fg);color:var(--bg);padding:10px 12px 10px 16px;border-radius:12px;font-size:15px;z-index:9;display:flex;align-items:center;gap:10px;box-sizing:border-box}
+.toast span{flex:1}
+.toast button{font:inherit;font-weight:700;background:none;border:1px solid var(--bg);color:var(--bg);border-radius:8px;min-height:40px;padding:0 12px;cursor:pointer}
+.demo{margin-top:22px;border:1px dashed var(--auto);border-radius:12px;padding:12px 14px}
+.demo p{font-size:14px;color:var(--muted);margin:0 0 10px}
+.f{display:block;font-size:14px;color:var(--muted);margin:16px 0 6px;font-weight:700}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.kpi .k{font-size:13px;color:var(--muted)}
+.kpi .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;font-family:var(--display)}
+.kpi .s{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.kpi.main{grid-column:1 / -1;background:var(--accent-soft);border-color:transparent}
+.kpi.main .v{font-size:30px;color:var(--accent)}
+.mnav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 10px}
+.mnav b{font-family:var(--display);font-size:18px;text-align:center}
+.mnav button{font:inherit;font-size:20px;min-width:48px;min-height:44px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg);cursor:pointer}
+.mnav button:disabled{opacity:.25;cursor:default}
+.tonow{font:inherit;font-size:14px;font-weight:700;color:var(--accent);background:var(--accent-soft);border:0;border-radius:999px;padding:8px 14px;min-height:40px;cursor:pointer;margin:0 0 10px}
+.bars .b{display:grid;grid-template-columns:7.5em 1fr 5.5em;gap:8px;align-items:center;font-size:14px;padding:5px 0}
+.bars .track{height:12px;background:var(--accent-soft);border-radius:6px;overflow:hidden}
+.bars .fill{display:block;height:100%;background:var(--accent);border-radius:6px}
+.bars .n{text-align:right;font-variant-numeric:tabular-nums}
+.sales .s{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sales .s:last-child{border-bottom:0}
+.sales .s .m{color:var(--muted);font-size:13px}
+.pay{font-size:12px;color:var(--muted);border:1px solid var(--line-strong);border-radius:6px;padding:0 6px;margin-left:6px;white-space:nowrap}
+.kpi.link{grid-column:1 / -1;font:inherit;color:inherit;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kpi.link .go{color:var(--accent);font-weight:700;font-size:14px;flex-shrink:0}
+.kpi.minus .v{color:var(--warn)}
+.kari{display:inline-block;font-size:12px;font-weight:700;padding:0 7px;border-radius:999px;background:var(--warn-soft);color:var(--warn);margin-left:4px;vertical-align:2px;font-family:var(--body)}
+.erow{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:10px 2px;cursor:pointer;font-size:14px}
+.erow:last-child{border-bottom:0}
+.erow .m{color:var(--muted);font-size:13px}
+.erow .rc{font-size:12px;color:var(--auto);white-space:nowrap}
+.ytab{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.ytab th{font-weight:500;color:var(--muted);text-align:right;padding:6px 2px;border-bottom:1px solid var(--line-strong);white-space:nowrap}
+.ytab th:first-child,.ytab td:first-child{text-align:left}
+.ytab td{text-align:right;padding:0;border-bottom:1px solid var(--line);white-space:nowrap}
+.ytab td button{font:inherit;color:inherit;background:none;border:0;padding:12px 2px;min-height:44px;width:100%;text-align:inherit;cursor:pointer}
+.ytab tr.cur td{background:var(--accent-soft)}
+.ytab tr.sum td{font-weight:700;border-bottom:0;padding:9px 2px}
+.ytab .neg{color:var(--warn)}
+.ytab .none{color:var(--muted)}
+.amt{font-size:24px!important;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+input[type=date]{font:inherit;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);color:var(--fg);min-height:46px;width:100%;max-width:14em}
+.photo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.photo label.btn{width:auto;display:inline-flex;align-items:center;justify-content:center;flex:1;min-width:12em;box-sizing:border-box}
+.photo input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+.thumb{font:inherit;padding:0;cursor:pointer;width:72px;height:96px;border-radius:8px;border:1px solid var(--line-strong);object-fit:cover;background:var(--idle-soft);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);text-align:center;flex-shrink:0}
+.zoom{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;cursor:pointer}
+.zoom img{max-width:100%;max-height:100%;object-fit:contain;border-radius:6px}
+.zoom .demo-r{background:#fff;color:#333;padding:40px 30px;border-radius:6px;font-size:15px;text-align:center}
+.ybar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.ybar h2{margin:0!important}
+.ybar button{font:inherit;font-size:14px;font-weight:700;min-height:40px;padding:0 12px;border-radius:999px;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg);cursor:pointer}
+.ybar button:disabled{opacity:.3;cursor:default}
+.tk{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.tk:last-child{border-bottom:0}
+.tk .m{font-size:13px;color:var(--muted)}
+.dots{letter-spacing:5px;color:var(--accent);font-size:18px;line-height:1.2}
+.tk.end{opacity:.6}
+pre.csv{font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px;overflow:auto;-webkit-user-select:text;user-select:text;white-space:pre;margin:8px 0 0;max-height:12em}
+details summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:14px;padding:8px 0;min-height:28px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--auto);outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap" id="main">
+  <p class="note">試作です。お客さん・金額・経費は全部<b>架空</b>です。本番では、記録はコロレさんの Google(スプレッドシート)に入り、Lift-Off は預かりません。</p>
+  <h1>colore お客さん台帳</h1>
+  <p class="sub" id="todaylabel"></p>
+  <div class="tabs" role="tablist">
+    <button class="tab" id="t-list" role="tab" aria-selected="true">お客さん</button>
+    <button class="tab" id="t-today" role="tab" aria-selected="false">今日</button>
+    <button class="tab" id="t-sales" role="tab" aria-selected="false">売り上げ</button>
+    <button class="tab" id="t-exp" role="tab" aria-selected="false">経費</button>
+  </div>
+
+  <section id="v-list">
+    <input type="search" id="q" placeholder="名前・ふりがなで探す" autocomplete="off" aria-label="名前・ふりがなで探す">
+    <div class="chips" id="filters">
+      <button class="chip" data-f="all" aria-pressed="true">すべて</button>
+      <button class="chip" data-f="old" aria-pressed="false">60日以上ごぶさた</button>
+      <button class="chip" data-f="bday" aria-pressed="false">今月お誕生日</button>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="demo">
+      <p>ネット予約が入ると、台帳に自動で1行入ります(本番は予約のしくみから)。押して試せます。</p>
+      <button class="btn auto" id="demo-book">ネット予約が1件入ったことにする</button>
+    </div>
+  </section>
+
+  <section id="v-today" hidden>
+    <p class="sub">名前を押すと前回の内容。施術が終わったら右の「記録」を押すと、売り上げにも入ります。</p>
+    <div class="list" id="today"></div>
+  </section>
+
+  <section id="v-sales" hidden>
+    <div class="mnav"><button id="mprev" aria-label="前の月">‹</button><b id="mlabel"></b><button id="mnext" aria-label="次の月">›</button></div>
+    <button class="tonow" id="tonow" hidden>今月にもどる</button>
+    <div class="kpis" id="kpis"></div>
+    <div class="sec"><h2>メニュー別</h2><div class="card bars" id="bars"></div></div>
+    <div class="sec"><h2>この月の記録</h2><div class="card sales" id="sales"></div></div>
+  </section>
+
+  <section id="v-exp" hidden>
+    <button class="btn" id="addexp">経費を入れる</button>
+    <div class="mnav" style="margin-top:14px"><button id="eprev" aria-label="前の月">‹</button><b id="elabel"></b><button id="enext" aria-label="次の月">›</button></div>
+    <button class="tonow" id="etonow" hidden>今月にもどる</button>
+    <div class="kpis" id="ekpis"></div>
+    <div class="sec"><h2>項目別</h2><div class="card bars" id="ebars"></div></div>
+    <div class="sec"><h2>この月の経費</h2><div class="card" id="elist" style="padding:4px 12px"></div></div>
+    <div class="sec"><div class="ybar"><button id="yprev">‹ 前の年</button><h2 id="ytitle"></h2><button id="ynext">次の年 ›</button></div><div class="card" style="padding:6px 10px" id="year"></div></div>
+    <div class="sec"><h2>税理士さん・会計ソフトに渡す</h2><div class="card" id="csvbox"></div></div>
+  </section>
+</div>
+
+<div class="sheet" id="person" hidden><div class="wrap" id="person-in"></div></div>
+<div class="sheet" id="rec" hidden><div class="wrap" id="rec-in"></div></div>
+<div class="sheet" id="exp" hidden><div class="wrap" id="exp-in"></div></div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-label="レシートの写真(押すと閉じる)"></div>
+<div class="toast" id="toast" hidden role="status"><span id="toast-t"></span><button id="toast-b" hidden>取り消す</button></div>
+
+<script>
+var TODAY = new Date(2026,10,3);
+function d(off){var x=new Date(TODAY.getTime());x.setDate(x.getDate()+off);return x;}
+function ymd(x){return x.getFullYear()+'/'+(x.getMonth()+1)+'/'+x.getDate();}
+var WD=['日','月','火','水','木','金','土'];
+function md(x){return (x.getMonth()+1)+'月'+x.getDate()+'日('+WD[x.getDay()]+')';}
+function mdShort(x){return (x.getMonth()+1)+'/'+x.getDate();}
+function daysAgo(x){return Math.round((TODAY-x)/86400000);}
+function rel(x){var n=daysAgo(x);return n<0?'ご予約':n===0?'今日':n+'日前';}
+function yen(n){return n==null?'—':String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'円';}
+// 料金は予約ページ(shop.jsonc)と同じ。null は「お問い合わせください」= その都度金額を入れる
+var MENUS=[['よもぎ蒸し',5500],['フェイシャル',5500],['ボディケア 15分',2200],['ボディケア 30分',3300],['ボディケア 60分',6600],['ボディケア 90分',9900],['ボディケア 120分',13200],['脱毛',null],['バストアップ',null],['回数券を売った',null]];
+var PRICE={};for(var i=0;i<MENUS.length;i++)PRICE[MENUS[i][0]]=MENUS[i][1];
+var USE='回数券を使った';
+var PAYS=['現金','カード',USE,'その他'];
+var vid=1;
+// V(何日前, [メニュー名 か [メニュー名, 金額]], 支払い, メモ)
+function V(off,list,pay,memo,tk){var it=[];pay=pay||'現金';
+  for(var i=0;i<list.length;i++){var x=list[i];if(typeof x==='string')x=[x,PRICE[x]];it.push({n:x[0],amt:pay===USE?0:x[1]});}
+  return {id:vid++,dt:d(off),items:it,pay:pay,memo:memo||'',ticket:tk||null};}
+function vt(v){var s=0;for(var i=0;i<v.items.length;i++)s+=v.items[i].amt||0;return s;}
+function vnames(v){var a=[];for(var i=0;i<v.items.length;i++)a.push(v.items[i].n);return a.join('・');}
+// ---- 回数券(売った日に売り上げ。使った回数と残りを数える) ----
+var TCOUNTS=[3,5,10];
+function tickets(p){
+  var vs=p.v.filter(function(v){return daysAgo(v.dt)>=0;}).sort(function(a,b){return a.dt-b.dt||a.id-b.id;}),ts=[],use={};
+  for(var i=0;i<vs.length;i++){var v=vs[i];
+    if(v.ticket){var t={menu:v.ticket.menu,count:v.ticket.count,dt:v.dt,used:0,vid:v.id};ts.push(t);if(v.ticket.today){t.used=1;use[v.id]={t:t,n:1};}}
+    if(v.pay===USE){use[v.id]={t:null,n:0};for(var k=0;k<ts.length;k++)if(ts[k].used<ts[k].count){ts[k].used++;use[v.id]={t:ts[k],n:ts[k].used};break;}}
+  }
+  return {list:ts,use:use};
+}
+function remain(p){var r=0,T=tickets(p).list;for(var i=0;i<T.length;i++)r+=T[i].count-T[i].used;return r;}
+function dots(t){var x='';for(var i=0;i<t.count;i++)x+=i<t.used?'●':'○';return x;}
+function NX(text,setOff){return {text:text,set:d(setOff)};}
+
+var people=[
+ {id:1,name:'青葉 さくら',kana:'あおば さくら',tel:'090-0000-0001',bmonth:11,care:'香りの強いものが苦手',next:NX('11月16日(日)ごろに フェイシャル(本人希望)',-12),from:'net',
+  v:[V(-12,['よもぎ蒸し','フェイシャル'],'カード','冷えが気になるとのこと。お茶は温かいもの'),V(-40,['フェイシャル'],'現金','乾燥。保湿多め')]},
+ {id:2,name:'川辺 みどり',kana:'かわべ みどり',tel:'090-0000-0002',bmonth:3,care:'',next:null,from:'paper',
+  v:[V(-75,['ボディケア 60分'],'現金','肩こり。右側が強め'),V(-110,['ボディケア 60分'])]},
+ {id:3,name:'森下 ゆい',kana:'もりした ゆい',tel:'090-0000-0003',bmonth:11,care:'',next:NX('11月5日(水)ごろに 脱毛(2回目)',-28),from:'net',
+  v:[V(-28,[['脱毛',8800]],'カード','1回目。腕。赤みなし')]},
+ {id:4,name:'田畑 ちひろ',kana:'たばた ちひろ',tel:'090-0000-0004',bmonth:7,care:'妊娠中(よもぎ蒸しは控える)',next:null,from:'paper',
+  v:[V(-5,['ボディケア 30分'],'現金','腰。横向きで施術'),V(-33,['ボディケア 30分','フェイシャル']),V(-61,['フェイシャル'])]},
+ {id:5,name:'野口 あかね',kana:'のぐち あかね',tel:'090-0000-0005',bmonth:1,care:'',next:null,from:'paper',
+  v:[V(-140,['よもぎ蒸し'],'現金','初めて。友人の紹介')]},
+ {id:6,name:'星野 まい',kana:'ほしの まい',tel:'090-0000-0006',bmonth:5,care:'',next:NX('バストアップの相談',-2),from:'net',
+  v:[V(-2,['よもぎ蒸し'],USE,'次はバストアップの相談'),V(-19,['よもぎ蒸し'],USE,''),V(-47,[['回数券を売った',22000]],'カード','初めて。よもぎ蒸しの回数券をお買い上げ',{menu:'よもぎ蒸し',count:5,today:true})]},
+ {id:7,name:'内田 ことね',kana:'うちだ ことね',tel:'090-0000-0007',bmonth:11,care:'',next:null,from:'net',
+  v:[V(-1,['ボディケア 90分'],'カード'),V(-9,['よもぎ蒸し','ボディケア 30分']),V(-24,[['回数券を売った',29700]],'カード','ボディケア60分の回数券をお買い上げ',{menu:'ボディケア 60分',count:5,today:true})]},
+ {id:8,name:'松尾 ひなた',kana:'まつお ひなた',tel:'090-0000-0008',bmonth:9,care:'',next:null,from:'paper',
+  v:[V(-15,[['バストアップ',7700]],'現金','初回。次回の予約はご自身で'),V(-30,['よもぎ蒸し'])]}
+];
+var todayBook=[{t:'10:00',id:1,items:['フェイシャル']},{t:'13:00',id:4,items:['ボディケア 30分']},{t:'15:30',id:2,items:['ボディケア 60分','よもぎ蒸し']},{t:'17:00',id:6,items:['よもぎ蒸し']}];
+var demoNames=[['小川 りこ','おがわ りこ','よもぎ蒸し'],['橋本 なつ','はしもと なつ','フェイシャル'],['石田 かえで','いしだ かえで','ボディケア 60分']],demoN=0;
+var filter='all',curTab='list',mOff=0;
+
+function $(id){return document.getElementById(id);}
+function digits(v){return String(v).replace(/[０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);}).replace(/[^0-9]/g,'');}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function done(p){var a=[];for(var i=0;i<p.v.length;i++)if(daysAgo(p.v[i].dt)>=0)a.push(p.v[i]);return a;}
+function last(p){var a=done(p);return a.length?a[0]:null;}
+function upcoming(p){for(var i=0;i<p.v.length;i++)if(daysAgo(p.v[i].dt)<0)return p.v[i];return null;}
+function find(id){for(var i=0;i<people.length;i++)if(people[i].id===id)return people[i];}
+function closest(el,sel){while(el&&el.nodeType===1){if(el.matches?el.matches(sel):el.webkitMatchesSelector(sel))return el;el=el.parentNode;}return null;}
+function setPressed(box,fn){var a=box.querySelectorAll('.chip');for(var k=0;k<a.length;k++)a[k].setAttribute('aria-pressed',fn(a[k])?'true':'false');}
+function norm(s){return String(s).replace(/\s/g,'').replace(/[ァ-ヶ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0x60);});}
+function nextText(p){if(!p.next)return '';return p.next.text+'('+mdShort(p.next.set)+' に決めた)';}
+
+var undoFn=null;
+function toast(msg,undo){$('toast-t').textContent=msg;undoFn=undo||null;$('toast-b').hidden=!undo;$('toast').hidden=false;
+  clearTimeout(toast.k);toast.k=setTimeout(function(){$('toast').hidden=true;undoFn=null;},undo?6000:2800);}
+$('zoom').onclick=function(){this.hidden=true;};
+$('toast-b').onclick=function(){if(undoFn){var f=undoFn;undoFn=null;f();}$('toast').hidden=true;};
+
+// ---- 画面の重ね(スマホの「戻る」で1枚ずつ閉じる) ----
+var stack=[],histOK=true,recDirty=false,expDirty=false,leaveOK=false;
+function pushSheet(name){stack.push(name);try{history.pushState({k:stack.length},'');}catch(e){histOK=false;}}
+function goBack(){if(histOK){try{history.back();return;}catch(e){histOK=false;}}handlePop();}
+function handlePop(){
+  var top=stack[stack.length-1];if(!top)return;
+  if(((top==='rec'&&recDirty)||(top==='exp'&&expDirty))&&!leaveOK){try{history.pushState({k:stack.length},'');}catch(e){}showLeave(top==='exp'?'eleave':'leave');return;}
+  stack.pop();leaveOK=false;
+  if(top==='rec'){$('rec').hidden=true;recDirty=false;var p=find(curPerson);if(p&&!$('person').hidden)openPerson(p.id,true);else refresh();}
+  else if(top==='person'){$('person').hidden=true;refresh();}
+  else if(top==='exp'){$('exp').hidden=true;expDirty=false;refresh();}
+  else if(top==='gotab'){tab('sales',true);}
+}
+window.addEventListener('popstate',handlePop);
+function showLeave(id){var c=$(id||'leave');if(!c)return;c.hidden=false;c.scrollIntoView({block:'center'});}
+
+// ---- 一覧 ----
+function rowHTML(p,opt){
+  opt=opt||{};var l=last(p),u=upcoming(p),n=l?daysAgo(l.dt):null,old=n!==null&&n>=60,tags='';
+  if(p.isNew)tags+='<span class="tag auto">予約から自動</span>';
+  if(p.care)tags+='<span class="tag care">注意あり</span>';
+  var sub=opt.sub||(l?(n===0?'今日 ':'前回 ')+esc(vnames(l)):(u?'初めてのご予約 '+md(u.dt):'まだ来店なし'));
+  var right=opt.right!=null?opt.right:(l?'<span class="days'+(old?' old':'')+'">'+rel(l.dt)+'</span><br>'+ymd(l.dt):(u?'<span class="days" style="color:var(--auto)">ご予約</span><br>'+ymd(u.dt):'—'));
+  return '<button class="row'+(opt.flash?' flash':'')+'" data-open="'+p.id+'"><span class="l"><span class="nm">'+esc(p.name)+'</span>'+tags+
+    '<br><span class="kana">'+esc(p.kana)+'</span><br><span class="last">'+sub+'</span></span>'+(right?'<span class="r">'+right+'</span>':'')+'</button>';
+}
+function sortKey(p){var l=last(p)||upcoming(p);return l?l.dt.getTime():0;}
+var flashId=null;
+function renderList(){
+  var q=norm($('q').value),out=[],m=TODAY.getMonth()+1;
+  var arr=people.slice().sort(function(a,b){if(!!b.isNew!==!!a.isNew)return b.isNew?1:-1;return sortKey(b)-sortKey(a);});
+  for(var i=0;i<arr.length;i++){var p=arr[i];
+    if(q&&norm(p.name+p.kana).indexOf(q)<0)continue;
+    var l=last(p);
+    if(filter==='old'&&!(l&&daysAgo(l.dt)>=60))continue;
+    if(filter==='bday'&&p.bmonth!==m)continue;
+    out.push(rowHTML(p,{flash:p.id===flashId}));}
+  $('list').innerHTML=out.length?out.join(''):'<p class="empty">あてはまるお客さんはいません</p>';
+}
+function recordedToday(p){var l=last(p);return l&&daysAgo(l.dt)===0;}
+function renderToday(){
+  var out=[];for(var i=0;i<todayBook.length;i++){var b=todayBook[i],p=find(b.id),ok=recordedToday(p);
+    var rm=remain(p),sub='<span class="tm">'+b.t+'</span> '+esc(b.items.join('・'))+'<br>'+(rm?'<span class="tag auto" style="margin:0 6px 0 0">回数券 残り'+rm+'回</span>':'')+(ok?'<span class="tag ok" style="margin:0">記録ずみ</span>':'<span class="tag idle" style="margin:0">記録まだ</span>');
+    out.push('<div class="trow">'+rowHTML(p,{sub:sub,right:''})+'<button class="recbtn'+(ok?' done':'')+'" data-rec="'+p.id+'">'+(ok?'記録を<br>見る':'記録')+'</button></div>');}
+  $('today').innerHTML=out.join('');
+}
+
+// ---- 売り上げ ----
+function monthOf(off){return new Date(TODAY.getFullYear(),TODAY.getMonth()+off,1);}
+function inMonth(dt,m,uptoDay){return dt.getFullYear()===m.getFullYear()&&dt.getMonth()===m.getMonth()&&daysAgo(dt)>=0&&(!uptoDay||dt.getDate()<=uptoDay);}
+function visitsIn(m,uptoDay){var a=[];for(var i=0;i<people.length;i++){var p=people[i];for(var j=0;j<p.v.length;j++)if(inMonth(p.v[j].dt,m,uptoDay))a.push({p:p,v:p.v[j]});}
+  a.sort(function(x,y){return y.v.dt-x.v.dt;});return a;}
+function sum(a){var s=0;for(var i=0;i<a.length;i++)s+=vt(a[i].v);return s;}
+function renderSales(){
+  var m=monthOf(mOff),cur=mOff===0,upto=cur?TODAY.getDate():0,a=visitsIn(m),pa=visitsIn(monthOf(mOff-1),upto),tot=sum(a),ptot=sum(pa);
+  $('mlabel').textContent=m.getFullYear()+'年'+(m.getMonth()+1)+'月'+(cur?'(今月)':'');
+  $('mnext').disabled=cur;$('tonow').hidden=cur;
+  var todayA=[];for(var i=0;i<a.length;i++)if(daysAgo(a[i].v.dt)===0)todayA.push(a[i]);
+  var diff=tot-ptot,h='';
+  h+='<div class="kpi main"><div class="k">'+(cur?'今月の売り上げ('+upto+'日まで)':'この月の売り上げ')+'</div><div class="v">'+yen(tot)+'</div><div class="s">'+(cur?'前の月の同じ日まで ':'前の月 ')+yen(ptot)+'('+(diff>=0?'+':'−')+yen(Math.abs(diff))+')</div></div>';
+  if(cur)h+='<div class="kpi"><div class="k">今日</div><div class="v">'+yen(sum(todayA))+'</div><div class="s">'+todayA.length+'件</div></div>';
+  var tsale=0;for(i=0;i<a.length;i++)for(var j0=0;j0<a[i].v.items.length;j0++)if(a[i].v.items[j0].n==='回数券を売った')tsale+=a[i].v.items[j0].amt||0;
+  var ppl={},np=0;for(i=0;i<a.length;i++)if(!ppl[a[i].p.id]){ppl[a[i].p.id]=1;np++;}
+  h+='<div class="kpi"><div class="k">来店</div><div class="v">'+a.length+'件</div><div class="s">'+np+'人・1回あたり '+(a.length?yen(Math.round((tot-tsale)/a.length)):'—')+'(回数券をのぞく)</div></div>';
+  var used=0,R=0,rp=0;for(i=0;i<a.length;i++){var vv=a[i].v;if(vv.pay===USE||(vv.ticket&&vv.ticket.today))used++;}
+  for(i=0;i<people.length;i++){var r1=remain(people[i]);if(r1){R+=r1;rp++;}}
+  h+='<div class="kpi" style="grid-column:1 / -1"><div class="k">回数券</div><div class="v">この月 使った '+used+'回</div><div class="s">まだ使っていない回数 '+(cur?'':'(今) ')+'合計 '+R+'回('+rp+'人)。売り上げは売った日に入ります</div></div>';
+  var ex=esum(expsIn(m)),df=tot-ex;
+  h+='<button class="kpi link" data-goexp><span><span class="k">この月の経費 '+yen(ex)+'</span><br><span class="k">売り上げ − 経費'+KARI+'</span> <b class="yen" style="font-size:18px'+(df<0?';color:var(--warn)':'')+'">'+signed(df)+'</b></span><span class="go">経費を見る ›</span></button>';
+  h+='<p class="hint" style="grid-column:1 / -1;margin:0">'+KARI_NOTE+'</p>';
+  $('kpis').innerHTML=h;
+  var by={},order=[];
+  for(i=0;i<a.length;i++){var v=a[i].v;for(var j=0;j<v.items.length;j++){var it=v.items[j];
+    if(!(it.n in by)){by[it.n]={amt:0,n:0};order.push(it.n);}by[it.n].amt+=it.amt||0;by[it.n].n++;}}
+  order.sort(function(x,y){return by[y].amt-by[x].amt||by[y].n-by[x].n;});
+  var mx=1;for(i=0;i<order.length;i++)if(by[order[i]].amt>mx)mx=by[order[i]].amt;
+  h='';for(i=0;i<order.length;i++){var o=by[order[i]];
+    h+='<div class="b"><span>'+esc(order[i])+'<br><small style="color:var(--muted)">'+o.n+'回</small></span><span class="track"><span class="fill" style="width:'+Math.round(o.amt/mx*100)+'%"></span></span><span class="n">'+yen(o.amt)+'</span></div>';}
+  if(h)h+='<p class="hint">回数券を使った日は 0円です(売り上げは、回数券を売った日に入ります)</p>';
+  $('bars').innerHTML=h||'<p class="empty">この月の記録はまだありません</p>';
+  h='';for(i=0;i<a.length;i++){var x=a[i];
+    h+='<div class="s"><span><span class="m">'+ymd(x.v.dt)+'</span><br>'+esc(x.p.name)+' 様<br><span class="m">'+esc(vnames(x.v))+'</span></span><span style="text-align:right"><span class="yen">'+yen(vt(x.v))+'</span><br><span class="pay">'+esc(x.v.pay)+'</span></span></div>';}
+  $('sales').innerHTML=h||'<p class="empty">この月の記録はまだありません</p>';
+}
+
+// ---- 1人のページ ----
+var curPerson=null;
+function openPerson(id,already){
+  var p=find(id),h='',dn=done(p),u=upcoming(p),tot=0;curPerson=id;
+  for(var i=0;i<dn.length;i++)tot+=vt(dn[i]);
+  h+='<button class="back" id="pb">← もどる</button><h1>'+esc(p.name)+' 様</h1><p class="sub">'+esc(p.kana)+'</p>';
+  if(p.care)h+='<div class="card care"><b>気をつけること</b><br>'+esc(p.care)+'</div>';
+  if(u)h+='<div class="sec"><h2>次のご予約</h2><div class="card">'+md(u.dt)+' '+esc(vnames(u))+'</div></div>';
+  h+='<div class="sec"><h2>次回のご案内</h2><div class="card">'+(p.next?esc(nextText(p)):'<span style="color:var(--muted)">まだ決めていない</span>')+'</div></div>';
+  var T=tickets(p);
+  if(T.list.length){h+='<div class="sec"><h2>回数券</h2><div class="card">';
+    for(i=T.list.length-1;i>=0;i--){var t=T.list[i],rest=t.count-t.used;
+      h+='<div class="tk'+(rest?'':' end')+'"><span><b>'+esc(t.menu)+' '+t.count+'回券</b> <span class="m">'+ymd(t.dt)+' に買った</span></span><span class="dots" aria-hidden="true">'+dots(t)+'</span><span>使った '+t.used+'回 ・ <b>'+(rest?'残り '+rest+'回':'使い終わり')+'</b></span></div>';}
+    h+='</div></div>';}
+  h+='<div class="sec"><button class="btn" id="addrec">'+(recordedToday(p)?'今日の記録をもう1件つける':'今日の記録をつける')+'</button></div>';
+  h+='<div class="sec"><h2>来店の記録('+dn.length+'回・合計 '+yen(tot)+')</h2><div class="card hist">';
+  if(!dn.length)h+='<p class="empty">まだありません</p>';
+  for(i=0;i<dn.length;i++){var v=dn[i];
+    h+='<button class="h" data-edit="'+v.id+'"><span class="d"><span>'+ymd(v.dt)+'('+rel(v.dt)+')</span><span><span class="yen" style="color:var(--fg)">'+yen(vt(v))+'</span><span class="pay">'+esc(v.pay)+'</span></span></span><b>'+esc(vnames(v))+'</b>'+(T.use[v.id]&&T.use[v.id].t?'<span class="tag ok">回数券 '+T.use[v.id].n+'/'+T.use[v.id].t.count+'回目</span>':'')+(v.ticket?'<span class="tag auto">'+esc(v.ticket.menu)+' '+v.ticket.count+'回券を売った</span>':'')+(v.memo?'<br>'+esc(v.memo):'')+'<br><span class="edit">押すと直す・消す</span></button>';}
+  h+='</div></div>';
+  h+='<div class="sec"><h2>基本</h2><div class="card"><dl><dt>電話</dt><dd>'+esc(p.tel)+'</dd><dt>お誕生月</dt><dd>'+(p.bmonth?p.bmonth+'月':'—')+'</dd><dt>はじまり</dt><dd>'+(p.from==='net'?'ネット予約':'紙から移した')+'</dd></dl></div></div>';
+  $('person-in').innerHTML=h;
+  if(!already){$('person').hidden=false;$('person').scrollTop=0;pushSheet('person');}
+  $('pb').onclick=goBack;
+  $('addrec').onclick=function(){openRec(p,null);};
+  $('person-in').querySelector('.hist').onclick=function(e){var b=closest(e.target,'[data-edit]');if(!b)return;var id2=+b.getAttribute('data-edit');
+    for(var k=0;k<p.v.length;k++)if(p.v[k].id===id2)openRec(p,p.v[k]);};
+}
+
+// ---- 今日の記録(新しく/直す) ----
+function openRec(p,edit){
+  var lines=[],pay='現金',nxt='変えない',h='',bk=null,i,src,TK=tickets(p),tk={menu:'よもぎ蒸し',count:5,today:true};
+  if(edit&&edit.ticket)tk={menu:edit.ticket.menu,count:edit.ticket.count,today:edit.ticket.today};
+  recDirty=false;leaveOK=false;$('toast').hidden=true;
+  for(i=0;i<todayBook.length;i++)if(todayBook[i].id===p.id)bk=todayBook[i];
+  if(edit){for(i=0;i<edit.items.length;i++)lines.push({n:edit.items[i].n,amt:edit.items[i].amt});pay=edit.pay;}
+  else{var l=last(p);src=bk&&!recordedToday(p)?bk.items:(l?(function(){var a=[];for(var k=0;k<l.items.length;k++)a.push(l.items[k].n);return a;})():[]);
+    for(i=0;i<src.length;i++)if(src[i]!=='回数券を売った')lines.push({n:src[i],amt:PRICE[src[i]]});
+    for(i=0;i<TK.list.length;i++){var t0=TK.list[i];if(t0.used<t0.count){for(var k0=0;k0<lines.length;k0++)if(lines[k0].n===t0.menu)pay=USE;break;}}}
+  h+='<button class="back" id="rb">← '+(edit?'もどる':'やめる')+'</button><h1>'+(edit?'記録を直す':'今日の記録')+'</h1><p class="sub">'+esc(p.name)+' 様 ・ '+md(edit?edit.dt:TODAY)+'</p>';
+  h+='<div class="confirm" id="leave" hidden><p>入力中の内容を捨てて、もどりますか?</p><div class="two"><button class="btn danger" id="leave-y">捨てる</button><button class="btn plain" id="leave-n">続ける</button></div></div>';
+  if(p.care)h+='<div class="card care" style="font-size:14px"><b>気をつけること</b> '+esc(p.care)+'</div>';
+  h+='<span class="f">メニュー(いくつでも選べます)</span>'+(!edit&&src&&src.length?'<p class="sub" style="margin:0">'+(bk&&!recordedToday(p)?'ご予約の内容':'前回の内容')+'が入っています</p>':'')+'<div class="chips" id="rm">';
+  for(i=0;i<MENUS.length;i++)h+='<button class="chip" data-m="'+esc(MENUS[i][0])+'">'+esc(MENUS[i][0])+'<small>'+(MENUS[i][1]?yen(MENUS[i][1]):'金額は入れる')+'</small></button>';
+  h+='</div><span class="f">お支払い</span><div class="chips" id="rp">';
+  for(i=0;i<PAYS.length;i++)h+='<button class="chip" data-p="'+PAYS[i]+'">'+PAYS[i]+(PAYS[i]===USE?'<small>0円</small>':'')+'</button>';
+  h+='</div><div id="rt" hidden><span class="f">回数券のメニュー</span><div class="chips" id="rtm">';
+  for(i=0;i<MENUS.length;i++)if(MENUS[i][1])h+='<button class="chip" data-tm="'+esc(MENUS[i][0])+'">'+esc(MENUS[i][0])+'</button>';
+  h+='</div><span class="f">何回券</span><div class="chips" id="rtc">';for(i=0;i<TCOUNTS.length;i++)h+='<button class="chip" data-tc="'+TCOUNTS[i]+'">'+TCOUNTS[i]+'回</button>';
+  h+='</div><div class="chips"><button class="chip" id="rtt">'+(edit?'この日':'今日')+'1回目も使った(押すと切りかえ)</button></div><p class="hint" id="rth"></p></div>';
+  h+='<span class="f">金額(メニューごと。値引きのときは数字を直す)</span><div class="card lines" id="rl"></div><p class="hint" id="rh"></p>';
+  h+='<label class="f" for="rmemo">メモ(なくてもよい)</label><textarea id="rmemo" rows="3" placeholder="例: 肩こり。右側が強め">'+(edit?esc(edit.memo):'')+'</textarea>';
+  h+='<span class="f">次回のご案内</span>'+(p.next?'<p class="sub" style="margin:0">いま: '+esc(nextText(p))+'</p>':'')+'<div class="chips" id="rn">';
+  var NXS=['変えない','2週間後','1か月後','2か月後','なしにする'];
+  for(i=0;i<NXS.length;i++)h+='<button class="chip" data-n="'+NXS[i]+'">'+NXS[i]+'</button>';
+  h+='</div>';
+  if(edit)h+='<div class="sec"><button class="btn line" id="rdel">この記録を消す</button><div class="confirm" id="delc" hidden><p>この記録('+md(edit.dt)+' '+yen(vt(edit))+')を消しますか?'+(function(){if(!edit.ticket)return '';for(var q=0;q<TK.list.length;q++)if(TK.list[q].vid===edit.id)return '<br><small>この回数券で使った '+TK.list[q].used+'回の記録は、回数券なしになります</small>';return '';})()+'</p><div class="two"><button class="btn danger" id="del-y">消す</button><button class="btn plain" id="del-n">やめる</button></div></div></div>';
+  h+='<div class="savebar"><span class="tot">合計<span class="yen" id="rtot"></span></span><button class="btn" id="rsave">'+(edit?'直して保存':'保存する')+'</button></div>';
+  $('rec-in').innerHTML=h;$('rec').hidden=false;$('rec').scrollTop=0;pushSheet('rec');
+
+  function hasSale(){for(var k=0;k<lines.length;k++)if(lines[k].n==='回数券を売った')return true;return false;}
+  function nextUse(){if(edit&&TK.use[edit.id])return TK.use[edit.id];for(var k=0;k<TK.list.length;k++){var t=TK.list[k];if(t.used<t.count)return {t:t,n:t.used+1};}return {t:null,n:0};}
+  function useTk(){return pay===USE?nextUse().t:null;}
+  function covered(L){var t=useTk();if(t&&L.n===t.menu)return true;if(hasSale()&&tk.today&&L.n===tk.menu)return true;return false;}
+  function saleTk(){if(!edit||!edit.ticket)return null;for(var q=0;q<TK.list.length;q++)if(TK.list[q].vid===edit.id)return TK.list[q];return null;}
+  function total(){var s=0;for(var k=0;k<lines.length;k++)if(!covered(lines[k]))s+=+lines[k].amt||0;return s;}
+  function missing(){var a=[];for(var k=0;k<lines.length;k++)if(!covered(lines[k])&&(lines[k].amt===null||lines[k].amt===''))a.push(lines[k].n);return a;}
+  function drawLines(){
+    var hh='';if(!lines.length)hh='<p class="hint" style="margin:0">上でメニューを選んでください</p>';
+    for(var k=0;k<lines.length;k++){var L=lines[k],cv=covered(L),nd=!cv&&(L.amt===null||L.amt==='');
+      hh+='<div class="ln"><span class="n">'+esc(L.n)+(cv?'<br><small style="color:var(--accent)">回数券で 0円</small>':'')+'</span><span class="a"><input type="text" inputmode="numeric" pattern="[0-9]*" data-i="'+k+'" aria-label="'+esc(L.n)+'の金額" '+(cv?'disabled value="0"':'value="'+(L.amt==null?'':L.amt)+'" placeholder="金額"')+(nd?' class="need"':'')+'>円</span></div>';}
+    $('rl').innerHTML=hh;
+  }
+  function update(){
+    setPressed($('rm'),function(b){for(var k=0;k<lines.length;k++)if(lines[k].n===b.getAttribute('data-m'))return true;return false;});
+    setPressed($('rp'),function(b){return b.getAttribute('data-p')===pay;});
+    setPressed($('rn'),function(b){return b.getAttribute('data-n')===nxt;});
+    var ms=missing(),rh=$('rh');
+    if(ms.length){rh.className='hint w';rh.textContent=ms.join('・')+' の金額を入れてください';}
+    else if(pay===USE){var u=nextUse();
+      if(u.t){var hit=false;for(var k=0;k<lines.length;k++)if(lines[k].n===u.t.menu)hit=true;
+        if(!hit){rh.className='hint w';rh.textContent='この回数券は「'+u.t.menu+'」用です。メニューに「'+u.t.menu+'」を選んでください';}
+        else{var dup=false;if(!edit)for(var k2=0;k2<p.v.length;k2++)if(daysAgo(p.v[k2].dt)===0&&p.v[k2].pay===USE)dup=true;
+          rh.className=dup?'hint w':'hint';rh.textContent=(edit?'この記録は ':'この記録で ')+u.t.menu+'の回数券 '+u.n+'/'+u.t.count+'回目'+(edit?'':'(残り '+(u.t.count-u.n)+'回)')+'。'+(lines.length>1?'ほかのメニューは別にお支払い':'')+(dup?' ※今日はもう回数券を使った記録があります':'');}}
+      else if(edit&&edit.pay===USE){rh.className='hint';rh.textContent='この記録の回数券は、もうありません(売った記録が消えています)';}
+      else{rh.className='hint w';rh.textContent='この方には使える回数券がありません(先に「回数券を売った」の記録が要ります)';}}
+    else{rh.className='hint';rh.textContent='';}
+    var sale=hasSale();$('rt').hidden=!sale;
+    if(sale){setPressed($('rtm'),function(b){return b.getAttribute('data-tm')===tk.menu;});setPressed($('rtc'),function(b){return +b.getAttribute('data-tc')===tk.count;});$('rtt').setAttribute('aria-pressed',tk.today?'true':'false');
+      var st0=saleTk();$('rth').textContent=st0?(st0.menu===tk.menu&&st0.count===tk.count?'この券は いま 使った '+st0.used+'回 ・ 残り '+(st0.count-st0.used)+'回':'直すと '+tk.menu+' '+tk.count+'回券になります(使った '+st0.used+'回)'):tk.menu+' '+tk.count+'回券。'+(tk.today?'今日1回目を使ったので、残り '+(tk.count-1)+'回':'残り '+tk.count+'回')+'になります'+(tk.today?'。'+tk.menu+'の代金は 0円にしました':'');}
+    $('rtot').textContent=yen(total());
+  }
+  drawLines();update();
+  $('rm').onclick=function(e){var b=closest(e.target,'[data-m]');if(!b)return;var m=b.getAttribute('data-m'),ix=-1;
+    for(var k=0;k<lines.length;k++)if(lines[k].n===m)ix=k;
+    if(ix>=0)lines.splice(ix,1);else lines.push({n:m,amt:PRICE[m]});recDirty=true;drawLines();update();};
+  $('rtm').onclick=function(e){var b=closest(e.target,'[data-tm]');if(!b)return;tk.menu=b.getAttribute('data-tm');recDirty=true;drawLines();update();};
+  $('rtc').onclick=function(e){var b=closest(e.target,'[data-tc]');if(!b)return;tk.count=+b.getAttribute('data-tc');recDirty=true;drawLines();update();};
+  $('rtt').onclick=function(){tk.today=!tk.today;recDirty=true;drawLines();update();};
+  $('rp').onclick=function(e){var b=closest(e.target,'[data-p]');if(!b)return;pay=b.getAttribute('data-p');recDirty=true;drawLines();update();};
+  $('rn').onclick=function(e){var b=closest(e.target,'[data-n]');if(!b)return;nxt=b.getAttribute('data-n');recDirty=true;update();};
+  $('rl').oninput=function(e){var t=e.target;if(!t.getAttribute('data-i'))return;var v=digits(t.value);if(v!==t.value)t.value=v;
+    lines[+t.getAttribute('data-i')].amt=v===''?null:+v;t.className=v===''?'need':'';recDirty=true;update();};
+  $('rmemo').oninput=function(){recDirty=true;};
+  $('rb').onclick=goBack;
+  $('leave-y').onclick=function(){leaveOK=true;recDirty=false;goBack();};
+  $('leave-n').onclick=function(){$('leave').hidden=true;};
+  if(edit){
+    $('rdel').onclick=function(){$('delc').hidden=false;$('delc').scrollIntoView({block:'center'});};
+    $('del-n').onclick=function(){$('delc').hidden=true;};
+    $('del-y').onclick=function(){var ix=p.v.indexOf(edit),keep=edit;p.v.splice(ix,1);recDirty=false;leaveOK=true;goBack();
+      toast(md(keep.dt)+'の記録を消しました',function(){p.v.splice(ix,0,keep);openPerson(p.id,true);refresh();});};
+  }
+  $('rsave').onclick=function(){
+    if(!lines.length){toast('メニューを1つ以上選んでください');return;}
+    if(pay===USE&&!nextUse().t&&!(edit&&edit.pay===USE)){toast('使える回数券がありません');return;}
+    var ut=useTk();if(ut){var hit2=false;for(var k3=0;k3<lines.length;k3++)if(lines[k3].n===ut.menu)hit2=true;if(!hit2){toast('この回数券は「'+ut.menu+'」用です');return;}}
+    var st1=saleTk();if(st1&&hasSale()&&tk.count<st1.used){toast('もう '+st1.used+'回使っているので、'+tk.count+'回券にはできません');return;}
+    if(pay===USE&&hasSale()){toast('回数券を売った日は、お支払いを現金かカードにしてください');return;}
+    var ms=missing();if(ms.length){toast(ms.join('・')+' の金額を入れてください');var inp=$('rl').querySelector('input.need');if(inp)inp.focus();return;}
+    var tot=total();
+    if(tot>100000&&!$('rsave').getAttribute('data-sure')){$('rsave').setAttribute('data-sure','1');$('rsave').textContent=yen(tot)+' で保存';toast('合計が '+yen(tot)+' です。よければもう一度押してください');return;}
+    var items=[];for(var k=0;k<lines.length;k++)items.push({n:lines[k].n,amt:covered(lines[k])?0:+lines[k].amt});
+    var memo=$('rmemo').value.trim(),oldNext=p.next,undo;
+    if(nxt==='なしにする')p.next=null;
+    else if(nxt!=='変えない'){var dd=d(nxt==='2週間後'?14:nxt==='1か月後'?30:60);p.next={text:md(dd)+'ごろに '+lines[0].n+(lines.length>1?' ほか':''),set:new Date(TODAY.getTime())};}
+    var tkt=hasSale()?{menu:tk.menu,count:tk.count,today:tk.today}:null;
+    if(edit){var before={items:edit.items,pay:edit.pay,memo:edit.memo,ticket:edit.ticket};edit.items=items;edit.pay=pay;edit.memo=memo;edit.ticket=tkt;
+      undo=function(){edit.items=before.items;edit.pay=before.pay;edit.memo=before.memo;edit.ticket=before.ticket;p.next=oldNext;openPerson(p.id,true);refresh();};}
+    else{var nv={id:vid++,dt:new Date(TODAY.getTime()),items:items,pay:pay,memo:memo,ticket:tkt};p.v.unshift(nv);p.isNew=false;
+      undo=function(){var ix=p.v.indexOf(nv);if(ix>=0)p.v.splice(ix,1);p.next=oldNext;openPerson(p.id,true);refresh();};}
+    recDirty=false;leaveOK=true;goBack();
+    toast(p.name+' 様 '+yen(tot)+' を'+(edit?'直しました':'保存しました'),undo);
+  };
+}
+
+// ---- 経費 ----
+// 本番では、しほさんの Google スプレッドシートの「経費」シートに1行ずつ入る(Lift-Off は預からない)。確定申告の計算はしない
+var CATS=['仕入れ','消耗品','家賃','光熱費','通信','交通','広告','その他'];
+var CAT_EX={'仕入れ':'例: よもぎ・オイル・パック','消耗品':'例: タオル・ペーパーシーツ','家賃':'例: お店の部屋代','光熱費':'例: 電気代・ガス代・水道代','通信':'例: スマホ代・ネット代','交通':'例: 研修の電車代','広告':'例: チラシの印刷','その他':'例: 研修の参加費'};
+var eid=1;
+function E(m,dd,amt,cat,what,photo){return {id:eid++,dt:new Date(2026,m-1,dd),amt:amt,cat:cat,what:what,photo:photo?'demo':null};}
+var exps=[];
+(function(){
+  var ele={9:3120,10:2860};
+  for(var m=9;m<=10;m++){
+    exps.push(E(m,1,12000,'家賃','お店の部屋代',false));
+    exps.push(E(m,10,4400,'仕入れ','よもぎ(1か月分)',true));
+    exps.push(E(m,15,1980,'消耗品','タオル・ペーパーシーツ',true));
+    exps.push(E(m,25,ele[m],'光熱費','電気代',false));
+    exps.push(E(m,27,3300,'通信','スマホ代',false));
+  }
+  exps.push(E(9,5,3300,'広告','チラシの印刷(200枚)',true));
+  exps.push(E(9,12,1040,'交通','研修の電車代',false));
+  exps.push(E(9,12,3000,'その他','研修の参加費',true));
+  exps.push(E(10,18,2970,'仕入れ','フェイシャル用パック',true));
+  exps.push(E(11,1,12000,'家賃','お店の部屋代',false));
+  exps.push(E(11,2,1280,'消耗品','ペーパーシーツ',true));
+})();
+var eOff=0,YR=TODAY.getMonth()<3?TODAY.getFullYear()-1:TODAY.getFullYear(); // 1〜3月(確定申告の時期)は去年を先に出す
+function iso(x){return x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2);}
+function fromIso(s){var a=String(s).split('-');if(a.length!==3)return null;var x=new Date(+a[0],+a[1]-1,+a[2]);return isNaN(x)?null:x;}
+function sameMonth(x,m){return x.getFullYear()===m.getFullYear()&&x.getMonth()===m.getMonth();}
+function expsIn(m){var a=[];for(var i=0;i<exps.length;i++)if(sameMonth(exps[i].dt,m)&&daysAgo(exps[i].dt)>=0)a.push(exps[i]);
+  a.sort(function(x,y){return y.dt-x.dt||y.id-x.id;});return a;}
+function esum(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i].amt;return s;}
+function signed(n){return (n<0?'−':'')+yen(Math.abs(n));}
+var KARI='<span class="kari">目安</span>';
+var KARI_NOTE='「目安」: 回数券は売った日に売り上げに入れています。税金は引いていません。';
+
+function renderExp(){
+  var m=monthOf(eOff),cur=eOff===0,a=expsIn(m),tot=esum(a),sales=sum(visitsIn(m)),diff=sales-tot,i,h='';
+  $('elabel').textContent=m.getFullYear()+'年'+(m.getMonth()+1)+'月'+(cur?'(今月)':'');
+  $('enext').disabled=cur;$('etonow').hidden=cur;
+  var np=0;for(i=0;i<a.length;i++)if(a[i].photo)np++;
+  h+='<div class="kpi main" style="background:var(--warn-soft)"><div class="k">'+(cur?'今月の経費('+TODAY.getDate()+'日まで)':'この月の経費')+'</div><div class="v" style="color:var(--warn)">'+yen(tot)+'</div><div class="s">'+a.length+'件・レシートの写真 '+np+'枚</div></div>';
+  h+='<div class="kpi"><div class="k">売り上げ</div><div class="v">'+yen(sales)+'</div><div class="s">売り上げの画面と同じ</div></div>';
+  h+='<div class="kpi'+(diff<0?' minus':'')+'"><div class="k">売り上げ − 経費'+KARI+'</div><div class="v">'+signed(diff)+'</div><div class="s">手もとに残るおおよそ</div></div>';
+  $('ekpis').innerHTML=h+'<p class="hint" style="grid-column:1 / -1;margin:0">'+KARI_NOTE+'</p>';
+  var by={},order=[];for(i=0;i<a.length;i++){var e=a[i];if(!(e.cat in by)){by[e.cat]={amt:0,n:0};order.push(e.cat);}by[e.cat].amt+=e.amt;by[e.cat].n++;}
+  order.sort(function(x,y){return by[y].amt-by[x].amt;});
+  var mx=1;for(i=0;i<order.length;i++)if(by[order[i]].amt>mx)mx=by[order[i]].amt;
+  h='';for(i=0;i<order.length;i++){var o=by[order[i]];
+    h+='<div class="b"><span>'+esc(order[i])+'<br><small style="color:var(--muted)">'+o.n+'件</small></span><span class="track" style="background:var(--warn-soft)"><span class="fill" style="background:var(--warn);width:'+Math.round(o.amt/mx*100)+'%"></span></span><span class="n">'+yen(o.amt)+'</span></div>';}
+  $('ebars').innerHTML=h||'<p class="empty">この月の経費はまだありません</p>';
+  h='';for(i=0;i<a.length;i++){var x=a[i];
+    h+='<button class="erow" data-eedit="'+x.id+'"><span><span class="m">'+ymd(x.dt)+' ・ '+esc(x.cat)+'</span><br>'+esc(x.what||'(何に使ったか なし)')+(x.photo?' <span class="rc">🧾 写真あり</span>':'')+'</span><span class="yen" style="flex-shrink:0">'+yen(x.amt)+'</span></button>';}
+  $('elist').innerHTML=h?h+'<p class="hint" style="margin:0 0 8px">押すと直す・消す</p>':'<p class="empty">この月の経費はまだありません</p>';
+  renderYear();renderCsvBox();
+}
+function renderYear(){
+  var y=YR,h='',st=0,et=0,dt=0,cm=monthOf(eOff),lastM=y<TODAY.getFullYear()?11:TODAY.getMonth(),skip=0;
+  $('ytitle').textContent=y+'年の一覧';$('ynext').disabled=y>=TODAY.getFullYear();
+  h+='<table class="ytab"><thead><tr><th>月</th><th>売り上げ</th><th>経費</th><th>差'+KARI+'</th></tr></thead><tbody>';
+  var first=-1;for(var fi=lastM;fi>=0;fi--){var fm=new Date(y,fi,1);if(sum(visitsIn(fm))||esum(expsIn(fm)))first=fi;}
+  if(first<0){$('year').innerHTML='<p class="empty">'+y+'年の記録はありません</p>';return;}
+  for(var mi=first;mi<=lastM;mi++){var m=new Date(y,mi,1),s=sum(visitsIn(m)),e=esum(expsIn(m)),df=s-e,off=(y-TODAY.getFullYear())*12+mi-TODAY.getMonth();st+=s;et+=e;if(e)dt+=df;else if(s)skip++;
+    var none=!s&&!e;
+    h+='<tr'+(sameMonth(m,cm)?' class="cur"':'')+'><td><button data-emonth="'+off+'">'+(mi+1)+'月'+(mi===TODAY.getMonth()?'<small style="color:var(--muted)">(今)</small>':'')+'</button></td>'+
+      (none?'<td colspan="3" class="none"><button data-emonth="'+off+'" style="text-align:right">記録なし</button></td>':
+      '<td><button data-emonth="'+off+'">'+yen(s)+'</button></td>'+(e?'<td><button data-emonth="'+off+'">'+yen(e)+'</button></td><td'+(df<0?' class="neg"':'')+'><button data-emonth="'+off+'">'+signed(df)+'</button></td>':'<td class="none"><button data-emonth="'+off+'">まだ</button></td><td class="none"><button data-emonth="'+off+'">—</button></td>'))+'</tr>';}
+  h+='<tr class="sum"><td>合計</td><td>'+yen(st)+'</td><td>'+yen(et)+'</td><td'+(dt<0?' class="neg"':'')+'>'+signed(dt)+'</td></tr></tbody></table>';
+  h+='<p class="hint" style="margin:4px 2px 6px">月を押すと、その月の経費が上に出ます。'+(skip?'経費を「まだ」入れていない月は、差の合計に入れていません。':'')+'試作の経費は9月からです。</p>';
+  $('year').innerHTML=h;
+}
+function csvCell(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function yearCsv(){
+  var y=YR,a=[],i;for(i=0;i<exps.length;i++)if(exps[i].dt.getFullYear()===y&&daysAgo(exps[i].dt)>=0)a.push(exps[i]);
+  a.sort(function(x,z){return x.dt-z.dt||x.id-z.id;});
+  var L=['日付,項目,金額,何に使ったか,レシートの写真'];
+  for(i=0;i<a.length;i++){var e=a[i];L.push([e.dt.getFullYear()+'/'+('0'+(e.dt.getMonth()+1)).slice(-2)+'/'+('0'+e.dt.getDate()).slice(-2),e.cat,e.amt,e.what,e.photo?'あり':'なし'].map(csvCell).join(','));}
+  return {text:L.join('\r\n')+'\r\n',n:a.length,y:y};
+}
+function renderCsvBox(){
+  var c=yearCsv(),h='';
+  h+='<button class="btn plain" id="csvbtn"'+(c.n?'':' disabled')+'>'+c.y+'年分の CSV をコピーする('+c.n+'件)</button>';
+  h+='<p class="hint">CSV は、表の形の文字です。会計ソフトに読み込んだり、税理士さんにそのまま渡せます。本番では、ボタン1つでファイルとして保存できます。確定申告の計算(税金・控除)は、このアプリではしません。</p>';
+  h+='<details id="csvd"><summary>中身を見る</summary><pre class="csv" id="csvpre">'+esc(c.text.replace(/\r\n/g,'\n'))+'</pre></details>';
+  $('csvbox').innerHTML=h;
+  $('csvbtn').onclick=function(){
+    function fallback(){$('csvd').open=true;try{var r=document.createRange();r.selectNodeContents($('csvpre'));var sel=window.getSelection();sel.removeAllRanges();sel.addRange(r);}catch(e){}
+      toast('コピーできませんでした。下の中身を長押しでコピーしてください');}
+    try{navigator.clipboard.writeText(c.text).then(function(){toast(c.y+'年分 '+c.n+'件の CSV をコピーしました');},fallback);}catch(e){fallback();}
+  };
+}
+
+function openExp(edit){
+  var st={dt:edit?edit.dt:new Date(TODAY.getTime()),amt:edit?edit.amt:null,cat:edit?edit.cat:null,what:edit?edit.what:'',photo:edit?edit.photo:null},h='',i;
+  expDirty=false;leaveOK=false;$('toast').hidden=true;
+  h+='<button class="back" id="eb">← '+(edit?'もどる':'やめる')+'</button><h1>'+(edit?'経費を直す':'経費を入れる')+'</h1>';
+  h+='<div class="confirm" id="eleave" hidden><p>入力中の内容を捨てて、もどりますか?</p><div class="two"><button class="btn danger" id="eleave-y">捨てる</button><button class="btn plain" id="eleave-n">続ける</button></div></div>';
+  if(!edit){var seen={},q=[];for(i=0;i<exps.length&&q.length<4;i++){var x=exps[exps.length-1-i],k=x.cat+'|'+x.what;if(seen[k])continue;seen[k]=1;q.push(x);}
+    h+='<span class="f">前に入れたものから(押すと下に入ります)</span><div class="chips" id="eq">';
+    for(i=0;i<q.length;i++)h+='<button class="chip" data-q="'+q[i].id+'">'+esc(q[i].what)+'<small>'+yen(q[i].amt)+'</small></button>';
+    h+='</div>';}
+  h+='<label class="f" for="ea">金額</label><div class="ln" style="justify-content:flex-start"><input type="text" class="amt" id="ea" inputmode="numeric" pattern="[0-9]*" placeholder="0" style="width:9em" value="'+(st.amt==null?'':st.amt)+'"><span>円</span></div>';
+  h+='<span class="f">項目</span><div class="chips" id="eci">';
+  for(i=0;i<CATS.length;i++)h+='<button class="chip" data-c="'+CATS[i]+'">'+CATS[i]+'</button>';
+  h+='</div>';
+  h+='<label class="f" for="ew">何に使ったか</label><input type="text" id="ew" value="'+esc(st.what)+'" placeholder="'+esc(st.cat?CAT_EX[st.cat]:'例: よもぎ(1か月分)')+'">';
+  h+='<label class="f" for="ed">日付</label><input type="date" id="ed" value="'+iso(st.dt)+'" max="'+iso(TODAY)+'">';
+  h+='<span class="f">レシートの写真(なくてもよい)</span><div class="photo"><button type="button" class="thumb" id="ep" aria-label="写真を大きく見る"></button><label class="btn plain" for="ef" id="eflabel">写真を添える</label><input type="file" id="ef" accept="image/*"></div><button type="button" class="back" id="eprm" hidden style="color:var(--warn)">写真を外す</button>';
+  h+='<p class="hint">写真は添えるだけです(文字の読み取りはしません)。本番では、しほさんの Google ドライブに入ります。</p>';
+  h+='<p class="hint w" id="eh"></p>';
+  if(edit)h+='<div class="sec"><button class="btn line" id="edel">この経費を消す</button><div class="confirm" id="edelc" hidden><p>この経費('+md(edit.dt)+' '+yen(edit.amt)+')を消しますか?</p><div class="two"><button class="btn danger" id="edel-y">消す</button><button class="btn plain" id="edel-n">やめる</button></div></div></div>';
+  h+='<div class="savebar"><span class="tot">経費<span class="yen" id="etot"></span></span><button class="btn" id="esave">'+(edit?'直して保存':'保存する')+'</button></div>';
+  $('exp-in').innerHTML=h;$('exp').hidden=false;$('exp').scrollTop=0;pushSheet('exp');
+  function drawPhoto(){var p=$('ep');$('eprm').hidden=!st.photo;$('eflabel').textContent=st.photo?'写真を取りかえる':'写真を添える';p.disabled=!st.photo;
+    if(!st.photo){p.innerHTML='写真<br>なし';return;}
+    if(st.photo==='demo'){p.innerHTML='🧾<br>見本の<br>写真';return;}
+    p.innerHTML='<img src="'+st.photo+'" alt="レシートの写真" class="thumb" style="border:0">';}
+  $('ep').onclick=function(){if(!st.photo)return;var z=$('zoom');z.innerHTML=st.photo==='demo'?'<div class="demo-r">🧾 レシートの写真(試作の見本)<br><small>押すと閉じます</small></div>':'<img src="'+st.photo+'" alt="レシートの写真">';z.hidden=false;};
+  $('eprm').onclick=function(){st.photo=null;$('ef').value='';expDirty=true;drawPhoto();};
+  function update(){
+    setPressed($('eci'),function(b){return b.getAttribute('data-c')===st.cat;});
+    $('ew').placeholder=st.cat?CAT_EX[st.cat]:'例: よもぎ(1か月分)';
+    $('etot').textContent=yen(st.amt||0);$('eh').textContent='';
+  }
+  drawPhoto();update();
+  if(!edit)$('eq').onclick=function(e){var b=closest(e.target,'[data-q]');if(!b)return;var id=+b.getAttribute('data-q'),x=null;
+    for(var k=0;k<exps.length;k++)if(exps[k].id===id)x=exps[k];if(!x)return;
+    st.amt=x.amt;st.cat=x.cat;st.what=x.what;$('ea').value=x.amt;$('ew').value=x.what;expDirty=true;update();};
+  $('ea').oninput=function(){var v=digits(this.value);if(v!==this.value)this.value=v;st.amt=v===''?null:+v;expDirty=true;update();};
+  $('eci').onclick=function(e){var b=closest(e.target,'[data-c]');if(!b)return;st.cat=b.getAttribute('data-c');expDirty=true;update();};
+  $('ew').oninput=function(){st.what=this.value;expDirty=true;};
+  $('ed').onchange=function(){var x=fromIso(this.value);if(x){st.dt=x;expDirty=true;}};
+  $('ef').onchange=function(){var f=this.files&&this.files[0];if(!f)return;try{st.photo=URL.createObjectURL(f);}catch(e){st.photo='demo';}expDirty=true;drawPhoto();};
+  $('eb').onclick=goBack;
+  $('eleave-y').onclick=function(){leaveOK=true;expDirty=false;goBack();};
+  $('eleave-n').onclick=function(){$('eleave').hidden=true;};
+  if(edit){
+    $('edel').onclick=function(){$('edelc').hidden=false;$('edelc').scrollIntoView({block:'center'});};
+    $('edel-n').onclick=function(){$('edelc').hidden=true;};
+    $('edel-y').onclick=function(){var ix=exps.indexOf(edit),keep=edit;exps.splice(ix,1);expDirty=false;leaveOK=true;goBack();
+      toast(md(keep.dt)+'の経費を消しました',function(){exps.splice(ix,0,keep);refresh();});};
+  }
+  $('esave').onclick=function(){
+    var eh=$('eh'),bad=[];if(!st.amt)bad.push('金額');if(!st.cat)bad.push('項目');
+    if(bad.length){eh.textContent=bad.join('と')+'を入れてください';if(!st.amt)$('ea').focus();else $('eci').scrollIntoView({block:'center'});return;}
+    if(st.dt>TODAY){eh.textContent='先の日付は入れられません';return;}
+    if(st.amt>300000&&!$('esave').getAttribute('data-sure')){$('esave').setAttribute('data-sure','1');$('esave').textContent=yen(st.amt)+' で保存';toast(yen(st.amt)+' です。よければもう一度押してください');return;}
+    var undo,what=st.what.trim();
+    if(edit){var before={dt:edit.dt,amt:edit.amt,cat:edit.cat,what:edit.what,photo:edit.photo};
+      edit.dt=st.dt;edit.amt=st.amt;edit.cat=st.cat;edit.what=what;edit.photo=st.photo;
+      undo=function(){for(var k in before)edit[k]=before[k];refresh();};}
+    else{var ne={id:eid++,dt:st.dt,amt:st.amt,cat:st.cat,what:what,photo:st.photo};exps.push(ne);
+      undo=function(){var ix=exps.indexOf(ne);if(ix>=0)exps.splice(ix,1);refresh();};}
+    var mo=monthOf(0);eOff=(st.dt.getFullYear()-mo.getFullYear())*12+st.dt.getMonth()-mo.getMonth();
+    expDirty=false;leaveOK=true;goBack();
+    toast(st.cat+' '+yen(st.amt)+' を'+(edit?'直しました':'入れました'),undo);
+  };
+}
+
+// ---- タブ・そのほか ----
+function tab(which,keep){if(!keep&&stack[stack.length-1]==='gotab')stack.pop();curTab=which;if(which==='sales'&&!keep)mOff=0;if(which==='exp'&&!keep)eOff=0;
+  var t=['list','today','sales','exp'];for(var i=0;i<t.length;i++){$('t-'+t[i]).setAttribute('aria-selected',t[i]===which?'true':'false');$('v-'+t[i]).hidden=t[i]!==which;}
+  refresh();}
+function refresh(){if(curTab==='list')renderList();else if(curTab==='today')renderToday();else if(curTab==='exp')renderExp();else renderSales();}
+$('t-list').onclick=function(){tab('list');};
+$('t-today').onclick=function(){tab('today');};
+$('t-sales').onclick=function(){tab('sales');};
+$('t-exp').onclick=function(){tab('exp');};
+$('eprev').onclick=function(){eOff--;renderExp();};
+$('enext').onclick=function(){if(eOff<0){eOff++;renderExp();}};
+$('etonow').onclick=function(){eOff=0;renderExp();};
+$('addexp').onclick=function(){openExp(null);};
+$('yprev').onclick=function(){YR--;renderYear();renderCsvBox();};
+$('ynext').onclick=function(){if(YR<TODAY.getFullYear()){YR++;renderYear();renderCsvBox();}};
+$('mprev').onclick=function(){mOff--;renderSales();};
+$('mnext').onclick=function(){if(mOff<0){mOff++;renderSales();}};
+$('tonow').onclick=function(){mOff=0;renderSales();};
+$('q').oninput=renderList;
+$('filters').onclick=function(e){var b=closest(e.target,'[data-f]');if(!b)return;filter=b.getAttribute('data-f');setPressed($('filters'),function(x){return x===b;});renderList();};
+document.addEventListener('click',function(e){
+  var g=closest(e.target,'[data-goexp]');if(g){eOff=mOff;tab('exp',true);pushSheet('gotab');try{window.scrollTo(0,0);}catch(x){}return;}
+  var em=closest(e.target,'[data-emonth]');if(em){eOff=+em.getAttribute('data-emonth');renderExp();try{$('elabel').scrollIntoView({block:'start',behavior:'smooth'});}catch(x){}return;}
+  var ee=closest(e.target,'[data-eedit]');if(ee){var id=+ee.getAttribute('data-eedit');for(var k=0;k<exps.length;k++)if(exps[k].id===id){openExp(exps[k]);return;}}
+  var r=closest(e.target,'[data-open]');if(r){openPerson(+r.getAttribute('data-open'));return;}
+  var c=closest(e.target,'[data-rec]');if(c){var p=find(+c.getAttribute('data-rec'));
+    if(recordedToday(p))openPerson(p.id);else{openPerson(p.id);openRec(p,null);}}
+});
+$('demo-book').onclick=function(){
+  if(demoN>=demoNames.length){toast('試しはここまでです');return;}
+  var nm=demoNames[demoN++],id=100+demoN;
+  people.push({id:id,name:nm[0],kana:nm[1],tel:'090-0000-01'+(10+demoN),bmonth:0,care:'',next:null,from:'net',isNew:true,v:[V(5+demoN,[nm[2]],'')]});
+  filter='all';setPressed($('filters'),function(x){return x.getAttribute('data-f')==='all';});
+  $('q').value='';flashId=id;renderList();
+  try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+  toast(nm[0]+' 様が台帳に入りました(手で入れたのは 0)');
+  setTimeout(function(){flashId=null;if(curTab==='list')renderList();},4000);
+};
+$('todaylabel').textContent='今日は '+md(TODAY)+'(試作の日付)';
+renderList();
+</script>
