@@ -171,6 +171,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
   </div>
 
   <section id="v-list">
+    <button class="btn" id="addp" style="margin-bottom:10px">＋ お客さんを足す</button>
     <input type="search" id="q" placeholder="名前・ふりがなで探す" autocomplete="off" aria-label="名前・ふりがなで探す">
     <div class="chips" id="filters">
       <button class="chip" data-f="all" aria-pressed="true">すべて</button>
@@ -217,6 +218,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-vi
 <div class="sheet" id="person" hidden><div class="wrap" id="person-in"></div></div>
 <div class="sheet" id="rec" hidden><div class="wrap" id="rec-in"></div></div>
 <div class="sheet" id="exp" hidden><div class="wrap" id="exp-in"></div></div>
+<div class="sheet" id="np" hidden><div class="wrap" id="np-in"></div></div>
 <div class="zoom" id="zoom" hidden role="dialog" aria-label="レシートの写真(押すと閉じる)"></div>
 <div class="toast" id="toast" hidden role="status"><span id="toast-t"></span><button id="toast-b" hidden>取り消す</button></div>
 
@@ -297,16 +299,17 @@ $('zoom').onclick=function(){this.hidden=true;};
 $('toast-b').onclick=function(){if(undoFn){var f=undoFn;undoFn=null;f();saveState();}$('toast').hidden=true;};
 
 // ---- 画面の重ね(スマホの「戻る」で1枚ずつ閉じる) ----
-var stack=[],histOK=true,recDirty=false,expDirty=false,leaveOK=false;
+var stack=[],histOK=true,recDirty=false,expDirty=false,npDirty=false,leaveOK=false;
 function pushSheet(name){stack.push(name);try{history.pushState({k:stack.length},'');}catch(e){histOK=false;}}
 function goBack(){if(histOK){try{history.back();return;}catch(e){histOK=false;}}handlePop();}
 function handlePop(){
   var top=stack[stack.length-1];if(!top)return;
-  if(((top==='rec'&&recDirty)||(top==='exp'&&expDirty))&&!leaveOK){try{history.pushState({k:stack.length},'');}catch(e){}showLeave(top==='exp'?'eleave':'leave');return;}
+  if(((top==='rec'&&recDirty)||(top==='exp'&&expDirty)||(top==='np'&&npDirty))&&!leaveOK){try{history.pushState({k:stack.length},'');}catch(e){}showLeave(top==='exp'?'eleave':top==='np'?'nleave':'leave');return;}
   stack.pop();leaveOK=false;
   if(top==='rec'){$('rec').hidden=true;recDirty=false;var p=find(curPerson);if(p&&!$('person').hidden)openPerson(p.id,true);else refresh();}
   else if(top==='person'){$('person').hidden=true;refresh();}
   else if(top==='exp'){$('exp').hidden=true;expDirty=false;refresh();}
+  else if(top==='np'){$('np').hidden=true;npDirty=false;refresh();}
   else if(top==='gotab'){tab('sales',true);}
 }
 window.addEventListener('popstate',handlePop);
@@ -316,13 +319,14 @@ function showLeave(id){var c=$(id||'leave');if(!c)return;c.hidden=false;c.scroll
 function rowHTML(p,opt){
   opt=opt||{};var l=last(p),u=upcoming(p),n=l?daysAgo(l.dt):null,old=n!==null&&n>=60,tags='';
   if(p.isNew)tags+='<span class="tag auto">予約から自動</span>';
+  if(p.from==='hand')tags+='<span class="tag ok">手で足した</span>';
   if(p.care)tags+='<span class="tag care">注意あり</span>';
   var sub=opt.sub||(l?(n===0?'今日 ':'前回 ')+esc(vnames(l)):(u?'初めてのご予約 '+md(u.dt):'まだ来店なし'));
   var right=opt.right!=null?opt.right:(l?'<span class="days'+(old?' old':'')+'">'+rel(l.dt)+'</span><br>'+ymd(l.dt):(u?'<span class="days" style="color:var(--auto)">ご予約</span><br>'+ymd(u.dt):'—'));
   return '<button class="row'+(opt.flash?' flash':'')+'" data-open="'+p.id+'"><span class="l"><span class="nm">'+esc(p.name)+'</span>'+tags+
     '<br><span class="kana">'+esc(p.kana)+'</span><br><span class="last">'+sub+'</span></span>'+(right?'<span class="r">'+right+'</span>':'')+'</button>';
 }
-function sortKey(p){var l=last(p)||upcoming(p);return l?l.dt.getTime():0;}
+function sortKey(p){var l=last(p)||upcoming(p),t=l?l.dt.getTime():0;return Math.max(t,p.addedAt||0);}
 var flashId=null;
 function renderList(){
   var q=norm($('q').value),out=[],m=TODAY.getMonth()+1;
@@ -337,7 +341,7 @@ function renderList(){
 }
 function recordedToday(p){var l=last(p);return l&&daysAgo(l.dt)===0;}
 function renderToday(){
-  var out=[];for(var i=0;i<todayBook.length;i++){var b=todayBook[i],p=find(b.id),ok=recordedToday(p);
+  var out=[];for(var i=0;i<todayBook.length;i++){var b=todayBook[i],p=find(b.id);if(!p)continue;var ok=recordedToday(p);
     var rm=remain(p),sub='<span class="tm">'+b.t+'</span> '+esc(b.items.join('・'))+'<br>'+(rm?'<span class="tag auto" style="margin:0 6px 0 0">回数券 残り'+rm+'回</span>':'')+(ok?'<span class="tag ok" style="margin:0">記録ずみ</span>':'<span class="tag idle" style="margin:0">記録まだ</span>');
     out.push('<div class="trow">'+rowHTML(p,{sub:sub,right:''})+'<button class="recbtn'+(ok?' done':'')+'" data-rec="'+p.id+'">'+(ok?'記録を<br>見る':'記録')+'</button></div>');}
   $('today').innerHTML=out.join('');
@@ -401,10 +405,15 @@ function openPerson(id,already){
   for(i=0;i<dn.length;i++){var v=dn[i];
     h+='<button class="h" data-edit="'+v.id+'"><span class="d"><span>'+ymd(v.dt)+'('+rel(v.dt)+')</span><span><span class="yen" style="color:var(--fg)">'+yen(vt(v))+'</span><span class="pay">'+esc(v.pay)+'</span></span></span><b>'+esc(vnames(v))+'</b>'+(T.use[v.id]&&T.use[v.id].t?'<span class="tag ok">回数券 '+T.use[v.id].n+'/'+T.use[v.id].t.count+'回目</span>':'')+(v.ticket?'<span class="tag auto">'+esc(v.ticket.menu)+' '+v.ticket.count+'回券を売った</span>':'')+(v.memo?'<br>'+esc(v.memo):'')+'<br><span class="edit">押すと直す・消す</span></button>';}
   h+='</div></div>';
-  h+='<div class="sec"><h2>基本</h2><div class="card"><dl><dt>電話</dt><dd>'+esc(p.tel)+'</dd><dt>お誕生月</dt><dd>'+(p.bmonth?p.bmonth+'月':'—')+'</dd><dt>はじまり</dt><dd>'+(p.from==='net'?'ネット予約':'紙から移した')+'</dd></dl></div></div>';
+  h+='<div class="sec"><h2>基本</h2><div class="card"><dl><dt>電話</dt><dd>'+esc(p.tel)+'</dd><dt>お誕生月</dt><dd>'+(p.bmonth?p.bmonth+'月':'—')+'</dd><dt>はじまり</dt><dd>'+(p.from==='hand'?'手で足した':p.from==='net'?'ネット予約':'紙から移した')+'</dd></dl></div></div>';
+  h+='<div class="sec"><button class="btn line" id="pdel">この人を消す</button><div class="confirm" id="pdelc" hidden><p>'+esc(p.name)+' 様を消しますか?'+(dn.length?'<br><small>来店の記録 '+dn.length+'回も一緒に消えます</small>':'')+'</p><div class="two"><button class="btn danger" id="pdel-y">消す</button><button class="btn plain" id="pdel-n">やめる</button></div></div></div>';
   $('person-in').innerHTML=h;
   if(!already){$('person').hidden=false;$('person').scrollTop=0;pushSheet('person');}
   $('pb').onclick=goBack;
+  $('pdel').onclick=function(){$('pdelc').hidden=false;$('pdelc').scrollIntoView({block:'center'});};
+  $('pdel-n').onclick=function(){$('pdelc').hidden=true;};
+  $('pdel-y').onclick=function(){var ix=people.indexOf(p);if(ix<0)return;people.splice(ix,1);goBack();
+    toast(p.name+' 様を消しました',function(){people.splice(ix,0,p);refresh();});};
   $('addrec').onclick=function(){openRec(p,null);};
   $('person-in').querySelector('.hist').onclick=function(e){var b=closest(e.target,'[data-edit]');if(!b)return;var id2=+b.getAttribute('data-edit');
     for(var k=0;k<p.v.length;k++)if(p.v[k].id===id2)openRec(p,p.v[k]);};
@@ -677,6 +686,45 @@ function openExp(edit){
     toast(st.cat+' '+yen(st.amt)+' を'+(edit?'直しました':'入れました'),undo);
   };
 }
+
+// ---- お客さんを足す ----
+function openNew(){
+  var h='',i,bm=0;npDirty=false;leaveOK=false;$('toast').hidden=true;
+  h+='<button class="back" id="nb">← やめる</button><h1>お客さんを足す</h1><p class="sub">お名前だけでも保存できます。あとから記録をつけられます。</p>';
+  h+='<div class="confirm" id="nleave" hidden><p>入力中の内容を捨てて、もどりますか?</p><div class="two"><button class="btn danger" id="nleave-y">捨てる</button><button class="btn plain" id="nleave-n">続ける</button></div></div>';
+  h+='<label class="f" for="nn">お名前(いります)</label><input type="text" id="nn" autocomplete="off" placeholder="例: 山田 はなこ">';
+  h+='<label class="f" for="nk">ふりがな</label><input type="text" id="nk" autocomplete="off" placeholder="例: やまだ はなこ">';
+  h+='<label class="f" for="nt">電話</label><input type="tel" id="nt" autocomplete="off" inputmode="tel" placeholder="例: 090-1234-5678" style="font:inherit;width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface);color:var(--fg)">';
+  h+='<span class="f">お誕生月</span><div class="chips" id="nbm">';
+  for(i=1;i<=12;i++)h+='<button class="chip" data-bm="'+i+'" style="min-width:3.6em">'+i+'月</button>';
+  h+='<button class="chip" data-bm="0">わからない</button></div>';
+  h+='<label class="f" for="nc">気をつけること(なくてもよい)</label><textarea id="nc" rows="2" placeholder="例: 香りの強いものが苦手"></textarea>';
+  h+='<p class="hint w" id="nh"></p>';
+  h+='<div class="savebar"><button class="btn" id="nsave">保存する</button></div>';
+  $('np-in').innerHTML=h;$('np').hidden=false;$('np').scrollTop=0;pushSheet('np');
+  function upd(){setPressed($('nbm'),function(b){return +b.getAttribute('data-bm')===bm;});
+    var nm=$('nn').value.replace(/\s/g,''),dup=false;for(var k=0;k<people.length;k++)if(nm&&people[k].name.replace(/\s/g,'')===nm)dup=true;
+    $('nh').className='hint';$('nh').textContent=dup?'同じお名前の方がもういます(別の方なら、このまま保存できます)':'';}
+  upd();
+  $('nbm').onclick=function(e){var b=closest(e.target,'[data-bm]');if(!b)return;bm=+b.getAttribute('data-bm');npDirty=true;upd();};
+  $('nn').oninput=function(){npDirty=true;upd();};
+  $('nk').oninput=$('nt').oninput=$('nc').oninput=function(){npDirty=true;};
+  $('nb').onclick=goBack;
+  $('nleave-y').onclick=function(){leaveOK=true;npDirty=false;goBack();};
+  $('nleave-n').onclick=function(){$('nleave').hidden=true;};
+  $('nsave').onclick=function(){
+    var nm=$('nn').value.trim();
+    if(!nm){$('nh').className='hint w';$('nh').textContent='お名前を入れてください';$('nn').focus();return;}
+    var mx=199;for(var k=0;k<people.length;k++)if(people[k].id>mx)mx=people[k].id;
+    var np={id:mx+1,name:nm,kana:$('nk').value.trim(),tel:$('nt').value.trim()||'—',bmonth:bm,care:$('nc').value.trim(),next:null,from:'hand',addedAt:Date.now(),v:[]};
+    people.push(np);npDirty=false;leaveOK=true;
+    filter='all';setPressed($('filters'),function(x){return x.getAttribute('data-f')==='all';});$('q').value='';flashId=np.id;
+    goBack();
+    toast(nm+' 様を足しました',function(){var ix=people.indexOf(np);if(ix>=0)people.splice(ix,1);refresh();});
+    setTimeout(function(){flashId=null;if(curTab==='list')renderList();},4000);
+  };
+}
+$('addp').onclick=openNew;
 
 // ---- タブ・そのほか ----
 function tab(which,keep){if(!keep&&stack[stack.length-1]==='gotab')stack.pop();curTab=which;if(which==='sales'&&!keep)mOff=0;if(which==='exp'&&!keep)eOff=0;
