@@ -15,6 +15,9 @@
   4. robots.txt・sitemap.xml を作る
      ※ 見本帳（samples/）は架空のお店なので、noindex のまま・サイトマップにも入れない
         ほかにも検索に出さないフォルダがあれば --keep-noindex=samples,〇〇 で指定
+     ※ 置きかえる仮のURLは、ふだんは「github.io/フォルダ名」と「フォルダ名.liftoff-358.workers.dev」の2つ。
+        それ以外の住所に置いていたとき（ココナラ用の置き場所など）は --from=https://〇〇.workers.dev で足す
+        （カンマで区切って何個でも。https:// から書く。書かなければ今までと同じ。2026/11/7）
   5. 消すフォルダ（前の版 v1/・別案 new/ など）を一覧にし、push のときに消すコマンドを出す
      （Claude の作業場所からは消せないので、担当者のターミナルで消す）
   6. 最後に「本公開の日にやること（ファイルの外）」の一覧を出す（Cloudflare の転送 など。2026/10/21 決定事項 08）
@@ -49,13 +52,19 @@ def main():
     root, domain = os.path.expanduser(a[0]).rstrip('/'), a[1].rstrip('/')
     apply = '--apply' in sys.argv
     keep = ['samples']
+    extra = []  # --from= で足す仮のURL（ココナラ用の置き場所など。2026/11/7）
     for x in sys.argv:
         if x.startswith('--keep-noindex='): keep = [k for k in x.split('=', 1)[1].split(',') if k]
+        if x.startswith('--from='): extra += [k.strip().rstrip('/') for k in x.split('=', 1)[1].split(',') if k.strip()]
     if not domain.startswith('https://'): print('⚠️ ドメインは https:// から書いてください'); sys.exit(1)
+    if any(not k.startswith('https://') for k in extra): print('⚠️ --from= の住所は https:// から書いてください'); sys.exit(1)
     repo = os.path.basename(root)
     olds = [f'https://suke358.github.io/{repo}', f'https://{repo}.liftoff-358.workers.dev']
+    # 足した住所は長い順に先に置きかえる（短い住所が長い住所の頭と同じとき、途中だけ置きかわらないように）
+    olds = sorted([k for k in extra if k not in olds and k != domain], key=len, reverse=True) + olds
     today = datetime.date.today().isoformat()
     print(f'{"【書きかえ】" if apply else "【確かめるだけ】"} {root} → {domain}\n')
+    if extra: print('  置きかえる仮のURL：' + '、'.join(olds) + '\n')
 
     # 5. 消すもの
     removed = [n for n in sorted(os.listdir(root)) if os.path.isdir(os.path.join(root, n)) and REMOVE_DIRS.match(n)]
