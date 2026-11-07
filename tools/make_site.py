@@ -38,6 +38,10 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
               見本：templates/site_sample_shop.json（架空のよもぎ蒸しサロン hiyori）→ samples/shop/
   それぞれ true と書くと決まった中身（メニューの写真など）で入る。{...} で中身を書ける。色・書体はお店の theme に合わせて出る
   "sample_note" … 見本のとき、ページのいちばん上に出す注（例 "※画面は架空のお店の見本です"）。本物のお店では書かない
+  "dm_url"  … インスタグラムの DM の入口（2026/11/7）。お店のインスタのページの URL（例 "https://www.instagram.com/〇〇/"）。書くと「インスタのDM」のボタンが
+              トップの入口・ご予約の欄・スマホの下の固定ボタンに出る（新しいタブ）。LINE がないお店は、メニューのカードにも「インスタのDMで相談」（電話より先）。
+              電話より先に並べる（施術中は電話に出られないお店のため）。スマホの下は「ネット予約」がないときだけ右の枠に DM が入る。書かなければ今までと同じ
+              "dm_text" … ご予約の欄の DM の説明（空なら「インスタグラムのメッセージで、お気軽にどうぞ。」）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
@@ -68,6 +72,9 @@ MARKS = {
     'dot':   '<circle cx="12" cy="12" r="6"/>',
 }
 
+IG_ICON = ('<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">'
+           '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>')
+
 def line_url(c, msg=None):
     oid = c.get('line_id')  # 例 "@224ybmlu"。あれば下書き入りで開く
     if msg and oid:
@@ -87,6 +94,7 @@ def build(c):
     base = c.get('url_base', '')
     has_line = bool(c.get('line_url'))
     has_rsv = bool(c.get('reserve_url'))
+    dm = c.get('dm_url') or ''  # インスタの DM の入口（2026/11/7）。空なら今までと同じ
     tel = c.get('tel', ''); tel_d = ''.join(ch for ch in tel if ch.isdigit())
     I = lambda: '<svg class="mk"><use href="#mk"/></svg>'
     P = parts_conf(c)  # 入れる部品（"parts"）。{} なら部品なし
@@ -95,6 +103,7 @@ def build(c):
     first_btns = []
     if has_rsv: first_btns.append(f'<a class="btn btn-main" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a>')
     if has_line: first_btns.append(f'<a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}LINEで<wbr>相談する</a>')
+    if dm: first_btns.append(f'<a class="btn btn-main btn-dm" {ext(dm)}>{IG_ICON}インスタの<wbr>DMで予約・相談</a>')
     if tel: first_btns.append(f'<a class="btn btn-ghost" href="tel:{tel_d}">電話する <span class="nw">{e(tel)}</span></a>')
     if not first_btns: first_btns.append('<a class="btn btn-main" href="#reserve">お問い合わせ</a>')
 
@@ -175,6 +184,8 @@ def build(c):
             ask = f'<a class="ask-line" {ext(line_url(c, msg))}>{LINE_ICON}<span class="nw">この{e(c.get("menu_word","メニュー"))}を<wbr>LINEで相談</span></a>'
         elif tel:
             ask = f'<a class="ask-line tel" href="tel:{tel_d}"><span class="nw">電話で相談する</span></a>'
+        if dm and not has_line:
+            ask = f'<a class="ask-line dm" {ext(dm)}>{IG_ICON}<span class="nw">インスタのDMで相談</span></a>' + ask
         cards.append(f'''
         <article class="card" id="m-{e(m["id"])}">
           {img}
@@ -229,6 +240,8 @@ def build(c):
     ways = []
     if has_line:
         ways.append(f'<div class="way"><h3>LINE</h3><p>{e(c.get("line_text","友だち追加して、メッセージでご相談ください。"))}</p><a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}友だち追加</a></div>')
+    if dm:
+        ways.append(f'<div class="way way-dm"><h3>インスタグラムのDM</h3><p>{e(c.get("dm_text","インスタグラムのメッセージで、お気軽にどうぞ。"))}</p><a class="btn btn-main" {ext(dm)}>{IG_ICON}DMを送る</a></div>')
     if tel:
         ways.append(f'<div class="way"><h3>お電話</h3><p>{e(c.get("tel_note","作業中は出られないことがあります。折り返しご連絡いたします。"))}</p><a class="tel" href="tel:{tel_d}">{e(tel)}</a></div>')
     if has_rsv:
@@ -298,6 +311,7 @@ def build(c):
     if tel: bar.append(f'<a href="tel:{tel_d}">電話する</a>')
     if has_line: bar.append(f'<a class="l" {ext(c["line_url"])}>LINEで相談</a>')
     if has_rsv: bar.append(f'<a class="r" {ext(c["reserve_url"])}>ネット予約</a>')
+    elif dm: bar.insert(0, f'<a class="r" {ext(dm)}>{IG_ICON}インスタのDM</a>')  # DM は電話より先（左）
     elif 'form' in P: bar.append('<a class="r" href="#form">フォーム</a>')
     else: bar.append('<a class="r" href="#menu">メニュー</a>')
 
@@ -335,6 +349,7 @@ def build(c):
     css = CSS
     # 上の部分の明るさ（2026/10/31）：設定の hero_style ＞ THEMES の hero_style ＞ dark。light のときだけ、明るい色の上書きを足す（dark は今までどおり）
     if (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light': css += '\n' + LIGHT_HERO_CSS
+    if dm: css += '\n' + DM_CSS
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -391,7 +406,7 @@ def build(c):
     <p class="copy">© {e(short)}</p>
   </div>
 </footer>
-{f'<nav class="spbar n{len(bar)}" aria-label="ご予約・ご相談">' + ''.join(bar) + '</nav>' if (tel or has_line or has_rsv) else ''}
+{f'<nav class="spbar n{len(bar)}" aria-label="ご予約・ご相談">' + ''.join(bar) + '</nav>' if (tel or has_line or has_rsv or dm) else ''}
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 {js}
@@ -634,6 +649,15 @@ p{margin:0 0 1.2em}
 
 # 上の部分（トップ）を明るくする上書き（hero_style: light。2026/10/31）。背景は pale・文字は ink・小見出しと印は primary_deep。
 # :root の --hero-style は check_site.py が「明るい上の部分」と見分けるための印。スマホのメニュー（開いたとき）は濃い色のまま
+DM_CSS = r'''/* インスタグラムの DM の入口（dm_url。2026/11/7） */
+.btn-dm svg,.way-dm .btn svg{width:1.2em;height:1.2em;margin-right:.5em;flex:none}
+.ask-line.dm{color:#fff;background:var(--primary);border-color:var(--primary)}
+.ask-line.dm:hover{background:var(--primary-deep);border-color:var(--primary-deep);color:#fff}
+.ask-line.dm svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
+.ask-line.dm + .ask-line.tel{margin-top:8px}
+@media (max-width:860px){.spbar a.r svg{width:1.1em;height:1.1em;margin-right:.35em;vertical-align:-.2em}}
+'''
+
 LIGHT_HERO_CSS = r'''/* 明るい上の部分（hero_style: light） */
 :root{--hero-style:light}
 .head .wrap{color:var(--ink)}
