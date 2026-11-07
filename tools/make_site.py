@@ -44,6 +44,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
               "dm_text" … ご予約の欄の DM の説明（空なら「インスタグラムのメッセージで、お気軽にどうぞ。」）
   "map_query" … 地図と「Googleマップで道順を見る」の行き先（店名＋住所など）。空ならどちらも出ない
   "show_map" / "show_route" … 地図（埋め込み）と「道順を見る」ボタンを別々に消す（2026/11/7）。false と書くと出ない。書かなければ両方出る（住所を出したくないお店は show_map:false など）
+  "menu_cols" … メニューのカードを2列にする（2026/11/7）。2 と書くと、パソコン幅でも2列（スマホは1列）。4つのとき4列になって写真が小さくなるお店用。書かなければ今までと同じ（数で決まる）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
@@ -173,6 +174,7 @@ def build(c):
 
     # ---------- メニュー・料金 ----------
     menus = c.get('menus', [])
+    m2 = str(c.get('menu_cols', '')) == '2'  # メニューを2列にする（2026/11/7）。書かなければ今までと同じ
     tabs = ''.join(f'<a href="#m-{e(m["id"])}">{e(m["name"])}</a>' for m in menus)
     if c.get('price_table'): tabs += f'<a href="#m-table">{e(c["price_table"].get("title","料金表"))}</a>'
     cards = []
@@ -220,7 +222,7 @@ def build(c):
       <div class="sec-head center"><i>{I()}menu</i><h2>{e(c.get("menu_title","メニュー・料金"))}</h2></div>
       {f'<p class="sec-lead center muted">{e(c["menu_lead"])}</p>' if c.get("menu_lead") else ''}
       <nav class="menu-tabs" aria-label="メニューの種類">{tabs}</nav>
-      <div class="menu-cards n{len(cards)}">{''.join(cards)}
+      <div class="menu-cards n{len(cards)}{' c2' if m2 else ''}">{''.join(cards)}
       </div>{table}
       <p class="price-note muted center">{e(c.get("menu_note","どれにすればいいか迷うときも、お気軽にご相談ください。"))}</p>
     </div>
@@ -353,6 +355,7 @@ def build(c):
     # 上の部分の明るさ（2026/10/31）：設定の hero_style ＞ THEMES の hero_style ＞ dark。light のときだけ、明るい色の上書きを足す（dark は今までどおり）
     if (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light': css += '\n' + LIGHT_HERO_CSS
     if dm: css += '\n' + DM_CSS
+    if m2: css += '\n' + MENU2_CSS
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -649,6 +652,11 @@ p{margin:0 0 1.2em}
 .totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .totop.show{opacity:.92;visibility:visible}
 @media (max-width:860px){.totop{bottom:76px;right:12px}}'''
+
+MENU2_CSS = r'''/* メニューを2列にする（menu_cols:2。2026/11/7） */
+.menu-cards.c2{grid-template-columns:1fr 1fr}
+@media (max-width:600px){.menu-cards.c2{grid-template-columns:1fr}}
+'''
 
 # 上の部分（トップ）を明るくする上書き（hero_style: light。2026/10/31）。背景は pale・文字は ink・小見出しと印は primary_deep。
 # :root の --hero-style は check_site.py が「明るい上の部分」と見分けるための印。スマホのメニュー（開いたとき）は濃い色のまま
