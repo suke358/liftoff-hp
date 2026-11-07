@@ -42,6 +42,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
               トップの入口・ご予約の欄・スマホの下の固定ボタンに出る（新しいタブ）。LINE がないお店は、メニューのカードにも「インスタのDMで相談」（電話より先）。
               電話より先に並べる（施術中は電話に出られないお店のため）。スマホの下は「ネット予約」がないときだけ右の枠に DM が入る。書かなければ今までと同じ
               "dm_text" … ご予約の欄の DM の説明（空なら「インスタグラムのメッセージで、お気軽にどうぞ。」）
+  "map_query" … 地図と「Googleマップで道順を見る」の行き先（店名＋住所など）。空ならどちらも出ない
+  "show_map" / "show_route" … 地図（埋め込み）と「道順を見る」ボタンを別々に消す（2026/11/7）。false と書くと出ない。書かなければ両方出る（住所を出したくないお店は show_map:false など）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
@@ -271,7 +273,8 @@ def build(c):
     if tel: info += f'<div><dt>電話</dt><dd><a href="tel:{tel_d}">{e(tel)}</a></dd></div>'
     mq = c.get('map_query')
     route = f'<a class="route" {ext("https://www.google.com/maps/dir/?api=1&destination=" + urllib.parse.quote(mq))}>{PIN}Googleマップで<wbr>道順を見る</a>' if mq and c.get('show_route', True) else ''
-    mapf = f'<div class="map"><iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>' if mq else ''
+    # 地図と道順のボタンは別々に出し入れできる（2026/11/7）：show_map:false で地図（埋め込み）だけ、show_route:false で「道順を見る」だけ消す。どちらも書かなければ両方出る
+    mapf = f'<div class="map"><iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>' if mq and c.get('show_map', True) else ''
     access_html = f'''
   <section id="access" class="sec access">
     <div class="wrap{' nomap' if not mapf else ''}">
