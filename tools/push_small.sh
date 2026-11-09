@@ -11,7 +11,7 @@
 # 止める条件（push せず、理由を出して終了コード 1。作業メモにも「push していない・理由」を書く）
 #   1. git のフォルダでない  2. 今のブランチが main でない  3. fetch のあと HEAD が origin/main の続き（fast-forward）でない
 #   4. commit していない直しがある（.DS_Store と未追跡 ?? は除く）  5. origin/main..HEAD の commit が 4つ以上（0 のときも止める）
-#   6. 変えたファイルに、削除・名前の変更／wrangler.jsonc .assetsignore _redirects _headers package.json package-lock.json／
+#   6. 変えたファイルに、削除・名前の変更／wrangler.jsonc .okiba .assetsignore _redirects _headers package.json package-lock.json／
 #      tools/ .github/ gas/ src/ yoyaku* の中／拡張子 .css .js .mjs .ts .py .sh .php .yml .yaml .jsonc .toml がある
 #      例外は tools/mihon/top_hash.txt（自社トップ index.html の指紋。make_shian2.py --top が書く）の1つだけ：同じ差分に index.html があり、
 #      中身が HEAD の index.html の sha256 と一致するときだけ通す（2026/10/31 決定。どれか欠けたら止まる）
@@ -21,6 +21,8 @@
 #
 # 通ったら：git push origin main（--force は絶対に付けない）→ 公開URL https://<name>.liftoff-358.workers.dev/ の index.html と
 #   変えた画像（images/・img/ の中）が HEAD と同じ中身になるまで最大 5 分待つ → 作業メモ（~/src/作業メモ.md）に書く
+#   住所の後ろ（liftoff-358.workers.dev）は、サイトのフォルダに .okiba（1行：例 omise-site.workers.dev）があればそれに変わる
+#   （ココナラのお店は別の Cloudflare アカウント omise-site に置く。2026/11/7 決定・11/9 作成）。.okiba がなければ今までどおり liftoff-358
 #   作業メモには「強み記録用」として、依頼を受けた時刻 → 公開を確認した時刻 → その差（分）も書く（更新が早いことの記録）
 #   公開URLの確認が時間切れなら「push は済み・確認できず」と書いて終了コード 1
 #
@@ -28,7 +30,7 @@
 #   PUSH_SMALL_MEMO      作業メモの書き込み先（ふだんは ~/src/作業メモ.md）
 #   PUSH_SMALL_BASE_URL  公開URLの確認先（ふだんは wrangler.jsonc の name から決まる）
 set -u
-DOMAIN='liftoff-358.workers.dev'
+DEFAULT_DOMAIN='liftoff-358.workers.dev'
 WAIT_SEC=300
 MAX_COMMITS=3
 MAX_HTML_LINES=30
@@ -53,6 +55,19 @@ done
 
 now_stamp() { date '+%Y/%m/%d %H:%M'; }
 SITE='（サイト名 不明）'
+
+# 公開先の住所の後ろを決める（preview_push.sh と同じ読み方）：サイトのフォルダの .okiba があればその1行、なければ DEFAULT_DOMAIN
+#   .okiba の書き方：住所だけを1行（例 omise-site.workers.dev）。# で始まる行と空行は飛ばす。https:// や最後の / は付けても消す
+#   中身が空・英数字と . - 以外の文字がある・. がない、のときは 1 を返す（道具は止まる。だまって liftoff-358 にはしない）
+read_okiba() {
+  if [ ! -f "$1/.okiba" ]; then echo "$DEFAULT_DOMAIN"; return 0; fi
+  d="$(grep -v '^[[:space:]]*#' "$1/.okiba" | grep -v '^[[:space:]]*$' | head -n 1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//; s#^https\{0,1\}://##; s#/*$##')"
+  case "$d" in
+    ''|*[!A-Za-z0-9.-]*) return 1 ;;
+    *.*) echo "$d"; return 0 ;;
+    *) return 1 ;;
+  esac
+}
 
 # 止める：理由を出し、作業メモに「push していない」を書き、終了コード 1
 stop() {
@@ -81,10 +96,12 @@ SITE="$(basename "$ROOT")"
 NAME="$(sed 's#//.*$##' wrangler.jsonc | tr -d '\n' | sed -n 's/.*"name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
 [ -n "$NAME" ] || stop "wrangler.jsonc に \"name\" が見つかりません"
 SITE="$NAME"
+DOMAIN="$(read_okiba "$ROOT")" || stop ".okiba の中身が住所になっていません: $ROOT/.okiba（例のように1行だけ：omise-site.workers.dev）"
 BASE_URL="${PUSH_SMALL_BASE_URL:-https://${NAME}.${DOMAIN}/}"
 case "$BASE_URL" in */) ;; *) BASE_URL="${BASE_URL}/" ;; esac
 
 echo "サイト: ${NAME}（${ROOT}）"
+if [ -f .okiba ]; then echo "置き場所: ${DOMAIN}（.okiba から）"; fi
 echo "何を変えたか: ${MSG}"
 echo "依頼を受けた時刻: ${RECEIVED}"
 
@@ -138,7 +155,7 @@ while IFS= read -r f; do
   [ -n "$f" ] || continue
   base="${f##*/}"
   case "$base" in
-    wrangler.jsonc|.assetsignore|_redirects|_headers|package.json|package-lock.json) BAD="$BAD
+    wrangler.jsonc|.okiba|.assetsignore|_redirects|_headers|package.json|package-lock.json) BAD="$BAD
   公開の設定ファイル：$f" ;;
   esac
   case "/$f" in

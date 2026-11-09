@@ -6,6 +6,8 @@
 #   確認用URL https://preview-<name>.liftoff-358.workers.dev/ を決める（Cloudflare の Workers Builds が preview ブランチから作る）
 #   例）~/src/liftoff-hp     → https://preview-liftoff-hp.liftoff-358.workers.dev/
 #       ~/src/colore-website → https://preview-colore-website.liftoff-358.workers.dev/
+#   住所の後ろ（liftoff-358.workers.dev）は、サイトのフォルダに .okiba（1行：例 omise-site.workers.dev）があればそれに変わる
+#   （ココナラのお店は別の Cloudflare アカウント omise-site に置く。2026/11/7 決定・11/9 作成）。.okiba がなければ今までどおり liftoff-358
 #
 # 使い方:  cd サイトのフォルダ && bash ~/src/liftoff-hp/tools/preview_push.sh [出ているか確かめる文字]
 #   例:    bash ~/src/liftoff-hp/tools/preview_push.sh                 → 出して、トップが 200 で HEAD の index.html と同じ中身になるのを待つ
@@ -14,12 +16,26 @@
 # 決まり：--force は、この道具の中で preview ブランチに出すときだけ使う（main には絶対に出さない。下の PREVIEW_BRANCH は変えない）
 set -u
 PREVIEW_BRANCH='preview'
-DOMAIN='liftoff-358.workers.dev'
+DEFAULT_DOMAIN='liftoff-358.workers.dev'
 WAIT_SEC=300
+
+# 公開先の住所の後ろを決める（push_small.sh と同じ読み方）：サイトのフォルダの .okiba があればその1行、なければ DEFAULT_DOMAIN
+#   .okiba の書き方：住所だけを1行（例 omise-site.workers.dev）。# で始まる行と空行は飛ばす。https:// や最後の / は付けても消す
+#   中身が空・英数字と . - 以外の文字がある・. がない、のときは 1 を返す（道具は止まる。だまって liftoff-358 にはしない）
+read_okiba() {
+  if [ ! -f "$1/.okiba" ]; then echo "$DEFAULT_DOMAIN"; return 0; fi
+  d="$(grep -v '^[[:space:]]*#' "$1/.okiba" | grep -v '^[[:space:]]*$' | head -n 1 | sed 's/^[[:space:]]*//; s/[[:space:]]*$//; s#^https\{0,1\}://##; s#/*$##')"
+  case "$d" in
+    ''|*[!A-Za-z0-9.-]*) return 1 ;;
+    *.*) echo "$d"; return 0 ;;
+    *) return 1 ;;
+  esac
+}
 
 # 今いるフォルダのリポジトリで動く（道具の置き場所ではなく）
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "❌ ここは git のフォルダではありません: $(pwd)。サイトのフォルダに cd してから動かしてください"; exit 1; }
 cd "$ROOT" || exit 1
+DOMAIN="$(read_okiba "$ROOT")" || { echo "❌ .okiba の中身が住所になっていません: $ROOT/.okiba（例のように1行だけ：omise-site.workers.dev）"; exit 1; }
 if [ "$PREVIEW_BRANCH" = "main" ] || [ "$PREVIEW_BRANCH" = "master" ]; then
   echo "❌ 出す先が $PREVIEW_BRANCH になっています。この道具は preview 以外に出しません"; exit 1
 fi
@@ -36,6 +52,7 @@ fi
 PREVIEW_URL="https://preview-${NAME}.${DOMAIN}/"
 
 echo "サイト: ${NAME}（${ROOT}）"
+if [ -f .okiba ]; then echo "置き場所: ${DOMAIN}（.okiba から）"; fi
 echo "出すコミット: $(git log --oneline -1)"
 if [ -n "$(git status --short | grep -v 'DS_Store' | grep -v '^??')" ]; then
   echo "⚠️ commit していない直しがあります（下）。出るのは commit した分だけです"
