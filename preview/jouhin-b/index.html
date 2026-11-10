@@ -1,0 +1,1994 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>【見比べ用・案B 濃い紺と余白】Lift-Off｜防府のお店のホームページ制作・WEB担当者代行</title>
+<meta name="description" content="山口県防府市で、お店・事業者のホームページを作り、毎月の更新まで引き受けます。料金はすべて税込。">
+<!-- 見比べ用（案B 濃い紺と余白・2026/11/10 夜）。中身は 2026/11/10 の本番トップと同じで、2つ目の <style> だけを足した。もとの注釈：本番のトップ（2026/10/10 に切りかえ式 shian2 を本番に入れかえた。前の版は v5/）。tools/mihon/make_shian2.py --top が shian/ から作る。直すときは shian/ か、その道具を直して作り直す。公開準備ができるまで検索に出さない（noindex。本公開時に外す） -->
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Lift-Off｜防府のお店のホームページ制作・WEB担当者代行">
+<meta property="og:description" content="ホームページを作って、毎月の更新まで引き受けます。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://liftoff-hp.liftoff-358.workers.dev/?v=6">
+<link rel="canonical" href="https://liftoff-hp.liftoff-358.workers.dev/?v=6">
+<script>
+// アドレスバーに ?v=6 を足す（LINE に転送したとき新しいカードが出るように。カードを変えたら tools/mihon/make_shian2.py の CARD_V を次の数字に）
+(function(){ try {
+  var q = location.search || '';
+  if (/[?&]v=/.test(q)) return;
+  history.replaceState(history.state, '', location.pathname + (q ? q + '&' : '?') + 'v=6' + (location.hash || ''));
+} catch (e) {} })();
+</script>
+<meta property="og:image" content="https://liftoff-hp.liftoff-358.workers.dev/img/og-20261010.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#17283A">
+<link rel="icon" href="../../img/favicon.png" type="image/png">
+<link rel="icon" href="../../img/emblem.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Lift-Off",
+  "description": "防府市のお店・事業者向けのホームページ制作と毎月の更新代行",
+  "telephone": "090-1189-6726",
+  "email": "liftoff.358@gmail.com",
+  "address": {"@type": "PostalAddress", "addressRegion": "山口県", "addressLocality": "防府市", "addressCountry": "JP"},
+  "areaServed": "山口県防府市",
+  "openingHours": "Mo-Fr 10:00-16:00"
+}
+</script>
+<script>
+// 動きを付けられる環境（動きを減らす設定でなく、requestAnimationFrame がある）だけ、トップの文を最初は見えなくしておく（下の JS がふわっと出す）
+if (window.requestAnimationFrame && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) document.documentElement.className += ' anim';
+</script>
+<style>
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れた。足した文は手で入れた） */
+body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
+
+/* =========================================================
+   Lift-Off ホームページ制作　試しの版（2026/10/9。前の版は v4/）
+   ねらい：スマホで縦に短く。まとまりごとに「開く・切りかえる」で、読みたい所だけ読める
+   紺（空の高いところ）× 黄色（滑走路の誘導灯）
+   古いスマホ対策：aspect-ratio / inset / svh / flex の gap は使わない。min()・clamp() の前に予備の指定（マニュアル 16）
+   動きは JavaScript（requestAnimationFrame）で動かす。動きを減らす設定の人には止めて見せる
+   ========================================================= */
+:root{
+  --ink:#17283A;
+  --ink-2:#22384E;
+  --sea:#2F6F8F;
+  --sky:#EAF2F6;
+  --paper:#FFFFFF;
+  --signal:#F2C230;
+  --line:#D2DEE6;
+  --muted:#4A5F72;
+  --chat:#06C755;
+  --head:"Hiragino Sans","BIZ UDPGothic","Yu Gothic",sans-serif;
+  --body:"BIZ UDPGothic","Hiragino Sans","Yu Gothic",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{font-family:var(--body);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+a{color:var(--sea)}
+:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-9999px;top:0;background:var(--signal);color:var(--ink);padding:8px 16px;z-index:50;font-weight:700}
+.skip:focus{left:12px;top:12px}
+.wrap{width:1040px;max-width:calc(100% - 40px);margin-left:auto;margin-right:auto}
+h1,h2,h3{font-family:var(--head);line-height:1.4;font-weight:900;letter-spacing:.02em}
+.nw{white-space:nowrap}
+.sec{padding:64px 0}
+.sec.alt{background:var(--sky)}
+.sec-head{margin-bottom:26px}
+.sec-head h2{font-size:28px;font-size:clamp(24px,3.4vw,32px);line-height:1.3;padding-top:18px;position:relative}
+.sec-head h2::before{content:"";position:absolute;left:0;top:0;width:56px;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 18px,transparent 18px 26px)}
+.sec-head p{color:var(--muted);max-width:40em;margin-top:10px;font-size:16px}
+@media (max-width:760px){.sec{padding:48px 0}.sec-head{margin-bottom:20px}.sec-head p{font-size:16px}}
+/* ---------- 上の細い進み具合の線と小さな飛行機 ---------- */
+.prog{position:fixed;left:0;right:0;top:66px;height:4px;z-index:21;pointer-events:none}
+.prog-bar{position:absolute;left:0;top:0;height:4px;width:100%;background:var(--signal);border-radius:0 2px 2px 0;-webkit-transform-origin:0 0;transform-origin:0 0;-webkit-transform:scaleX(0);transform:scaleX(0)}
+/* ---------- 上へ戻る：飛行機のマーク（押すと上へ飛んでいく） ---------- */
+.totop{position:fixed;right:14px;bottom:24px;width:46px;height:46px;border-radius:50%;background:#fff;border:2px solid var(--line);box-shadow:0 6px 16px rgba(23,40,58,.18);z-index:25;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;overflow:visible}
+.totop.on{display:flex}
+.totop svg{width:30px;height:15px;-webkit-transform:rotate(-90deg);transform:rotate(-90deg)}
+@media (max-width:760px){.totop{bottom:84px;right:12px}}
+
+/* ---------- ボタン ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:700;text-decoration:none;border-radius:999px;padding:13px 26px;min-height:50px;border:2px solid var(--ink);color:var(--ink);background:var(--paper);font-size:16px;cursor:pointer;line-height:1.4;text-align:center;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{border-color:var(--sea);color:var(--sea)}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--sea);border-color:var(--sea);color:#fff}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:var(--ink)}
+.btn.signal:hover{background:#ffd54a;border-color:#ffd54a;color:var(--ink)}
+.btn.ghost{background:transparent;border-color:rgba(255,255,255,.6);color:#fff}
+.btn.ghost:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,.08)}
+.btn svg{width:18px;height:18px;flex:none;margin-right:8px}
+
+/* ---------- ヘッダー ---------- */
+.top{position:-webkit-sticky;position:sticky;top:0;z-index:20;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
+.top .wrap > * + *{margin-left:16px}
+.logo{display:flex;align-items:center;text-decoration:none;color:var(--ink);font-family:var(--head);font-weight:900;font-size:22px;letter-spacing:.03em;flex:none}
+.logo img{height:42px;width:auto}
+.logo small{font-family:var(--body);font-weight:400;font-size:12px;color:var(--muted);letter-spacing:0;padding-left:12px;margin-left:10px;border-left:1px solid var(--line);line-height:1.4}
+@media (max-width:420px){.logo img{height:36px}.logo small{display:none}}
+.nav{display:flex;font-size:15px}
+.nav a{text-decoration:none;color:var(--ink);padding:6px 0;margin:0 10px;border-bottom:2px solid transparent;white-space:nowrap}
+.nav a:hover{color:var(--sea)}
+.nav a.now{border-bottom-color:var(--signal)}
+.nav a.nav-m{display:none}
+.top .btn{padding:9px 20px;min-height:0;font-size:14px}
+.menu-btn{display:none;align-items:center;font:inherit;font-family:var(--head);font-weight:700;font-size:14px;background:none;border:2px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink);cursor:pointer;min-height:44px}
+.menu-btn i{display:block;width:16px;height:2px;margin-right:7px;background:var(--ink);box-shadow:0 -5px 0 var(--ink),0 5px 0 var(--ink)}
+.menu-btn[aria-expanded="true"] i{background:transparent;box-shadow:none;position:relative}
+.menu-btn[aria-expanded="true"] i::before,.menu-btn[aria-expanded="true"] i::after{content:"";position:absolute;left:0;top:0;width:16px;height:2px;background:var(--ink);-webkit-transform:rotate(45deg);transform:rotate(45deg)}
+.menu-btn[aria-expanded="true"] i::after{-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+.top-right{display:flex;align-items:center}
+@media (max-width:1060px){
+  .nav{display:none;position:absolute;left:0;right:0;top:66px;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(23,40,58,.12);flex-direction:column;padding:6px 20px 14px;max-height:calc(100vh - 66px);overflow-y:auto}
+  .nav.open{display:flex}
+  .nav a{padding:13px 4px;margin:0;border-bottom:1px solid var(--line);font-size:16px}
+  .nav a.sub{padding-left:22px;font-size:15px;color:var(--muted)}
+  .nav a:last-child{border-bottom:none}
+  .nav a.nav-m{display:block}
+  .nav a.now{border-bottom-color:var(--line);color:var(--sea)}
+  .menu-btn{display:inline-flex;margin-left:8px}
+  .top .wrap > .nav{margin-left:0}
+}
+@media (max-width:760px){.top .top-right .btn{display:none}}
+
+/* ---------- トップ：短く。紙飛行機がすっと飛び込んで、見出しが出る ---------- */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#F5F9FB 0%,var(--sky) 100%);padding:64px 0 56px}
+.hero .wrap{position:relative;z-index:1}
+.hero-copy{max-width:600px}
+.hero h1{font-size:40px;font-size:clamp(30px,4vw,46px);line-height:1.3;margin-bottom:20px}
+.hero h1 span{display:block;white-space:nowrap}
+.hero .sub{max-width:30em;font-size:17px;margin-bottom:22px}
+.from{display:flex;flex-wrap:wrap;align-items:baseline;margin:0 0 22px;font-family:var(--head);font-weight:700;color:var(--ink)}
+.from .from-k{font-size:14px;background:var(--ink);color:#fff;border-radius:6px;padding:2px 10px;margin-right:10px;-webkit-align-self:center;align-self:center}
+.from b{font-family:var(--head);font-size:36px;line-height:1;letter-spacing:-.01em}
+.from .from-u{font-size:17px;margin-left:4px}
+.from .from-u small{font-size:13px;color:var(--muted);font-weight:500}
+.from a{font-size:14px;margin-left:16px;color:var(--sea)}
+.actions{display:flex;flex-wrap:wrap;margin:-6px}
+.actions .btn{margin:6px}
+.facts{margin-top:18px;font-size:13px;color:var(--muted)}
+.facts i{font-style:normal;margin:0 .5em;color:#b9c9d5}
+/* 紙飛行機（JS で動かす。JS がないときは出さない） */
+@media (max-width:760px){
+  .hero{padding:40px 0 40px}
+  .hero h1{font-size:30px}
+  .hero .sub{font-size:16px}
+  .actions .btn{flex:1 1 100%}
+}
+@media (max-width:520px){.from{display:block}.from .from-k{display:inline-block;vertical-align:.4em}.from .from-u small{display:block;margin-top:6px}.from a{display:inline-block;margin-left:0;margin-top:6px}}
+@media (max-width:420px){.from b{font-size:32px}}
+@media (max-width:360px){.hero h1{font-size:27px}.from b{font-size:30px}}
+
+/* ---------- こんなこと、ありませんか（悩みが1つずつ出て、最後に LINE でひと言） ---------- */
+.worry h2{font-size:26px;font-size:clamp(22px,3.2vw,30px);margin-bottom:20px}
+.voices{list-style:none;max-width:720px}
+.voices li{position:relative;background:var(--sky);border-radius:18px 18px 18px 6px;padding:14px 18px;font-size:16px;line-height:1.7;max-width:88%}
+.voices li + li{margin-top:12px}
+.voices li::after{content:"";position:absolute;left:0;bottom:-9px;border-left:12px solid var(--sky);border-bottom:9px solid transparent}
+.voices li:nth-child(2){margin-left:auto;border-radius:18px 18px 6px 18px}
+.voices li:nth-child(2)::after{left:auto;right:0;border-left:none;border-right:12px solid var(--sky)}
+.answer{margin:22px 0 0;max-width:720px;display:flex;align-items:flex-start;background:var(--ink);color:#fff;border-radius:18px;padding:18px 20px}
+.answer .mark{flex:none;width:46px;height:46px;border-radius:50%;background:var(--chat);display:flex;align-items:center;justify-content:center;margin-right:16px}
+.answer .mark svg{width:26px;height:26px}
+.answer p{font-size:16px;line-height:1.8}
+.answer b{font-family:var(--head);font-size:18px;display:block;color:var(--signal);margin-bottom:2px}
+
+/* ---------- できること：4つを1行ずつ ---------- */
+.can{list-style:none;border-top:1px solid var(--line)}
+.can li{display:grid;grid-template-columns:44px 11em minmax(0,1fr);column-gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.can .ic{width:44px;height:44px;border-radius:12px;background:var(--paper);display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+.can .ic svg{width:28px;height:28px}
+.can h3{font-size:17px}
+.can h3 .tag{display:inline-block;font-family:var(--head);font-weight:700;font-size:12px;background:var(--signal);color:var(--ink);border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:2px}
+.can p{font-size:16px;color:var(--ink-2);line-height:1.7}
+.can-foot{margin-top:14px;font-size:15px;color:var(--muted)}
+/* できることの中の小さなボタン（デモを試す）。2026/10/21 */
+.can .btn.demo{display:inline-flex;font-size:14px;padding:7px 14px;min-height:0;margin:8px 0 0;border:1.5px solid var(--ink);color:var(--ink);background:#fff;line-height:1.3}
+.can .btn.demo:hover{border-color:var(--sea);color:var(--sea)}
+@media (max-width:760px){
+  .can li{grid-template-columns:40px minmax(0,1fr);row-gap:2px;padding:12px 0;align-items:start}
+  .can .ic{width:40px;height:40px}
+  .can .ic svg{width:26px;height:26px}
+  .can h3{font-size:17px;margin-top:6px}
+  .can p{grid-column:2;font-size:15px}
+}
+
+/* ---------- 更新は、こんなふうに（LINE の吹き出しが1つずつ届く） ---------- */
+.up-chat{background:#8cabd8;background:linear-gradient(180deg,#9bb7de,#87a6d2);border-radius:24px;padding:20px 18px 22px;max-width:460px}
+.up-day{font-family:var(--head);font-weight:700;color:#fff;font-size:13px;text-align:center;margin-bottom:12px}
+.up-day span{font-weight:500;opacity:.85}
+.bubble2{position:relative;max-width:86%;padding:10px 14px;border-radius:16px;font-size:16px;line-height:1.6;background:#fff;color:var(--ink)}
+.bubble2 + .bubble2,.photo-msg + .bubble2{margin-top:10px}
+.bubble2 small{display:block;font-size:11px;color:var(--muted);margin-bottom:2px}
+.bubble2.shop{border-bottom-left-radius:4px}
+.bubble2.us{margin-left:auto;background:var(--chat);color:#fff;border-bottom-right-radius:4px}
+.bubble2.us small{color:rgba(255,255,255,.85)}
+.photo-msg{width:110px;height:78px;border-radius:12px;margin-top:8px;background:linear-gradient(135deg,#efe3d6,#d8c3ad);display:flex;align-items:flex-end;padding:8px 10px;font-size:11px;color:#7a6650}
+/* 最後の吹き出しの中：直したあとの画面（架空のお店） */
+.mini{margin-top:8px;border-radius:12px;overflow:hidden;background:#fbf7f2;color:#3a3330;font-size:11px;line-height:1.5}
+.m-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#24342b;color:#fff}
+.m-logo{font-family:"Cormorant Garamond",serif;font-size:14px;letter-spacing:.06em}
+.m-btn{background:#fe97b2;border-radius:999px;padding:1px 8px;font-size:10px}
+.m-notice{margin:10px 10px 0;border-radius:8px;padding:7px 10px;background:#fff;border-left:4px solid var(--signal);font-size:11px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.m-notice b{display:block;font-size:10px;color:var(--sea)}
+.m-menu{list-style:none;margin:8px 10px 10px}
+.m-menu li{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:8px;padding:7px 10px;margin-bottom:6px;font-size:11px}
+.m-menu li.new{box-shadow:0 0 0 2px var(--signal)}
+.m-menu em{font-style:normal;font-size:10px;font-weight:700;background:var(--signal);border-radius:4px;padding:0 5px}
+.up-note{font-size:14px;color:var(--muted);margin-top:10px}
+
+/* ---------- 料金：3プランをタブで切りかえ ---------- */
+.ptabs{position:relative;display:flex;border-bottom:2px solid var(--line);margin-bottom:22px}
+.ptabs button{position:relative;flex:1 1 0;font:inherit;font-family:var(--head);font-weight:700;font-size:15px;color:var(--muted);background:none;border:none;padding:12px 6px 14px;cursor:pointer;min-height:48px;line-height:1.35;border-bottom:3px solid transparent}
+.ptabs button[aria-selected="true"]{color:var(--ink)}
+.ptabs.nojs button[aria-selected="true"]{border-bottom-color:var(--signal)}
+.ptabs button small{display:block;font-family:var(--body);font-weight:400;font-size:12px;color:var(--muted)}
+/* 診断で「合いそう」と出たプランの印 */
+.ptabs button .fit{display:none;position:absolute;left:50%;top:-10px;-webkit-transform:translateX(-50%);transform:translateX(-50%);font-family:var(--head);font-size:11px;font-weight:700;background:var(--signal);color:var(--ink);border-radius:999px;padding:1px 9px;white-space:nowrap;line-height:1.5}
+.ptabs button.fit-on .fit{display:block}
+/* 下線＝黄色の飛行機雲（左がうすく、右が濃い）。選ぶとすっと移動 */
+.ptabs .uline{position:absolute;left:0;bottom:-2px;height:4px;width:0;border-radius:2px;background:#F2C230;background:linear-gradient(90deg,rgba(242,194,48,0) 0%,rgba(242,194,48,.75) 45%,#F2C230 100%)}
+/* ---------- 料金の前の「どのプランが合う？」3問の診断 ---------- */
+.quiz{background:var(--paper);border:2px solid var(--ink);border-radius:18px;padding:18px 20px 16px;margin-bottom:26px;position:relative}
+.quiz h3{font-size:19px;margin-bottom:4px}
+.quiz > p{font-size:15px;color:var(--muted);line-height:1.7}
+.quiz-sky{display:block;width:100%;height:74px;margin:8px 0 4px;border-radius:12px;background:linear-gradient(180deg,#F5F9FB,var(--sky))}
+.quiz-sky .ground{stroke:#17283A;stroke-width:3;stroke-linecap:round}
+.quiz-sky .lights{stroke:#F2C230;stroke-width:3;stroke-dasharray:6 8;stroke-linecap:round}
+.quiz-sky .q-trail{fill:none;stroke:#F2C230;stroke-width:2.5;stroke-dasharray:5 7;stroke-linecap:round;opacity:.8}
+.quiz-sky .q-label{font-family:var(--head);font-weight:700;font-size:12px;fill:#17283A}
+.quiz-q{list-style:none;counter-reset:q}
+.quiz-q li{counter-increment:q;padding:10px 0;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center}
+.quiz-q li > span{font-family:var(--head);font-weight:700;font-size:16px;margin:4px 16px 4px 0;flex:1 1 15em}
+.quiz-q li > span::before{content:counter(q);display:inline-block;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-size:13px;text-align:center;line-height:24px;margin-right:8px}
+.quiz .chips{margin:0 -4px}
+.quiz .chip{font-size:16px}
+.quiz .chip span{border-color:var(--line);color:var(--ink);background:var(--paper);min-height:44px;padding:9px 16px}
+.quiz .chip input:checked + span{background:var(--signal);border-color:var(--signal)}
+.quiz .chip input:focus-visible + span{outline:3px solid var(--sea);outline-offset:2px}
+.quiz-out{margin-top:8px;font-size:16px;line-height:1.7;min-height:1.7em}
+.quiz-out b{font-family:var(--head);color:var(--ink);background:var(--signal);border-radius:6px;padding:1px 8px;margin-right:6px}
+@media (max-width:760px){.quiz{padding:16px 16px 14px}.quiz-q li > span{flex-basis:100%;margin-right:0}}
+.pview{overflow:hidden;position:relative}
+.ptrack{display:flex;width:200%;align-items:flex-start}
+.ppanel{width:50%;flex:none;padding:0 2px}
+.ppanel[aria-hidden="true"]{visibility:hidden}
+.pass{border:2px solid var(--ink);border-radius:18px;background:var(--paper);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);overflow:hidden}
+.pass .main{padding:22px 24px}
+.pass .who{color:var(--muted);font-size:15px;line-height:1.6}
+.pass h3{font-size:23px;margin:4px 0 12px}
+.pass .tag{display:inline-block;background:var(--signal);font-family:var(--body);font-weight:700;font-size:12px;padding:2px 10px;border-radius:6px;margin-left:8px;vertical-align:middle;color:var(--ink)}
+.pass dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:16px;line-height:1.7}
+.pass dt{color:var(--muted);white-space:nowrap}
+.pass .stub{position:relative;background:var(--sky);padding:22px 24px;border-left:2px dashed var(--ink);display:flex;flex-direction:column;justify-content:center}
+.pass.rec .stub{background:var(--ink);color:#fff}
+.price-k{font-size:13px;color:var(--muted);display:block}
+.pass.rec .price-k,.pass.rec .price.init{color:#c9d6e0}
+.price{font-family:var(--head);font-weight:400;font-size:36px;line-height:1.15;display:block;letter-spacing:.01em}
+.price small{font-family:var(--head);font-size:15px;font-weight:700;margin-left:2px}
+.price.init{font-family:var(--head);font-size:16px;font-weight:700;margin-top:8px;color:var(--muted)}
+@media (max-width:760px){
+  .ptabs button{font-size:14px;padding:10px 2px 12px}
+  .ptabs button small{display:none}
+  .pass{grid-template-columns:1fr}
+  .pass .main{padding:18px 18px 14px}
+  .pass h3{font-size:21px}
+  .pass .stub{border-left:none;border-top:2px dashed var(--ink);padding:14px 18px 16px;flex-direction:row;flex-wrap:wrap;align-items:baseline}
+  .pass .stub .price-k{width:100%}
+  .pass .stub .price{font-size:30px;margin-right:12px}
+  .pass .stub .price.init{margin-top:0;font-size:15px}
+}
+@media (max-width:360px){.pass .stub .price{font-size:26px}}
+.how{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 18px;list-style:none;max-width:640px}
+.how li{border-left:4px solid var(--signal);padding-left:12px;line-height:1.5;font-size:15px}
+.how li span{display:block;font-size:14px;color:var(--muted)}
+.how li b{font-family:var(--head);font-size:17px}
+@media (max-width:760px){.how{grid-template-columns:1fr;gap:10px}}
+.price-cta{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;background:var(--ink);color:#fff;border-radius:18px;padding:20px 24px}
+.price-cta h3{font-size:18px;line-height:1.45}
+.price-cta p{color:#c9d6e0;font-size:15px}
+.price-cta .actions{margin:6px -6px -6px}
+@media (max-width:760px){.price-cta{display:block;padding:18px 18px 22px}.price-cta .actions{margin-top:12px}.price-cta .actions .btn{flex:1 1 100%}}
+
+/* ---------- 開く所（共通）：なめらかに開閉、「＋」が「−」に回る ---------- */
+.acc-h{font-family:var(--head);font-weight:700;font-size:15px;color:var(--sea);margin:28px 0 4px}
+.acc{border-bottom:1px solid #c4d4de}
+.acc-list{border-top:1px solid #c4d4de}
+.acc summary{cursor:pointer;font-family:var(--head);font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:flex-start;align-items:center;padding:15px 0;line-height:1.55}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary:hover{color:var(--sea)}
+.pm{flex:none;position:relative;width:28px;height:28px;margin-left:auto;padding-left:0;border-radius:50%;background:#fff;border:1.5px solid #b9cbd7}
+.pm b{position:absolute;left:7px;top:12px;width:11px;height:2px;background:var(--sea);border-radius:1px}
+.pm b + b{-webkit-transform:rotate(90deg);transform:rotate(90deg)}
+.acc[open] .pm b + b{-webkit-transform:rotate(180deg);transform:rotate(180deg)}
+.acc-body{overflow:hidden}
+.acc-in{padding:0 0 20px;font-size:16px}
+.acc-in > p + p,.acc-in > p + ul,.acc-in > ul + p{margin-top:10px}
+.acc-in ul.ck{list-style:none}
+.acc-in ul.ck li{padding-left:1.4em;position:relative;line-height:1.75}
+.acc-in ul.ck li + li{margin-top:4px}
+.acc-in ul.ck li::before{content:"";position:absolute;left:2px;top:.6em;width:.7em;height:.38em;border-left:2px solid var(--sea);border-bottom:2px solid var(--sea);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+.note{font-size:15px;color:var(--muted);line-height:1.75}
+.acc-in table{width:100%;border-collapse:collapse;font-size:16px}
+.acc-in th,.acc-in td{padding:8px 8px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
+.acc-in th:first-child,.acc-in td:first-child{text-align:left;white-space:normal}
+.acc-in thead th{font-size:13px;color:var(--muted);font-weight:400;border-top:none;line-height:1.5;vertical-align:bottom}
+.acc-in td b{font-family:var(--head)}
+.acc-in dl.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;font-size:16px;line-height:1.7}
+.acc-in dl.kv dt{color:var(--muted);white-space:nowrap}
+.acc-in dl.kv dd b{font-family:var(--head)}
+.opt-note{margin:12px 0 0;padding-left:1.2em;font-size:14px;line-height:1.7;color:var(--muted)}
+.keep{background:#FFF8E1;border:1px solid #F0DC9A;border-radius:14px;padding:14px 18px}
+.keep .note{color:#4d4a3a}
+.keep .note + .note{margin-top:8px}
+@media (max-width:760px){.acc summary{font-size:17px;padding:14px 0}.acc-in{font-size:16px}.acc-in table{font-size:15px}}
+@media (max-width:600px){.opt table{font-size:14px;table-layout:fixed}.opt th,.opt td{padding:8px 4px}.opt th:first-child{width:40%}.opt th:nth-child(2),.opt th:nth-child(3){width:30%}.opt th{white-space:normal}}
+/* お支払いの合計（何か月使うかで計算） */
+.sim[hidden]{display:none}
+.sim-q{display:flex;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.sim-q label{font-family:var(--head);font-weight:700;font-size:15px;margin-right:12px}
+.sim-q output{font-family:var(--head);font-weight:900;font-size:24px;color:var(--ink);line-height:1.2}
+.sim-q output small{font-size:14px;margin-left:2px}
+.sim input[type=range]{width:100%;height:36px;margin:2px 0 4px;accent-color:#17283A;cursor:pointer}
+.sim-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:10px}
+.sim-quick{display:flex;flex-wrap:wrap;margin:-4px -4px 10px}
+.sim-quick button{margin:4px;font:inherit;font-size:14px;border:1px solid var(--line);background:var(--sky);color:var(--ink);border-radius:999px;padding:6px 14px;cursor:pointer;min-height:36px}
+.sim-quick button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-rows{list-style:none}
+.sim-rows li{padding:10px 0;border-top:1px solid var(--line)}
+.sim-rows .row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.sim-rows .row b{font-family:var(--head);font-size:18px;white-space:nowrap}
+.sim-rows .bar{height:8px;border-radius:4px;background:var(--sky);margin-top:6px;overflow:hidden}
+.sim-rows .bar i{display:block;height:100%;width:0;background:#9fb6c6;border-radius:4px;-webkit-transition:width .3s;transition:width .3s}
+.sim-rows li.low .bar i{background:var(--signal)}
+.sim-rows li.low .row span::after{content:"いちばん少ない";font-size:11px;font-family:var(--head);font-weight:700;background:var(--signal);color:var(--ink);border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:2px;white-space:nowrap}
+.sim-rows .fee{display:block;font-size:12px;color:#7a5b00;margin-top:2px}
+.sim-note{font-size:13px;color:var(--muted);line-height:1.7;margin-top:8px}
+@media (max-width:340px){.sim-rows .row{display:block}.sim-rows .row b{display:block}}
+
+/* ---------- 作成の流れ：6つを1行ずつ。見えたら線でつながりながら順に出る ---------- */
+.steps-wrap{position:relative;max-width:760px}
+.steps{list-style:none;counter-reset:s;padding-left:0}
+.steps-line{position:absolute;left:21px;top:24px;bottom:24px;width:4px;background:repeating-linear-gradient(180deg,var(--signal) 0 10px,transparent 10px 18px);border-radius:2px;-webkit-transform-origin:top;transform-origin:top}
+.steps li{counter-increment:s;position:relative;padding-left:62px}
+.steps li .acc{border-bottom:none}
+.steps li::before{content:counter(s);position:absolute;left:0;top:10px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-size:15px;box-shadow:0 0 0 5px var(--sky);z-index:1}
+.steps li:last-child::before{background:var(--signal);color:var(--ink)}
+.steps li .acc summary{font-size:17px;padding:14px 0}
+.steps li .acc summary .tag{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);margin-left:10px;margin-right:10px}
+.steps li .acc-in{padding:0 0 14px;font-size:16px}
+.steps li .acc-in p{color:var(--ink-2)}
+/* 滑走路を走る飛行機（JS で動かす。見えたら手順1→6を走って、6で離陸） */
+.steps-jet{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;display:none;z-index:2}
+.steps-jet.on{display:block}
+.steps-jet .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-dasharray:6 9;stroke-linecap:round;opacity:.8}
+@media (max-width:760px){.steps li{padding-left:56px}.steps li::before{width:40px;height:40px;font-size:13px;top:9px}.steps-line{left:19px}.steps li .acc summary{font-size:16px}.steps li .acc summary .tag{display:block;margin:0;font-size:12px}}
+
+/* ---------- デザイン見本：カードを指で横にめくる（お店に合わせて作れます と1つに） ---------- */
+.v-group{font-family:var(--head);font-weight:700;font-size:15px;color:var(--ink);margin:0 0 8px}
+.v-group small{font-weight:500;color:var(--muted);margin-left:6px;font-size:14px}
+.cards{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px 6px;padding:4px 20px 14px;-webkit-scroll-snap-type:x mandatory;scroll-snap-type:x mandatory;scroll-padding:0 20px}
+.cards::-webkit-scrollbar{display:none}
+.cards ul{list-style:none;display:flex;width:-webkit-max-content;width:max-content}
+.cards li{width:300px;flex:none;margin-right:14px;scroll-snap-align:start}
+.cards li:last-child{margin-right:20px}
+.card{display:block;text-decoration:none;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:5px 5px 0 var(--signal);height:100%}
+.card .shot{display:block;background:var(--sky);border-bottom:2px solid var(--ink)}
+.card img{width:100%;height:auto}
+.card .cap{padding:10px 14px 12px}
+.card .kind{display:inline-block;font-size:11px;font-family:var(--head);font-weight:700;color:var(--ink);background:var(--sky);border-radius:999px;padding:1px 8px;margin-bottom:4px}
+.card .sub{display:block;font-size:13px;color:var(--sea);font-family:var(--head);font-weight:700}
+.card b{display:block;font-family:var(--head);font-size:18px;line-height:1.4}
+.card .open{display:inline-block;margin-top:4px;font-size:14px;color:var(--sea);text-decoration:underline}
+.cards-hint{font-size:14px;color:var(--muted);margin-bottom:18px}
+.cards-hint i{font-style:normal;color:var(--sea);margin-right:4px}
+.v-note{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.7}
+.work-foot{margin-top:18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.work-foot p{color:var(--muted);max-width:40em;font-size:15px;margin:6px 24px 6px 0}
+@media (max-width:760px){
+  .cards li{width:76vw;width:min(76vw,300px)}
+  .v-group small{display:block;margin:0}
+  .work-foot .btn{width:100%}
+}
+
+/* ---------- 安心してお任せいただくために（項目を押すと開く） ---------- */
+.trust .acc-in{max-width:760px}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.k-own,.k-keep{border-radius:16px;padding:16px 18px}
+.k-own{background:var(--paper);border:2px solid var(--ink)}
+.k-keep{background:var(--ink);color:#fff}
+.keys h4{font-family:var(--head);font-size:16px;margin-bottom:4px}
+.k-lead{font-size:14px;color:var(--muted);margin-bottom:8px;line-height:1.7}
+.k-keep .k-lead{color:#c3d2dd}
+.keys ul{list-style:none}
+.keys li{padding:8px 0;border-top:1px solid var(--line);line-height:1.6;font-size:15px}
+.k-keep li{border-top-color:rgba(255,255,255,.15)}
+.keys li b{font-family:var(--head);font-size:16px}
+.keys li span{display:block;font-size:14px;color:var(--muted)}
+.k-keep li span{color:#c3d2dd}
+.k-note{margin-top:12px;font-size:15px;color:var(--muted)}
+@media (max-width:640px){.keys{grid-template-columns:1fr}}
+/* Lift-Off という名前について：行の切れ目は HTML の <br> で決める。文は変えない */
+.p-name p{color:var(--ink-2);font-size:17px;line-height:2.1}
+@media (min-width:900px){.p-name .sp-br{display:none}}
+@media (max-width:899px){.p-name p{font-size:16px;line-height:2}}
+.p-points{list-style:none;display:flex;flex-wrap:wrap;margin:12px -6px 0}
+.p-points li{display:flex;align-items:center;background:var(--sky);border-radius:999px;padding:5px 14px 5px 9px;margin:4px 6px;font-size:15px;font-family:var(--head);font-weight:700}
+.p-points svg{width:18px;height:18px;margin-right:8px;flex:none}
+.same-list{list-style:none}
+.same-list li{padding:10px 0;border-top:1px dashed var(--line)}
+.same-list li:first-child{border-top:none;padding-top:0}
+.same-list h4{font-family:var(--head);font-size:16px;margin-bottom:2px}
+.same-list p{font-size:15px;color:var(--ink-2)}
+.same-list .try{display:block;font-size:14px;color:var(--sea);margin-top:2px}
+
+/* ---------- よくある質問 ---------- */
+.faq{max-width:860px}
+.faq .acc summary{-webkit-justify-content:flex-start;justify-content:flex-start}
+.faq .acc summary::before{content:"Q";flex:none;width:30px;height:30px;margin-right:12px;border-radius:50%;background:var(--ink);color:var(--signal);font-family:var(--head);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.faq .faq .acc-in{position:relative;padding:0 0 18px 42px;max-width:44em}
+.faq .acc-in::before{content:"A";position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}
+.faq-ask{margin-top:22px;font-size:15px;color:var(--muted)}
+
+/* ---------- 伐採 ---------- */
+.other{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px 24px;border:2px solid var(--ink);border-radius:18px;padding:18px 22px;background:var(--paper)}
+.other .ic{width:60px;height:60px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center}
+.other .ic svg{width:40px;height:40px}
+.other h3{font-size:18px;margin-bottom:2px}
+.other p{font-size:15px;color:var(--ink-2)}
+@media (max-width:760px){.other{grid-template-columns:1fr;padding:18px}.other .btn{width:100%}}
+
+/* ---------- 無料相談のお申し込み ---------- */
+.contact{background:var(--ink);color:#fff;position:relative}
+.contact::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:repeating-linear-gradient(90deg,var(--signal) 0 40px,transparent 40px 80px)}
+.contact .sec-head h2{color:#fff}
+.contact .sec-head p{color:#c3d2dd}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:40px;align-items:start}
+.howto{list-style:none;counter-reset:n}
+.howto li{counter-increment:n;position:relative;padding-left:42px;font-size:16px;line-height:1.7;color:#fff}
+.howto li + li{margin-top:12px}
+.howto li::before{content:counter(n);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:900;font-size:14px;line-height:30px;text-align:center}
+.howto li b{display:block;font-family:var(--head);font-size:18px}
+.howto li span{color:#c3d2dd;font-size:15px}
+.nopush{list-style:none;margin-top:18px;padding-top:14px;border-top:1px dashed rgba(255,255,255,.2)}
+.nopush li{position:relative;padding-left:24px;font-size:15px;line-height:1.7;color:#fff}
+.nopush li + li{margin-top:2px}
+.nopush li::before{content:"";position:absolute;left:3px;top:.45em;width:.8em;height:.42em;border-left:2px solid var(--signal);border-bottom:2px solid var(--signal);-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}
+.c-info{margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.16)}
+.c-info .tel-label{font-size:13px;color:#c3d2dd}
+.c-info .tel{font-family:var(--head);font-weight:900;font-size:32px;font-size:clamp(28px,4vw,36px);color:#fff;text-decoration:none;display:inline-flex;align-items:center;letter-spacing:.02em}
+.c-info .tel svg{width:.8em;height:.8em;margin-right:.3em}
+.c-info .tel-hours{font-size:14px;color:#fff;margin-top:2px}
+.c-info .tel-hours b{font-family:var(--head);font-size:16px;color:var(--signal);letter-spacing:.03em}
+.c-info .tel-note{font-size:14px;margin:8px 0 10px;color:#c3d2dd}
+.c-info .mail{color:var(--signal);word-break:break-all}
+.c-info dl{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:15px;color:#c3d2dd}
+.formbox{background:var(--ink-2);border-radius:20px;padding:0 24px 24px;overflow:hidden;position:relative}
+.form-top{display:flex;justify-content:space-between;align-items:center;margin:0 -24px 18px;padding:11px 24px;background:var(--signal);color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px}
+.form-top .left{font-family:var(--head);font-weight:400;font-size:12px;letter-spacing:.06em}
+.form-top .left b{font-family:var(--head);font-size:15px;margin-left:4px}
+form{display:grid;gap:16px}
+label{font-weight:700;font-size:15px;display:grid;gap:6px}
+input,textarea,select{font:inherit;font-size:16px;font-weight:400;padding:12px 14px;border-radius:10px;border:2px solid transparent;background:#fff;color:var(--ink);width:100%;min-height:50px}
+input:focus,textarea:focus,select:focus{border-color:var(--signal);outline:none}
+textarea{min-height:110px;resize:vertical}
+.formnote{font-size:14px;color:#c3d2dd;line-height:1.7}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.req{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;background:var(--signal);color:var(--ink);border-radius:4px;padding:0 6px;vertical-align:2px}
+.opt-label{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;border:1px solid #7f95a6;color:#c3d2dd;border-radius:4px;padding:0 5px;vertical-align:2px}
+form .btn{width:100%;font-size:17px}
+fieldset{border:none;margin:0;padding:0;min-width:0}
+legend{font-weight:700;font-size:15px;margin-bottom:8px;padding:0}
+.chips{display:flex;flex-wrap:wrap;margin:-4px}
+.chip{display:block;position:relative;margin:4px;font-weight:400;font-size:16px;cursor:pointer}
+.chip input{position:absolute;left:0;top:0;width:1px;height:1px;opacity:0;min-height:0;padding:0}
+/* 指で押しやすい大きさ（高さ 46px 以上） */
+.chip span{display:block;padding:10px 16px;border-radius:999px;border:2px solid rgba(255,255,255,.35);color:#fff;line-height:1.4;min-height:46px;-webkit-transition:background .15s;transition:background .15s}
+.chip input:checked + span{background:var(--signal);border-color:var(--signal);color:var(--ink);font-weight:700}
+.chip input:checked + span::before{content:"✓ "}
+.chip input:focus-visible + span{outline:3px solid #fff;outline-offset:2px}
+.chips.days .chip span{min-width:52px;text-align:center}
+.meet{display:grid;gap:16px;padding:14px;border-radius:14px;background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.22)}
+.meet[hidden]{display:none}
+.left-note{font-family:var(--head);font-weight:700;font-size:15px;color:#fff;text-align:center;margin-top:-4px}
+.left-note b{color:var(--signal);font-size:20px;margin:0 2px}
+.sent{display:none;text-align:center;padding:26px 0 10px}
+.sent.on{display:block}
+.sent b{display:block;font-family:var(--head);font-size:22px;color:var(--signal);margin-bottom:8px}
+.sent p{font-size:16px;color:#fff}
+.sent .plane-box{width:96px;height:48px;margin:0 auto 10px}
+.send-plane{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible;display:none;z-index:3}
+.send-plane.on{display:block}
+.send-plane .trail{fill:none;stroke:#F2C230;stroke-width:3;stroke-dasharray:6 9;stroke-linecap:round;opacity:.85}
+@media (max-width:760px){.contact-grid{grid-template-columns:1fr;gap:28px}.formbox{padding:0 16px 20px}.form-top{margin:0 -16px 16px;padding:10px 16px}.c-info{margin-top:22px}}
+
+footer{background:#101d2b;color:#9fb3c2;font-size:14px;padding:36px 0 32px}
+footer .wrap{display:grid;grid-template-columns:auto 1fr;gap:20px 48px;align-items:start}
+.foot-logo{height:40px;width:auto;margin-bottom:10px}
+footer a{color:#dbe6ee;text-decoration:none}
+footer a:hover{color:var(--signal)}
+.foot-nav{display:flex;flex-wrap:wrap;list-style:none;justify-content:flex-end}
+.foot-nav li{margin:0 0 10px 24px}
+.copy{grid-column:1 / -1;border-top:1px solid #2c4256;padding-top:16px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap}
+@media (max-width:760px){footer{padding-bottom:110px}footer .wrap{grid-template-columns:1fr}.foot-nav{justify-content:flex-start;display:grid;grid-template-columns:1fr 1fr}.foot-nav li{margin:0 0 10px}}
+
+/* ---------- スマホ固定ボタン ---------- */
+.fixbar{position:fixed;left:0;right:0;bottom:0;display:none;padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid var(--line);z-index:30;transition:transform .25s}
+.fixbar .btn{flex:1;padding:12px 8px;min-height:48px}
+.fixbar .btn + .btn{margin-left:8px}
+.fixbar.hide{-webkit-transform:translateY(110%);transform:translateY(110%)}
+@media (max-width:760px){.fixbar{display:flex}}
+
+/* ---------- 切りかえ式（shian2）：画面を1つずつ見せる。下の5つのボタンで切りかえる ---------- */
+.scr{display:none}
+.scr.on{display:block}
+.next-btn{text-align:center;padding:8px 20px 56px}
+.next-btn .btn{min-width:260px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.tabbar a{flex:1 1 0;text-align:center;text-decoration:none;color:var(--muted);font-family:var(--head);font-weight:700;font-size:13px;padding:12px 2px 10px;min-height:56px;border-top:3px solid transparent;line-height:1.3}
+.tabbar a.on{color:var(--ink);border-top-color:var(--signal)}
+.tabbar a[data-scr="soudan"]{color:var(--ink);background:#FFF4CC}
+.tabbar a[data-scr="soudan"].on{background:var(--signal)}
+footer{padding-bottom:96px}
+@media (max-width:760px){footer{padding-bottom:96px}.top .top-right .btn{display:inline-flex}}
+/* 修正依頼（ご契約中のお店の入口）：帯は控えめ（相談の入口より目立たせない） */
+.irai-band{display:block;color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;text-decoration:none;padding:34px 0 0;line-height:1.5}
+/* ヘッダーの中、線（66〜70px）のすぐ下。上の 34px は飛行機が通る所（透明。右向き 70px・左向き 80px、機体の一番下は中心＋6px → 86px まで）。
+   文字の行（.in）は白い地で、飛行機（z-index 22）より手前（ヘッダー全体が z-index 24）。入ってくる途中の飛行機は文字の行の後ろを通って隠れる。文字は 100px から（飛行機の一番下との間 14px 以上） */
+.irai-band .in{display:block;text-align:center;background:#fff;padding:6px 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* 最初から出しておき（JS を待たない）、ホーム以外の画面のときだけ消す */
+.scr-dekiru .irai-band,.scr-ryokin .irai-band,.scr-nagare .irai-band,.scr-soudan .irai-band,.scr-irai .irai-band{display:none}
+/* ヘッダーの帯（0〜66px）の地色は ::before に移し（飛行機は帯の中を飛ばない）、ヘッダー自体は透明にして、飛行機が通る所に地色が付かないようにする */
+.top{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:none;z-index:24}
+.top::before{content:"";position:absolute;left:0;right:0;top:0;height:66px;background:rgba(255,255,255,.97);border-bottom:1px solid var(--line);z-index:-1} /* ぼかし（backdrop-filter）はやめた：iOS の sticky と合わせると、下の本文が描き直されないことがある */
+/* 飛行機が通る所の白い地（ホームの画面だけ。飛行機より後ろ、本文より手前） */
+.jet-sky{position:fixed;left:0;right:0;top:66px;height:34px;background:#fff;z-index:19}
+.scr-dekiru .jet-sky,.scr-ryokin .jet-sky,.scr-nagare .jet-sky,.scr-soudan .jet-sky,.scr-irai .jet-sky{display:none}
+html{scroll-padding-top:130px}
+.irai-band .in::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--signal);margin-right:8px;vertical-align:1px}
+.irai-band .sep{color:#9fb6c6;margin:0 4px;font-weight:400}
+.irai-band:hover{color:var(--sea)}
+.irai-line{text-align:center;padding:0 20px 24px;font-size:15px}
+.irai-line a{color:var(--sea)}
+.foot-irai{grid-column:1 / -1;font-size:14px}
+.foot-irai a{color:#dbe6ee;text-decoration:underline}
+.irai .sec-head h2{padding-top:18px}
+.irai-box{max-width:560px;color:#fff} /* 紺の地なので、項目の名前（お店の名前・直したい所・ひと言）も白に。相談の画面は .contact{color:#fff} で同じになっている */
+.irai-photo{background:rgba(242,194,48,.14);color:#fff;border-radius:10px;padding:10px 14px}
+.irai-small{color:#c3d2dd}
+.irai-alt-p{margin-top:-4px}
+.irai-alt{color:#c3d2dd;font-size:13px;text-decoration:underline}
+.irai-altbox{background:rgba(255,255,255,.08);border:1px dashed rgba(255,255,255,.3);border-radius:12px;padding:12px 14px}
+.irai-altbox[hidden]{display:none}
+.irai-addr{display:flex;flex-wrap:wrap;align-items:center;font-size:16px;color:#fff;word-break:break-all;margin-bottom:6px}
+.irai-addr span{margin:4px 10px 4px 0}
+.irai-copy{font:inherit;font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink);background:#fff;border:none;border-radius:999px;padding:7px 14px;min-height:36px;cursor:pointer;margin:4px 0}
+.irai-copy[disabled]{opacity:.8}
+.news{max-width:560px;margin-top:28px;border:2px solid var(--ink);border-radius:18px;padding:18px 20px 8px;background:var(--paper)}
+.news h3{font-size:18px;margin-bottom:6px}
+.news ul{list-style:none}
+.news li{padding:10px 0 12px;border-top:1px solid var(--line)}
+.news li b{display:block;font-family:var(--head);font-size:16px;margin-bottom:2px}
+.news li p{font-size:15px;color:var(--ink-2);line-height:1.75}
+.news li a{color:var(--sea)}
+@media (max-width:760px){.irai-band{font-size:14px}.irai-band .in{padding:6px 12px}}
+.totop{bottom:84px}
+.prog-seg{position:absolute;top:0;height:4px;width:1px;background:rgba(23,40,58,.25)}
+/* 1機だけの飛行機：画面に固定。左上を原点にして transform で動かす。中の絵は機体の中心が原点に来るようにずらす */
+.nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;-webkit-transform:translate3d(-200px,-200px,0);transform:translate3d(-200px,-200px,0)}
+.nav-jet svg{display:block;width:60px;max-width:none;margin:-10px 0 0 -44px;overflow:visible}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== 案B：濃い紺の基調＋余白多め（2026/11/10 夜・見比べ用。見た目だけ。文・料金・リンクは今のトップと同じ） =====
+   トップの最初の画面と相談の欄を深い紺に。ほかは白と薄いグレーで、余白を広く。見出しは細めのゴシック（Zen Kaku Gothic New 500）
+   明るく目立つのは「相談する」のボタンだけ（シャンパン色の地に紺の字）
+   古いスマホ対策：マニュアル16 の書き方を守る（新しい書き方は足していない）。新しい動きは足さない */
+:root{
+  --ink:#16202B;--ink-2:#2B3846;--sea:#3B5F7A;--sky:#F3F4F6;--paper:#FFFFFF;
+  --signal:#D8B864;--line:#E1E4E8;--muted:#56606B;--navy:#121C26;--navy-2:#1C2834;
+  --head:"Zen Kaku Gothic New","Hiragino Sans","BIZ UDPGothic",sans-serif;
+}
+body{line-height:1.95;letter-spacing:.02em}
+h1,h2,h3,h4{font-weight:500;letter-spacing:.08em}
+.wrap{width:960px}
+.sec{padding:104px 0}
+@media (max-width:760px){.sec{padding:64px 0}}
+.sec.alt{background:var(--sky)}
+.sec-head{margin-bottom:40px}
+.sec-head h2{font-size:26px;font-size:clamp(23px,3vw,30px);padding-top:0;padding-bottom:16px}
+.sec-head h2::before{top:auto;bottom:0;width:32px;height:2px;background:var(--ink)}
+.sec-head p{margin-top:16px}
+/* ボタン：角を小さく。相談のボタンだけシャンパン色 */
+.btn{border-radius:2px;border-width:1px;letter-spacing:.1em;font-weight:700;min-height:52px}
+.btn.primary{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.btn.primary:hover{background:#E6CB85;border-color:#E6CB85;color:var(--navy)}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.top .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;border-radius:2px}
+.menu-btn{border-radius:2px;border-width:1px}
+/* ヘッダーは白のまま（ロゴが紺のため） */
+.prog-bar{background:var(--signal);height:2px}
+.irai-band{font-weight:500}
+.irai-band .in::before{background:var(--ink);width:6px;height:6px;border-radius:50%}
+.nav a.now{border-bottom-color:var(--ink)}
+/* トップの最初の画面：深い紺 */
+.hero{background:var(--navy);color:#fff;padding:72px 0 64px}
+.hero h1{font-size:32px;font-size:clamp(30px,3.6vw,44px);line-height:1.5;color:#fff}
+.hero .sub{color:#D6DCE2;line-height:1.95}
+.from{color:#fff}
+.from .from-k{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:2px;font-weight:500;letter-spacing:.1em}
+.from b{font-weight:500;color:#fff}
+.from .from-u small{color:#AEB8C2}
+.from a{color:var(--signal)}
+.hero .btn:not(.primary){background:transparent;border-color:rgba(255,255,255,.6);color:#fff}
+.hero .btn:not(.primary):hover{border-color:#fff;color:#fff}
+.facts{color:#AEB8C2}
+.facts i{color:#4A5866}
+@media (max-width:760px){.hero{padding:44px 0 44px}.hero h1{font-size:28px}}
+@media (max-width:360px){.hero h1{font-size:25px;letter-spacing:.04em}}
+/* 飾りを静かに */
+.card{border:1px solid var(--line);box-shadow:0 12px 28px rgba(18,28,38,.08);border-radius:4px}
+.card .shot{border-bottom:1px solid var(--line)}
+.quiz,.pass,.news,.other,.k-own{border:1px solid var(--line);border-radius:4px}
+.pass .stub{border-left:1px solid var(--line)}
+@media (max-width:760px){.pass .stub{border-top:1px solid var(--line);border-left:none}}
+.pass.rec .stub,.k-keep,.price-cta,.answer{background:var(--navy-2)}
+.price-cta,.answer{border-radius:4px}
+.price{font-weight:500}
+.tag,.pass .tag,.ptabs button .fit,.can h3 .tag{background:var(--ink)!important;color:#fff!important;border-radius:2px!important}
+.req{background:var(--signal);color:var(--navy);border-radius:2px}
+.quiz-out b{background:var(--ink);color:#fff;border-radius:2px}
+.quiz .chip input:checked + span{background:var(--ink);border-color:var(--ink);color:#fff}
+.voices li{border-radius:4px;background:var(--sky)}
+.voices li::after{display:none}
+.can .ic{border-radius:4px}
+.steps-line{width:1px;background:var(--line)}
+.steps li::before{border-radius:2px;background:var(--navy);font-weight:500}
+.steps li:last-child::before{background:var(--signal);color:var(--navy)}
+.how li{border-left:2px solid var(--ink)}
+.faq .acc summary::before{border-radius:2px;background:var(--navy);color:#fff;font-weight:500}
+.faq .acc-in::before{border-radius:2px;background:var(--sky);color:var(--ink);font-weight:500}
+.keep{background:#F7F4EC;border-color:#E6DDC6;border-radius:4px}
+.p-points li{border-radius:2px}
+.sim-rows li.low .row span::after{background:var(--ink);color:#fff}
+.sim-rows li.low .bar i{background:var(--ink)}
+.ptabs .uline{background:var(--ink);height:2px}
+/* 相談の欄：深い紺。金は細く */
+.contact{background:var(--navy)}
+.contact::before{height:1px;background:rgba(216,184,100,.6)}
+.formbox{background:var(--navy-2);border-radius:4px;border:1px solid rgba(255,255,255,.08)}
+.form-top{background:var(--signal);color:var(--navy)}
+.howto li::before{border-radius:2px;background:var(--signal);color:var(--navy);font-weight:500}
+.chip span{border-radius:2px}
+.chip input:checked + span{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.c-info .tel{font-weight:500}
+input,textarea,select{border-radius:2px}
+footer{background:#0D151D}
+/* 下の5つのボタン */
+.tabbar a{border-top-width:2px}
+.tabbar a.on{border-top-color:var(--ink)}
+.tabbar a[data-scr="soudan"]{background:var(--navy);color:#fff}
+.tabbar a[data-scr="soudan"].on{background:var(--navy);color:var(--signal);border-top-color:var(--signal)}
+:focus-visible{outline-color:var(--sea)}
+/* 絵の中の黄色（HTML の SVG）を、シャンパン色に */
+[fill="#F2C230"]{fill:#C9A54E}
+[stroke="#F2C230"]{stroke:#C9A54E}
+.quiz-sky .lights,.quiz-sky .q-trail,.steps-jet .trail,.send-plane .trail{stroke:#C9A54E}
+/* ヘッダーは今と同じ幅（960 だとメニューが折り返す） */
+.top .wrap{width:1040px}
+.top .btn{white-space:nowrap;letter-spacing:.04em}
+/* 見直しで直した所（11/10 夜） */
+h1,h2,h3,h4{letter-spacing:.05em}
+.btn{letter-spacing:.05em}
+.next-btn .btn.primary{background:#fff;border-color:var(--ink);color:var(--ink)}
+.next-btn .btn.primary:hover{background:var(--ink);color:#fff}
+.worry{background:var(--sky)}
+</style>
+</head>
+<body class="switch">
+<!-- 飛行機（旅客機の横向きのシルエット。機首は右）。動きの所で <use href="#jet"> で使い回す。色はロゴに合わせて紺＋白、飛行機雲は黄色 -->
+<svg width="0" height="0" style="position:absolute;width:0;height:0" aria-hidden="true" focusable="false"><defs>
+<symbol id="jet" viewBox="-32 -16 64 32">
+  <path d="M-27 1 L-19 -13 L-12 -13 L-17 1 Z" fill="#17283A"/>
+  <path d="M-28 2 C-28 -2 -24 -4 -16 -4 L15 -4 C23 -4 29 -1 31 2 C29 4 23 6 15 6 L-16 6 C-24 6 -28 5 -28 2 Z" fill="#17283A"/>
+  <path d="M-23 2.4 L15 2.4 C21 2.4 26 2.8 29.5 2.4 C27 4.6 23 6 15 6 L-16 6 C-21 6 -24 5 -25 3.6 Z" fill="#EAF2F6"/>
+  <path d="M-19 -1 H17" stroke="#fff" stroke-width="1.5" stroke-dasharray="1.8 2.4" fill="none"/>
+  <path d="M-5 2 L-17 12 L-9 12 L8 3 Z" fill="#2F6F8F"/>
+  <path d="M-24 -3 L-19 -7 L-13 -7 L-17 -3 Z" fill="#2F6F8F"/>
+  <ellipse cx="1" cy="7.5" rx="4" ry="2.4" fill="#17283A"/>
+</symbol>
+</defs></svg>
+<a class="skip" href="#main">本文へ</a>
+<!-- 飛行機は1機だけ。ヘッダーのすぐ下の線の上を飛ぶ。位置は JS の変数に持ち、transform で動かす（top/left は動かさない） -->
+<div class="jet-sky" aria-hidden="true"></div>
+<div class="nav-jet" id="nav-jet" aria-hidden="true"><svg viewBox="-44 -10 60 20" width="60" height="20"><path d="M-42 0 H-19" stroke="#F2C230" stroke-width="2.4" stroke-dasharray="4 5" stroke-linecap="round" fill="none"/><use href="#jet" xlink:href="#jet" x="-16" y="-8" width="32" height="16"/></svg></div>
+<!-- 上の細い進み具合の線。その上を小さな飛行機が進む（JS で動かす。動きを減らす設定の人は線だけ） -->
+<div class="prog" id="prog" aria-hidden="true"><i class="prog-bar" id="prog-bar"></i></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Lift-Off ホームページ制作 トップへ">
+      <img src="../../img/logo.svg" alt="Lift-Off" width="397" height="140">
+      <small>ホームページ制作</small>
+    </a>
+    <nav class="nav" id="nav" aria-label="ページ内">
+      <a href="#can">できる<wbr>こと</a><a href="#price">料金</a><a class="nav-m sub" href="#option">ロゴ・名刺・チラシの料金</a><a href="#flow">作成の<wbr>流れ</a><a href="#work">デザイン見本</a><a href="#trust">安心の<wbr>ために</a><a class="nav-m sub" href="#data">データの管理</a><a href="#faq">よく<wbr>ある<wbr>質問</a><a href="#contact">無料相談</a><a class="nav-m" href="#irai">修正依頼</a>
+    </nav>
+    <div class="top-right">
+      <a class="btn primary" href="#contact">相談する</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav"><i></i>メニュー</button>
+    </div>
+  </div>
+  <a class="irai-band" id="irai-band" href="#irai"><span class="in">ご契約中の<wbr>お店へ<span class="sep">｜</span>修正の<wbr>ご依頼は<wbr>こちら →</span></a>
+</header>
+
+<main id="main">
+<!-- ===== 画面 1：ホーム ===== -->
+<div class="scr" id="home" data-name="ホーム">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy" id="hero-copy">
+      <h1 class=""><span>お店の<wbr>ホームページ、</span><span>作った<wbr>あとも</span><span>引き<wbr>受けます。</span></h1>
+      <p class="sub">作って<wbr>終わりに<wbr>せず、<wbr>お休みの<wbr>お知らせや<wbr>メニューの<wbr>変更も、<wbr>LINEや<wbr>電話で<wbr>ひと言いただければ<wbr>こちらで<wbr>直します。<wbr><span class="nw">パソコンが苦手でも大丈夫です。</span></p>
+      <p class="from"><span class="from-k">月額</span><b>5,500</b><span class="from-u">円〜<small>（税込・<wbr>初期費用 <span class="nw">98,000円）</span></small></span></p>
+      <div class="actions">
+        <a class="btn primary" href="#contact">まずは<wbr>相談する<wbr>（無料・<wbr>お気軽に）</a>
+        <a class="btn" href="#price">料金を<wbr>見る</a>
+      </div>
+      <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>契約の<wbr>縛りなし</p>
+    </div>
+  </div>
+</section>
+<section class="sec worry" aria-labelledby="worry-h">
+  <div class="wrap">
+    <h2 id="worry-h">こんなこと、<wbr>ありませんか？</h2>
+    <ul class="voices" id="voices">
+      <li class="">ホームページは<wbr>あるけれど、<wbr>何年も前の<wbr>情報の<wbr>ままに<wbr>なっている。</li>
+      <li class="">お休みや<wbr>メニューを<wbr>変えたいけれど、<wbr>直し方が<wbr>わからない。</li>
+      <li class="">お店の<wbr>仕事で<wbr>手いっぱいで、<wbr>ネットの<wbr>ことまで<wbr>手が<wbr>回らない。</li>
+    </ul>
+    <div class="answer">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h20v12H13l-6 5v-5H5z"/><path d="M10 14h10"/></svg></span>
+      <p><b>変えたいことは、<wbr>LINEで<wbr>ひと言だけ。</b>あとは<wbr>こちらで<wbr>直して、<wbr>直した<wbr>ことを<wbr>お知らせします。<wbr>作るところから、<wbr>そのあとの<wbr>更新まで<wbr>引き受けます。</p>
+    </div>
+  </div>
+</section>
+<section id="work" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2><span class="nw">お店に合わせて、</span><wbr><span class="nw">いろいろ作れます</span></h2>
+      <p>業種ごとの<wbr>見本と、<wbr>同じ<wbr>お店で<wbr>雰囲気だけを<wbr>変えた<wbr>見本です。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>色・文字・写真は、<wbr>お店に<wbr>合わせて<wbr>変えられます。</p>
+    </div>
+    <!-- カードを指で横にめくる（scroll-snap）。1枚目の5つは業種、あとの6つは同じサロンで雰囲気を変えた見本 -->
+    <div class="cards" id="cards">
+      <ul>
+        <li><a class="card" href="../../samples/cafe/index.html"><span class="shot"><img src="../../samples/thumbs/cafe.jpg" alt="喫茶・カフェの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">落ち着いた、木の色で</span><b>喫茶・カフェ</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/school/index.html"><span class="shot"><img src="../../samples/thumbs/school.jpg" alt="教室・習いごとの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">明るく、わかりやすく</span><b>教室・習いごと</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/reform/index.html"><span class="shot"><img src="../../samples/thumbs/reform.jpg" alt="工務店・リフォームの見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">頼りになる感じを</span><b>工務店・リフォーム</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/hair/index.html"><span class="shot"><img src="../../samples/thumbs/hair.jpg" alt="美容室の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">静かに、上品に</span><b>美容室</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/relax/index.html"><span class="shot"><img src="../../samples/thumbs/relax.jpg" alt="整体の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">業種の見本</span><span class="sub">やさしく、安心して</span><b>整体</b><span class="open">この見本を開く</span></span></a></li>
+      
+        <li><a class="card" href="../../samples/homey/index.html"><span class="shot"><img src="../../samples/thumbs/homey.jpg" alt="アットホームな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">やわらかく、親しみやすく</span><b>アットホーム</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/luxury/index.html"><span class="shot"><img src="../../samples/thumbs/luxury.jpg" alt="ラグジュアリーな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">上品に、落ち着いて</span><b>ラグジュアリー</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/pop/index.html"><span class="shot"><img src="../../samples/thumbs/pop.jpg" alt="カラフルな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">明るく、わかりやすく</span><b>カラフル</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/chic/index.html"><span class="shot"><img src="../../samples/thumbs/chic.jpg" alt="シックな見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">大人っぽく、印象に残る</span><b>シック</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/photo/index.html"><span class="shot"><img src="../../samples/thumbs/photo.jpg" alt="写真を大きく使った見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">トップに写真や絵を大きく</span><b>写真を大きく</b><span class="open">この見本を開く</span></span></a></li>
+        <li><a class="card" href="../../samples/wa/index.html"><span class="shot"><img src="../../samples/thumbs/wa.jpg" alt="和風・職人の見本の画面" width="1200" height="780" loading="lazy" decoding="async"></span><span class="cap"><span class="kind">同じサロンで雰囲気を変えた見本</span><span class="sub">落ち着いて、確かな手仕事を</span><b>和風・職人</b><span class="open">この見本を開く</span></span></a></li>
+      </ul>
+    </div>
+    <p class="cards-hint"><i>⇆</i>指で<wbr>横に<wbr>めくれます。<wbr>どれも<wbr>架空の<wbr>お店です。<wbr>写真の<wbr>ところには、<wbr>お店で<wbr>撮った<wbr>写真が<wbr>入ります。</p>
+    <div class="work-foot">
+      <p>ロゴや<wbr>名刺も、<wbr>ホームページと<wbr>そろえて<wbr>作れます<wbr>（見本：<wbr><a href="../../samples/logo/index.html">ロゴ</a>・<a href="../../samples/card/index.html">名刺</a>／<a href="#option">料金</a>）。<wbr>実際に<wbr>お作りした<wbr>お店の<wbr>ホームページは、<wbr>打ち合わせの<wbr>ときに<wbr>お見せします。</p>
+      <a class="btn" href="../../samples/index.html">業種ごとの<wbr>見本<wbr>（31種）を<wbr>見る</a>
+    </div>
+  </div>
+</section>
+<section id="update" class="sec" aria-labelledby="up-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="up-h">更新は、<wbr><span class="nw">こんなふうに</span></h2>
+      <p>変えたい<wbr>ことを<wbr>LINEで<wbr>送るだけ。<wbr>こちらで<wbr>直して、<wbr>直した<wbr>ことを<wbr>お知らせします。<wbr>ご依頼には<wbr>原則<wbr>3営業日以内に<wbr>対応します。</p>
+    </div>
+    <div class="up-chat" id="up-chat" aria-label="LINEのやりとりの例">
+      <p class="up-day">LINE<span>（例）</span></p>
+      <p class="bubble2 shop rv"><small>お店から</small>年末年始の<wbr>お休みを<wbr>のせてください。<wbr>あと、<wbr>季節の<wbr>メニューを<wbr>足したいです。<wbr>写真を<wbr>送ります！</p>
+      <p class="photo-msg rv" aria-hidden="true"><span>写真</span></p>
+      <p class="bubble2 us rv"><small>Lift-Off</small>受け取りました。<wbr>直したら<wbr>お知らせしますね。</p>
+      <div class="bubble2 us rv"><small>Lift-Off</small>直しました。<wbr>サイトを<wbr>見てみてください。
+        <div class="mini" aria-hidden="true">
+          <div class="m-top"><span class="m-logo">hiyori</span><span class="m-btn">予約</span></div>
+          <p class="m-notice"><b>お知らせ</b>12月29日〜1月3日は<wbr>お休みします</p>
+          <ul class="m-menu"><li><span>よもぎ蒸し</span></li><li><span>脱毛</span></li><li class="new"><span>季節の<wbr>メニュー</span><em>NEW</em></li></ul>
+        </div>
+      </div>
+    </div>
+    <p class="up-note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#dekiru">次へ：できること →</a></p>
+</div>
+<!-- ===== 画面 2：できること ===== -->
+<div class="scr" id="dekiru" data-name="できること">
+<section id="can" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>できる<wbr>こと</h2>
+      <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
+    </div>
+    <ol class="can" aria-label="ホームページを作ってから、ずっと続く流れ">
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="18" width="34" height="26" rx="4" stroke="#17283A" stroke-width="2.6"/><path d="M7 20l16 12 16-12" stroke="#17283A" stroke-width="2.6"/><rect x="34" y="30" width="24" height="24" rx="4" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M34 37h24M41 27v6M51 27v6" stroke="#17283A" stroke-width="2.6"/><path d="M40 45l4 4 8-8" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>問い合わせを<wbr>受ける</h3><p>お問い合わせフォームや<wbr>ネット予約の受付を<wbr>つけられます。<wbr>予約は&nbsp;RESERVA&nbsp;か<wbr>Googleカレンダーで<wbr>受け付けます。</p></li>
+      <!-- ネット予約（予約カレンダー）2026/10/21。デモは架空のお店（メールは送らず見本を出す）。料金は決定事項03（ご契約のお店 初期 22,000円〜＋月 1,100円・税込） -->
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="12" width="48" height="44" rx="5" fill="#fff" stroke="#17283A" stroke-width="2.6"/><path d="M8 24h48" stroke="#17283A" stroke-width="2.6"/><path d="M20 8v8M44 8v8" stroke="#17283A" stroke-width="2.6"/><rect x="14" y="30" width="10" height="8" rx="2" fill="#2F6F8F" stroke="none"/><rect x="27" y="30" width="10" height="8" rx="2" fill="#2F6F8F" stroke="none"/><rect x="14" y="42" width="10" height="8" rx="2" fill="#2F6F8F" stroke="none"/><circle cx="44" cy="44" r="10" fill="#F2C230" stroke="#17283A" stroke-width="2.4"/><path d="M39 44l4 4 7-7" stroke="#17283A" stroke-width="2.6"/></svg></span><h3>ネットで<wbr>予約を<wbr>受ける<span class="tag">予約カレンダー</span></h3><p>お客さまは<wbr>スマホで<wbr>空いている<wbr>時間を<wbr>選んで<wbr>予約。<wbr>お店は<wbr>営業日を<wbr>スマホで<wbr>入れるだけ。<wbr>予約が<wbr>入ると、<wbr>お客さまと<wbr>お店に<wbr>メールが<wbr>届きます<wbr>（ご契約の<wbr>お店 <span class="nw">初期 22,000円〜</span>＋<span class="nw">月 1,100円</span>・税込）。<a class="btn demo" href="https://yoyaku-demo.liftoff-358.workers.dev/" target="_blank" rel="noopener">デモを<wbr>試す<wbr>（架空の<wbr>お店）</a></p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h30v20H22l-8 7v-7H8z" fill="#06C755" stroke="#17283A" stroke-width="2.4"/><path d="M15 22h16" stroke="#fff" stroke-width="2.4"/><path d="M50 30a12 12 0 01-20 12" stroke="#F2C230" stroke-width="2.8"/><path d="M30 42v-6h6" stroke="#F2C230" stroke-width="2.8"/><path d="M30 46a12 12 0 0120-12" stroke="#17283A" stroke-width="2.8"/><path d="M50 34v6h-6" stroke="#17283A" stroke-width="2.8"/></svg></span><h3>直す・<wbr>更新する<span class="tag">公開したあとも</span></h3><p>営業日やメニュー、<wbr>写真の入れ替えは、<wbr>ひと言いただければ<wbr>こちらで。<wbr>依頼には<wbr>原則3営業日以内に<wbr>対応します。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16l16-6 20 6 16-6v36l-16 6-20-6-16 6z" fill="#fff" stroke="#17283A" stroke-width="2.6"/><path d="M22 10v36M42 16v36" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 42s-9-8-9-16a9 9 0 0118 0c0 8-9 16-9 16z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="26" r="3.5" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>Googleマップを<wbr>整える・任せる</h3><p>お店の<wbr>説明・写真・営業時間・予約の<wbr>リンクなど、<wbr>最初の<wbr>整備を<wbr>します。<wbr>WEB担当者代行なら、<wbr>投稿<wbr>（月4回）・口コミへの<wbr>返事の<wbr>下書き・毎月の<wbr>報告まで<wbr>任せられます<wbr>（<a href="#ryokin">料金</a>）。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 22h36l-3 34H17z" fill="#fff" stroke="#17283A" stroke-width="2.6"/><path d="M24 22v-4a8 8 0 0116 0v4" stroke="#17283A" stroke-width="2.6"/><rect x="36" y="38" width="22" height="14" rx="3" fill="#F2C230" stroke="#17283A" stroke-width="2.4"/><path d="M41 45h12" stroke="#17283A" stroke-width="2.4"/><path d="M24 34h12" stroke="#2F6F8F" stroke-width="2.4"/></svg></span><h3>ネットで売る<span class="tag">商品ページ</span></h3><p>お店の<wbr>商品を<wbr>5点まで<wbr>載せて、<wbr>「購入する」ボタンから<wbr>Square で<wbr>お支払いいただけます。<wbr>特定商取引法の<wbr>表示も<wbr>こちらで<wbr>用意します<wbr>（<a href="../../samples/shop/index.html">見本を見る</a>）。</p></li>
+      <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="14" width="34" height="22" rx="3" fill="#fff" stroke="#17283A" stroke-width="2.6"/><circle cx="17" cy="25" r="4" fill="#F2C230" stroke="none"/><path d="M25 22h12M25 28h9" stroke="#2F6F8F" stroke-width="2.4"/><rect x="34" y="30" width="22" height="28" rx="3" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><path d="M39 38h12M39 44h12M39 50h8" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>ロゴ・名刺・チラシ・メニュー表</h3><p>ホームページと<wbr>同じ色・<wbr>言葉で<wbr>そろえて<wbr>作れます。<wbr>印刷用の<wbr>データで<wbr>お渡しします<wbr>（<a href="#option">料金</a>）。</p></li>
+    </ol>
+    <p class="can-foot">作って<wbr>終わりではなく、<wbr>お店が<wbr>続くかぎり、<wbr>直す・<wbr>更新するを<wbr>くり返します。</p>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#ryokin">次へ：料金 →</a></p>
+</div>
+<!-- ===== 画面 3：料金 ===== -->
+<div class="scr" id="ryokin" data-name="料金">
+<section id="price" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>料金プラン</h2>
+      <p>すべて<wbr>税込です。<wbr>お問い合わせフォームは、<wbr>付ける<wbr>お店だけ<wbr>「フォームの<wbr>管理」<wbr>月550円が<wbr>月額に<wbr>加わります。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）の<wbr>代金は、<wbr>お店から<wbr>ドメインの<wbr>会社へ<wbr>直接<wbr>お支払い<wbr>いただきます<wbr><span class="nw">（年2,000円前後〜）。</span></p>
+    </div>
+    <!-- 3問の診断：答えると合いそうなプランのタブが選ばれて印が付く。決めつけず「目安」と添える。小さな飛行機が答えるたびに少し上がり、最後に合うプランへ着地 -->
+    <div class="quiz" id="quiz">
+      <h3>どの<wbr>プランが<wbr>合う？</h3>
+      <p>2つ<wbr>答えると、<wbr>合いそうな<wbr>プランに<wbr>印が<wbr>付きます。<wbr>目安です。<wbr>相談で<wbr>一緒に<wbr>決めます。</p>
+      <svg class="quiz-sky" id="quiz-sky" aria-hidden="true" focusable="false"><path class="q-trail" id="q-trail" d=""/><line class="ground" id="q-ground" x1="0" y1="0" x2="0" y2="0"/><line class="lights" id="q-lights" x1="0" y1="0" x2="0" y2="0"/><text class="q-label" id="q-label" x="0" y="0" text-anchor="end"></text><g id="q-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+      <ol class="quiz-q">
+        <li><span>更新は<wbr>月に<wbr>何回<wbr>くらい？</span><div class="chips"><label class="chip"><input type="radio" name="q1" value="2"><span>月2回まで</span></label><label class="chip"><input type="radio" name="q1" value="4"><span>月3回以上</span></label></div></li>
+        <li><span>Googleマップの<wbr>投稿も<wbr>任せたい？</span><div class="chips"><label class="chip"><input type="radio" name="q2" value="yes"><span>はい</span></label><label class="chip"><input type="radio" name="q2" value="no"><span>いいえ</span></label></div></li>
+      </ol>
+      <p class="quiz-out" id="quiz-out" aria-live="polite"></p>
+    </div>
+    <div class="ptabs nojs" id="ptabs" role="tablist" aria-label="料金プラン">
+      <button type="button" role="tab" id="pt-std" aria-controls="price-std" aria-selected="true"><span class="fit">合いそう</span>スタンダード<small>月 5,500円</small></button>
+      <button type="button" role="tab" id="pt-web" aria-controls="price-web" aria-selected="false" tabindex="-1"><span class="fit">合いそう</span>WEB担当者代行<small>月 19,800円</small></button>
+      <span class="uline" id="uline" aria-hidden="true"></span>
+    </div>
+    <div class="pview" id="pview">
+      <div class="ptrack" id="ptrack">
+        <div class="ppanel" id="price-std" role="tabpanel" aria-labelledby="pt-std">
+          <article class="pass rec">
+            <div class="main">
+              <p class="who">作って、<wbr>ときどき更新する<wbr>基本の<wbr>プラン</p>
+              <h3>スタンダード <span class="tag">おすすめ</span></h3>
+              <dl>
+                <dt>サイト</dt><dd>スマホで<wbr>見やすい<wbr>縦長の<wbr>1ページ</dd>
+                <dt>更新</dt><dd>月2回まで</dd>
+                <dt>契約期間</dt><dd>縛りなし</dd>
+              </dl>
+            </div>
+            <div class="stub">
+              <span class="price-k">月額</span>
+              <span class="price">5,500<small>円</small></span>
+              <span class="price init">初期 98,000円</span>
+            </div>
+          </article>
+        </div>
+        <div class="ppanel" id="price-web" role="tabpanel" aria-labelledby="pt-web" aria-hidden="true">
+          <article class="pass">
+            <div class="main">
+              <p class="who">ネットの<wbr>ことは、<wbr>まる<wbr>ごと<wbr>任せたい方に</p>
+              <h3>WEB担当者代行</h3>
+              <dl>
+                <dt>サイト</dt><dd>スタンダードと<wbr>同じ</dd>
+                <dt>更新</dt><dd>月4回まで</dd>
+                <dt>Googleマップ</dt><dd>お知らせの<wbr>投稿 月4回、<wbr>口コミへの<wbr>返信文の<wbr>下書き</dd>
+                <dt>報告</dt><dd>月1回、<wbr>サイトの<wbr>見られ方を<wbr>簡単に<wbr>お知らせ</dd>
+                <dt>契約期間</dt><dd>縛りなし</dd>
+              </dl>
+            </div>
+            <div class="stub">
+              <span class="price-k">月額</span>
+              <span class="price">19,800<small>円</small></span>
+              <span class="price init">初期 98,000円</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <ul class="how" aria-label="選び方の目安">
+      <li><span>長く<wbr>使う<wbr>予定なら</span><b>スタンダード</b></li>
+      <li><span>Googleマップも<wbr>任せたいなら</span><b>WEB担当者代行</b></li>
+    </ul>
+
+    <p class="acc-h">くわしく<wbr>見る<wbr>（押すと<wbr>開きます）</p>
+    <div class="acc-list">
+      <details class="acc" id="incl"><summary>初期費用<wbr>（98,000円）に<wbr>含まれる<wbr>もの<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <ul class="ck">
+          <li>デザイン・文章の<wbr>整え・ページづくり</li>
+          <li>スマホ・パソコンの<wbr>両方で<wbr>見やすく</li>
+          <li>お問い合わせフォームの<wbr>設置<wbr>（付ける<wbr>お店だけ。<wbr>管理は<wbr>月550円）</li>
+          <li>独自ドメインの<wbr>取得と<wbr>設定</li>
+          <li>Googleの<wbr>検索に<wbr>登録する<wbr>設定</li>
+          <li>お店の<wbr>地図を<wbr>サイトに<wbr>載せる</li>
+        </ul>
+        <p class="note">ネット予約<wbr>（RESERVA など）の<wbr>つなぎこみも<wbr>ご相談ください。<wbr>Googleマップの<wbr>お店情報<wbr>（説明文・<wbr>写真・営業時間など）の<wbr>最初の<wbr>整備は<wbr>別料金です<wbr>（<a href="#option">下の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>）。</p>
+      </div></div></details>
+      <details class="acc" id="total"><summary>お支払いの<wbr>合計の<wbr>目安<wbr>（税込）<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">初期費用と、<wbr>公開してからの<wbr>月額を<wbr>足した<wbr>金額です。</p>
+        <div class="sim" id="sim" hidden>
+          <div class="sim-q"><label for="sim-m">使う<wbr>期間</label><output id="sim-out" for="sim-m">12<small>か月</small></output></div>
+          <input type="range" id="sim-m" min="1" max="36" step="1" value="12" aria-describedby="sim-note">
+          <div class="sim-scale" aria-hidden="true"><span>1か月</span><span>1年</span><span>2年</span><span>3年</span></div>
+          <div class="sim-quick" role="group" aria-label="よく聞かれる期間"><button type="button" data-m="6">半年</button><button type="button" data-m="12" aria-pressed="true">1年</button><button type="button" data-m="24">2年</button><button type="button" data-m="36">3年</button></div>
+          <ul class="sim-rows" aria-live="polite">
+            <li data-plan="std"><div class="row"><span>スタンダード</span><b>164,000円</b></div><div class="bar"><i></i></div></li>
+            <li data-plan="web"><div class="row"><span>WEB担当者代行</span><b>335,600円</b></div><div class="bar"><i></i></div></li>
+          </ul>
+          <p class="sim-note" id="sim-note">つまみを<wbr>動かすと、<wbr>その期間の<wbr>合計が<wbr>出ます。</p>
+        </div>
+        <table id="sim-table">
+          <thead><tr><th>プラン</th><th>1年<wbr>使うと</th><th>2年<wbr>使うと</th></tr></thead>
+          <tbody>
+            <tr><td>スタンダード</td><td><b>164,000円</b></td><td><b>230,000円</b></td></tr>
+            <tr><td>WEB担当者代行</td><td><b>335,600円</b></td><td><b>573,200円</b></td></tr>
+          </tbody>
+        </table>
+      </div></div></details>
+      <details class="acc" id="extra"><summary>追加で<wbr>お願いする<wbr>場合<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <dl class="kv">
+          <dt>回数を<wbr>こえた<wbr>更新</dt><dd><b>1回 3,300円</b></dd>
+          <dt>ページの<wbr>追加</dt><dd><b>1ページ 22,000円</b></dd>
+        </dl>
+        <p class="note">更新は、<wbr>1回の<wbr>ご依頼<wbr>（LINEなら<wbr>1通分）で<wbr>まとめていただいた<wbr>変更を<wbr>「1回」と<wbr>数えます。<wbr>ページの<wbr>作り直しや<wbr>新しい<wbr>項目の<wbr>追加など<wbr>大きな<wbr>変更は、<wbr>別に<wbr>ご相談させてください。</p>
+      </div></div></details>
+      <details class="acc" id="pay"><summary>お支払い方法<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <dl class="kv">
+          <dt>方法</dt><dd>お振込み<wbr>（振込手数料は<wbr>お店の<wbr>ご負担です）</dd>
+          <dt>初期費用</dt><dd>公開の<wbr>ときに<wbr>ご請求します</dd>
+          <dt>月額</dt><dd>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください</dd>
+          <dt>請求書</dt><dd>インボイス<wbr>（適格請求書）に<wbr>対応しています</dd>
+        </dl>
+        <p class="note">紹介料などの<wbr>仕組みは<wbr>ありません。</p>
+      </div></div></details>
+      <details class="acc opt" id="option"><summary>ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします<wbr>（税込）<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">ホームページと<wbr>同じ<wbr>ロゴ・<wbr>色・<wbr>言葉で<wbr>そろえて<wbr>作ります。<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引に<wbr>なります<wbr>（右の<wbr>列の<wbr>金額）。</p>
+        <table>
+          <thead><tr><th>内容</th><th>通常</th><th>ご契約の<br>お店</th></tr></thead>
+          <tbody>
+            <tr><td>ロゴ</td><td>33,000円〜</td><td><b>22,000円〜</b></td></tr>
+            <tr><td>名刺</td><td>11,000円〜</td><td><b>5,500円〜</b></td></tr>
+            <tr><td>チラシ<wbr><span class="nw">（A4片面）</span></td><td>22,000円〜</td><td><b>16,500円〜</b></td></tr>
+            <tr><td><span class="nw">メニュー表</span><wbr><span class="nw">（A4片面）</span></td><td>22,000円〜</td><td><b>16,500円〜</b></td></tr>
+            <tr><td>Googleマップの<wbr>最初の<wbr>整備<wbr><span class="nw">（口コミQRカード込み）</span></td><td>24,200円〜</td><td><b>13,200円〜</b></td></tr>
+            <tr><td>ホームページの<wbr>動きの<wbr>演出<wbr><span class="nw">（1か所）</span></td><td>—</td><td><b>16,500円〜</b></td></tr>
+            <tr><td>商品ページの<wbr>追加<wbr><span class="nw">（1ページ・</span><wbr><span class="nw">商品5点まで）</span></td><td>—</td><td><b>22,000円〜</b></td></tr>
+            <tr><td>ネット予約<wbr><span class="nw">（予約カレンダー）</span></td><td>—</td><td><b>初期 22,000円〜<br>＋月 1,100円</b></td></tr>
+            <tr><td>お問い合わせフォームの<wbr>管理<wbr><span class="nw">（ご希望の<wbr>お店）</span></td><td>—</td><td><b>月550円</b></td></tr>
+          </tbody>
+        </table>
+        <ul class="opt-note">
+          <li>どれも<wbr>直しは<wbr>2回まで<wbr>含みます。</li>
+          <li>ロゴは<wbr>「メインの<wbr>ロゴ」と<wbr>「小さい<wbr>場所用」の<wbr>2つで<wbr>1組です。<wbr>看板や<wbr>印刷にも<wbr>使える<wbr>データで<wbr>お渡しします。</li>
+          <li>名刺・<wbr>チラシ・<wbr>メニュー表は<wbr>印刷用の<wbr>データで<wbr>お渡しします。<wbr>印刷代は<wbr>実費で<wbr>お店の<wbr>ご負担です。</li>
+          <li>Googleマップの<wbr>整備は、<wbr>口コミを<wbr>お願いする<wbr>QRカードの<wbr>データ込みです。<wbr>カードだけの<wbr>ご依頼は<wbr>お受けして<wbr>いません。</li>
+          <li>動きの<wbr>演出は、<wbr>お店の<wbr>ロゴや<wbr>絵に<wbr>合わせた<wbr>オリジナルの<wbr>動き<wbr>（例：<wbr>♡が<wbr>光る）です。<wbr>ホームページを<wbr>ご契約の<wbr>お店だけの<wbr>メニューです。<wbr>ふつうの<wbr>動き<wbr>（ふわっと<wbr>表示されるなど）は<wbr>初期費用に<wbr>含みます。</li>
+          <li>商品ページは、<wbr>「購入する」<wbr>ボタンと<wbr>特定商取引法の<wbr>表示の<wbr>ページ込みです。<wbr>ホームページを<wbr>ご契約の<wbr>お店だけの<wbr>メニューです。<wbr>商品の<wbr>追加・<wbr>入れかえは<wbr>更新1回です。<wbr>6点以上や、<wbr>配送・<wbr>在庫の<wbr>管理が<wbr>要るときは、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</li>
+          <li>ネット予約は、<wbr>お客さまが<wbr>空いている<wbr>時間を<wbr>選んで<wbr>予約できる<wbr>ページです。<wbr>予約が<wbr>入ると、<wbr>お客さまと<wbr>お店に<wbr>メールが<wbr>届きます<wbr>（お店の<wbr>Gmail から<wbr>送ります）。<wbr>ホームページを<wbr>ご契約の<wbr>お店だけの<wbr>メニューです。</li>
+          <li>両面に<wbr>するときや、<wbr>載せる<wbr>ものが<wbr>多いとき、<wbr>写真の<wbr>撮影が<wbr>いるときは、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</li>
+          <li>フォームの<wbr>管理は、<wbr>お問い合わせフォームを<wbr>付ける<wbr>お店だけの<wbr>月額です。<wbr>毎月の<wbr>月額と<wbr>一緒に<wbr>ご請求します。</li>
+        </ul>
+      </div></div></details>
+    </div>
+
+    <div class="price-cta">
+      <div>
+        <h3>どの<wbr>プランが<wbr>合うか、<wbr><span class="nw">一緒に考えます</span></h3>
+        <p>ご相談・<wbr>お見積もりは<wbr>無料です。<wbr>決めて<wbr>いなくても<wbr>大丈夫です。</p>
+      </div>
+      <div class="actions">
+        <a class="btn signal" href="tel:09011896726"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3L13 11.5l4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C8.6 17 3 11.4 2.5 4.6A1.5 1.5 0 0 1 4 3z"/></svg>電話で<wbr>相談</a>
+        <a class="btn ghost" href="#contact">フォームで<wbr>相談</a>
+      </div>
+    </div>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#nagare">次へ：流れ →</a></p>
+</div>
+<!-- ===== 画面 4：流れ ===== -->
+<div class="scr" id="nagare" data-name="流れ">
+<section id="flow" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>作成の<wbr>流れ</h2>
+      <p>お会いする<wbr>打ち合わせは<wbr>2回です。<wbr>あいだは<wbr>LINEや<wbr>電話での<wbr>やりとりで<wbr>進めます。<wbr>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<span class="nw">2〜3週間</span>です。<wbr>手順を<wbr>押すと<wbr>くわしく<wbr>出ます。</p>
+    </div>
+    <div class="steps-wrap" id="steps-wrap">
+    <span class="steps-line" id="steps-line" aria-hidden="true"></span>
+    <svg class="steps-jet" id="steps-jet" aria-hidden="true" focusable="false"><path class="trail" id="steps-trail" d=""/><g id="steps-plane"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+    <ol class="steps" id="steps">
+      <li class="rv"><details class="acc"><summary>お問い合わせ<span class="tag">フォーム・<wbr>電話・<wbr>メール</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>フォーム・<wbr>電話・<wbr>メールから。<wbr>選んで<wbr>送るだけでも<wbr>大丈夫です。</p></div></div></details></li>
+      <li class="rv"><details class="acc"><summary>1回目の<wbr>打ち合わせ<span class="tag">お会いして</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>ご都合の<wbr>よい<wbr>場所で、<wbr>載せたい<wbr>内容や<wbr>お好みの<wbr>デザインを<wbr>お聞きします。<wbr>写真は<wbr>お店で<wbr>撮って<wbr>いただきます<wbr>（撮り方は<wbr>お伝えします）。</p></div></div></details></li>
+      <li class="rv"><details class="acc"><summary>見本を作って<wbr>確認<span class="tag">スマホで<wbr>見られます</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>スマホで<wbr>見られる<wbr>見本を<wbr>お送りします。<wbr>気になる<wbr>ところを<wbr>お伝えください。</p></div></div></details></li>
+      <li class="rv"><details class="acc"><summary>2回目の<wbr>打ち合わせ<span class="tag">お会いして</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>ドメインや<wbr>Googleマップ、<wbr>ネット予約など、<wbr>お店の<wbr>名義で<wbr>作るものを<wbr>一緒に<wbr>作ります。</p></div></div></details></li>
+      <li class="rv"><details class="acc"><summary>公開<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>Googleへの<wbr>登録などの<wbr>設定をして、<wbr>ネットに<wbr>公開します。</p></div></div></details></li>
+      <li class="rv"><details class="acc"><summary>毎月の<wbr>更新<span class="tag">ずっと<wbr>続きます</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>公開後も、<wbr>変えたい<wbr>ことは<wbr>ひと言<wbr>いただければ<wbr>こちらで<wbr>直します。</p></div></div></details></li>
+    </ol>
+    </div>
+  </div>
+</section>
+<section id="faq" class="sec alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>よく<wbr>ある<wbr>質問</h2>
+      <p>質問を<wbr>押すと<wbr>答えが<wbr>開きます。<wbr>ほかにも<wbr>気に<wbr>なることが<wbr>あれば、<wbr>お気軽に<wbr>お問い合わせ<wbr>ください。</p>
+    </div>
+    <div class="faq">
+      <p class="acc-h" id="faq-start">はじめる前に</p>
+      <div class="acc-list">
+        <details class="acc"><summary>パソコンが<wbr>使えなくても<wbr>大丈夫ですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>大丈夫です。<wbr>更新の<wbr>ご依頼は<wbr>LINEや<wbr>電話で<wbr>ひと言いただくだけで、<wbr>作業は<wbr>こちらで<wbr>行います。</p></div></div></details>
+        <details class="acc"><summary>どの<wbr>くらいでできあがりますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<wbr><span class="nw">2〜3週間</span>です。<wbr>見本を<wbr>見ていただいてからの<wbr>直しの<wbr>回数などで<wbr>前後します。</p></div></div></details>
+        <details class="acc"><summary>写真が<wbr>ありません。<wbr>撮って<wbr>もらえますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>こちらでの<wbr>撮影は<wbr>していませんが、<wbr>スマホで<wbr>撮った<wbr>写真でも<wbr>使えます。<wbr>「横向きで<wbr>多めに」など、<wbr>撮り方の<wbr>コツを<wbr>お伝えします。</p></div></div></details>
+        <details class="acc"><summary>すでに<wbr>ホームページが<wbr>あります。<wbr>作り直しも<wbr>できますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>できます。<wbr>今の<wbr>サイトの<wbr>状態を<wbr>見てから<wbr>ご提案しますので、<wbr>まずは<wbr>ご相談ください。</p></div></div></details>
+        <details class="acc"><summary>防府市以外でも<wbr>お願いできますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>防府市を<wbr>中心に、<wbr>近くの<wbr>地域も<wbr>ご相談ください。<wbr>打ち合わせに<wbr>うかが<wbr>える<wbr>範囲か<wbr>どうかを<wbr>お伝えします。</p></div></div></details>
+      </div>
+      <p class="acc-h" id="faq-money">お金と契約のこと</p>
+      <div class="acc-list">
+        <details class="acc"><summary>途中で<wbr>プランを<wbr>変えられますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>変えられます。<wbr>お申し出の<wbr>翌月<wbr>分から<wbr>切りかわります。<wbr>変える<wbr>前に、<wbr>金額を<wbr>お伝えします。</p></div></div></details>
+        <details class="acc"><summary>ドメイン代は<wbr>いくらですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>年2,000円前後からです<wbr>（.com や .jp など、<wbr>種類で<wbr>変わります）。<wbr>お店の<wbr>名義で<wbr>取り、<wbr>ドメインの<wbr>会社へ<wbr>お店から<wbr>直接<wbr>お支払い<wbr>いただきます。<wbr>取る<wbr>手続きは、<wbr>2回目の<wbr>打ち合わせで<wbr>一緒に<wbr>します。<wbr>更新の<wbr>時期が<wbr>近づいたら、<wbr>こちらから<wbr>お知らせします。</p></div></div></details>
+        <details class="acc"><summary>支払いは<wbr>どうすればいいですか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>初期費用は<wbr>公開の<wbr>ときに<wbr>ご請求します。<wbr>月額は<wbr>公開の<wbr>翌月<wbr>分から、<wbr>毎月<wbr>末までに<wbr>お振込みください。<wbr>振込手数料は<wbr>お店の<wbr>ご負担です。</p></div></div></details>
+        <details class="acc"><summary>やめる<wbr>ときは<wbr>どうなりますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>サイトの<wbr>データを<wbr>すべて<wbr>お渡しします。<wbr>ドメイン<wbr>（ホームページの<wbr>住所）も<wbr>お店の<wbr>名義なので、<wbr>そのまま<wbr>使い続けられます<wbr>（ドメイン代は、<wbr>はじめから<wbr>お店の<wbr>お支払いです）。</p></div></div></details>
+      </div>
+      <p class="acc-h" id="faq-more">あわせて頼めること</p>
+      <div class="acc-list">
+        <details class="acc"><summary>Googleマップの<wbr>お店情報も<wbr>整えて<wbr>もらえますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>できます。<wbr>説明文・<wbr>写真・営業時間などの<wbr>最初の<wbr>整備は<wbr>別料金で、<wbr>ホームページを<wbr>ご契約の<wbr>お店は<wbr>13,200円〜<wbr>（通常<wbr>24,200円〜・<wbr>口コミQRカード込み）です。<wbr>WEB担当者代行プランでは、<wbr>その<wbr>あとの<wbr>お知らせの<wbr>投稿<wbr>（月4回）と、<wbr>口コミへの<wbr>返信文の<wbr>下書きを<wbr>毎月<wbr>行います。</p></div></div></details>
+        <details class="acc"><summary>ロゴや<wbr>名刺、<wbr>チラシも<wbr>作って<wbr>もらえますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>できます。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>「ロゴ・<wbr>名刺・<wbr>チラシなども<wbr>お作りします」</a>を<wbr>ご覧ください<wbr>（ホームページを<wbr>ご契約の<wbr>お店は<wbr>割引が<wbr>あります）。<wbr>メニュー表も<wbr>作れます。<wbr>ロゴは<wbr>いくつか<wbr>案を<wbr>お見せして、<wbr>選んで<wbr>いただいてから<wbr>仕上げます。<wbr>ホームページ・<wbr>Instagram・<wbr>Googleマップ・<wbr>名刺の<wbr>ロゴを<wbr>同じ日に<wbr>そろえて<wbr>切りかえると、<wbr>お店の<wbr>印象が<wbr>ばらばらに<wbr>なりません。</p></div></div></details>
+        <details class="acc"><summary>ネットで<wbr>商品を<wbr>売れますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>できます。<wbr>商品ページ<wbr>1ページ・<wbr>商品5点までで<wbr>22,000円〜<wbr>（ホームページを<wbr>ご契約の<wbr>お店）です。<wbr>支払いは<wbr>Square の<wbr>しくみで、<wbr>手数料は<wbr>お店から<wbr>Square へ<wbr>お支払い<wbr>いただきます。<wbr>売る<wbr>物や<wbr>点数を<wbr>うかがって、<wbr>作る<wbr>前に<wbr>金額を<wbr>お伝えします。</p></div></div></details>
+        <details class="acc"><summary>ネット予約も<wbr>つけられますか？<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in"><p>つけられます。<wbr>お客さまが<wbr>スマホで<wbr>空いている<wbr>時間を<wbr>選んで<wbr>予約できる<wbr>ページを<wbr>足します。<wbr>お店は<wbr>営業日を<wbr>スマホで<wbr>入れるだけです。<wbr>料金は<wbr><a href="#option">「料金」の<wbr>中の<wbr>表</a>を<wbr>ご覧ください。<wbr>架空の<wbr>お店の<wbr><a href="https://yoyaku-demo.liftoff-358.workers.dev/" target="_blank" rel="noopener">デモ</a>で<wbr>試せます。</p></div></div></details>
+      </div>
+      <p class="faq-ask">ここにない<wbr>質問は、<wbr>「こんなこと<wbr>できる？」だけでも<wbr>大丈夫です。<wbr><a href="#contact">無料相談</a>から<wbr>どうぞ。</p>
+    </div>
+  </div>
+</section>
+<section id="other" class="sec">
+  <div class="wrap">
+    <div class="other">
+      <span class="ic" aria-hidden="true"><svg viewBox="0 0 56 56" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 46h44" stroke="#17283A" stroke-width="2.4"/><path d="M20 46V34" stroke="#17283A" stroke-width="2.6"/><path d="M20 8l-10 14h5l-8 12h26l-8-12h5z" fill="#fff" stroke="#2F6F8F" stroke-width="2.4"/><circle cx="41" cy="14" r="5" fill="#F2C230" stroke="none"/><path d="M34 46v-5h10v5" stroke="#17283A" stroke-width="2.4"/><path d="M33 41c2-4 10-4 12 0" stroke="#17283A" stroke-width="2.2"/></svg></span>
+      <div>
+        <h3>伐採・伐木・抜根・草刈りも</h3>
+        <p>Lift-Off では、<wbr>木の<wbr>伐採や<wbr>草刈りの<wbr>仕事も<wbr>行っています。<wbr>防府市近郊の<wbr>空き家・<wbr>空き地の<wbr>お手入れも<wbr>ご相談ください。</p>
+      </div>
+      <!-- 伐採サイトのURLが決まったら href を差し替える -->
+      <a class="btn" href="#contact" data-topic="伐採・草刈りの相談">伐採・草刈りに<wbr>ついて<wbr>相談する</a>
+    </div>
+  </div>
+</section>
+<p class="next-btn"><a class="btn primary" href="#soudan">次へ：相談 →</a></p>
+</div>
+<!-- ===== 画面 5：相談 ===== -->
+<div class="scr" id="soudan" data-name="相談">
+<section id="trust" class="sec trust">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>安心して<wbr>お任せ<wbr>いただく<wbr>ために</h2>
+      <p>約束している<wbr>ことや、<wbr>データの<wbr>扱い、<wbr>担当する<wbr>人の<wbr>ことです。<wbr>気になる<wbr>項目を<wbr>押すと<wbr>開きます。</p>
+    </div>
+    <div class="acc-list">
+      <details class="acc" id="promise"><summary>お約束している<wbr>こと<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <ul class="ck">
+          <li>「検索で<wbr>1位」<wbr>「必ず<wbr>お客さんが<wbr>増える」などの<wbr>約束は<wbr>しません。<wbr>できる<wbr>ことを<wbr>正直に<wbr>お伝えします。</li>
+          <li>お店の<wbr>サイトに、<wbr>効果を<wbr>言い切る<wbr>表現や<wbr>大げさな<wbr>言葉は<wbr>使いません。</li>
+          <li>写真や<wbr>お名前は、<wbr>了承を<wbr>いただいてから<wbr>載せます。</li>
+        </ul>
+      </div></div></details>
+      <details class="acc" id="data"><summary>データの<wbr>管理<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">ホームページは<wbr>お店の大事な財産です。<wbr>やめるときに<wbr>困らないよう、<wbr>最初からお店のものとして<wbr>持っていただきます。</p>
+        <div class="keys">
+          <div class="k-own">
+            <h4>お店の<wbr>名義で<wbr>作るもの</h4>
+            <p class="k-lead">最初から<wbr>お店の<wbr>ものです。<wbr>やめても<wbr>そのまま<wbr>使えます。</p>
+            <ul>
+              <li><b>ドメイン</b><span>ホームページの<wbr>住所<wbr><span class="nw">（〇〇.jp など）。</span><wbr>代金も<wbr>お店から<wbr>直接<wbr>お支払い</span></li>
+              <li><b>Googleマップの<wbr>お店情報</b></li>
+              <li><b>ネット予約</b><span>RESERVA など</span></li>
+              <li><b>お問い合わせの<wbr>メール</b><span>お店の<wbr>メールに<wbr>直接<wbr>届きます</span></li>
+            </ul>
+          </div>
+          <div class="k-keep">
+            <h4>こちらで<wbr>預かって<wbr>管理するもの</h4>
+            <p class="k-lead">やめる<wbr>ときは<wbr>一式を<wbr>お渡しします。<wbr>ほかの<wbr>会社にも<wbr>引き継げます。</p>
+            <ul>
+              <li><b>ホームページの<wbr>ファイル</b><span>2か所に<wbr>保管。<wbr>変更の<wbr>記録も<wbr>すべて<wbr>残すので、<wbr>前の<wbr>状態にも<wbr>戻せます</span></li>
+              <li><b>いただいた<wbr>写真</b><span>やめる<wbr>ときに<wbr>お返しして、<wbr>こちらの<wbr>分は<wbr>消します</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="k-note">お店の<wbr>お客さんの<wbr>個人情報<wbr>（お問い合わせ・<wbr>予約）は、<wbr>こちらでは<wbr>持ちません。</p>
+      </div></div></details>
+      <details class="acc" id="person"><summary>担当する人<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p><b>最初の<wbr>ご相談から<wbr>毎月の<wbr>更新まで、<wbr><span class="nw">同じ1人が担当します。</span></b></p>
+        <p>防府市を<wbr>拠点に<wbr>している<wbr>個人の<wbr>事業者です。<wbr>会社勤めを<wbr>25年<wbr>続けた<wbr>あと<wbr>独立し、<wbr>ホームページの<wbr>仕事と、<wbr>伐採・<wbr>草刈りの<wbr>仕事を<wbr>しています。<wbr>話した<wbr>ことが<wbr>担当者の<wbr>あいだで<wbr>伝わらない、<wbr>ということは<wbr>ありません。</p>
+        <ul class="p-points">
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>窓口は<wbr>最後まで<wbr>同じ人</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>打ち合わせは<wbr>お会いして<wbr>2回</li>
+          <li><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="#F2C230"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="#17283A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>インボイス<wbr>登録済み</li>
+        </ul>
+      </div></div></details>
+      <!-- Lift-Off という名前について（チャットで決めた文。言葉と行の切れ目は変えない。wbr.py をかけない）
+           行は <br> で決める。スマホだけの切れ目は <br class="sp-br">（パソコンでは消す） -->
+      <details class="acc p-name" id="name"><summary>Lift-Off という名前について<i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p><span class="nw">飛行機は、飛び立つときに<br class="sp-br">いちばん大きな力を使います。</span><br><span class="nw">お店も同じで、始めるとき・<br class="sp-br">新しいことに踏み出すときに、<br class="sp-br">いちばん力がいります。</span><br><span class="nw">その「飛び立つとき」の<br class="sp-br">チカラになりたい。<br class="sp-br">そんな思いで名づけました。</span></p>
+      </div></div></details>
+      <details class="acc" id="same"><summary><span class="nw">このページも、</span><wbr><span class="nw">同じ作りです</span><i class="pm" aria-hidden="true"><b></b><b></b></i></summary><div class="acc-body"><div class="acc-in">
+        <p class="note">見えにくい<wbr>ところですが、<wbr>お店の<wbr>ホームページには、<wbr>はじめから<wbr>次のことを<wbr>入れています。<wbr>このページで<wbr>そのまま<wbr>試せます。</p>
+        <ul class="same-list">
+          <li><h4>古いスマホでも<wbr>崩れない</h4><p>新しい<wbr>スマホでしか<wbr>効かない<wbr>書き方には、<wbr>古い<wbr>スマホ用の<wbr>予備を<wbr>付けています。<wbr>公開の<wbr>前に、<wbr>画面の<wbr>幅を<wbr>変えて<wbr>崩れが<wbr>ないか<wbr>確かめます。</p><span class="try">お手元の<wbr>スマホや<wbr>タブレットで<wbr>開いてみてください</span></li>
+          <li><h4>言葉の<wbr>途中で<wbr>切れない</h4><p>スマホの<wbr>せまい<wbr>画面でも、<wbr>「ホーム／ページ」の<wbr>ように<wbr>言葉の<wbr>途中で<wbr>改行されないよう、<wbr>文の<wbr>区切りを<wbr>整えています。</p><span class="try">スマホを<wbr>横に<wbr>してみてください</span></li>
+          <li><h4>「戻る」で、<wbr>見ていた<wbr>場所へ</h4><p>メニューや<wbr>見本を<wbr>開いてから<wbr>戻ると、<wbr>ページの<wbr>一番上ではなく、<wbr>さっきまで<wbr>見ていた<wbr>ところに<wbr>戻ります。</p><span class="try"><a href="../../samples/index.html">見本の<wbr>一覧</a>を<wbr>開いて、<wbr>戻ってみてください</span></li>
+          <li><h4>LINEで<wbr>送ると<wbr>カードが<wbr>出る</h4><p>URLを<wbr>LINEや<wbr>SNSで<wbr>送ったときに、<wbr>画像と<wbr>説明の<wbr>カードが<wbr>出るように<wbr>しています。<wbr>お店の<wbr>雰囲気が<wbr>ひと目で<wbr>伝わります。</p><span class="try">このページの<wbr>URLを、<wbr>ご自分あての<wbr>LINEに<wbr>送ってみてください</span></li>
+          <li><h4>押すと<wbr>そのまま<wbr>電話・予約</h4><p>電話番号は<wbr>押すだけで<wbr>電話が<wbr>かけられます。<wbr>ネット予約や<wbr>地図にも、<wbr>ボタン<wbr>ひとつで<wbr>進めます。</p><span class="try">スマホで、<wbr>下の<wbr>「電話する」を<wbr>押すと<wbr>電話の<wbr>画面が<wbr>開きます</span></li>
+          <li><h4>お問い合わせは<wbr>お店の<wbr>メールへ</h4><p>フォームから<wbr>送られた<wbr>内容は、<wbr>お店の<wbr>メールに<wbr>直接<wbr>届きます。<wbr>こちらで<wbr>預かることは<wbr>ありません。</p><span class="try">このページの<wbr>フォームも、<wbr>同じ<wbr>しくみです</span></li>
+        </ul>
+        <p class="note">ほかにも、<wbr>画像は<wbr>見る<wbr>ところまで<wbr>来てから<wbr>読み込むなど、<wbr>表示が<wbr>重く<wbr>ならないように<wbr>しています。</p>
+      </div></div></details>
+    </div>
+  </div>
+</section>
+<section id="contact" class="sec contact">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>無料相談の<wbr>お申し込み<wbr><span class="nw">（選ぶだけ・1分）</span></h2>
+      <p>ご相談・<wbr>お見積もりは<wbr>無料です。<wbr>「こんなことできる？」だけでも<wbr>お気軽に<wbr>どうぞ。</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <ol class="howto">
+          <li><b>下の<wbr>項目を<wbr>選ぶ</b><span>1分ほど。<wbr>文を<wbr>考えなくても<wbr>大丈夫です。</span></li>
+          <li><b>送る</b><span>ページの<wbr>中で<wbr>送信が<wbr>終わります。<wbr>メールの<wbr>画面は<wbr>開きません。</span></li>
+          <li><b>こちらから<wbr>連絡して、<wbr>会う<wbr>日と<wbr>場所を<wbr>決めます</b><span>ご都合の<wbr>よい<wbr>場所へ<wbr>うかがいます<wbr>（お店・<wbr>カフェなど）。<wbr>お店の<wbr>ことを<wbr>うかがって、<wbr>合いそうな<wbr>プランと<wbr>金額を<wbr>お伝えします。<wbr>決めるのは<wbr>そのあとで。<wbr>ご家族と<wbr>相談してからでも<wbr>かまいません。</span></li>
+        </ol>
+        <ul class="nopush">
+          <li>その場で<wbr>決めなくて<wbr>大丈夫です</li>
+          <li>無理に<wbr>おすすめしません</li>
+          <li>お断りいただいても、<wbr>こちらから<wbr>何度も<wbr>連絡しません</li>
+        </ul>
+        <div class="c-info">
+          <p class="tel-label">お電話でも</p>
+          <a class="tel" href="tel:09011896726"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h3l1.5 4-2 1.2a10 10 0 0 0 5.3 5.3L13 11.5l4 1.5v3a1.5 1.5 0 0 1-1.6 1.5C8.6 17 3 11.4 2.5 4.6A1.5 1.5 0 0 1 4 3z"/></svg>090-1189-6726</a>
+          <p class="tel-hours">受付時間　<b>平日 10:00〜16:00</b></p>
+          <p class="tel-note">フォーム・<wbr>メールは<wbr>いつでも<wbr>送れます。<wbr>お電話は<wbr>作業中で<wbr>出られない<wbr>ことがあります。<wbr>その<wbr>場合は、<wbr>折り返しお電話します。</p>
+          <p>メール：<a class="mail" href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
+          <dl>
+            <dt>屋号</dt><dd>Lift-Off<wbr>（リフトオフ）</dd>
+            <dt>所在地</dt><dd>山口県防府市</dd>
+            <dt>対応地域</dt><dd>防府市と<wbr>その<wbr>周辺</dd>
+          </dl>
+        </div>
+      </div>
+      <div class="formbox" id="formbox">
+        <svg class="send-plane" id="send-plane" aria-hidden="true" focusable="false"><path class="trail" id="send-trail" d=""/><g class="plane" id="send-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+        <div class="form-top"><span>ご相談票</span><span class="left" id="left-top" aria-hidden="true"></span></div>
+        <form id="form" action="" method="POST" novalidate>
+          <label><span>お名前<span class="req">必須</span></span><input name="name" required autocomplete="name"></label>
+          <label><span>お店・会社の<wbr>名前<span class="opt-label">なくても可</span></span><input name="shop" autocomplete="organization"></label>
+          <div class="two">
+            <label><span>お電話番号<span class="req">どちらか必須</span></span><input name="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="例：090-0000-0000"></label>
+            <label><span>メールアドレス<span class="opt-label">電話がなければ</span></span><input name="email" type="email" inputmode="email" autocomplete="email" placeholder="例：abc@example.com"></label>
+          </div>
+          <fieldset><legend>ご相談の<wbr>しかた<span class="req">必須</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="how" value="会って話したい"><span>会って話したい</span></label>
+              <label class="chip"><input type="radio" name="how" value="まずは連絡のやりとりで"><span>まずは連絡のやりとりで</span></label>
+              <label class="chip"><input type="radio" name="how" value="電話で話したい"><span>電話で話したい</span></label>
+            </div>
+          </fieldset>
+          <div class="meet" id="meet" hidden>
+            <fieldset><legend>いつごろが<wbr>よいですか<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="when" value="今週"><span>今週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="来週"><span>来週</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="再来週より先"><span>再来週より先</span></label>
+              <label class="chip"><input type="checkbox" name="when" value="いつでも"><span>いつでも</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>曜日<span class="opt-label">いくつでも</span></legend>
+              <div class="chips days">
+              <label class="chip"><input type="checkbox" name="day" value="月"><span>月</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="火"><span>火</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="水"><span>水</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="木"><span>木</span></label>
+              <label class="chip"><input type="checkbox" name="day" value="金"><span>金</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>時間<span class="opt-label">いくつでも</span></legend>
+              <div class="chips">
+              <label class="chip"><input type="checkbox" name="time" value="午前（10〜12時）"><span>午前（10〜12時）</span></label>
+              <label class="chip"><input type="checkbox" name="time" value="午後（13〜16時）"><span>午後（13〜16時）</span></label>
+              </div>
+            </fieldset>
+            <fieldset><legend>会う<wbr>場所</legend>
+              <div class="chips">
+              <label class="chip"><input type="radio" name="place" value="お店に来てほしい"><span>お店に来てほしい</span></label>
+              <label class="chip"><input type="radio" name="place" value="お店の近くのカフェなど"><span>お店の近くのカフェなど</span></label>
+              <label class="chip"><input type="radio" name="place" value="どこでもよい"><span>どこでもよい</span></label>
+              </div>
+            </fieldset>
+            <p class="formnote">日にちと<wbr>場所は、<wbr>こちらから<wbr>折り返して<wbr>決めます。<wbr>うかがえるのは、<wbr>防府市と<wbr>その<wbr>周辺の<wbr>平日 10:00〜16:00 です。</p>
+          </div>
+          <fieldset><legend>気に<wbr>なること<span class="req">必須</span><span class="opt-label">いくつでも</span></legend>
+            <div class="chips">
+              <label class="chip"><input type="checkbox" name="about" value="ホームページを新しく作りたい"><span>ホームページを新しく作りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="今のホームページを直したい"><span>今のホームページを直したい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="更新をまかせたい"><span>更新をまかせたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ネット予約をつけたい"><span>ネット予約をつけたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="Googleマップを整えたい"><span>Googleマップを整えたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="ロゴ・名刺・チラシ・メニュー表"><span>ロゴ・名刺・チラシ・メニュー表</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="料金を知りたい"><span>料金を知りたい</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="伐採・草刈りの相談"><span>伐採・草刈りの相談</span></label>
+              <label class="chip"><input type="checkbox" name="about" value="まだ決めていない・話を聞きたい"><span>まだ決めていない・話を聞きたい</span></label>
+            </div>
+          </fieldset>
+          <label><span>ほかに<wbr>伝えたいこと<span class="opt-label">なくても可</span></span><textarea name="message" placeholder="なければ空のままで大丈夫です"></textarea></label>
+          <input type="hidden" name="_subject" value="【Lift-Off】ホームページからのお問い合わせ">
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+          <p class="left-note" id="left-note" aria-live="polite"></p>
+          <button class="btn signal" type="submit">この<wbr>内容で<wbr>送る</button>
+          <p class="formnote" id="formnote" role="status">送ると、<wbr>このページに<wbr>「送りました」と<wbr>出ます。<wbr>メールの<wbr>画面は<wbr>開きません。</p>
+          <p class="formnote">いただいた<wbr>内容は、<wbr>ご相談への<wbr>返事の<wbr>ためだけに<wbr>使います。</p>
+        </form>
+        <div class="sent" id="sent" role="status">
+          <svg class="plane-box" viewBox="-40 -20 80 40" aria-hidden="true"><path d="M-38 14 C-30 12 -22 8 -14 4" fill="none" stroke="#F2C230" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 5"/><g transform="translate(4 -2) rotate(-12)"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+          <b>送りました。</b>
+          <p>こちらから<wbr>連絡します。<wbr>ありがとうございます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<p class="irai-line"><a href="#irai">ご契約中の<wbr>お店：<wbr>修正の<wbr>ご依頼 →</a></p>
+</div>
+<!-- ===== 画面：修正のご依頼（#irai。下のタブには出さない。ホームの帯・メニューの「修正依頼」・相談の下・フッターから） ===== -->
+<div class="scr" id="irai" data-name="修正のご依頼">
+<section class="sec irai" aria-labelledby="irai-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="irai-h">修正の<wbr>ご依頼<wbr><span class="nw">（ご契約中のお店）</span></h2>
+      <p>直したい<wbr>所を<wbr>選んで<wbr>「メールを作る」を<wbr>押すと、<wbr>内容の<wbr>入った<wbr>メールの<wbr>画面が<wbr>開きます。<wbr>そのまま<wbr>送信してください。</p>
+    </div>
+    <div class="formbox irai-box" id="irai-box">
+      <svg class="send-plane" id="irai-plane" aria-hidden="true" focusable="false"><path class="trail" id="irai-trail" d=""/><g class="plane" id="irai-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
+      <div class="form-top"><span>修正のご依頼票</span><span class="left" id="irai-top"></span></div>
+      <form id="irai-form" action="" method="POST" novalidate>
+        <label><span>お店の<wbr>名前<span class="req">必須</span></span><input name="shop" id="irai-shop" autocomplete="organization" placeholder="例：〇〇サロン"></label>
+        <fieldset><legend>直したい<wbr>所<span class="opt-label">いくつでも</span></legend>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" name="what" value="お休み・営業時間"><span>お休み・営業時間</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="メニュー・料金"><span>メニュー・料金</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="写真"><span>写真</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="文の直し"><span>文の直し</span></label>
+            <label class="chip"><input type="checkbox" name="what" value="そのほか"><span>そのほか</span></label>
+          </div>
+        </fieldset>
+        <label><span>ひと言<span class="opt-label">自由に</span></span><textarea name="note" id="irai-note-in" placeholder="例：来週の水曜はお休みにします"></textarea></label>
+        <p class="formnote irai-photo">写真が<wbr>あるときは、<wbr>次に<wbr>開く<wbr>メールに<wbr>付けて<wbr>送ってください。</p>
+        <button class="btn signal" type="submit" id="irai-btn">メールを<wbr>作る</button>
+        <p class="formnote" id="irai-msg" role="status"></p>
+        <p class="formnote irai-alt-p"><a href="#irai-altbox" id="irai-alt" class="irai-alt" aria-expanded="false">メールが<wbr>開かないときは</a></p>
+        <div class="irai-altbox" id="irai-altbox" hidden>
+          <p class="irai-addr"><span id="irai-addr">liftoff.358@gmail.com</span><button type="button" class="irai-copy" id="irai-copy">コピー</button></p>
+          <p class="formnote">件名は<wbr>『ホームページの<wbr>修正の<wbr>ご依頼』、<wbr>本文の<wbr>1行目に<wbr>『お店：<span id="irai-alt-shop">〇〇</span>』と<wbr>書いてください。</p>
+        </div>
+        <p class="formnote irai-small">ご依頼には<wbr>原則<wbr>3営業日以内に<wbr>対応します。<wbr>回数は<wbr>月の<wbr>回数の<wbr>中で<wbr>数えます。</p>
+      </form>
+    </div>
+    <!-- 最近できるようになったこと：お知らせとして並べるだけ（あおる言葉は使わない） -->
+    <div class="news" id="news">
+      <h3>最近<wbr>できるように<wbr>なったこと</h3>
+      <ul>
+        <li><b>商品ページ<wbr>（ネットで<wbr>売る）</b><p>1ページ・<wbr>商品5点までの<wbr>商品ページを<wbr>作れるように<wbr>なりました。<wbr>「購入する」<wbr>ボタン付きで、<wbr>支払いは<wbr>Square の<wbr>しくみです。<wbr><a href="#option">料金の表</a></p></li>
+        <li><b>動きの<wbr>演出</b><p>お店の<wbr>ロゴや<wbr>絵に<wbr>合わせた<wbr>オリジナルの<wbr>動きを、<wbr>1か所から<wbr>付けられます。<wbr><a href="#option">料金の表</a></p></li>
+        <li><b>ロゴ・<wbr>名刺・<wbr>チラシ</b><p>ホームページと<wbr>同じ<wbr>色・言葉で<wbr>そろえて<wbr>作れます。<wbr>印刷用の<wbr>データで<wbr>お渡しします。<wbr><a href="#option">料金の表</a></p></li>
+      </ul>
+    </div>
+    <p class="next-btn"><a class="btn" href="#home">← ホームへ</a></p>
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <img class="foot-logo" src="../../img/logo-white.svg" alt="Lift-Off" width="397" height="140" loading="lazy" decoding="async">
+      <p>防府のお店の<wbr>ホームページ制作・<wbr>WEB担当者代行</p>
+      <p><a href="tel:09011896726">090-1189-6726</a>（受付 平日 10:00〜16:00）　<a href="mailto:liftoff.358@gmail.com">liftoff.358@gmail.com</a></p>
+    </div>
+    <ul class="foot-nav">
+      <li><a href="#can">できること</a></li><li><a href="#price">料金</a></li><li><a href="#flow">作成の流れ</a></li><li><a href="#work">デザイン見本</a></li><li><a href="#trust">安心のために</a></li><li><a href="#faq">よくある質問</a></li><li><a href="#contact">無料相談</a></li>
+    </ul>
+    <p class="foot-irai"><a href="#irai">ご契約中のお店：修正のご依頼 →</a></p>
+    <p class="copy"><span>© Lift-Off　山口県防府市</span><a href="#">ページの上へ ↑</a></p>
+  </div>
+</footer>
+
+<button class="totop" id="totop" type="button" aria-label="ページの上へ"><svg viewBox="-32 -16 64 32" aria-hidden="true"><use href="#jet" xlink:href="#jet"/></svg></button>
+<nav class="tabbar" id="tabbar" aria-label="画面の切りかえ">
+  <a href="#home" data-scr="home">ホーム</a>
+  <a href="#dekiru" data-scr="dekiru">できること</a>
+  <a href="#ryokin" data-scr="ryokin">料金</a>
+  <a href="#nagare" data-scr="nagare">流れ</a>
+  <a href="#soudan" data-scr="soudan">相談</a>
+</nav>
+
+<script>
+// ===== 動きの共通の道具 =====
+// 動きを減らす設定の人には止めて見せる（tween は最後の形をすぐ出す）。requestAnimationFrame がない古い環境も同じ
+var STILL = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || !window.requestAnimationFrame;
+function easeOut(u){ return 1 - Math.pow(1 - u, 3); }
+function easeInOut(u){ return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+// ms の時間をかけて fn(0→1) を呼ぶ。終わったら done
+function tween(ms, fn, done, ease){
+  if (STILL) { fn(1); if (done) done(); return; }
+  var s = null; ease = ease || easeOut;
+  function st(ts){ if (s === null) s = ts; var u = Math.min(1, (ts - s) / ms); fn(ease(u)); if (u < 1) requestAnimationFrame(st); else if (done) done(); }
+  requestAnimationFrame(st);
+}
+function setTf(el, v){ el.style.webkitTransform = v; el.style.transform = v; }
+// 見えたら1回だけ fn を呼ぶ（IntersectionObserver がなければすぐ呼ぶ）
+function whenSeen(el, fn){
+  if (STILL || !('IntersectionObserver' in window)) { fn(); return; }
+  var io = new IntersectionObserver(function(es){ for (var i = 0; i < es.length; i++) if (es[i].isIntersecting) { io.disconnect(); fn(); return; } }, { rootMargin: '0px 0px -12% 0px' });
+  io.observe(el);
+}
+// 子ども（.rv）を1つずつ、下からふわっと出す
+function revealAll(items, gap, each, done){
+  if (STILL) { if (done) done(); return; }
+  for (var i = 0; i < items.length; i++) { items[i].style.opacity = '0'; setTf(items[i], 'translateY(14px)'); }
+  var n = 0;
+  function one(i){
+    var el = items[i];
+    tween(420, function(u){ el.style.opacity = u; setTf(el, 'translateY(' + ((1 - u) * 14).toFixed(1) + 'px)'); }, function(){ el.style.opacity = '1'; setTf(el, ''); n++; if (n === items.length && done) done(); });
+    if (each) each(i);
+  }
+  return function(){ for (var i = 0; i < items.length; i++) (function(i){ setTimeout(function(){ one(i); }, i * gap); })(i); };
+}
+</script>
+
+<script>
+// ===== 切りかえ式：画面を1つずつ見せる。URL の #ryokin などで画面を覚え、スマホの「戻る」で前の画面に戻る =====
+(function(){
+  var IDS = ['home', 'dekiru', 'ryokin', 'nagare', 'soudan'], ALL = IDS.concat(['irai']), cur = null; // irai：タブのない画面（修正のご依頼）。飛行機と線はホームの位置
+  function tabIndex(id){ var i = IDS.indexOf(id); return i < 0 ? 0 : i; }
+  var bar = document.getElementById('tabbar'), prog = document.getElementById('prog'), pbar = document.getElementById('prog-bar');
+  function el(id){ return document.getElementById(id); }
+  function screenOf(node){ while (node && node !== document.body) { if (node.className && String(node.className).indexOf('scr') === 0) return node.id; node = node.parentNode; } return null; }
+  for (var k = 1; k < IDS.length; k++) { var seg = document.createElement('i'); seg.className = 'prog-seg'; seg.style.left = (k / IDS.length * 100) + '%'; prog.appendChild(seg); }
+  function render(id){
+    for (var i = 0; i < ALL.length; i++) { var sc = el(ALL[i]); if (sc) sc.className = ALL[i] === id ? 'scr on' : 'scr'; }
+    var links = bar.querySelectorAll('a'); for (i = 0; i < links.length; i++) links[i].className = links[i].getAttribute('data-scr') === id ? 'on' : '';
+    cur = id; document.body.className = 'switch scr-' + id;
+    setTf(pbar, 'scaleX(' + ((tabIndex(id) + 1) / IDS.length).toFixed(3) + ')'); // 上の線：今の画面の所まで黄色
+    if (window.jetGo) window.jetGo(tabIndex(id));
+    if (id === 'ryokin' && window.layoutPlan) setTimeout(window.layoutPlan, 0);
+    fitHome();
+  }
+  // ホームの画面：帯の分だけヘッダーが高くなるので、見出しの一番上が「帯の一番下＋16px」より上に来ないように、実際の高さを測って最初の section を下げる
+  // （決め打ちの数字にしない。帯の高さが文字の大きさや幅で変わっても合う。ふつうはヘッダーが場所を取るので足す量は 0 だが、ブラウザによってはヘッダーが本文に重なるので、その分を足す）
+  function fitHome(){
+    var band = el('irai-band'), hero = document.querySelector('#home .hero'), h1 = hero && hero.querySelector('h1');
+    if (!band || !hero || !h1) return;
+    hero.style.marginTop = '0px';
+    if (cur !== 'home') return;
+    // 帯はヘッダーの中で sticky（画面に貼り付く）なので、帯の位置は画面から測ったまま使う（スクロール量 y を足さない）。見出しはページの上から測る（y を足す）
+    // （前は帯にも y を足していたので、スクロール中に resize が来ると y の分だけ余白が付き、iPhone でスクロールのたびに見出しの上に白い隙間が出ていた。2026/10/11）
+    var y = window.pageYOffset || 0, need = band.getBoundingClientRect().bottom + 16 - (h1.getBoundingClientRect().top + y);
+    if (need > 0) hero.style.marginTop = Math.ceil(need) + 'px';
+  }
+  window.fitHome = fitHome;
+  function go(id, push){
+    if (ALL.indexOf(id) < 0) id = 'home';
+    if (push) { try { history.pushState(null, '', '#' + id); } catch (e) { location.hash = id; } }
+    if (id === cur) return;
+    render(id); window.scrollTo(0, 0);
+  }
+  // ページの中のリンク（#price-web・#option・#contact など）：その場所がある画面に切りかえてから、開く・飛ぶ
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null; if (!a) return;
+    var h = a.getAttribute('href'); if (!h || h.charAt(0) !== '#') return;
+    e.preventDefault();
+    var id = h.slice(1);
+    if (!id) { go('home', true); return; }
+    if (ALL.indexOf(id) >= 0) { go(id, true); return; }
+    var target = el(id); if (!target) return;
+    var sid = screenOf(target) || cur;
+    if (sid !== cur) go(sid, true);
+    setTimeout(function(){ if (window.revealTarget) window.revealTarget(id); else { try { target.scrollIntoView(); } catch (err) {} } }, 30);
+  });
+  window.addEventListener('popstate', function(){ var id = location.hash.replace('#', ''); if (ALL.indexOf(id) < 0) { var t = id && el(id); id = (t && screenOf(t)) || 'home'; } if (id !== cur) { render(id); window.scrollTo(0, 0); } });
+  // 最初の画面：URL の # で決める（#option のような中の場所なら、その画面を出してから開く）
+  var first = location.hash.replace('#', ''), inner = null;
+  if (ALL.indexOf(first) < 0) { var t0 = first && el(first); inner = t0 ? first : null; first = (t0 && screenOf(t0)) || 'home'; }
+  render(first);
+  if (inner) setTimeout(function(){ if (window.revealTarget) window.revealTarget(inner); }, 120);
+  // resize は横幅が変わったときだけ（iPhone はスクロールでブラウザのバーが出入りするたびに resize が出る。高さだけの変化では飛行機も見出しの位置も変わらない）
+  var lastW = document.documentElement.clientWidth;
+  window.addEventListener('resize', function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; if (window.jetGo) window.jetGo(tabIndex(cur)); fitHome(); });
+  window.addEventListener('load', fitHome); setTimeout(fitHome, 300); // 書体が読み込まれて帯の高さが変わったあとにも合わせる
+})();
+// ===== 修正のご依頼（#irai）：選んだ内容とひと言の入ったメールを開く（liftoff.358@gmail.com あて。件名は今までと同じ「ホームページの修正のご依頼」。店名は本文の1行目） =====
+// URL に ?shop=〇〇 のように付いていたら、その文字をそのままお店の名前の欄に入れる（日本語も可。実在のお店の名前はソースに書かない。長すぎる・おかしな文字は入れない）
+(function(){
+  var form = document.getElementById('irai-form'); if (!form) return;
+  var MAIL = 'liftoff.358@gmail.com', SUBJECT_HEAD = 'ホームページの修正のご依頼';
+  var shop = document.getElementById('irai-shop'), msg = document.getElementById('irai-msg'), btn = document.getElementById('irai-btn'), box = document.getElementById('irai-box');
+  var m = /[?&]shop=([^&#]+)/.exec(location.search || '');
+  if (m) { var k = ''; try { k = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (err) { k = ''; }
+    k = k.replace(/[\x00-\x1f<>"'`\\]/g, '').replace(/^\s+|\s+$/g, ''); if (k.length > 40) k = ''; shop.value = k; }
+  function build(){
+    var what = [], els = form.querySelectorAll('input[name=what]'), i;
+    for (i = 0; i < els.length; i++) if (els[i].checked) what.push(els[i].value);
+    var name = shop.value.replace(/^\s+|\s+$/g, ''), note = document.getElementById('irai-note-in').value.replace(/^\s+|\s+$/g, '');
+    var body = 'お店：' + name + '\n直したい所：' + (what.length ? what.join('、') : '（未選択）') + '\nひと言：' + (note || '（なし）') + '\n\n写真があるときは、このメールに付けて送ってください。';
+    return 'mailto:' + MAIL + '?subject=' + encodeURIComponent(SUBJECT_HEAD) + '&body=' + encodeURIComponent(body);
+  }
+  // 送るときの飛行機：相談のフォームと同じ動き（右上へ飛んで黄色い飛行機雲）。動きを減らす設定の人には飛ばさない
+  function fly(done){
+    var svg = document.getElementById('irai-plane'), jet = document.getElementById('irai-jet'), trail = document.getElementById('irai-trail');
+    if (STILL || !svg || !jet) { done(); return; }
+    var r = box.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height), b = btn.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px'; svg.setAttribute('class', 'send-plane on');
+    var x0 = b.left - r.left + b.width / 2, y0 = b.top - r.top, x1 = W + 80, y1 = -60, cx = x0 + (x1 - x0) * .25, cy = y0 - (y0 - y1) * .02;
+    function at(u){ var a = 1 - u; return [a * a * x0 + 2 * a * u * cx + u * u * x1, a * a * y0 + 2 * a * u * cy + u * u * y1]; }
+    tween(1000, function(u){
+      var p = at(u), a = 1 - u, dx = 2 * a * (cx - x0) + 2 * u * (x1 - cx), dy = 2 * a * (cy - y0) + 2 * u * (y1 - cy);
+      jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(' + (.9 + u * .5).toFixed(2) + ')');
+      var d = 'M' + x0 + ' ' + y0, k, n = Math.max(2, Math.round(u * 20));
+      for (k = 1; k <= n; k++) { var t = at(u * k / n); d += ' L' + t[0].toFixed(1) + ' ' + t[1].toFixed(1); }
+      trail.setAttribute('d', d);
+    }, function(){ svg.setAttribute('class', 'send-plane'); done(); }, easeInOut);
+  }
+  // メールが開かないときは：押したときだけ、宛先と「コピー」・件名と本文の書き方を出す（?shop の店名があれば〇〇に入れる）
+  var alt = document.getElementById('irai-alt'), altbox = document.getElementById('irai-altbox'), copyBtn = document.getElementById('irai-copy');
+  alt.addEventListener('click', function(e){
+    e.preventDefault();
+    var open = altbox.hidden; altbox.hidden = !open; alt.setAttribute('aria-expanded', open ? 'true' : 'false');
+    var name = shop.value.replace(/^\s+|\s+$/g, ''); document.getElementById('irai-alt-shop').textContent = name || '〇〇';
+  });
+  function copied(ok){ copyBtn.textContent = ok ? 'コピーしました' : 'コピーできませんでした。長押しで選んでコピーしてください'; setTimeout(function(){ copyBtn.textContent = 'コピー'; }, 2500); }
+  copyBtn.addEventListener('click', function(){
+    var text = MAIL;
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(function(){ copied(true); }, function(){ copied(fallback(text)); }); }
+    else copied(fallback(text));
+  });
+  function fallback(text){ // 古い iPhone 用：見えない欄に入れて選んでコピー
+    var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px;top:0'; document.body.appendChild(ta);
+    var ok = false; try { ta.select(); ta.setSelectionRange(0, text.length); ok = document.execCommand('copy'); } catch (err) { ok = false; }
+    document.body.removeChild(ta); return ok;
+  }
+  // メールを開く（確かめる道具は、この関数を差しかえて mailto: を外に渡さないようにする）
+  if (!window.iraiOpenMail) window.iraiOpenMail = function(href){ location.href = href; };
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!shop.value.replace(/\s/g, '')) { msg.textContent = 'お店の名前を入れてください。'; shop.focus(); return; }
+    var href = build(); window.iraiLastMailto = href; // 確かめる用
+    btn.disabled = true;
+    fly(function(){
+      msg.textContent = 'メールの画面を開きます。写真を付けて送信してください。「開く」を押すと、メールのアプリが開きます。';
+      btn.disabled = false;
+      setTimeout(function(){ window.iraiOpenMail(href); }, 300);
+    });
+  });
+})();
+// ===== 飛行機は1機だけ：ヘッダーのすぐ下の線の上を飛ぶ。切りかえの移動は「どこへでも約1.5秒で着く」（遠いほど速い。動き出しと止まる所は少しゆっくり。折り返しの旋回も1.5秒の中） =====
+// 開いたときは1回だけ、画面の右下の外から、画面の中ほどを通る大きなゆるいカーブで左上へ上がり、線に乗って今の画面のタブの位置で止まる（約3秒。動き出しと止まる所はゆっくり、途中は速め）
+// 画面を切りかえると、いまの位置から続けて、その画面の位置（5つに区切った線のまん中）へ。位置は変数 pos に持つ
+// 右へ飛ぶときは線の高さ、左へ飛ぶときはその 10px 下。折り返しは半円を描いて機首を 180 度なめらかに回す。向きは常に進む方向
+// 上下の反転は「いま右へ進んでいるか、左へ進んでいるか」（moveDir）で決める：右へ進むときは必ず背中が上。角度は毎回 -180〜180 度にそろえる（足され続けない）
+// 動かすのは transform と requestAnimationFrame だけ。動きを減らす設定の人には、その画面の位置に止めて置く
+(function(){
+  var jet = document.getElementById('nav-jet'); if (!jet) return;
+  var N = 5, Y_R = 70, Y_L = 80, R = 5, FLY_MS = 1500, ENTRY_MS = 3000; // 右向きは線のすぐ下 70px、左向きはその 10px 下 80px（機体の一番下は中心＋6px。帯の文字 100px〜との間 14px 以上）
+  var pos = { x: -200, y: -200, a: 0 }, path = [], last = null, raf = 0, entered = false, turn = 0, moveDir = 1, entry = null, fly = null;
+  function norm(a){ while (a > 180) a -= 360; while (a <= -180) a += 360; return a; }
+  function xOf(i){ return (i + .5) / N * document.documentElement.clientWidth; }
+  // 向き a で回したあと、上下を f 倍にする：右へ進んでいれば +（そのまま）、左へ進んでいれば -（上下反転＝背中が上・機首が進む向き）。
+  // 曲がっている最中（turn＝1px 進むあいだに何度向きが変わるか）は f を 0 に近づけて、旋回して傾いているように見せる。
+  // 折り返しの半円は強く曲がるので、左右が入れかわる瞬間は f がほぼ 0 → パッと切りかわって見えない
+  function apply(){ var f = moveDir * Math.max(.1, 1 - turn / 3.5); setTf(jet, 'translate3d(' + pos.x.toFixed(1) + 'px,' + pos.y.toFixed(1) + 'px,0) rotate(' + pos.a.toFixed(1) + 'deg) scaleY(' + f.toFixed(3) + ')'); }
+  // 1歩すすめる：目標の点へ向けて d px。向きは進む方向へ少しずつ。左右の向きは実際の動きで決める
+  function moveTo(p, d){
+    var dx = p[0] - pos.x, dy = p[1] - pos.y, L = Math.sqrt(dx * dx + dy * dy);
+    if (L < .01) return 0;
+    var step = Math.min(L, d), ang = Math.atan2(dy, dx) * 180 / Math.PI, da = norm(ang - pos.a);
+    var turned = da * Math.min(1, step / 6); pos.a = norm(pos.a + turned);
+    turn += (Math.abs(turned) / Math.max(.5, step) - turn) * .25;
+    if (Math.abs(dx) > .01) moveDir = dx > 0 ? 1 : -1;
+    pos.x += dx / L * step; pos.y += dy / L * step;
+    return step;
+  }
+  function heading(){ return moveDir; } // 今の向き：1 右、-1 左
+  // いまの位置・向きから目標の x まで、なめらかな道筋を作る
+  function plan(tx){
+    path = [];
+    var dir = heading(), need = tx >= pos.x ? 1 : -1, y0 = pos.y, y1 = need > 0 ? Y_R : Y_L, i;
+    if (Math.abs(tx - pos.x) < 1) return; // もう同じ位置なら動かない（向きが左でも折り返さない。#irai でホームの位置を指すときなど）
+    if (dir !== need) {
+      // 折り返し：進んでいる方へふくらむ半円で、もう一方の高さへ（向きが 180 度なめらかに変わる）
+      var r = Math.abs(y1 - y0) / 2 || R, n = 16;
+      for (i = 1; i <= n; i++) { var t = Math.PI * i / n; path.push([pos.x + dir * Math.sin(t) * r, y0 + (y1 - y0) / 2 * (1 - Math.cos(t))]); }
+    } else if (Math.abs(y1 - y0) > 1) {
+      // 同じ向きのまま高さだけ違うとき：ゆるい S 字で高さを合わせる
+      var n2 = 12, len = Math.min(80, Math.abs(tx - pos.x) * .5);
+      for (i = 1; i <= n2; i++) { var u = i / n2; path.push([pos.x + need * len * u, y0 + (y1 - y0) * (u * u * (3 - 2 * u))]); }
+    }
+    path.push([tx, y1]);
+    // 道のりの長さを測って、約 FLY_MS で着くようにする（時間で進める）
+    var L = 0, prev = [pos.x, pos.y]; for (i = 0; i < path.length; i++) { L += Math.sqrt((path[i][0] - prev[0]) * (path[i][0] - prev[0]) + (path[i][1] - prev[1]) * (path[i][1] - prev[1])); prev = path[i]; }
+    fly = { t0: null, L: L, flown: 0 };
+  }
+  // 線の上の飛び方：時間で進める。進み具合は「ゆっくり→速め→ゆっくり」（smoothstep）。遠いほど速く飛んで、どこへでも約1.5秒
+  function advance(ts){
+    if (!fly) { path = []; return false; }
+    if (fly.t0 === null) fly.t0 = ts;
+    var u = Math.min(1, (ts - fly.t0) / FLY_MS), e = u * u * (3 - 2 * u), d = fly.L * e - fly.flown;
+    while (d > 0 && path.length) { var moved = moveTo(path[0], d); if (moved === 0) { path.shift(); continue; } fly.flown += moved; d -= moved; if (moved < .01) break; if (Math.abs(path[0][0] - pos.x) < .01 && Math.abs(path[0][1] - pos.y) < .01) path.shift(); }
+    apply();
+    if (u >= 1 || !path.length) { if (path.length) { var last2 = path[path.length - 1]; pos.x = last2[0]; pos.y = last2[1]; } path = []; fly = null; return false; }
+    return true;
+  }
+  function step(ts){
+    raf = 0;
+    if (last === null) last = ts;
+    var more;
+    try { more = entry ? entryStep(ts) : advance(ts); }
+    catch (err) { if (entry) entryFinish(); path = []; more = false; }
+    last = ts;
+    if (more) raf = requestAnimationFrame(step); else { last = null; turn = 0; if (!entry) pos.a = moveDir > 0 ? 0 : 180; apply(); } // 止まったら向きを線にぴったりそろえる
+  }
+  function kick(){ if (!raf) { last = null; raf = requestAnimationFrame(step); } }
+  // ---- 開いたときの入り方：右下の外 → 画面の中ほど → 左上 → 線に乗って目標（3次ベジェ。長さで等分して、時間はゆっくり→速め→ゆっくり）
+  function bez(P, t){ var a = 1 - t; return [a * a * a * P[0][0] + 3 * a * a * t * P[1][0] + 3 * a * t * t * P[2][0] + t * t * t * P[3][0], a * a * a * P[0][1] + 3 * a * a * t * P[1][1] + 3 * a * t * t * P[2][1] + t * t * t * P[3][1]]; }
+  function planEntry(tx){
+    var W = document.documentElement.clientWidth, VH = window.innerHeight || 800;
+    // 画面のまん中（幅の半分・高さの半分あたり）を通るように、2つの制御点を置く。目標が左寄りなら左向きで線に乗る（その高さは Y_L）、右寄りなら右向き（Y_R）
+    var leftEnd = tx < W * .32, P = [[W + 50, VH + 30], [W * .6, VH * .8], [W * .32, 60], [tx, leftEnd ? Y_L : Y_R]], pts = [], cum = [], i, L = 0;
+    for (i = 0; i <= 120; i++) { var q = bez(P, i / 120); if (i) L += Math.sqrt((q[0] - pts[i - 1][0]) * (q[0] - pts[i - 1][0]) + (q[1] - pts[i - 1][1]) * (q[1] - pts[i - 1][1])); pts.push(q); cum.push(L); }
+    entry = { pts: pts, cum: cum, L: L, t0: null, tx: tx, leftEnd: leftEnd };
+    pos = { x: P[0][0], y: P[0][1], a: Math.atan2(P[1][1] - P[0][1], P[1][0] - P[0][0]) * 180 / Math.PI }; moveDir = -1; turn = 0;
+  }
+  function entryAt(u){ // 道のり u（0〜1）の点（pts[i] までの道のりが cum[i]。i は 1〜最後）
+    var sL = Math.max(0, Math.min(1, u)) * entry.L, i = 1; while (i < entry.pts.length - 1 && entry.cum[i] < sL) i++;
+    var a = entry.pts[i - 1], b = entry.pts[i], seg = entry.cum[i] - entry.cum[i - 1], k = seg > 0 ? (sL - entry.cum[i - 1]) / seg : 0;
+    return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+  }
+  // 入り方の終わり：線の上の決まった位置に置く。入ってくる途中にタブが押されていたら（nextTx）、そのまま線にそってそこへ続けて飛ぶ
+  function entryFinish(){ var d = entry.leftEnd ? -1 : 1, nx = entry.nextTx; pos = { x: entry.tx, y: d > 0 ? Y_R : Y_L, a: d > 0 ? 0 : 180 }; moveDir = d; turn = 0; entry = null; path = []; apply(); if (nx !== undefined) { plan(nx); if (path.length) kick(); } }
+  function entryStep(ts){
+    if (entry.t0 === null) entry.t0 = ts;
+    var u = Math.min(1, (ts - entry.t0) / ENTRY_MS), e = u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; // 動き出しと止まる所はゆっくり、途中は速め
+    var p = entryAt(e), q = entryAt(Math.min(1, e + .004)), dx = q[0] - p[0], dy = q[1] - p[1];
+    var moved = Math.sqrt((p[0] - pos.x) * (p[0] - pos.x) + (p[1] - pos.y) * (p[1] - pos.y));
+    if (dx * dx + dy * dy > .0001) { var da = norm(Math.atan2(dy, dx) * 180 / Math.PI - pos.a); var turned = da * .25; pos.a = norm(pos.a + turned); turn += (Math.abs(turned) / Math.max(.5, moved) - turn) * .15; if (Math.abs(dx) > .001) moveDir = dx > 0 ? 1 : -1; }
+    pos.x = p[0]; pos.y = p[1];
+    apply();
+    if (u >= 1) { entryFinish(); return false; }
+    return true;
+  }
+  window.jetGo = function(i){
+    var tx = xOf(i);
+    if (STILL) { pos = { x: tx, y: Y_R, a: 0 }; moveDir = 1; turn = 0; path = []; fly = null; entry = null; apply(); entered = true; return; } // 動きなし：入ってくる動きなしで、その画面の位置に置く
+    if (!entered) { entered = true; planEntry(tx); apply(); kick(); return; }
+    if (entry) { entry.nextTx = tx; return; } // 入ってくる途中に切りかえた：入り方は最後まで飛んで、そのあと線にそって新しい行き先へ
+    plan(tx); if (path.length) kick();
+  };
+  // 確かめる用（確認画像・JS での確認）
+  window.jetPose = function(x, y, a, t, dir){ pos = { x: x, y: y, a: a }; turn = t || 0; if (dir) moveDir = dir; path = []; fly = null; entry = null; apply(); };
+  window.jetEntryPose = function(u, i){ planEntry(xOf(i || 0)); if (u >= 1) { entryFinish(); return; } var e = u, p = entryAt(e), q = entryAt(Math.min(1, e + .004)); pos = { x: p[0], y: p[1], a: Math.atan2(q[1] - p[1], q[0] - p[0]) * 180 / Math.PI }; moveDir = q[0] >= p[0] ? 1 : -1; turn = 0; entry = null; path = []; fly = null; apply(); }; // 置いたあとは入り方の動きを止める（画像を撮る用）
+  window.jetSim = function(ms){ var t = 0; while (t < ms && path.length) { t += 16; advance(t); } turn = 0; apply(); return { x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a), dir: moveDir, left: path.length }; };
+  window.jetTick = function(ts){ step(ts); return { raf: raf, last: last, entry: !!entry, left: path.length, x: Math.round(pos.x), y: Math.round(pos.y), a: Math.round(pos.a) }; }; // 確かめる用：描画の1コマを手で回す
+  window.jetState = function(){ return { x: pos.x, y: pos.y, a: pos.a, dir: moveDir, turn: turn, left: path.length, entry: !!entry }; };
+  apply();
+  window.jetGo(['home', 'dekiru', 'ryokin', 'nagare', 'soudan'].indexOf(document.querySelector('.scr.on') ? document.querySelector('.scr.on').id : 'home'));
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && (path.length || entry) && !raf) { last = null; if (entry) entry.t0 = null; raf = requestAnimationFrame(step); } });
+})();
+</script>
+<script>
+// （shian2：「こんなこと」のふわっと表示はしない。iOS の Safari で、開いた直後の見出しが古い位置に描かれる不具合の対策）
+// ===== 更新は、こんなふうに：LINE の吹き出しが1つずつ届く =====
+(function(){
+  var box = document.getElementById('up-chat'); if (!box) return;
+  var show = revealAll(box.querySelectorAll('.rv'), 650);
+  if (show) whenSeen(box, show);
+})();
+// ===== 作成の流れ：手順1〜6を滑走路に見立て、見えたら飛行機が走って、手順6（公開）で離陸。通った手順が順に出る =====
+(function(){
+  var wrap = document.getElementById('steps-wrap'), ol = document.getElementById('steps'), line = document.getElementById('steps-line');
+  var svg = document.getElementById('steps-jet'), plane = document.getElementById('steps-plane'), trail = document.getElementById('steps-trail');
+  if (!ol || !line) return;
+  var items = ol.querySelectorAll('li');
+  var show = revealAll(items, 1); // 出す順は飛行機に合わせるので、ここでは準備だけ
+  if (!show || !svg) return;
+  setTf(line, 'scaleY(0)');
+  var shown = [];
+  function one(i){ if (shown[i]) return; shown[i] = true; var el = items[i]; tween(380, function(u){ el.style.opacity = u; setTf(el, 'translateY(' + ((1 - u) * 14).toFixed(1) + 'px)'); }, function(){ el.style.opacity = '1'; setTf(el, ''); }); }
+  whenSeen(ol, function(){
+    var r = wrap.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height);
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('class', 'steps-jet on');
+    var ys = [], i, cx = 0;
+    for (i = 0; i < items.length; i++) { var b = items[i].getBoundingClientRect(); ys.push(b.top - r.top + 32); }
+    cx = (items[0].getBoundingClientRect().left - r.left) + 22;
+    var y0 = ys[0] - 40, y1 = ys[ys.length - 1], TAXI = 2000, FLY = 1100, mob = W < 500, sc = mob ? .7 : .85;
+    // 滑走（上から下へ機首を下に向けて走る）
+    tween(TAXI, function(u){
+      var y = y0 + (y1 - y0) * u;
+      setTf(line, 'scaleY(' + Math.min(1, Math.max(0, (y - ys[0] + 10) / (y1 - ys[0] + 20))).toFixed(3) + ')');
+      plane.setAttribute('transform', 'translate(' + cx.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(90) scale(' + sc + ')');
+      for (i = 0; i < ys.length; i++) if (y >= ys[i] - 14) one(i);
+    }, function(){
+      setTf(line, ''); for (i = 0; i < items.length; i++) one(i);
+      // 離陸：右上へ抜ける。うしろに黄色い飛行機雲
+      var ex = W + 70, ey = Math.max(-60, y1 - H * .9), cx1 = cx + (ex - cx) * .35, cy1 = y1 + 10;
+      tween(FLY, function(u){
+        var a = 1 - u, x = a * a * cx + 2 * a * u * cx1 + u * u * ex, y = a * a * y1 + 2 * a * u * cy1 + u * u * ey;
+        var dx = 2 * a * (cx1 - cx) + 2 * u * (ex - cx1), dy = 2 * a * (cy1 - y1) + 2 * u * (ey - cy1);
+        var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        plane.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + ang.toFixed(1) + ') scale(' + sc + ')');
+        var d = 'M' + cx + ' ' + y1, k, n = Math.max(2, Math.round(u * 20));
+        for (k = 1; k <= n; k++) { var v = u * k / n, av = 1 - v; d += ' L' + (av * av * cx + 2 * av * v * cx1 + v * v * ex).toFixed(1) + ' ' + (av * av * y1 + 2 * av * v * cy1 + v * v * ey).toFixed(1); }
+        trail.setAttribute('d', d);
+      }, function(){ plane.style.display = 'none'; trail.style.opacity = '.4'; }, easeInOut);
+    }, function(u){ return u * u * (3 - 2 * u); });
+  });
+})();
+</script>
+<script>
+// ===== 開く所（details）：なめらかに開閉、「＋」が「−」に回る。目次から来たときは開いた状態で見せる =====
+(function(){
+  var accs = document.querySelectorAll('details.acc');
+  function bar(d){ var b = d.querySelectorAll('.pm b'); return b.length > 1 ? b[1] : null; }
+  function openNow(d){ d.setAttribute('open', ''); var body = d.querySelector('.acc-body'); if (body) body.style.height = ''; var b = bar(d); if (b) setTf(b, ''); }
+  function toggle(d){
+    var body = d.querySelector('.acc-body'), b = bar(d);
+    if (!body || d.getAttribute('data-busy')) { if (!body) { if (d.open) d.removeAttribute('open'); else d.setAttribute('open', ''); } return; }
+    d.setAttribute('data-busy', '1');
+    if (d.open) {
+      var h0 = body.offsetHeight;
+      tween(260, function(u){ body.style.height = (h0 * (1 - u)).toFixed(1) + 'px'; if (b) setTf(b, 'rotate(' + (180 - 90 * u) + 'deg)'); }, function(){ d.removeAttribute('open'); body.style.height = ''; if (b) setTf(b, ''); d.removeAttribute('data-busy'); });
+    } else {
+      d.setAttribute('open', ''); var h1 = body.offsetHeight; body.style.height = '0px';
+      tween(300, function(u){ body.style.height = (h1 * u).toFixed(1) + 'px'; if (b) setTf(b, 'rotate(' + (90 + 90 * u) + 'deg)'); }, function(){ body.style.height = ''; if (b) setTf(b, ''); d.removeAttribute('data-busy'); });
+    }
+  }
+  for (var i = 0; i < accs.length; i++) (function(d){
+    var s = d.querySelector('summary'); if (!s) return;
+    s.addEventListener('click', function(e){ e.preventDefault(); toggle(d); });
+  })(accs[i]);
+  // 目次・リンクから「開く所」や「タブの中」に飛んだときは、開いて（切りかえて）見せる
+  // id の場所を見せる：開く所の中なら開き、タブの中ならそのタブに切りかえる。force のときは必ずその場所へ動く
+  function revealTarget(id, force){
+    var el = document.getElementById(id); if (!el) return;
+    var p = el, target = el, changed = !!force;
+    while (p && p !== document.body) {
+      if (p.tagName === 'DETAILS' && !p.open) { openNow(p); changed = true; }
+      // タブの中なら、そのタブに切りかえて、料金の見出しへ（タブの枠の中を横に動かさない）
+      if (p.className && String(p.className).indexOf('ppanel') >= 0) { if (window.pickPlan) window.pickPlan(p.id, true); target = document.getElementById('price') || el; changed = true; }
+      p = p.parentNode;
+    }
+    if (changed) setTimeout(function(){ try { target.scrollIntoView(); } catch (err) {} }, 40);
+  }
+  function openHash(){ var id = location.hash.replace('#', ''); if (id) revealTarget(id); }
+  window.addEventListener('hashchange', openHash);
+  if (location.hash) setTimeout(openHash, 50);
+  window.openHashNow = openHash;
+  window.revealTarget = function(id){ revealTarget(id, true); };
+})();
+</script>
+<script>
+// ===== 料金のタブ：中身が横にすっと切りかわり、下線が動く =====
+(function(){
+  var bar = document.getElementById('ptabs'), track = document.getElementById('ptrack'), view = document.getElementById('pview'), ul = document.getElementById('uline');
+  if (!bar || !track) return;
+  var tabs = bar.querySelectorAll('[role=tab]'), panels = track.querySelectorAll('.ppanel'), cur = 0, pos = 0, busy = false;
+  bar.className = 'ptabs';
+  function uline(i, u){ // 下線を、今の場所から押したタブの下へ
+    var a = tabs[cur].getBoundingClientRect(), b = tabs[i].getBoundingClientRect(), base = bar.getBoundingClientRect().left;
+    var l = a.left + (b.left - a.left) * u - base, w = a.width + (b.width - a.width) * u;
+    ul.style.left = l.toFixed(1) + 'px'; ul.style.width = w.toFixed(1) + 'px';
+  }
+  function fit(){ view.style.height = panels[cur].offsetHeight + 'px'; }
+  function pick(i, noScroll){
+    if (i === cur || busy) return;
+    busy = true;
+    for (var k = 0; k < tabs.length; k++) { tabs[k].setAttribute('aria-selected', k === i ? 'true' : 'false'); tabs[k].tabIndex = k === i ? 0 : -1; }
+    panels[i].removeAttribute('aria-hidden');
+    var from = pos, to = -i * 100 / panels.length, h0 = panels[cur].offsetHeight, h1 = panels[i].offsetHeight, prev = cur;
+    tween(360, function(u){
+      pos = from + (to - from) * u; setTf(track, 'translateX(' + pos.toFixed(3) + '%)');
+      view.style.height = (h0 + (h1 - h0) * u).toFixed(1) + 'px';
+      uline(i, u);
+    }, function(){ panels[prev].setAttribute('aria-hidden', 'true'); cur = i; uline(i, 1); fit(); busy = false; }, easeInOut);
+  }
+  window.pickPlan = function(id, noScroll){ for (var k = 0; k < panels.length; k++) if (panels[k].id === id) pick(k, noScroll); };
+  for (var k = 0; k < tabs.length; k++) (function(k){
+    tabs[k].addEventListener('click', function(){ pick(k); });
+    tabs[k].addEventListener('keydown', function(e){ var n = e.key === 'ArrowRight' ? k + 1 : e.key === 'ArrowLeft' ? k - 1 : null; if (n === null) return; e.preventDefault(); n = (n + tabs.length) % tabs.length; pick(n); tabs[n].focus(); });
+  })(k);
+  function layout(){ setTf(track, 'translateX(' + pos + '%)'); uline(cur, 1); fit(); }
+  layout();
+  window.layoutPlan = layout;
+  var lastW = document.documentElement.clientWidth; // 横幅が変わったときだけ並べ直す（iPhone はスクロールでバーが出入りするたびに resize が出るため）
+  window.addEventListener('resize', function(){ setTimeout(function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; layout(); }, 60); });
+  window.addEventListener('load', layout);
+  // タブの中のリンク（#price-web）に目次から来たとき
+  if (location.hash === '#price-web') setTimeout(function(){ window.pickPlan(location.hash.slice(1)); }, 60);
+})();
+</script>
+<script>
+// ===== お支払いの合計の目安：何か月使うかで計算。金額は決定事項のプランどおり。JS がない時は表だけ出る =====
+(function(){
+  var sim = document.getElementById('sim'); if (!sim) return;
+  var range = document.getElementById('sim-m'), out = document.getElementById('sim-out');
+  var table = document.getElementById('sim-table');
+  sim.hidden = false; if (table) table.style.display = 'none';
+  function yen(n){ return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '円'; }
+  function calc(m){
+    return { std: 98000 + 5500 * m, web: 98000 + 19800 * m };
+  }
+  var rows = {}; [].forEach.call(sim.querySelectorAll('[data-plan]'), function(li){ rows[li.getAttribute('data-plan')] = li; });
+  var btns = sim.querySelectorAll('.sim-quick button');
+  function draw(){
+    var m = parseInt(range.value, 10), c = calc(m);
+    out.innerHTML = (m >= 12 && m % 12 === 0 ? (m / 12) + '<small>年（' + m + 'か月）</small>' : m + '<small>か月</small>');
+    var max = c.web, low = null; // プランが2つになったので「いちばん少ない」の印は出さない
+    ['std', 'web'].forEach(function(k){
+      rows[k].querySelector('b').textContent = yen(c[k]);
+      rows[k].querySelector('.bar i').style.width = Math.max(3, Math.round(c[k] / max * 100)) + '%';
+      rows[k].className = (k === low ? 'low' : '');
+    });
+    [].forEach.call(btns, function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-m') === String(m) ? 'true' : 'false'); });
+  }
+  range.addEventListener('input', draw); range.addEventListener('change', draw);
+  [].forEach.call(btns, function(b){ b.addEventListener('click', function(){ range.value = b.getAttribute('data-m'); draw(); }); });
+  draw();
+})();
+</script>
+<script>
+// ===== 「どのプランが合う？」2問の診断（shian2 の飛び方）：答えるたびに少し上がり、2つそろったら、その高さのまま右へまっすぐ飛んで右はしで止まる =====
+// 高さは答えた数で決める（どのプランでも同じ高さ・同じ飛び方）。答えを変えても下がらず、今の位置からなめらかにつなぐ。動きを減らす設定の人には最後の位置に置く
+// 目安の決め方：更新が月3回以上 か Googleマップの投稿も任せたい → WEB担当者代行／それ以外 → スタンダード
+(function(){
+  var q = document.getElementById('quiz'), svg = document.getElementById('quiz-sky'); if (!q || !svg) return;
+  var jet = document.getElementById('q-jet'), trail = document.getElementById('q-trail'), label = document.getElementById('q-label'), out = document.getElementById('quiz-out');
+  var NAME = { std: 'スタンダード', web: 'WEB担当者代行' }, ID = { std: 'price-std', web: 'price-web' }, TAB = { std: 'pt-std', web: 'pt-web' };
+  var W = 0, H = 74, cur = [0, 0], pts = [], landed = null, stage = 0, busy = false, seg = [];
+  function val(n){ var el = q.querySelector('input[name=' + n + ']:checked'); return el ? el.value : null; }
+  function setup(){
+    W = Math.round(svg.getBoundingClientRect().width) || 300; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var g = document.getElementById('q-ground'), l = document.getElementById('q-lights');
+    g.setAttribute('x1', 12); g.setAttribute('y1', H - 10); g.setAttribute('x2', W - 12); g.setAttribute('y2', H - 10);
+    l.setAttribute('x1', 16); l.setAttribute('y1', H - 14); l.setAttribute('x2', W - 16); l.setAttribute('y2', H - 14);
+    label.setAttribute('x', W - 14); label.setAttribute('y', H - 32);
+    // 止まる所：出発 → 1問目 → 2問目（少しずつ上がる）→ 右はし（同じ高さのまま）
+    pts = [[28, H - 22], [W * .32, H - 40], [W * .58, H - 58], [W - 52, H - 58]]; // 出発 → 1問目 → 2問目 → 右はし
+  }
+  function put(p, a){ jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (a || 0) + ') scale(.75)'); }
+  function drawTrail(){ var d = '', i; for (i = 0; i < seg.length; i++) d += (i ? ' L' : 'M') + seg[i][0].toFixed(1) + ' ' + seg[i][1].toFixed(1); trail.setAttribute('d', d); }
+  function flyTo(p, done){
+    var from = cur.slice(); busy = true;
+    tween(500, function(u){
+      var x = from[0] + (p[0] - from[0]) * u, y = from[1] + (p[1] - from[1]) * u;
+      cur = [x, y]; put(cur, Math.atan2(p[1] - from[1], p[0] - from[0]) * 180 / Math.PI * .5);
+      if (seg.length > 60) seg.shift(); seg.push([x, y]); drawTrail();
+    }, function(){ cur = p.slice(); put(cur, 0); busy = false; if (done) done(); }, easeInOut);
+  }
+  function pick(k){
+    var tabs = document.querySelectorAll('#ptabs [role=tab]'), i;
+    for (i = 0; i < tabs.length; i++) tabs[i].className = tabs[i].id === TAB[k] ? 'fit-on' : '';
+    if (window.pickPlan) window.pickPlan(ID[k], true);
+    label.textContent = NAME[k];
+    out.innerHTML = '<b>目安</b>' + NAME[k] + 'が合いそうです。相談で一緒に決めます。';
+  }
+  function update(){
+    if (busy) { setTimeout(update, 120); return; }
+    var a = val('q1'), b = val('q2'), n = (a ? 1 : 0) + (b ? 1 : 0);
+    if (n < 2) { out.textContent = n ? 'あと' + (2 - n) + 'つ' : ''; if (n !== stage) { stage = n; flyTo(pts[n]); } return; }
+    var k = (a === '4' || b === 'yes') ? 'web' : 'std';
+    if (landed) { landed = k; pick(k); return; } // 3問そろったあとに答えを変えた：位置はそのまま、プラン名だけ変える
+    landed = k; stage = 3;
+    flyTo(pts[2], function(){ flyTo(pts[3], function(){ pick(k); }); });
+  }
+  setup(); cur = pts[0].slice(); seg = [cur.slice()]; put(cur, 0);
+  q.addEventListener('change', update);
+  var lastW = document.documentElement.clientWidth; // 横幅が変わったときだけ作り直す（iPhone のバーの出入りによる resize では何もしない）
+  window.addEventListener('resize', function(){ setTimeout(function(){ var w = document.documentElement.clientWidth; if (w === lastW) return; lastW = w; setup(); cur = pts[stage].slice(); seg = [cur.slice()]; put(cur, 0); drawTrail(); }, 80); });
+})();
+// ===== 上の細い進み具合の線。その上を小さな飛行機が進む（ページのどこまで読んだか） =====
+(function(){
+  var bar = document.getElementById('prog-bar'), jet = document.getElementById('prog-jet'); if (!bar) return;
+  if (document.body.className.indexOf('switch') >= 0) return; // 切りかえ式は、画面の番号で示す（別の JS）
+  var tick = false;
+  function draw(){
+    tick = false;
+    var h = document.documentElement.scrollHeight - window.innerHeight, y = window.pageYOffset || 0, p = h > 0 ? Math.max(0, Math.min(1, y / h)) : 0;
+    bar.style.width = (p * 100).toFixed(2) + '%';
+    if (jet) jet.style.left = (p * (document.documentElement.clientWidth - 24)).toFixed(1) + 'px';
+  }
+  function onScroll(){ if (tick) return; tick = true; if (window.requestAnimationFrame) requestAnimationFrame(draw); else draw(); }
+  window.addEventListener('scroll', onScroll); window.addEventListener('resize', onScroll); window.addEventListener('load', draw); draw();
+})();
+// ===== 上へ戻るボタン（飛行機のマーク）：押すと上へ飛んでいく =====
+(function(){
+  var b = document.getElementById('totop'); if (!b) return;
+  var svg = b.querySelector('svg'), tick = false, flying = false;
+  function check(){ tick = false; if (flying) return; b.className = (window.pageYOffset || 0) > 500 ? 'totop on' : 'totop'; }
+  window.addEventListener('scroll', function(){ if (tick) return; tick = true; if (window.requestAnimationFrame) requestAnimationFrame(check); else check(); });
+  b.addEventListener('click', function(){
+    if (STILL) { window.scrollTo(0, 0); return; }
+    flying = true; var y0 = window.pageYOffset || 0;
+    tween(600, function(u){ setTf(svg, 'rotate(-90deg) translateX(' + (u * 140).toFixed(1) + 'px)'); b.style.opacity = (1 - u).toFixed(2); window.scrollTo(0, Math.round(y0 * (1 - u))); },
+      function(){ setTf(svg, ''); b.style.opacity = ''; b.className = 'totop'; flying = false; }, easeInOut);
+  });
+  check();
+})();
+</script>
+<script>
+// ===== 相談フォーム：Formspree にページの中から送る（メールの画面は開かない）。選ぶたびに「あと〇つ」が減り、送ると紙飛行機が飛んで「送りました」 =====
+// ★ Formspree のフォームID はここ1か所だけ（https://formspree.io/f/ のあとの8文字）。今の index.html と同じフォームで、liftoff.358@gmail.com に届く
+var FORMSPREE_ID = "xrpeekdb";
+(function(){
+  var form = document.getElementById('form'), note = document.getElementById('formnote'), left = document.getElementById('left-note'), leftTop = document.getElementById('left-top');
+  var btn = form.querySelector('button[type=submit]'), sent = document.getElementById('sent'), box = document.getElementById('formbox');
+  var meet = document.getElementById('meet');
+  var LABEL = {name:'お名前', shop:'お店・会社', tel:'お電話番号', email:'メールアドレス', how:'ご相談のしかた', when:'いつごろ', day:'曜日', time:'時間', place:'会う場所', about:'気になること', message:'ほかに伝えたいこと'};
+  function checked(name){ var els = form.querySelectorAll('input[name=' + name + ']'); for (var i = 0; i < els.length; i++) if (els[i].checked) return true; return false; }
+  // 必須は4つ：お名前・ご連絡先（電話番号かメールのどちらか）・ご相談のしかた・気になること
+  function remain(){
+    var n = 0;
+    if (!form.name.value.replace(/\s/g, '')) n++;
+    if (!form.tel.value.replace(/\s/g, '') && !form.email.value.replace(/\s/g, '')) n++;
+    if (!checked('how')) n++;
+    if (!checked('about')) n++;
+    return n;
+  }
+  function showLeft(){
+    var n = remain();
+    left.innerHTML = n ? '必須の項目が、あと<b>' + n + '</b>つ' : '<b>✓</b> 送れます';
+    if (leftTop) leftTop.innerHTML = n ? 'あと<b>' + n + '</b>' : '<b>OK</b>';
+  }
+  function showMeet(){ var h = form.querySelector('input[name=how]:checked'); meet.hidden = !h || h.value !== '会って話したい'; }
+  form.addEventListener('change', function(){ showMeet(); showLeft(); });
+  form.addEventListener('input', showLeft);
+  [].forEach.call(document.querySelectorAll('[data-topic]'), function(a){ a.addEventListener('click', function(){
+    var t = a.getAttribute('data-topic');
+    [].forEach.call(form.querySelectorAll('input[value="' + t + '"]'), function(i){ i.checked = true; });
+    showMeet(); showLeft();
+  }); });
+  showMeet(); showLeft();
+  function collect(){
+    var v = {}, order = [];
+    for (var i = 0; i < form.elements.length; i++) {
+      var el = form.elements[i]; if (!el.name || el.name === '_gotcha' || el.type === 'submit') continue;
+      if (!(el.name in v)) { v[el.name] = []; order.push(el.name); }
+      if ((el.type === 'checkbox' || el.type === 'radio') && !el.checked) continue;
+      if (el.value) v[el.name].push(el.value);
+    }
+    if (!v.how || v.how.join('') !== '会って話したい') { delete v.when; delete v.day; delete v.time; delete v.place; }
+    var fd = new FormData();
+    for (var j = 0; j < order.length; j++) { var k = order[j]; if (!(k in v)) continue; fd.append(LABEL[k] || k, v[k].join('、')); }
+    fd.append('_gotcha', form._gotcha.value);
+    return fd;
+  }
+  // 送ったあと：飛行機が右上へ飛んでいき（黄色い飛行機雲を残して）、「送りました」
+  function fly(done){
+    var svg = document.getElementById('send-plane'), jet = document.getElementById('send-jet'), trail = document.getElementById('send-trail');
+    if (STILL || !svg || !jet) { done(); return; }
+    var r = box.getBoundingClientRect(), W = Math.round(r.width), H = Math.round(r.height), b = btn.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.style.height = H + 'px'; svg.setAttribute('class', 'send-plane on');
+    var x0 = b.left - r.left + b.width / 2, y0 = b.top - r.top, x1 = W + 80, y1 = -60, cx = x0 + (x1 - x0) * .25, cy = y0 - (y0 - y1) * .02;
+    function at(u){ var a = 1 - u; return [a * a * x0 + 2 * a * u * cx + u * u * x1, a * a * y0 + 2 * a * u * cy + u * u * y1]; }
+    tween(1000, function(u){
+      var p = at(u), a = 1 - u, dx = 2 * a * (cx - x0) + 2 * u * (x1 - cx), dy = 2 * a * (cy - y0) + 2 * u * (y1 - cy);
+      jet.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ') rotate(' + (Math.atan2(dy, dx) * 180 / Math.PI).toFixed(1) + ') scale(' + (.9 + u * .5).toFixed(2) + ')');
+      var d = 'M' + x0 + ' ' + y0, k, n = Math.max(2, Math.round(u * 20));
+      for (k = 1; k <= n; k++) { var t = at(u * k / n); d += ' L' + t[0].toFixed(1) + ' ' + t[1].toFixed(1); }
+      trail.setAttribute('d', d);
+    }, function(){ svg.setAttribute('class', 'send-plane'); done(); }, easeInOut);
+  }
+  function finish(){
+    form.style.display = 'none'; sent.className = 'sent on';
+    if (leftTop) leftTop.innerHTML = '';
+    try { sent.scrollIntoView({ block: 'nearest' }); } catch (err) {}
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (remain() > 0) { note.textContent = '必須の項目（お名前・お電話番号かメールアドレス・ご相談のしかた・気になること）を入れてから送ってください。'; showLeft(); return; }
+    if (!FORMSPREE_ID) { note.textContent = 'フォームは準備中です。お電話（090-1189-6726）か、メール（liftoff.358@gmail.com）でご連絡ください。'; return; }
+    btn.disabled = true; btn.textContent = '送信中…';
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://formspree.io/f/' + FORMSPREE_ID, true);
+    xhr.setRequestHeader('Accept', 'application/json');
+    xhr.onreadystatechange = function(){
+      if (xhr.readyState !== 4) return;
+      if (xhr.status >= 200 && xhr.status < 300) { fly(finish); }
+      else { btn.disabled = false; btn.textContent = 'この内容で送る'; note.textContent = 'うまく送れませんでした。お電話（090-1189-6726）か、メール（liftoff.358@gmail.com）でご連絡ください。'; }
+    };
+    xhr.send(collect());
+  });
+})();
+</script>
+<script>
+// ===== スマホのメニュー・今見ている所・固定ボタン =====
+(function(){
+  var menuBtn = document.querySelector('.menu-btn'), nav = document.getElementById('nav');
+  function closeMenu(){ nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  menuBtn.addEventListener('click', function(){ var o = nav.classList.toggle('open'); menuBtn.setAttribute('aria-expanded', o ? 'true' : 'false'); });
+  nav.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null; if (!a) return;
+    closeMenu();
+    // 同じ場所をもう一度押したときも、開いて見せる
+    if (a.getAttribute('href') === location.hash && window.openHashNow) setTimeout(window.openHashNow, 0);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+  document.addEventListener('click', function(e){ if (nav.classList.contains('open') && !nav.contains(e.target) && !menuBtn.contains(e.target)) closeMenu(); });
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    [].forEach.call(nav.querySelectorAll('a'), function(a){ var h = a.getAttribute('href'); if (h && h.charAt(0) === '#' && !a.classList.contains('sub')) links[h.slice(1)] = a; });
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (en.isIntersecting && links[en.target.id]) {
+          for (var k in links) links[k].classList.remove('now');
+          links[en.target.id].classList.add('now');
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(links).forEach(function(id){ var s = document.getElementById(id); if (s) io.observe(s); });
+    var fix = document.getElementById('fixbar'), ct = document.getElementById('contact');
+    if (fix && ct) new IntersectionObserver(function(es){ fix.classList.toggle('hide', es[0].isIntersecting); }, { rootMargin: '0px 0px -30% 0px' }).observe(ct);
+  }
+})();
+</script>
+<script>
+// 戻ったときに、見ていた場所に戻す（押すと一番上に戻ってしまうため）
+(function(){
+  var key = 'y:' + location.pathname;
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a || a.textContent.indexOf('もどる') < 0) return;
+    try {
+      if (document.referrer && document.referrer.indexOf(location.protocol + '//' + location.host) === 0 && history.length > 1) {
+        e.preventDefault(); history.back();
+      }
+    } catch (err) {}
+  });
+  try {
+    window.addEventListener('pagehide', function(){ sessionStorage.setItem(key, String(window.pageYOffset || 0)); });
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    var back = nav ? nav.type === 'back_forward' : (performance.navigation && performance.navigation.type === 2);
+    if (back) {
+      window.addEventListener('load', function(){
+        var y = parseInt(sessionStorage.getItem(key) || '0', 10);
+        if (y > 0 && (window.pageYOffset || 0) < 10) window.scrollTo(0, y);
+      });
+    }
+  } catch (err) {}
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b06c475a618149c5a4266a7eeb4775e7"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
