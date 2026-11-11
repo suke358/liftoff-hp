@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "yururi",
  "name": "整体 ゆるり",
  "short_name": "ゆるり",
@@ -39,40 +40,24 @@
    "id": "basic",
    "name": "整体 60分",
    "text": "お話をうかがってから、全身をていねいに施術します。",
-   "image": "images/menu-basic.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "整体 60分の写真",
    "price": "5,500円"
   },
   {
    "id": "short",
    "name": "整体 30分",
    "text": "時間のないときに、気になるところを中心に。",
-   "image": "images/menu-short.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "整体 30分の写真",
    "price": "3,300円"
   },
   {
    "id": "first",
    "name": "はじめての方",
    "text": "最初にお話をうかがう時間を長めにとります。",
-   "image": "images/menu-first.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "はじめての方の写真",
    "price": "+1,100円"
   },
   {
    "id": "ticket",
    "name": "回数券",
    "text": "5回分をまとめてお求めいただけます。",
-   "image": "images/menu-ticket.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "回数券の写真",
    "price": "25,000円"
   }
  ],
@@ -99,12 +84,12 @@
  ],
  "schema_type": "HealthAndBeautyBusiness",
  "area_served": "〇〇市",
+ "layout": "split",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1067,
+  "h": 1600,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

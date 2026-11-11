@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "dark",
  "slug": "morino",
  "name": "森野工務店",
  "short_name": "森野工務店",
@@ -38,38 +39,30 @@
   {
    "id": "mizu",
    "name": "水まわり",
-   "text": "台所・お風呂・トイレ・洗面所の取りかえや修理。",
-   "image": "images/menu-mizu.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "水まわりの写真"
+   "text": "台所・お風呂・トイレ・洗面所の取りかえや修理。"
   },
   {
    "id": "yane",
    "name": "外壁・屋根",
-   "text": "ぬりかえ・雨もりの修理・とい の取りかえ。",
-   "image": "images/menu-yane.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "外壁・屋根の写真"
+   "text": "ぬりかえ・雨もりの修理・とい の取りかえ。"
   },
   {
    "id": "naisou",
    "name": "内装",
    "text": "壁紙・床・建具・手すりの取りつけなど。",
-   "image": "images/menu-naisou.svg",
+   "image": "images/menu-naisou.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "内装の写真"
+   "alt": "内装のイメージ写真"
   },
   {
    "id": "shuuri",
    "name": "小さな修理",
    "text": "戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。",
-   "image": "images/menu-shuuri.svg",
+   "image": "images/menu-shuuri.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "小さな修理の写真"
+   "alt": "小さな修理のイメージ写真"
   }
  ],
  "flow_title": "ご依頼の流れ",
@@ -113,12 +106,12 @@
  ],
  "schema_type": "HomeAndConstructionBusiness",
  "area_served": "〇〇市",
+ "layout": "full",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1200,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

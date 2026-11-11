@@ -281,6 +281,33 @@ SAMPLES={
   schema_type='LocalBusiness',area_served='〇〇市'),
   hero=['camera','frame','sparkle'], c1='#ece6dc', c2='#dbd1c0', stroke='#7d6239', ink='#776b5c', bg='#ebe6dd'),
 }
+# ---- 写真とレイアウトの型（2026/11/11）。photos があると、絵（SVG）の代わりに _素材写真/ の写真を入れる ----
+# hero＝トップの写真。メニューは id ごと。写真のないメニューは写真なしのカードにする（中身に合わない写真は入れない）
+# layout は tools/layouts.py の型。明るい上の部分の型は hero_style='light'
+PHOTO_ROOT=os.path.join(os.path.dirname(os.path.abspath(ROOT)),'_素材写真')
+PHOTOS={
+'cafe':dict(layout='magazine',hero_style='light',photos=dict(hero='カフェ/cafe_hero.jpg',coffee='カフェ/cafe_coffee.jpg',cake='カフェ/cafe_cake.jpg')),
+'bakery':dict(layout='pop',hero_style='light',photos=dict(hero='パン屋/bakery_baguette.jpg',shoku='パン屋/bakery_loaf.jpg',souzai='パン屋/bakery_hero.jpg')),
+'juku':dict(layout='cards',hero_style='light',photos=dict(hero='学習塾/juku_hero.jpg',sho='学習塾/juku_desk.jpg',chu='学習塾/juku_note.jpg',kou='学習塾/juku_class.jpg')),
+'reform':dict(layout='full',hero_style='dark',photos=dict(hero='工務店/reform_hero.jpg',naisou='工務店/reform_room.jpg',shuuri='工務店/reform_plane.jpg')),
+'hair':dict(layout='frame',hero_style='light',photos=dict(hero='美容室/hair_hero.jpg',cut='美容室/hair_cut.jpg',color='美容室/hair_color.jpg')),
+'relax':dict(layout='split',hero_style='light',photos=dict(hero='整体/relax_hero.jpg')),
+}
+for _k,_v in PHOTOS.items(): SAMPLES[_k].update(_v)
+def photo(src,dst,w,h=None,maxh=1600):
+    """写真を書き出す（向きを直す・位置情報などを消す・大きさをそろえる）。h があればその比で真ん中を切ってから縮める"""
+    from PIL import Image, ImageOps
+    im=ImageOps.exif_transpose(Image.open(os.path.join(PHOTO_ROOT,src))).convert('RGB')
+    if h:
+        W,H=im.size; r=w/h
+        if W/H>r: nw=int(H*r); im=im.crop(((W-nw)//2,0,(W-nw)//2+nw,H))
+        else: nh=int(W/r); im=im.crop((0,(H-nh)//2,W,(H-nh)//2+nh))
+        im=im.resize((w,h),Image.LANCZOS)
+    else:
+        im.thumbnail((w,maxh),Image.LANCZOS)
+    os.makedirs(os.path.dirname(dst),exist_ok=True)
+    im.save(dst,'JPEG',quality=80,optimize=True,progressive=True)
+    return im.size
 BEFORE=('#d8d2c6','#b9b1a3','#8a847a','#7a746a')  # 部品の「前」の写真（灰色っぽく）
 MIHON_CSS='''
 /* 見本帳にもどる（見本だけに出す） */
@@ -292,8 +319,18 @@ only=sys.argv[2].split(',') if len(sys.argv)>2 else list(SAMPLES)
 for d in only:
     spec=SAMPLES[d]; c=dict(COMMON); c.update(spec['c'])
     out=f'{ROOT}/samples/{d}'
+    ph=spec.get('photos')
+    for k in ('layout','hero_style'):
+        if spec.get(k): c[k]=spec[k]
     for m in c['menus']:
         icons=m.pop('_icon')
+        if ph is not None:
+            if m['id'] in ph:
+                W,H=photo(ph[m['id']],f'{out}/images/menu-{m["id"]}.jpg',1000,750)
+                m.update(image=f'images/menu-{m["id"]}.jpg',w=W,h=H,alt=m['name']+'のイメージ写真')
+            else:
+                for k in ('image','w','h','alt'): m.pop(k,None)
+            continue
         svg(f'{out}/{m["image"]}',1000,750,icons,m['name']+'の写真が入ります',spec['c1'],spec['c2'],spec['stroke'],spec['ink'])
     # 部品（施工例・前と後）の写真。「前」は灰色っぽく、「後」はお店の色で（仮画像でも見比べが分かるように）
     cs=(c.get('parts') or {}).get('cases') or {}
@@ -302,8 +339,14 @@ for d in only:
             o=it[key]; icons=o.pop('_icon',['tools'])
             col=BEFORE if key=='before' else (spec['c1'],spec['c2'],spec['stroke'],spec['ink'])
             svg(f'{out}/{o["image"]}',1000,750,icons,cs.get('label_'+key,'')+'の写真が入ります',*col)
-    c['hero']=dict(image='images/hero.svg',w=1200,h=1500,alt='お店の写真')
-    t=c['theme']; svg(f'{out}/images/hero.svg',1200,1500,spec['hero'],'お店の写真が入ります',t['dark2'],t['dark'],t['accent_soft'],'rgba(255,255,255,.55)')
+    if ph is not None:
+        W,H=photo(ph['hero'],f'{out}/images/hero.jpg',1600)
+        c['hero']=dict(image='images/hero.jpg',w=W,h=H,alt='お店の雰囲気のイメージ写真')
+        for f in os.listdir(f'{out}/images'):  # 使わなくなった絵（SVG）を消す
+            if f.endswith('.svg'): os.remove(f'{out}/images/{f}')
+    else:
+      c['hero']=dict(image='images/hero.svg',w=1200,h=1500,alt='お店の写真')
+      t=c['theme']; svg(f'{out}/images/hero.svg',1200,1500,spec['hero'],'お店の写真が入ります',t['dark2'],t['dark'],t['accent_soft'],'rgba(255,255,255,.55)')
     c['_説明']='デザイン見本（架空のお店）。make_site.py で作った'
     cf=f'{S}/{d}.json'; json.dump(c,open(cf,'w'),ensure_ascii=False,indent=1)
     subprocess.run([sys.executable,f'{ROOT}/tools/make_site.py',cf,out],stdout=subprocess.DEVNULL)

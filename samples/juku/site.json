@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "tsubasa",
  "name": "つばさ学習教室",
  "short_name": "つばさ学習教室",
@@ -39,10 +40,10 @@
    "id": "sho",
    "name": "小学生コース",
    "text": "算数・国語を中心に、学校の進みに合わせて。",
-   "image": "images/menu-sho.svg",
+   "image": "images/menu-sho.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "小学生コースの写真",
+   "alt": "小学生コースのイメージ写真",
    "price": "月 8,800円",
    "price_note": "週2回"
   },
@@ -50,10 +51,10 @@
    "id": "chu",
    "name": "中学生コース",
    "text": "5教科。定期テストの前は回数を増やします。",
-   "image": "images/menu-chu.svg",
+   "image": "images/menu-chu.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "中学生コースの写真",
+   "alt": "中学生コースのイメージ写真",
    "price": "月 13,200円",
    "price_note": "週2回"
   },
@@ -61,10 +62,10 @@
    "id": "kou",
    "name": "高校生コース",
    "text": "教科を選んで、自分のペースで進めます。",
-   "image": "images/menu-kou.svg",
+   "image": "images/menu-kou.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "高校生コースの写真",
+   "alt": "高校生コースのイメージ写真",
    "price": "月 16,500円",
    "price_note": "週2回"
   },
@@ -72,10 +73,6 @@
    "id": "trial",
    "name": "体験授業",
    "text": "まずは2回、教室の様子を見に来てください。",
-   "image": "images/menu-trial.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "体験授業の写真",
    "price": "無料",
    "price_note": "2回まで"
   }
@@ -121,12 +118,12 @@
  ],
  "schema_type": "EducationalOrganization",
  "area_served": "〇〇市",
+ "layout": "cards",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1067,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

@@ -5,7 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
- "hero_style": "dark",
+ "hero_style": "light",
  "slug": "kotori",
  "name": "ベーカリー ことり",
  "short_name": "ことり",
@@ -40,10 +40,10 @@
    "id": "shoku",
    "name": "食パン",
    "text": "毎日食べても飽きない、やわらかい食パン。",
-   "image": "images/menu-shoku.svg",
+   "image": "images/menu-shoku.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "食パンの写真",
+   "alt": "食パンのイメージ写真",
    "price": "380円",
    "price_note": "1斤"
   },
@@ -51,30 +51,22 @@
    "id": "souzai",
    "name": "惣菜パン",
    "text": "カレーパン・ウインナーロールなど、日替わりで。",
-   "image": "images/menu-souzai.svg",
+   "image": "images/menu-souzai.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "惣菜パンの写真",
+   "alt": "惣菜パンのイメージ写真",
    "price": "200円〜"
   },
   {
    "id": "yaki",
    "name": "焼き菓子",
    "text": "クッキー・マフィン・スコーン。贈りものにも。",
-   "image": "images/menu-yaki.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "焼き菓子の写真",
    "price": "180円〜"
   },
   {
    "id": "cake",
    "name": "お祝いのケーキ",
    "text": "誕生日や記念日に。3日前までにご予約ください。",
-   "image": "images/menu-cake.svg",
-   "w": 1000,
-   "h": 750,
-   "alt": "お祝いのケーキの写真",
    "price": "3,200円〜",
    "price_note": "予約制"
   }
@@ -102,11 +94,12 @@
  ],
  "schema_type": "Bakery",
  "area_served": "〇〇市",
+ "layout": "pop",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1065,
+  "alt": "お店の雰囲気のイメージ写真"
  },
  "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

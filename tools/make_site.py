@@ -44,6 +44,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
               "dm_text" … ご予約の欄の DM の説明（空なら「インスタグラムのメッセージで、お気軽にどうぞ。」）
   "map_query" … 地図と「Googleマップで道順を見る」の行き先（店名＋住所など）。空ならどちらも出ない
   "show_map" / "show_route" … 地図（埋め込み）と「道順を見る」ボタンを別々に消す（2026/11/7）。false と書くと出ない。書かなければ両方出る（住所を出したくないお店は show_map:false など）
+  "layout" … レイアウトの型（2026/11/11）。full・magazine・split・cards・frame・pop のどれか。書かなければ今までと同じ。説明は tools/layouts.py
   "menu_cols" … メニューのカードを2列にする（2026/11/7）。2 と書くと、パソコン幅でも2列（スマホは1列）。4つのとき4列になって写真が小さくなるお店用。書かなければ今までと同じ（数で決まる）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 """
@@ -356,6 +357,7 @@ def build(c):
     if (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light': css += '\n' + LIGHT_HERO_CSS
     if dm: css += '\n' + DM_CSS
     if m2: css += '\n' + MENU2_CSS
+    if c.get('layout'): css += '\n' + layouts.css(c['layout'])  # レイアウトの型（2026/11/11。tools/layouts.py）
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -719,6 +721,7 @@ JS = r'''// スマホのメニュー（開く・閉じる）と、上へ戻る�
 # 設定の "parts": {"belt": true, "compare": {...}, "calc": {...}, "cases": {...}, "form": {...}}
 # それぞれの部品は、①動きを減らす設定の人には動かさない ②古いスマホ対策（マニュアル16の書き方）③JS がないときの代わりの表示 を入れている
 # 色・書体は :root の変数（--primary・--head など）だけを使う → お店の theme に自然に合う
+import layouts  # レイアウトの型（2026/11/11）
 import parts_extra  # 追加の部品（お知らせの帯・実績・選ばれる理由・お知らせ・お客様の声・営業時間・対応エリア・動画・写真の拡大。2026/10/30）
 PART_ORDER = ['belt', 'compare', 'calc', 'cases', 'form', 'shop'] + parts_extra.NAMES
 SHOP_MAX = 5  # 商品は5点まで（決定事項 2026/10/10：商品ページ＝商品5点まで。6点以上は作る前に金額を伝える）
