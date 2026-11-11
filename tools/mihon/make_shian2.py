@@ -565,6 +565,7 @@ CARD_V = 6
 TOP_URL = 'https://liftoff-hp.liftoff-358.workers.dev/'
 if TOP:
     s = re.sub(r'(src|href)="\.\./(img/|samples/)', r'\1="\2', s)
+    s = s.replace('url("../img/', 'url("img/')  # CSS の背景写真（2026/11/11 最初の画面の写真）
     must('content="https://liftoff-hp.liftoff-358.workers.dev/shian2/"', 'content="' + TOP_URL + '"')
     # og:url と canonical は ?v= 付き（iPhone の Safari の共有ボタンはアドレスバーではなく canonical の URL を LINE に送るため。2026/10/10 実機で確認）
     must('<meta property="og:url" content="' + TOP_URL + '">', '<meta property="og:url" content="%s?v=%d">\n<link rel="canonical" href="%s?v=%d">' % (TOP_URL, CARD_V, TOP_URL, CARD_V))

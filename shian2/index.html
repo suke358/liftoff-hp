@@ -583,6 +583,119 @@ html{scroll-padding-top:130px}
 .nav-jet{position:fixed;left:0;top:0;width:0;height:0;z-index:22;pointer-events:none;-webkit-transform:translate3d(-200px,-200px,0);transform:translate3d(-200px,-200px,0)}
 .nav-jet svg{display:block;width:60px;max-width:none;margin:-10px 0 0 -44px;overflow:visible}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== 案B：濃い紺の基調＋余白多め（2026/11/10 夜の見比べ用 → 11/11 本人「案B・背景は机」で本番へ。見た目だけ。文・料金・リンクは前と同じ） =====
+   トップの最初の画面と相談の欄を深い紺に。ほかは白と薄いグレーで、余白を広く。見出しは細めのゴシック（Zen Kaku Gothic New 500）
+   明るく目立つのは「相談する」のボタンだけ（シャンパン色の地に紺の字）
+   古いスマホ対策：マニュアル16 の書き方を守る（新しい書き方は足していない）。新しい動きは足さない */
+:root{
+  --ink:#16202B;--ink-2:#2B3846;--sea:#3B5F7A;--sky:#F3F4F6;--paper:#FFFFFF;
+  --signal:#D8B864;--line:#E1E4E8;--muted:#56606B;--navy:#121C26;--navy-2:#1C2834;
+  --head:"Zen Kaku Gothic New","Hiragino Sans","BIZ UDPGothic",sans-serif;
+}
+body{line-height:1.95;letter-spacing:.02em}
+h1,h2,h3,h4{font-weight:500;letter-spacing:.08em}
+.sec{padding:104px 0}
+@media (max-width:760px){.sec{padding:64px 0}}
+.sec.alt{background:var(--sky)}
+.sec-head{margin-bottom:40px}
+.sec-head h2{font-size:26px;font-size:clamp(23px,3vw,30px);padding-top:0;padding-bottom:16px}
+.sec-head h2::before{top:auto;bottom:0;width:32px;height:2px;background:var(--ink)}
+.sec-head p{margin-top:16px}
+/* ボタン：角を小さく。相談のボタンだけシャンパン色 */
+.btn{border-radius:2px;border-width:1px;letter-spacing:.1em;font-weight:700;min-height:52px}
+.btn.primary{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.btn.primary:hover{background:#E6CB85;border-color:#E6CB85;color:var(--navy)}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.top .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;border-radius:2px}
+.menu-btn{border-radius:2px;border-width:1px}
+/* ヘッダーは白のまま（ロゴが紺のため） */
+.prog-bar{background:var(--signal);height:2px}
+.irai-band{font-weight:500}
+.irai-band .in::before{background:var(--ink);width:6px;height:6px;border-radius:50%}
+.nav a.now{border-bottom-color:var(--ink)}
+/* トップの最初の画面：深い紺 */
+.hero{background:var(--navy);color:#fff;padding:72px 0 64px}
+.hero h1{font-size:32px;font-size:clamp(30px,3.6vw,44px);line-height:1.5;color:#fff}
+.hero .sub{color:#D6DCE2;line-height:1.95}
+.from{color:#fff}
+.from .from-k{background:transparent;border:1px solid rgba(255,255,255,.55);color:#fff;border-radius:2px;font-weight:500;letter-spacing:.1em}
+.from b{font-weight:500;color:#fff}
+.from .from-u small{color:#AEB8C2}
+.from a{color:var(--signal)}
+.hero .btn:not(.primary){background:transparent;border-color:rgba(255,255,255,.6);color:#fff}
+.hero .btn:not(.primary):hover{border-color:#fff;color:#fff}
+.facts{color:#AEB8C2}
+.facts i{color:#4A5866}
+@media (max-width:760px){.hero{padding:44px 0 44px}.hero h1{font-size:28px}}
+@media (max-width:360px){.hero h1{font-size:25px;letter-spacing:.04em}}
+/* 飾りを静かに */
+.card{border:1px solid var(--line);box-shadow:0 12px 28px rgba(18,28,38,.08);border-radius:4px}
+.card .shot{border-bottom:1px solid var(--line)}
+.quiz,.pass,.news,.other,.k-own{border:1px solid var(--line);border-radius:4px}
+.pass .stub{border-left:1px solid var(--line)}
+@media (max-width:760px){.pass .stub{border-top:1px solid var(--line);border-left:none}}
+.pass.rec .stub,.k-keep,.price-cta,.answer{background:var(--navy-2)}
+.price-cta,.answer{border-radius:4px}
+.price{font-weight:500}
+.tag,.pass .tag,.ptabs button .fit,.can h3 .tag{background:var(--ink)!important;color:#fff!important;border-radius:2px!important}
+.req{background:var(--signal);color:var(--navy);border-radius:2px}
+.quiz-out b{background:var(--ink);color:#fff;border-radius:2px}
+.quiz .chip input:checked + span{background:var(--ink);border-color:var(--ink);color:#fff}
+.voices li{border-radius:4px;background:var(--sky)}
+.voices li::after{display:none}
+.can .ic{border-radius:4px}
+.steps-line{width:1px;background:var(--line)}
+.steps li::before{border-radius:2px;background:var(--navy);font-weight:500}
+.steps li:last-child::before{background:var(--signal);color:var(--navy)}
+.how li{border-left:2px solid var(--ink)}
+.faq .acc summary::before{border-radius:2px;background:var(--navy);color:#fff;font-weight:500}
+.faq .acc-in::before{border-radius:2px;background:var(--sky);color:var(--ink);font-weight:500}
+.keep{background:#F7F4EC;border-color:#E6DDC6;border-radius:4px}
+.p-points li{border-radius:2px}
+.sim-rows li.low .row span::after{background:var(--ink);color:#fff}
+.sim-rows li.low .bar i{background:var(--ink)}
+.ptabs .uline{background:var(--ink);height:2px}
+/* 相談の欄：深い紺。金は細く */
+.contact{background:var(--navy)}
+.contact::before{height:1px;background:rgba(216,184,100,.6)}
+.formbox{background:var(--navy-2);border-radius:4px;border:1px solid rgba(255,255,255,.08)}
+.form-top{background:var(--signal);color:var(--navy)}
+.howto li::before{border-radius:2px;background:var(--signal);color:var(--navy);font-weight:500}
+.chip span{border-radius:2px}
+.chip input:checked + span{background:var(--signal);border-color:var(--signal);color:var(--navy)}
+.c-info .tel{font-weight:500}
+input,textarea,select{border-radius:2px}
+footer{background:#0D151D}
+/* 下の5つのボタン */
+.tabbar a{border-top-width:2px}
+.tabbar a.on{border-top-color:var(--ink)}
+.tabbar a[data-scr="soudan"]{background:var(--navy);color:#fff}
+.tabbar a[data-scr="soudan"].on{background:var(--navy);color:var(--signal);border-top-color:var(--signal)}
+:focus-visible{outline-color:var(--sea)}
+/* 絵の中の黄色（HTML の SVG）を、シャンパン色に */
+[fill="#F2C230"]{fill:#C9A54E}
+[stroke="#F2C230"]{stroke:#C9A54E}
+.quiz-sky .lights,.quiz-sky .q-trail,.steps-jet .trail,.send-plane .trail{stroke:#C9A54E}
+/* 幅はヘッダーも中身も今と同じ 1040px（左の端を揃える。11/11） */
+.top .btn{white-space:nowrap;letter-spacing:.04em}
+/* 見直しで直した所（11/10 夜） */
+h1,h2,h3,h4{letter-spacing:.05em}
+.btn{letter-spacing:.05em}
+.next-btn .btn.primary{background:#fff;border-color:var(--ink);color:var(--ink)}
+.next-btn .btn.primary:hover{background:var(--ink);color:#fff}
+.worry{background:var(--sky)}
+/* 幅 320〜360 の小さいスマホ：ヘッダーの「相談する」「メニュー」が縦に折れないよう、横の余白と字間を詰める（11/11） */
+@media (max-width:360px){.top .btn{padding-left:10px;padding-right:10px;letter-spacing:0}.menu-btn{margin-left:6px;padding-left:7px;padding-right:7px;letter-spacing:0;white-space:nowrap}.menu-btn i{margin-right:5px}}
+/* 最初の画面の背景に写真（机の上・11/11 本人「背景は机」）。写真：Unsplash（Jakub Żerdzicki・机の上のパソコンとスマホ・Unsplash License）。素材一覧に記録
+   紺を重ねて字を読みやすく（PC は左を濃く・右を薄く。スマホは全体を濃く）。写真が読めないときも紺の地のまま */
+.hero{background-color:var(--navy);background-image:linear-gradient(90deg,rgba(18,28,38,.96) 0%,rgba(18,28,38,.90) 42%,rgba(18,28,38,.60) 70%,rgba(18,28,38,.38) 100%),url("../img/hero-tsukue-pc.jpg");background-position:center;background-size:cover;background-repeat:no-repeat;padding:88px 0 80px}
+.hero .photo-note{position:absolute;right:12px;bottom:8px;margin:0;font-size:11px;color:#D6DCE2;z-index:1}
+@media (max-width:760px){
+  .hero{background-image:linear-gradient(180deg,rgba(18,28,38,.86) 0%,rgba(18,28,38,.90) 45%,rgba(18,28,38,.94) 100%),url("../img/hero-tsukue-sp.jpg");background-position:center top;padding:48px 0 44px}
+}
+</style>
 </head>
 <body class="switch">
 <!-- 飛行機（旅客機の横向きのシルエット。機首は右）。動きの所で <use href="#jet"> で使い回す。色はロゴに合わせて紺＋白、飛行機雲は黄色 -->
@@ -637,6 +750,7 @@ html{scroll-padding-top:130px}
       <p class="facts">料金は<wbr>すべて<wbr>税込<i>／</i>更新は<wbr>月2回まで<wbr>月額に<wbr>込み<i>／</i>契約の<wbr>縛りなし</p>
     </div>
   </div>
+  <p class="photo-note">※写真はイメージです</p>
 </section>
 <section class="sec worry" aria-labelledby="worry-h">
   <div class="wrap">
