@@ -514,6 +514,10 @@ footer a{color:#dbe6ee;text-decoration:none}
 footer a:hover{color:var(--signal)}
 .foot-nav{display:flex;flex-wrap:wrap;list-style:none;justify-content:flex-end}
 .foot-nav li{margin:0 0 10px 24px}
+/* 2026/11/11 「できること」「流れ」の見出しの下の写真（机の写真と同じ色合い）。古いスマホ対策で aspect-ratio は使わず高さで決める */
+.sec-photo{margin:0 0 32px;height:300px;overflow:hidden;border-radius:6px}
+.sec-photo img{display:block;width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){.sec-photo{height:180px;margin-bottom:24px}}
 .foot-other{font-size:13px;opacity:.8;margin-top:6px}
 .copy{grid-column:1 / -1;border-top:1px solid #2c4256;padding-top:16px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap}
 @media (max-width:760px){footer{padding-bottom:110px}footer .wrap{grid-template-columns:1fr}.foot-nav{justify-content:flex-start;display:grid;grid-template-columns:1fr 1fr}.foot-nav li{margin:0 0 10px}}
@@ -836,6 +840,7 @@ h1,h2,h3,h4{letter-spacing:.05em}
       <h2>できる<wbr>こと</h2>
       <p>ホームページ係の担当者を<wbr>一人雇うかわりに、<wbr>外から手伝う形です。<wbr>お店の仕事に<wbr>集中していただけるよう、<wbr>ネットまわりを<wbr>まとめて引き受けます。</p>
     </div>
+    <figure class="sec-photo"><img src="../img/sec-can-20261111.jpg" alt="木の机の上のノートパソコンとスマホ（イメージ写真）" width="1600" height="600" loading="lazy" decoding="async"></figure>
     <ol class="can" aria-label="ホームページを作ってから、ずっと続く流れ">
       <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="17" y="6" width="30" height="52" rx="6" stroke="#17283A" stroke-width="2.6"/><path d="M28 52h8" stroke="#17283A" stroke-width="2.6"/><rect x="22" y="13" width="20" height="11" rx="2" fill="#F2C230" stroke="none"/><path d="M22 30h20M22 36h14M22 42h17" stroke="#2F6F8F" stroke-width="2.6"/><path d="M50 30l6-6 4 4-6 6-6 1z" fill="#fff" stroke="#17283A" stroke-width="2.2"/></svg></span><h3>作る</h3><p>お店の雰囲気に合わせて<wbr>デザインします。<wbr>スマホで見やすく、<wbr>電話や予約に<wbr>すぐつながる作りにします。</p></li>
       <li><span class="ic" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 50l14-6 14 6 14-6 10 4" stroke="#2F6F8F" stroke-width="2.4"/><path d="M32 40s-12-11-12-20a12 12 0 0124 0c0 9-12 20-12 20z" fill="#F2C230" stroke="#17283A" stroke-width="2.6"/><circle cx="32" cy="20" r="4.5" fill="#fff" stroke="#17283A" stroke-width="2.4"/></svg></span><h3>見つけてもらう<wbr>準備</h3><p>独自ドメイン、<wbr>Googleの検索に<wbr>登録する設定、<wbr>お店の地図を<wbr>サイトに載せるなど、<wbr>公開時の基本の設定は<wbr>ひととおり行います。</p></li>
@@ -1026,6 +1031,7 @@ h1,h2,h3,h4{letter-spacing:.05em}
       <h2>作成の<wbr>流れ</h2>
       <p>お会いする<wbr>打ち合わせは<wbr>2回です。<wbr>あいだは<wbr>LINEや<wbr>電話での<wbr>やりとりで<wbr>進めます。<wbr>写真や<wbr>載せる<wbr>内容が<wbr>そろってから<wbr>公開まで、<wbr>目安は<span class="nw">2〜3週間</span>です。<wbr>手順を<wbr>押すと<wbr>くわしく<wbr>出ます。</p>
     </div>
+    <figure class="sec-photo"><img src="../img/sec-flow-20261111.jpg" alt="打ち合わせの机に置いたノートとコーヒー（イメージ写真）" width="1600" height="600" loading="lazy" decoding="async"></figure>
     <div class="steps-wrap" id="steps-wrap">
     <span class="steps-line" id="steps-line" aria-hidden="true"></span>
     <svg class="steps-jet" id="steps-jet" aria-hidden="true" focusable="false"><path class="trail" id="steps-trail" d=""/><g id="steps-plane"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
