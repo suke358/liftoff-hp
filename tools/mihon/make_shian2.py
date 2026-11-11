@@ -32,7 +32,7 @@ SCREENS = [
     ('home',   'ホーム',     ['hero', 'worry', 'work', 'update']),
     ('dekiru', 'できること', ['can']),
     ('ryokin', '料金',       ['price']),
-    ('nagare', '流れ',       ['flow', 'faq', 'other']),
+    ('nagare', '流れ',       ['flow', 'faq']),  # 2026/11/11 伐採の段（other）を外した。伐採の入口はフッターの1行とフォームのチェック
     ('soudan', '相談',       ['trust', 'contact']),
 ]
 
