@@ -24,6 +24,8 @@
   11. 色の差（2026/10/31）：:root の --primary・--dark・--bg などから、ボタンの白い文字とボタン／ボタンと周りの背景（トップの dark・ページの bg）／
      地図の印（primary）と dark／小見出し（accent_soft）と dark／札の文字（primary_deep）と pale／本文（ink）と bg の差（WCAG のコントラスト比）を計算し、
      小さすぎたら ⚠️（10/31 に色を一部だけ上書きして「ご相談」ボタンと地図の印が背景に溶けたのを二度と起こさない）。make_site.py で作ったページだけ
+  13. CSS の背景画像（2026/11/12 道具7件の7）：<style>・読み込んだ .css・style="…" の url(…) が指す画像などのファイルが無ければ ❌
+     （11/11 自社トップ案Bで Unsplash の写真が取れないまま、check_site が通ってしまった。http(s)・data: は調べない）
   12. 置き場所（2026/11/11）：サイトのフォルダに .okiba（ココナラのお客さんのサイト。公開先は別アカウント omise-site）があるのに、調べるページや site.json に
      Lift-Off 自社の住所 liftoff-358 の文字があれば ❌（site.json の url_base などを .okiba の住所に直して make_site.py で作り直す）。.okiba の中身が読めなければ ❌。
      .okiba のないサイト（Lift-Off 自社）は調べない（今までと同じ結果）
@@ -163,6 +165,27 @@ def check_css(path, css, base_line=0):
             OLD_HITS.setdefault((path, name, fb), []).append(line)
     return found
 
+def check_css_urls(root, base_dir, css, rel, base_line=0):
+    """CSS の url(…) が指す画像などのファイルがあるか（2026/11/12 道具7件の7。背景写真が無くても通っていた）。
+    base_dir＝相対の道の起点（.css ならその場所、<style>・style="…" ならページの場所）。/ で始まる道はサイトの根から。http(s)・//・data:・blob:・# は調べない。
+    返り＝あった数"""
+    n_ok = 0
+    for m in re.finditer(r'url\(\s*(["\']?)([^"\')\s]+)\1\s*\)', css):
+        u = m.group(2)
+        if re.match(r'(https?:|data:|blob:|//|#)', u): continue
+        path_only = u.split('#')[0].split('?')[0]
+        if not path_only: continue
+        if path_only.startswith('/'):
+            if not os.path.splitext(path_only.rstrip('/'))[1]: continue
+            f = os.path.normpath(os.path.join(root, path_only.lstrip('/')))
+        else:
+            f = os.path.normpath(os.path.join(base_dir, path_only))
+        if os.path.isdir(f): continue
+        line = css.count('\n', 0, m.start()) + 1 + base_line
+        if not os.path.exists(f): add('❌', '画像', f'{rel} {line}行目：CSS の背景などの画像 {u} がありません（url(…)。写真を置くか、url を直す。ネットの写真はダウンロードして images/ に）')
+        else: n_ok += 1
+    return n_ok
+
 def check_card_v(src, rel):
     """LINE のカードの番号（?v=）が3か所でそろっているか（2026/10/10 自社で再発防止。マニュアル 17）
     iPhone の Safari の共有ボタンはアドレスバーではなく canonical の URL を LINE に送る。LINE はページの URL ごとにカードを覚えるので、
@@ -267,9 +290,12 @@ def run_static(root):
         for m in re.finditer(r'<link[^>]+href=["\']([^"\']+\.css)["\']', src0):
             u = m.group(1)
             if not re.match(r'(https?:|//)', u): css_files.add(os.path.normpath(os.path.join(os.path.dirname(p), u)))
+    n_bg = 0  # CSS の背景画像（あった数。2026/11/12）
     for css_path in sorted(css_files):
         if os.path.exists(css_path):
-            old_found |= check_css(css_path, open(css_path, encoding='utf-8', errors='ignore').read())
+            css_txt = open(css_path, encoding='utf-8', errors='ignore').read()
+            old_found |= check_css(css_path, css_txt)
+            n_bg += check_css_urls(root, os.path.dirname(css_path), css_txt, os.path.relpath(css_path, root))
 
     for p in pages:
         rel = os.path.relpath(p, root)
@@ -289,6 +315,10 @@ def run_static(root):
 
         for m in re.finditer(r'<style[^>]*>(.*?)</style>', src, re.S):
             old_found |= check_css(p, m.group(1), src.count('\n', 0, m.start(1)))
+            n_bg += check_css_urls(root, os.path.dirname(p), m.group(1), rel, src.count('\n', 0, m.start(1)))  # 2026/11/12 背景画像
+        for t, d, line in par.tags:  # style="background:url(…)" も（2026/11/12）
+            if d.get('style') and 'url(' in d['style']: n_bg += check_css_urls(root, os.path.dirname(p), d['style'], rel, line - 1)
+        if is_top and n_bg: add('✅', '画像', f'CSS の背景などの画像 {n_bg} 枚：ファイルあり')
 
         if is_top: check_colors(src, rel)  # 色の差（2026/10/31）
 
