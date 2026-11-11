@@ -24,6 +24,9 @@
   11. 色の差（2026/10/31）：:root の --primary・--dark・--bg などから、ボタンの白い文字とボタン／ボタンと周りの背景（トップの dark・ページの bg）／
      地図の印（primary）と dark／小見出し（accent_soft）と dark／札の文字（primary_deep）と pale／本文（ink）と bg の差（WCAG のコントラスト比）を計算し、
      小さすぎたら ⚠️（10/31 に色を一部だけ上書きして「ご相談」ボタンと地図の印が背景に溶けたのを二度と起こさない）。make_site.py で作ったページだけ
+  12. 置き場所（2026/11/11）：サイトのフォルダに .okiba（ココナラのお客さんのサイト。公開先は別アカウント omise-site）があるのに、調べるページや site.json に
+     Lift-Off 自社の住所 liftoff-358 の文字があれば ❌（site.json の url_base などを .okiba の住所に直して make_site.py で作り直す）。.okiba の中身が読めなければ ❌。
+     .okiba のないサイト（Lift-Off 自社）は調べない（今までと同じ結果）
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -54,6 +57,21 @@ FALLBACK = {  # 同じ { } の中にこれがあれば「予備あり」とみ�
     'margin-block': r'margin-top\s*:', 'padding-block': r'padding-top\s*:',
 }
 WIDTHS = [320, 360, 390, 768, 1280]
+DEFAULT_DOMAIN = 'liftoff-358.workers.dev'  # 公開先の住所の後ろ（Lift-Off 自社）。.okiba があればそちら
+
+def read_okiba(folder):
+    """サイトのフォルダの .okiba から、公開先の住所の後ろを読む（2026/11/11。preview_push.sh・push_small.sh の read_okiba と同じ読み方）。
+    .okiba がなければ (DEFAULT_DOMAIN, '')。あれば # で始まる行と空行を飛ばした最初の1行（https:// と最後の / は消す）を返す。
+    中身が空・英数字と . - 以外の文字がある・. がない → (None, 理由)。呼んだ側は住所を出さない（だまって liftoff-358 にはしない）"""
+    p = os.path.join(folder, '.okiba')
+    if not os.path.exists(p): return DEFAULT_DOMAIN, ''
+    lines = [l.strip() for l in open(p, encoding='utf-8', errors='ignore').read().splitlines()]
+    lines = [l for l in lines if l and not l.startswith('#')]
+    d = re.sub(r'^https?://', '', lines[0]).rstrip('/') if lines else ''
+    if not d: return None, f'{p} の中身が空です（公開先の住所を1行書く。例 omise-site.workers.dev）'
+    if not re.fullmatch(r'[A-Za-z0-9.-]+', d) or '.' not in d:
+        return None, f'{p} の「{d[:40]}」が住所の形ではありません（英数字と . - だけ・. が要る。例 omise-site.workers.dev）'
+    return d, ''
 
 # ---- 下ごしらえ -------------------------------------------------------
 class TextAndTags(HTMLParser):
@@ -213,6 +231,26 @@ def check_og_image_changed(root, img_path, rel):
         if was and was.returncode == 0:
             add('⚠️', 'シェア', f'{rel}：og:image の画像 {p} が、直前のコミットで同じ名前のまま中身だけ変わっています。LINE が古い画像を覚えるので、ファイル名も変える（例 og-日付b.jpg）')
 
+def check_okiba(root, pages):
+    """置き場所（2026/11/11）：.okiba があるサイト（ココナラのお客さん。公開先は omise-site 側）に、Lift-Off 自社の住所 liftoff-358 が残っていたら ❌。
+    調べるのは run_static が調べるページ（ふつうはトップだけ・--all で全部。index.old.html は公開しないので除く）と site.json。
+    .okiba のないサイト（Lift-Off 自社）は何もしない（今までと同じ結果）"""
+    if not os.path.exists(os.path.join(root, '.okiba')): return
+    dom, err = read_okiba(root)
+    if not dom: add('❌', '置き場所', f'{err}。直すまで preview_push.sh・push_small.sh も止まります'); return
+    files = [p for p in pages if os.path.basename(p) != 'index.old.html'] + [os.path.join(root, 'site.json')]
+    bad = []
+    for f in files:
+        if not os.path.exists(f): continue
+        src = open(f, encoding='utf-8', errors='ignore').read()
+        ls = [i + 1 for i, l in enumerate(src.splitlines()) if 'liftoff-358' in l]
+        if ls: bad.append(f'{os.path.relpath(f, root)}（{"・".join(map(str, ls[:6]))}{"…" if len(ls) > 6 else ""}行目）')
+    name = os.path.basename(os.path.abspath(root))
+    if bad:
+        add('❌', '置き場所', f'ココナラのお店（.okiba={dom}）なのに、Lift-Off 自社の住所 liftoff-358 が残っています → ' + '／'.join(bad)
+            + f'。site.json の url_base・og_image などの住所を https://{name}.{dom}/ に直し、make_site.py で作り直す（お客さんのサイトに自社の住所を出さない）')
+    else: add('✅', '置き場所', f'.okiba={dom}：liftoff-358 の住所なし')
+
 def run_static(root):
     pages = sorted(glob.glob(os.path.join(root, '**', '*.html'), recursive=True))
     pages = [p for p in pages if '/tools/' not in p and '/.git/' not in p and '/node_modules/' not in p]
@@ -220,6 +258,7 @@ def run_static(root):
     if '--all' not in sys.argv: pages = [p for p in pages if p == top]
     if not os.path.exists(top): add('❌', 'ファイル', 'index.html がありません'); return []
     add('✅', 'ファイル', f'調べたページ：{len(pages)} ページ（{", ".join(os.path.relpath(p, root) for p in pages[:8])}{" ほか" if len(pages)>8 else ""}）')
+    check_okiba(root, pages)  # 置き場所（.okiba あり＝ココナラのお店に liftoff-358 が残っていないか。2026/11/11）
 
     old_found = False
     css_files = set()

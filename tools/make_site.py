@@ -17,6 +17,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "url_base" … 公開URL（例 "https://〇〇.liftoff-358.workers.dev/"）。書くと og:url・canonical・LINE のカード画像（og_image）の URL が入る
   "card_v"   … LINE のカードの番号（1から。url_base があるときだけ）。og:url・canonical・開いたときアドレスバーに足す ?v= の3か所に入る（2026/10/10 追加。マニュアル 17）。
                カードの画像を変えたら、画像の名前を変え、card_v を次の数字にして作り直す（LINE はページの URL ごとにカードを覚えるため）
+  公開先の住所（2026/11/11）：作り終わったあとの案内（公開URL・確認用URL。wrangler.jsonc を初めて置くときに出る）の後ろは、作るフォルダの .okiba
+               （1行：例 omise-site.workers.dev）があればそれ、なければ今までどおり liftoff-358.workers.dev（preview_push.sh・push_small.sh と同じ読み方）。
+               ココナラのお客さんのサイトは別アカウント omise-site に置くため（2026/11/7 決定）。.okiba の中身が読めないときは ❌ を出し、住所は出さない
 
 404 ページ（2026/10/21 決定事項 08）：index.html と一緒に 404.html も作る（店名・色・印・LINE・電話は設定から）。
   wrangler.jsonc に not_found_handling を入れるので、Cloudflare が無い住所のときに 404 の印のまま返す。メニューのボタンは /menu（転送で /#menu へ）
@@ -51,6 +54,22 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+DEFAULT_DOMAIN = 'liftoff-358.workers.dev'  # 公開先の住所の後ろ（Lift-Off 自社）。.okiba があればそちら
+
+def read_okiba(folder):
+    """サイトのフォルダの .okiba から、公開先の住所の後ろを読む（2026/11/11。preview_push.sh・push_small.sh の read_okiba と同じ読み方）。
+    .okiba がなければ (DEFAULT_DOMAIN, '')。あれば # で始まる行と空行を飛ばした最初の1行（https:// と最後の / は消す）を返す。
+    中身が空・英数字と . - 以外の文字がある・. がない → (None, 理由)。呼んだ側は住所を出さない（だまって liftoff-358 にはしない）"""
+    p = os.path.join(folder, '.okiba')
+    if not os.path.exists(p): return DEFAULT_DOMAIN, ''
+    lines = [l.strip() for l in open(p, encoding='utf-8', errors='ignore').read().splitlines()]
+    lines = [l for l in lines if l and not l.startswith('#')]
+    d = re.sub(r'^https?://', '', lines[0]).rstrip('/') if lines else ''
+    if not d: return None, f'{p} の中身が空です（公開先の住所を1行書く。例 omise-site.workers.dev）'
+    if not re.fullmatch(r'[A-Za-z0-9.-]+', d) or '.' not in d:
+        return None, f'{p} の「{d[:40]}」が住所の形ではありません（英数字と . - だけ・. が要る。例 omise-site.workers.dev）'
+    return d, ''
 
 def e(t): return html.escape(str(t or ''), quote=True)
 
@@ -1373,7 +1392,12 @@ def write_cloudflare_files(outdir):
   "previews": {{}}
 }}
 ''')
-        print('Cloudflare の設定を置きました：', wr, f'（公開URL https://{name}.liftoff-358.workers.dev/ ・確認用 https://preview-{name}.liftoff-358.workers.dev/）')
+        # 公開後の案内。住所の後ろは .okiba で決まる（ココナラのお店は omise-site 側。なければ liftoff-358。2026/11/11）
+        dom, err = read_okiba(outdir)
+        if dom: print('Cloudflare の設定を置きました：', wr, f'（公開URL https://{name}.{dom}/ ・確認用 https://preview-{name}.{dom}/）')
+        else:
+            print('Cloudflare の設定を置きました：', wr)
+            print(f'❌ 公開URLの案内を出せません：{err}。.okiba を直してから preview_push.sh・push_small.sh を使う（代わりに liftoff-358 の住所は出しません）')
     ai = os.path.join(outdir, '.assetsignore')
     if not os.path.exists(ai):
         open(ai, 'w', encoding='utf-8').write('# 公開しないファイル（設定ファイルや説明書き）\n.git\n.gitignore\n.assetsignore\nwrangler.jsonc\nREADME.md\n.wrangler\n.DS_Store\nsite.json\nindex.old.html\n')
