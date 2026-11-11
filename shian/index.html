@@ -639,8 +639,14 @@ h1,h2,h3,h4{letter-spacing:.05em}
    紺を重ねて字を読みやすく（PC は左を濃く・右を薄く。スマホは全体を濃く）。写真が読めないときも紺の地のまま */
 .hero{background-color:var(--navy);background-image:linear-gradient(90deg,rgba(18,28,38,.96) 0%,rgba(18,28,38,.90) 42%,rgba(18,28,38,.60) 70%,rgba(18,28,38,.38) 100%),url("../img/hero-tsukue-pc.jpg");background-position:center;background-size:cover;background-repeat:no-repeat;padding:88px 0 80px}
 .hero .photo-note{position:absolute;right:12px;bottom:8px;margin:0;font-size:11px;color:#D6DCE2;z-index:1}
+/* スマホは背景にせず、いちばん上に写真の帯（横幅いっぱい・3:2 のまま切らずに机全体＝パソコン・ノート・スマホが入る。下の端は紺にぼかして見出しへつなぐ。11/11 本人「スマホで綺麗に入るように」）
+   aspect-ratio は古いスマホ対策で使わず、padding-top の 66.7%（＝幅の 2/3）で高さを出す。写真は細かさのため PC と同じ 1800px のもの */
+.hero-photo{display:none}
 @media (max-width:760px){
-  .hero{background-image:linear-gradient(180deg,rgba(18,28,38,.86) 0%,rgba(18,28,38,.90) 45%,rgba(18,28,38,.94) 100%),url("../img/hero-tsukue-sp.jpg");background-position:center top;padding:48px 0 44px}
+  .hero{background-image:none;padding:0 0 44px}
+  .hero-photo{display:block;position:relative;height:0;padding-top:66.7%;margin-bottom:24px;background:url("../img/hero-tsukue-pc.jpg") center center/cover no-repeat}
+  .hero-photo:after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;background:linear-gradient(180deg,rgba(18,28,38,0) 0%,rgba(18,28,38,.55) 55%,rgba(18,28,38,1) 100%)}
+  .hero .photo-note{top:8px;bottom:auto;right:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 }
 </style>
 </head>
@@ -679,6 +685,7 @@ h1,h2,h3,h4{letter-spacing:.05em}
 
 <main id="main">
 <section class="hero">
+  <div class="hero-photo" aria-hidden="true"></div>
   <svg class="hero-plane" id="hero-plane" aria-hidden="true" focusable="false"><path class="trail" id="hero-trail" d=""/><g class="plane" id="hero-jet"><use href="#jet" xlink:href="#jet" x="-32" y="-16" width="64" height="32"/></g></svg>
   <div class="wrap">
     <div class="hero-copy" id="hero-copy">
