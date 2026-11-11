@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "hoshino",
  "name": "ほしの自動車整備",
  "short_name": "ほしの自動車",
@@ -39,10 +40,10 @@
    "id": "shaken",
    "name": "車検",
    "text": "法定費用込みの目安です。代車もご用意しています。",
-   "image": "images/menu-shaken.svg",
+   "image": "images/menu-shaken.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "車検の写真",
+   "alt": "車検のイメージ写真",
    "price": "49,500円〜",
    "price_note": "軽自動車"
   },
@@ -50,29 +51,29 @@
    "id": "oil",
    "name": "点検・オイル交換",
    "text": "待っている間にできる、ふだんの点検。",
-   "image": "images/menu-oil.svg",
+   "image": "images/menu-oil.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "点検・オイル交換の写真",
+   "alt": "点検・オイル交換のイメージ写真",
    "price": "4,400円〜"
   },
   {
    "id": "bankin",
    "name": "板金・塗装",
    "text": "へこみ・すり傷の修理。保険を使う修理もご相談ください。",
-   "image": "images/menu-bankin.svg",
+   "image": "images/menu-bankin.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "板金・塗装の写真"
+   "alt": "板金・塗装のイメージ写真"
   },
   {
    "id": "tire",
    "name": "タイヤ交換・保管",
    "text": "夏タイヤ・冬タイヤの交換と、お預かり。",
-   "image": "images/menu-tire.svg",
+   "image": "images/menu-tire.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "タイヤ交換・保管の写真",
+   "alt": "タイヤ交換・保管のイメージ写真",
    "price": "2,200円〜",
    "price_note": "4本"
   }
@@ -106,11 +107,11 @@
    "items": [
     {
      "before": {
-      "image": "images/case1-before.svg",
+      "image": "images/case1-before.jpg",
       "alt": "修理前のドア（見本）"
      },
      "after": {
-      "image": "images/case1-after.svg",
+      "image": "images/case1-after.jpg",
       "alt": "修理後のドア（見本）"
      },
      "title": "ドアのへこみの修理",
@@ -119,11 +120,11 @@
     },
     {
      "before": {
-      "image": "images/case2-before.svg",
+      "image": "images/case2-before.jpg",
       "alt": "修理前のバンパー（見本）"
      },
      "after": {
-      "image": "images/case2-after.svg",
+      "image": "images/case2-after.jpg",
       "alt": "修理後のバンパー（見本）"
      },
      "title": "バンパーのすり傷",
@@ -169,12 +170,12 @@
  ],
  "schema_type": "AutoRepair",
  "area_served": "〇〇市",
+ "layout": "cards",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1067,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

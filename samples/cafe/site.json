@@ -40,6 +40,10 @@
    "id": "morning",
    "name": "モーニング",
    "text": "トースト・ゆで卵・サラダに、お好きな飲みものを。",
+   "image": "images/menu-morning.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "モーニングのイメージ写真",
    "price": "550円",
    "price_note": "飲みもの代＋"
   },
@@ -47,6 +51,10 @@
    "id": "lunch",
    "name": "日替わりランチ",
    "text": "週ごとに変わる、ごはんとおかずの定食です。",
+   "image": "images/menu-lunch.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "日替わりランチのイメージ写真",
    "price": "900円"
   },
   {

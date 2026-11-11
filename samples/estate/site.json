@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "soyokaze",
  "name": "そよかぜ不動産",
  "short_name": "そよかぜ不動産",
@@ -39,37 +40,37 @@
    "id": "chintai",
    "name": "賃貸",
    "text": "お部屋探しと、貸したい方のご相談。",
-   "image": "images/menu-chintai.svg",
+   "image": "images/menu-chintai.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "賃貸の写真"
+   "alt": "賃貸のイメージ写真"
   },
   {
    "id": "baibai",
    "name": "売買",
    "text": "家・土地を買いたい方、売りたい方のご相談。",
-   "image": "images/menu-baibai.svg",
+   "image": "images/menu-baibai.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "売買の写真"
+   "alt": "売買のイメージ写真"
   },
   {
    "id": "kanri",
    "name": "管理",
    "text": "貸している家・アパートの管理をお引き受けします。",
-   "image": "images/menu-kanri.svg",
+   "image": "images/menu-kanri.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "管理の写真"
+   "alt": "管理のイメージ写真"
   },
   {
    "id": "akiya",
    "name": "空き家・相続のご相談",
    "text": "遠くにある実家のことなど、まずはお話をお聞かせください。",
-   "image": "images/menu-akiya.svg",
+   "image": "images/menu-akiya.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "空き家・相続のご相談の写真"
+   "alt": "空き家・相続のご相談のイメージ写真"
   }
  ],
  "flow_title": "ご相談の流れ",
@@ -119,12 +120,12 @@
  ],
  "schema_type": "RealEstateAgent",
  "area_served": "〇〇市",
+ "layout": "magazine",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1067,
+  "h": 1600,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

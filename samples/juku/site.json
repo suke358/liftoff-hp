@@ -73,6 +73,10 @@
    "id": "trial",
    "name": "体験授業",
    "text": "まずは2回、教室の様子を見に来てください。",
+   "image": "images/menu-trial.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "体験授業のイメージ写真",
    "price": "無料",
    "price_note": "2回まで"
   }

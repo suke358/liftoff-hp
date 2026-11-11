@@ -20,7 +20,7 @@
 {"@context": "https://schema.org", "@type": "LocalBusiness", "name": "トリミングサロン てくてく", "telephone": "+81--00-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇市〇〇町1-2-3"}, "areaServed": "〇〇市"}
 </script>
 <style>
-/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
@@ -155,7 +155,7 @@ p{margin:0 0 1.2em}
 .ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
 .ask-line:hover{background:#06c755;color:#fff}
 .ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
-.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary);font-family:inherit;font-size:.85rem;margin-top:14px}
 .ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
 .ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
 .ptable h3 .mk{margin-right:.45em}
@@ -249,6 +249,58 @@ p{margin:0 0 1.2em}
 .totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .totop.show{opacity:.92;visibility:visible}
 @media (max-width:860px){.totop{bottom:76px;right:12px}}
+/* 明るい上の部分（hero_style: light） */
+:root{--hero-style:light}
+.head .wrap{color:var(--ink)}
+.bk{color:var(--primary-deep)}
+.nav a:hover{color:var(--primary-deep)}
+@media (max-width:860px){
+  .menubtn{background:rgba(255,255,255,.75);color:var(--ink);border-color:var(--line)}
+  .head.open .nav{color:#f3efe6}
+}
+.hero{background:var(--pale);color:var(--ink)}
+.poster::after{background:linear-gradient(90deg,rgba(255,255,255,0),var(--pale))}
+.poster.plain{background:radial-gradient(70% 60% at 50% 45%,#fff,var(--bg2))}
+.plain-name{color:var(--primary-deep)}
+.eyebrow{color:var(--primary-deep)}
+.eyebrow::before{background:var(--primary-deep)}
+.hero .lead{color:var(--muted)}
+.addr{color:var(--ink);border-top-color:var(--line)}
+.toc a{color:var(--ink);background:#fff;border-color:var(--line)}
+.toc a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.hero .btn-ghost{border-color:var(--primary-deep);color:var(--primary-deep);background:#fff}
+.hero .btn-ghost:hover{border-color:var(--primary)}
+/* レイアウトの型：共通 */
+.hero .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.card > .card-body:first-child{border-top:4px solid var(--accent-soft)}
+.price small:empty{display:none}
+
+/* 型：pop（傾けた写真・太い枠・丸い飾り） */
+.hero::before{content:"";position:absolute;width:560px;height:560px;border-radius:50%;background:var(--accent-soft);opacity:.55;right:-140px;top:-160px}
+.hero::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:var(--primary);opacity:.12;left:-60px;bottom:-60px}
+.hero .wrap{position:relative;z-index:1;width:auto;max-width:1180px;margin:0 auto;padding:140px 20px 100px;min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;height:520px;border:10px solid #fff;border-radius:32px;-webkit-transform:rotate(-3deg);transform:rotate(-3deg);box-shadow:16px 16px 0 var(--primary)}
+.hero .poster::after{display:none}
+.hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;padding:0 50px 0 0;max-width:none}
+.hero h1{font-family:var(--gothic);font-weight:700;font-size:2.6rem;font-size:clamp(1.9rem,4vw,3.1rem);letter-spacing:.08em}
+.sec-head i{display:inline-block;background:var(--primary);color:#fff !important;font-style:normal;font-family:var(--gothic);font-weight:700;font-size:.8rem;letter-spacing:.14em;padding:.2em 1.1em;border-radius:999px;text-transform:uppercase}
+.sec-head i .mk{fill:#fff}
+.sec-head h2{font-family:var(--gothic);font-weight:700}
+.menu .card{border:2px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--primary)}
+.menu .card .photo{border-bottom:2px solid var(--ink)}
+
+.menu .card h3{font-family:var(--gothic);font-weight:700}
+.menu .card .price b{color:var(--primary-deep);font-family:var(--gothic);font-weight:700}
+@media (max-width:860px){
+  .hero::before{width:320px;height:320px;right:-120px;top:-80px}
+  .hero .wrap{grid-template-columns:1fr;padding:100px 20px 10px}
+  .hero .poster{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0;height:270px;margin:0 10px;border-width:7px;border-radius:24px;box-shadow:10px 10px 0 var(--primary)}
+  .hero .poster img{position:absolute;height:100%}
+  .hero-info{padding:0;margin:40px 0 0}
+}
+.menu .card > .card-body:first-child{border-top:0}
+.menu .card > .card-body:first-child h3{margin:-24px -24px 18px;padding:15% 16px;padding:calc(37.5% - .9em) 16px;background:var(--pale);color:var(--primary-deep);text-align:center;font-size:1.5rem;letter-spacing:.16em;border-bottom:2px solid var(--ink);background:var(--accent-soft);color:var(--ink)}
+@media (max-width:640px){.menu .card > .card-body:first-child h3{margin:-16px -16px 14px}}
 
 /* 見本帳にもどる（見本だけに出す） */
 .mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
@@ -262,7 +314,7 @@ p{margin:0 0 1.2em}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><path d="M12 21s-7.6-4.6-9.6-9.4C1 8.2 3 4.5 6.6 4.5c2.2 0 3.7 1.3 5.4 3.3 1.7-2 3.2-3.3 5.4-3.3 3.6 0 5.6 3.7 4.2 7.1C19.6 16.4 12 21 12 21z"/></symbol></svg>
 <header class="head">
   <div class="wrap">
-    <a href="#top" class="brand" aria-label="てくてく トップへ"><span class="bn">てくてく</span><span class="bk">ペットの<wbr>トリミング｜〇〇市</span></a>
+    <a href="#top" class="brand" aria-label="てくてく トップへ"><span class="bn">てくてく</span><span class="bk">ペットのトリミング｜〇〇市</span></a>
     <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">メニュー・料金</a><a href="#access">お店のこと</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
@@ -270,11 +322,11 @@ p{margin:0 0 1.2em}
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <figure class="poster"><img src="images/hero.svg" alt="お店の写真" width="1200" height="1500" fetchpriority="high"></figure>
+      <figure class="poster"><img src="images/hero.jpg" alt="お店の雰囲気のイメージ写真" width="1067" height="1600" fetchpriority="high"></figure>
       <div class="hero-info">
-        <p class="eyebrow">ペットの<wbr>トリミング｜〇〇市</p>
+        <p class="eyebrow">ペットのトリミング｜〇〇市</p>
         <h1><span class="nw">その子のペースで、</span><br><span class="nw">きれいに、やさしく。</span></h1>
-        <p class="lead">〇〇市の<wbr>トリミングサロンです。<wbr>1頭ずつ、<wbr>ゆっくり時間を<wbr>とって。<wbr>はじめての<wbr>子も、<wbr>年を<wbr>とった<wbr>子も。</p>
+        <p class="lead">〇〇市のトリミングサロンです。1頭ずつ、ゆっくり時間をとって。はじめての子も、年をとった子も。</p>
         <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
         <div class="hero-btns"><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a><a class="btn btn-ghost" href="tel:0000000000">電話する <span class="nw">0000-00-0000</span></a></div>
         <ul class="toc" aria-label="このページの案内"><li><a href="#menu">メニュー・料金</a></li><li><a href="#reserve">ご予約</a></li><li><a href="#access">お店のこと</a></li><li><a href="#faq">よくある質問</a></li></ul>
@@ -284,58 +336,58 @@ p{margin:0 0 1.2em}
   <section id="menu" class="sec menu">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>メニュー・料金</h2></div>
-      <p class="sec-lead center muted">料金は<wbr>見本です。</p>
+      <p class="sec-lead center muted">料金は見本です。</p>
       <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-shampoo">シャンプーコース</a><a href="#m-cut">カットコース</a><a href="#m-part">部分ケア</a><a href="#m-sougei">送迎</a></nav>
       <div class="menu-cards n4">
         <article class="card" id="m-shampoo">
-          <div class="photo"><img src="images/menu-shampoo.svg" alt="シャンプーコースの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-shampoo.jpg" alt="シャンプーコースのイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>シャンプーコース</h3>
             
-            <p>シャンプー・爪切り・耳そうじ・<wbr>足まわりの<wbr>カット。</p>
+            <p>シャンプー・爪切り・耳そうじ・足まわりのカット。</p>
             <div class="price"><small>小型犬</small><b>3,300円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューを<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-cut">
-          <div class="photo"><img src="images/menu-cut.svg" alt="カットコースの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-cut.jpg" alt="カットコースのイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>カットコース</h3>
             
-            <p>シャンプーコースに、<wbr>全身の<wbr>カット。</p>
+            <p>シャンプーコースに、全身のカット。</p>
             <div class="price"><small>小型犬</small><b>5,500円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューを<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-part">
-          <div class="photo"><img src="images/menu-part.svg" alt="部分ケアの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-part.jpg" alt="部分ケアのイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>部分ケア</h3>
             
-            <p>爪切り・耳そうじ・肛門腺だけ、<wbr>でも<wbr>大丈夫。</p>
+            <p>爪切り・耳そうじ・肛門腺だけ、でも大丈夫。</p>
             <div class="price"><small></small><b>550円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューを<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-sougei">
-          <div class="photo"><img src="images/menu-sougei.svg" alt="送迎の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-sougei.jpg" alt="送迎のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>送迎</h3>
             
-            <p>〇〇市内は、<wbr>お迎えと<wbr>お送りを<wbr>しています。</p>
+            <p>〇〇市内は、お迎えとお送りをしています。</p>
             <div class="price"><small></small><b>片道 550円</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューをLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">このメニューを<wbr>LINEで相談</span></a>
           </div>
         </article>
       </div>
-      <p class="price-note muted center">犬種・<wbr>大きさ・毛の<wbr>状態で<wbr>変わります。</p>
+      <p class="price-note muted center">犬種・大きさ・毛の状態で変わります。</p>
     </div>
   </section>
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご予約</h2></div>
-      <p class="muted center" style="margin-bottom:40px">ご予約は<wbr>LINEか<wbr>お電話で。<wbr>はじめての<wbr>子は、<wbr>ワクチンの<wbr>証明書を<wbr>お持ちください<wbr>（見本）。</p>
-      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
+      <p class="muted center" style="margin-bottom:40px">ご予約はLINEかお電話で。はじめての子は、ワクチンの証明書をお持ちください（見本）。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、メッセージでご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は出られないことがあります。折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
       
     </div>
   </section>
@@ -343,7 +395,7 @@ p{margin:0 0 1.2em}
     <div class="wrap nomap">
       <div>
         <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>お店のこと</h2></div>
-        <dl class="info"><div><dt>店名</dt><dd>トリミングサロン てくてく</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>9:00〜18:00<wbr>（見本）</dd></div><div><dt>定休日</dt><dd>木曜日<wbr>（見本）</dd></div><div><dt>駐車場</dt><dd>2台（見本）</dd></div><div><dt>お支払い</dt><dd>現金・QRコード決済<wbr>（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
+        <dl class="info"><div><dt>店名</dt><dd>トリミングサロン てくてく</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>9:00〜18:00（見本）</dd></div><div><dt>定休日</dt><dd>木曜日（見本）</dd></div><div><dt>駐車場</dt><dd>2台（見本）</dd></div><div><dt>お支払い</dt><dd>現金・QRコード決済（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
         
       </div>
       
@@ -352,7 +404,7 @@ p{margin:0 0 1.2em}
   <section id="faq" class="sec faq">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list"><details><summary><span class="q">Q</span><span>大型犬も<wbr>お願いできますか？</span></summary><p><span class="a">A</span><span>はい。<wbr>大きさに<wbr>よって<wbr>料金と<wbr>時間が<wbr>変わります。<wbr>ご予約の<wbr>ときに<wbr>お知らせ<wbr>ください。</span></p></details><details><summary><span class="q">Q</span><span>猫も<wbr>できますか？</span></summary><p><span class="a">A</span><span>いまは<wbr>犬だけ<wbr>お受けしています<wbr>（見本）。</span></p></details><details><summary><span class="q">Q</span><span>こわがりの<wbr>子でも<wbr>大丈夫ですか？</span></summary><p><span class="a">A</span><span>はい。<wbr>休みながら、<wbr>その<wbr>子の<wbr>ペースで<wbr>進めます。</span></p></details></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>大型犬もお願いできますか？</span></summary><p><span class="a">A</span><span>はい。大きさによって料金と時間が変わります。ご予約のときにお知らせください。</span></p></details><details><summary><span class="q">Q</span><span>猫もできますか？</span></summary><p><span class="a">A</span><span>いまは犬だけお受けしています（見本）。</span></p></details><details><summary><span class="q">Q</span><span>こわがりの子でも大丈夫ですか？</span></summary><p><span class="a">A</span><span>はい。休みながら、その子のペースで進めます。</span></p></details></div>
     </div>
   </section>
 </main>
@@ -360,12 +412,12 @@ p{margin:0 0 1.2em}
   <div class="wrap">
     <p class="fname">トリミングサロン てくてく</p>
     <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3</p>
-    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　9:00〜18:00<wbr>（見本）</p>
+    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　9:00〜18:00（見本）</p>
     <nav aria-label="フッター"><a href="#menu">メニュー・料金</a><a href="#access">お店のこと</a><a href="#faq">よくある質問</a></nav>
     <p class="copy">© てくてく</p>
   </div>
 </footer>
-<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで<wbr>相談</a><a class="r" href="#menu">メニュー</a></nav>
+<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで相談</a><a class="r" href="#menu">メニュー</a></nav>
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 // スマホのメニュー（開く・閉じる）と、上へ戻るボタン

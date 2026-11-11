@@ -40,24 +40,40 @@
    "id": "basic",
    "name": "整体 60分",
    "text": "お話をうかがってから、全身をていねいに施術します。",
+   "image": "images/menu-basic.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "整体 60分のイメージ写真",
    "price": "5,500円"
   },
   {
    "id": "short",
    "name": "整体 30分",
    "text": "時間のないときに、気になるところを中心に。",
+   "image": "images/menu-short.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "整体 30分のイメージ写真",
    "price": "3,300円"
   },
   {
    "id": "first",
    "name": "はじめての方",
    "text": "最初にお話をうかがう時間を長めにとります。",
+   "image": "images/menu-first.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "はじめての方のイメージ写真",
    "price": "+1,100円"
   },
   {
    "id": "ticket",
    "name": "回数券",
    "text": "5回分をまとめてお求めいただけます。",
+   "image": "images/menu-ticket.jpg",
+   "w": 1000,
+   "h": 750,
+   "alt": "回数券のイメージ写真",
    "price": "25,000円"
   }
  ],

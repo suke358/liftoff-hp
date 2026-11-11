@@ -286,12 +286,21 @@ SAMPLES={
 # layout は tools/layouts.py の型。明るい上の部分の型は hero_style='light'
 PHOTO_ROOT=os.path.join(os.path.dirname(os.path.abspath(ROOT)),'_素材写真')
 PHOTOS={
-'cafe':dict(layout='magazine',hero_style='light',photos=dict(hero='カフェ/cafe_hero.jpg',coffee='カフェ/cafe_coffee.jpg',cake='カフェ/cafe_cake.jpg')),
-'bakery':dict(layout='pop',hero_style='light',photos=dict(hero='パン屋/bakery_baguette.jpg',shoku='パン屋/bakery_loaf.jpg',souzai='パン屋/bakery_hero.jpg')),
-'juku':dict(layout='cards',hero_style='light',photos=dict(hero='学習塾/juku_hero.jpg',sho='学習塾/juku_desk.jpg',chu='学習塾/juku_note.jpg',kou='学習塾/juku_class.jpg')),
-'reform':dict(layout='full',hero_style='dark',photos=dict(hero='工務店/reform_hero.jpg',naisou='工務店/reform_room.jpg',shuuri='工務店/reform_plane.jpg')),
-'hair':dict(layout='frame',hero_style='light',photos=dict(hero='美容室/hair_hero.jpg',cut='美容室/hair_cut.jpg',color='美容室/hair_color.jpg')),
-'relax':dict(layout='split',hero_style='light',photos=dict(hero='整体/relax_hero.jpg')),
+'cafe':dict(layout='magazine',hero_style='light',photos=dict(morning='カフェ/cafe_morning.jpg',lunch='カフェ/cafe_lunch.jpg',hero='カフェ/cafe_hero.jpg',coffee='カフェ/cafe_coffee.jpg',cake='カフェ/cafe_cake.jpg')),
+'bakery':dict(layout='pop',hero_style='light',photos=dict(yaki='パン屋/bakery_yaki.jpg',cake='パン屋/bakery_cake.jpg',hero='パン屋/bakery_baguette.jpg',shoku='パン屋/bakery_loaf.jpg',souzai='パン屋/bakery_hero.jpg')),
+'juku':dict(layout='cards',hero_style='light',photos=dict(trial='学習塾/juku_trial.jpg',hero='学習塾/juku_hero.jpg',sho='学習塾/juku_desk.jpg',chu='学習塾/juku_note.jpg',kou='学習塾/juku_class.jpg')),
+'reform':dict(layout='full',hero_style='dark',photos=dict(mizu='工務店/reform_mizu.jpg',yane='工務店/reform_yane.jpg',hero='工務店/reform_hero.jpg',naisou='工務店/reform_room.jpg',shuuri='工務店/reform_plane.jpg')),
+'hair':dict(layout='frame',hero_style='light',photos=dict(perm='美容室/hair_perm.jpg',spa='美容室/hair_spa.jpg',hero='美容室/hair_hero.jpg',cut='美容室/hair_cut.jpg',color='美容室/hair_color.jpg')),
+'relax':dict(layout='split',hero_style='light',photos=dict(basic='整体/relax_basic.jpg',short='整体/relax_short.jpg',first='整体/relax_first.jpg',ticket='整体/relax_ticket.jpg',hero='整体/relax_hero.jpg')),
+'school':dict(layout='pop',hero_style='light',photos=dict(hero='英語教室/school_hero.jpg',kids='英語教室/school_kids.jpg',elementary='英語教室/school_elementary.jpg',junior='英語教室/school_junior.jpg',trial='英語教室/school_trial.jpg')),
+'izakaya':dict(layout='full',hero_style='dark',photos=dict(hero='居酒屋/izakaya_hero.jpg',course='居酒屋/izakaya_course.jpg',sashimi='居酒屋/izakaya_sashimi.jpg',yaki='居酒屋/izakaya_yaki.jpg',drink='居酒屋/izakaya_drink.jpg')),
+'nail':dict(layout='frame',hero_style='light',photos=dict(hero='ネイル/nail_hero.jpg',gel='ネイル/nail_gel.jpg',off='ネイル/nail_off.jpg',ext='ネイル/nail_ext.jpg',perm='ネイル/nail_perm.jpg')),
+'car':dict(layout='cards',hero_style='light',photos=dict(hero='車の整備/car_hero.jpg',shaken='車の整備/car_shaken.jpg',oil='車の整備/car_oil.jpg',bankin='車の整備/car_bankin.jpg',tire='車の整備/car_tire.jpg',**{'case1-before':'車の整備/car_case1-before.jpg'},**{'case1-after':'車の整備/car_case1-after.jpg'},**{'case2-before':'車の整備/car_case2-before.jpg'},**{'case2-after':'車の整備/car_case2-after.jpg'})),
+'setsubi':dict(layout='split',hero_style='light',photos=dict(hero='電気水道/setsubi_hero.jpg',denki='電気水道/setsubi_denki.jpg',suidou='電気水道/setsubi_suidou.jpg',aircon='電気水道/setsubi_aircon.jpg',kyuto='電気水道/setsubi_kyuto.jpg',**{'case1-before':'電気水道/setsubi_case1-before.jpg'},**{'case1-after':'電気水道/setsubi_case1-after.jpg'},**{'case2-before':'電気水道/setsubi_case2-before.jpg'},**{'case2-after':'電気水道/setsubi_case2-after.jpg'})),
+'estate':dict(layout='magazine',hero_style='light',photos=dict(hero='不動産/estate_hero.jpg',chintai='不動産/estate_chintai.jpg',baibai='不動産/estate_baibai.jpg',kanri='不動産/estate_kanri.jpg',akiya='不動産/estate_akiya.jpg')),
+'farm':dict(layout='full',hero_style='dark',photos=dict(hero='農家の直売/farm_hero.jpg',yasai='農家の直売/farm_yasai.jpg',kome='農家の直売/farm_kome.jpg',kudamono='農家の直売/farm_kudamono.jpg',kakou='農家の直売/farm_kakou.jpg')),
+'trimming':dict(layout='pop',hero_style='light',photos=dict(hero='トリミング/trimming_hero.jpg',shampoo='トリミング/trimming_shampoo.jpg',cut='トリミング/trimming_cut.jpg',part='トリミング/trimming_part.jpg',sougei='トリミング/trimming_sougei.jpg')),
+'studio':dict(layout='magazine',hero_style='light',photos=dict(hero='写真館/studio_hero.jpg',**{'753':'写真館/studio_753.jpg'},seijin='写真館/studio_seijin.jpg',family='写真館/studio_family.jpg',shoumei='写真館/studio_shoumei.jpg')),
 }
 for _k,_v in PHOTOS.items(): SAMPLES[_k].update(_v)
 def photo(src,dst,w,h=None,maxh=1600):
@@ -337,6 +346,9 @@ for d in only:
     for it in cs.get('items',[]):
         for key in ('before','after'):
             o=it[key]; icons=o.pop('_icon',['tools'])
+            nm=os.path.splitext(os.path.basename(o['image']))[0]   # case1-before など
+            if ph and nm in ph:
+                W,H=photo(ph[nm],f'{out}/images/{nm}.jpg',1000,750); o['image']=f'images/{nm}.jpg'; continue
             col=BEFORE if key=='before' else (spec['c1'],spec['c2'],spec['stroke'],spec['ink'])
             svg(f'{out}/{o["image"]}',1000,750,icons,cs.get('label_'+key,'')+'の写真が入ります',*col)
     if ph is not None:

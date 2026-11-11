@@ -25,7 +25,7 @@
 {"@context": "https://schema.org", "@type": "LocalBusiness", "name": "古民家リトリート ねむの葉", "url": "https://liftoff-hp.liftoff-358.workers.dev/samples/nemunoha/", "telephone": "+81--0000-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇郡〇〇町〇〇 000（見本）"}, "areaServed": "〇〇県", "openingHours": "Th-Su 10:00-16:00", "sameAs": ["https://www.instagram.com/nemunoha_retreat/"]}
 </script>
 <style>
-/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
@@ -275,6 +275,35 @@ p{margin:0 0 1.2em}
 .toc a:hover{border-color:var(--primary);color:var(--primary-deep)}
 .hero .btn-ghost{border-color:var(--primary-deep);color:var(--primary-deep);background:#fff}
 .hero .btn-ghost:hover{border-color:var(--primary)}
+/* レイアウトの型：共通 */
+.hero .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.card > .card-body:first-child{border-top:4px solid var(--accent-soft)}
+.price small:empty{display:none}
+
+/* 型：cards（文を真ん中に・写真は下に大きく。メニューは大きいカード2列） */
+.hero .wrap{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column;-webkit-box-align:center;-ms-flex-align:center;align-items:center;width:auto;max-width:1140px;margin:0 auto;padding:150px 20px 80px;min-height:0}
+.hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;text-align:center;max-width:780px;padding:0}
+.hero .eyebrow,.hero .addr,.hero-btns,.toc{-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center}
+.hero .eyebrow::after{content:"";width:36px;height:1px;background:currentColor;margin-left:14px;-ms-flex:none;flex:none}
+.hero h1{font-size:2.6rem;font-size:clamp(1.8rem,4vw,3rem)}
+.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;width:100%;height:460px;margin-top:56px;border-radius:28px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+.hero .poster::after{display:none}
+.menu-cards.n4,.menu-cards{grid-template-columns:1fr 1fr;grid-gap:32px}
+.menu .card{border-radius:24px;border:2px solid var(--line);box-shadow:none;-webkit-transition:-webkit-transform .2s;transition:transform .2s}
+.menu .card:hover{-webkit-transform:translateY(-4px);transform:translateY(-4px)}
+.menu .card .photo{margin:10px 10px 0;border-radius:16px}
+.menu .card h3{font-family:var(--gothic);font-weight:700}
+.menu .card .price b{color:var(--primary-deep)}
+@media (prefers-reduced-motion:reduce){.menu .card,.menu .card:hover{-webkit-transition:none;transition:none;-webkit-transform:none;transform:none}}
+@media (max-width:860px){
+  .hero .wrap{padding:104px 20px 10px}
+  .hero .poster{height:240px;margin-top:36px;border-radius:20px}
+  .hero .poster img{position:absolute;height:100%}
+}
+@media (max-width:600px){.menu-cards.n4,.menu-cards{grid-template-columns:1fr}}
+.menu .card > .card-body:first-child{border-top:0}
+.menu .card > .card-body:first-child h3{margin:-14px -14px 18px;padding:15% 16px;padding:calc(37.5% - .9em) 16px;background:var(--pale);color:var(--primary-deep);text-align:center;font-size:1.5rem;letter-spacing:.16em;border-radius:16px}
+@media (max-width:640px){.menu .card > .card-body:first-child h3{margin:-6px -6px 14px}}
 /* ---------- 部品（parts）共通 ---------- */
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
 .wrap.narrow{max-width:760px}
@@ -312,16 +341,7 @@ p{margin:0 0 1.2em}
 .lb-f figcaption{color:#eee;font-size:.86rem;margin-top:10px;letter-spacing:.06em}
 .lb-x{position:absolute;top:10px;right:12px;width:46px;height:46px;border:0;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:1.7rem;line-height:1;cursor:pointer}
 
-/* インスタグラムの DM のボタン（patch_dm.py） */
-.btn-dm svg{width:1.2em;height:1.2em;margin-right:.5em;flex:none}
-.ask-line.dm{color:#fff;background:var(--primary);border-color:var(--primary)}
-.ask-line.dm:hover{background:var(--primary-deep);border-color:var(--primary-deep);color:#fff}
-.ask-line.dm svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
-.ask-line.dm + .ask-line.tel{margin-top:8px}
-.way-dm .btn svg{width:1.2em;height:1.2em;margin-right:.5em;flex:none}
-/* 「赤い郵便ポストの角を右」を折り返さないので、幅 320 では項目名の列を少し狭くして、はみ出さないようにする（修正2回目） */
-@media (max-width:360px){.info div{grid-template-columns:4.5em 1fr}}
-@media (max-width:860px){.spbar a.r svg{width:1.1em;height:1.1em;margin-right:.35em;vertical-align:-.2em}}
+/* 見本帳にもどる（見本だけに出す） */
 .mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .mihon:hover{background:#000}
 @media (max-width:860px){.mihon{bottom:78px}}
@@ -337,12 +357,12 @@ p{margin:0 0 1.2em}
 </script>
 </head>
 <body>
-<!-- このページは tools/make_site.py で作った（設定：nemunoha.json）。直すときは設定を直して作り直すか、このファイルを直接直す --><p class="sample-note" role="note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
+<!-- このページは tools/make_site.py で作った（設定：nemunoha.json）。直すときは設定を直して作り直すか、このファイルを直接直す --><p class="sample-note" role="note">※画面は架空のお店の見本です</p>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><path d="M20 4C10 4 4 9 4 16c0 1.6.4 3 1 4 1-4 4-8 9-10-4 3-6 6-7 10 1 .3 2 .5 3 .5 7 0 10-7 10-16z"/></symbol></svg>
 <header class="head">
   <div class="wrap">
     <a href="#top" class="brand" aria-label="ねむの葉 トップへ"><img src="images/logo-leaf.svg" alt="ねむの葉" width="46" height="46"><span class="bn">ねむの葉</span><span class="bk">古民家リトリート｜〇〇県〇〇町</span></a>
-    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#greeting">ごあいさつ</a><a href="#menu">過ごし方と<wbr>料金</a><a href="#access">アクセス・営業日</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご予約</a></nav>
+    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#greeting">ごあいさつ</a><a href="#menu">過ごし方と料金</a><a href="#access">アクセス・営業日</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご予約</a></nav>
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
@@ -353,10 +373,10 @@ p{margin:0 0 1.2em}
       <div class="hero-info">
         <p class="eyebrow">古民家リトリート｜〇〇県〇〇町</p>
         <h1><span class="nw">がんばらなくていい、</span><br><span class="nw">何もしない時間を。</span></h1>
-        <p class="lead">築150年ほどの<wbr>古民家で、<wbr>裏の<wbr>畑の<wbr>薬草茶を<wbr>のみながら。<wbr>山あいの<wbr>町の、<wbr>小さな<wbr>リトリートです。</p>
-        <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇郡〇〇町<wbr>（駅から<wbr>車で<wbr>約20分）</span></p>
-        <div class="hero-btns" data-patch="dm"><a class="btn btn-main btn-dm" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>インスタの<wbr>DMで予約・相談</a><a class="btn btn-ghost" href="tel:00000000000">電話する <span class="nw">000-0000-0000</span></a></div>
-        <ul class="toc" aria-label="このページの案内"><li><a href="#greeting">ごあいさつ</a></li><li><a href="#menu">過ごし方と<wbr>料金</a></li><li><a href="#reserve">ご予約・<wbr>お問い合わせ</a></li><li><a href="#access">アクセス・営業日</a></li><li><a href="#faq">よくある質問</a></li></ul>
+        <p class="lead">築150年ほどの古民家で、裏の畑の薬草茶をのみながら。山あいの町の、小さなリトリートです。</p>
+        <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇郡〇〇町（駅から車で約20分）</span></p>
+        <div class="hero-btns"><a class="btn btn-ghost" href="tel:00000000000">電話する <span class="nw">000-0000-0000</span></a></div>
+        <ul class="toc" aria-label="このページの案内"><li><a href="#greeting">ごあいさつ</a></li><li><a href="#menu">過ごし方と料金</a></li><li><a href="#reserve">ご予約・お問い合わせ</a></li><li><a href="#access">アクセス・営業日</a></li><li><a href="#faq">よくある質問</a></li></ul>
       </div>
     </div>
   </section>
@@ -365,41 +385,41 @@ p{margin:0 0 1.2em}
       
       <div>
         <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>greeting</i><h2>ごあいさつ</h2></div>
-        <span class="role">代表　森下<wbr>（元看護師）</span>
-        <h3>祖母の<wbr>家を、<wbr>3年かけて<wbr>直しました。</h3>
-        <p class="muted">築150年ほどの、<wbr>祖母の<wbr>家です。<wbr>床と<wbr>水まわりは<wbr>業者さんに、<wbr>壁の<wbr>しっくいは<wbr>友人たちと<wbr>塗って、<wbr>少しずつ直してきました。</p><p class="muted">テーマは<wbr>「自然×人×薬草」。<wbr>裏の<wbr>畑で<wbr>育てた<wbr>薬草を<wbr>お茶に<wbr>して、<wbr>縁側で<wbr>お出ししています。</p><p class="muted">わたし自身、<wbr>子育てでしんどかった<wbr>時期が<wbr>ありました。<wbr>お母さんたちにも、<wbr>ふらりと<wbr>来ていただけたらうれしいです。</p>
+        <span class="role">代表　森下（元看護師）</span>
+        <h3>祖母の家を、3年かけて直しました。</h3>
+        <p class="muted">築150年ほどの、祖母の家です。床と水まわりは業者さんに、壁のしっくいは友人たちと塗って、少しずつ直してきました。</p><p class="muted">テーマは「自然×人×薬草」。裏の畑で育てた薬草をお茶にして、縁側でお出ししています。</p><p class="muted">わたし自身、子育てでしんどかった時期がありました。お母さんたちにも、ふらりと来ていただけたらうれしいです。</p>
       </div>
     </div>
   </section>
   <section id="strengths" class="sec why-sec">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>stay</i><h2>ねむの<wbr>葉での<wbr>過ごし方</h2></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>stay</i><h2>ねむの葉での過ごし方</h2></div>
       
-      <ol class="why n3"><li><span class="no">01</span><h3>何もしない<wbr>時間</h3><p>縁側に<wbr>座って、<wbr>庭の<wbr>緑を<wbr>なが<wbr>めるだけでもかまいません。<wbr>がんばらなくていい<wbr>場所です。</p></li><li><span class="no">02</span><h3>裏の<wbr>畑の<wbr>薬草茶</h3><p>ヨモギ、<wbr>ドクダミ、<wbr>スギナ、<wbr>レモンバーム、<wbr>カモミール。<wbr>裏の<wbr>畑で<wbr>季節ごとに<wbr>摘んだ<wbr>薬草を、<wbr>その<wbr>日ごとに<wbr>ブレンドしています。<wbr>香りもたのしんでください。</p></li><li><span class="no">03</span><h3>築150年の<wbr>古民家</h3><p>祖母の<wbr>家を、<wbr>3年かけて<wbr>少しずつ直しました。<wbr>しっくいの<wbr>壁は、<wbr>友人たちと<wbr>塗った<wbr>ものです。</p></li></ol>
+      <ol class="why n3"><li><span class="no">01</span><h3>何もしない時間</h3><p>縁側に座って、庭の緑をながめるだけでもかまいません。がんばらなくていい場所です。</p></li><li><span class="no">02</span><h3>裏の畑の薬草茶</h3><p>ヨモギ、ドクダミ、スギナ、レモンバーム、カモミール。裏の畑で季節ごとに摘んだ薬草を、その日ごとにブレンドしています。香りもたのしんでください。</p></li><li><span class="no">03</span><h3>築150年の古民家</h3><p>祖母の家を、3年かけて少しずつ直しました。しっくいの壁は、友人たちと塗ったものです。</p></li></ol>
     </div>
   </section>
   <section id="gallery" class="sec belt-sec">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>scenery</i><h2>ねむの<wbr>葉の<wbr>風景</h2></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>scenery</i><h2>ねむの葉の風景</h2></div>
       
     </div>
-    <div class="belt" id="belt"><ul class="belt-track" aria-label="ねむの葉の風景の一覧"><li><figure><span class="b-shot"><img src="images/gaikan.jpg" alt="古民家の外観のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>外観</b><small>築150年ほどの<wbr>古民家</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/engawa.jpg" alt="お座敷から縁側と庭を見たイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>お座敷と縁側</b></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/hatake.jpg" alt="裏の畑で育つ薬草のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>裏の畑</b><small>薬草5種類</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/chaba.jpg" alt="3種類の茶葉の袋のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>茶葉</b><small>3種類</small></figcaption></figure></li></ul></div>
-    <p class="belt-note center muted">横に<wbr>動かして<wbr>見られます。</p>
+    <div class="belt" id="belt"><ul class="belt-track" aria-label="ねむの葉の風景の一覧"><li><figure><span class="b-shot"><img src="images/gaikan.jpg" alt="古民家の外観のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>外観</b><small>築150年ほどの古民家</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/engawa.jpg" alt="お座敷から縁側と庭を見たイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>お座敷と縁側</b></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/hatake.jpg" alt="裏の畑で育つ薬草のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>裏の畑</b><small>薬草5種類</small></figcaption></figure></li><li><figure><span class="b-shot"><img src="images/chaba.jpg" alt="3種類の茶葉の袋のイメージ" width="1000" height="750" loading="lazy"></span><figcaption><b>茶葉</b><small>3種類</small></figcaption></figure></li></ul></div>
+    <p class="belt-note center muted">横に動かして見られます。</p>
   </section>
   <section id="menu" class="sec menu">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>過ごし方と<wbr>料金</h2></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>過ごし方と料金</h2></div>
       
-      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-tea">縁側で<wbr>薬草茶と<wbr>おやつ</a><a href="#m-counseling">カウンセリング</a><a href="#m-yoga">古民家ヨガ</a><a href="#m-sound">サウンドヒーリング</a><a href="#m-table">料金表</a></nav>
+      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-tea">縁側で薬草茶とおやつ</a><a href="#m-counseling">カウンセリング</a><a href="#m-yoga">古民家ヨガ</a><a href="#m-sound">サウンドヒーリング</a><a href="#m-table">料金表</a></nav>
       <div class="menu-cards n4">
         <article class="card" id="m-tea">
           <div class="photo"><img src="images/tea.jpg" alt="縁側のお盆に、急須と湯のみとおやつのイメージ" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
-            <h3>縁側で<wbr>薬草茶と<wbr>おやつ</h3>
+            <h3>縁側で薬草茶とおやつ</h3>
             
-            <p>季節ごとに<wbr>摘んだ<wbr>薬草を、<wbr>その<wbr>日ごとに<wbr>ブレンドした<wbr>薬草茶と、<wbr>おやつを<wbr>お出しします。<wbr>香りもたのしみながら、<wbr>縁側で<wbr>何もしない<wbr>時間を。</p>
+            <p>季節ごとに摘んだ薬草を、その日ごとにブレンドした薬草茶と、おやつをお出しします。香りもたのしみながら、縁側で何もしない時間を。</p>
             <div class="price"><small></small><b>1,500円</b></div>
-            <a class="ask-line dm" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span class="nw">インスタのDMで相談</span></a><a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
+            <a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
           </div>
         </article>
         <article class="card" id="m-counseling">
@@ -407,9 +427,9 @@ p{margin:0 0 1.2em}
           <div class="card-body">
             <h3>カウンセリング</h3>
             
-            <p>元看護師の<wbr>代表が、<wbr>ゆっくり<wbr>お話を<wbr>うかがいます。<wbr>90分は<wbr>7,000円です。</p>
+            <p>元看護師の代表が、ゆっくりお話をうかがいます。90分は7,000円です。</p>
             <div class="price"><small>60分</small><b>5,000円</b></div>
-            <a class="ask-line dm" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span class="nw">インスタのDMで相談</span></a><a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
+            <a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
           </div>
         </article>
         <article class="card" id="m-yoga">
@@ -417,9 +437,9 @@ p{margin:0 0 1.2em}
           <div class="card-body">
             <h3>古民家ヨガ</h3>
             
-            <p>お座敷で、<wbr>6人までの<wbr>少人数の<wbr>ヨガ。<wbr>ヨガの<wbr>先生を<wbr>お招きしています。<wbr>曜日は<wbr>お問い合わせ<wbr>ください。</p>
+            <p>お座敷で、6人までの少人数のヨガ。ヨガの先生をお招きしています。曜日はお問い合わせください。</p>
             <div class="price"><small>6人まで</small><b>2,500円</b></div>
-            <a class="ask-line dm" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span class="nw">インスタのDMで相談</span></a><a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
+            <a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
           </div>
         </article>
         <article class="card" id="m-sound">
@@ -427,9 +447,9 @@ p{margin:0 0 1.2em}
           <div class="card-body">
             <h3>サウンドヒーリング</h3>
             
-            <p>別の<wbr>先生を<wbr>お招きして、<wbr>月に<wbr><span class="nw">1〜2</span>回ひらいています。<wbr>日程は<wbr>インスタグラムで<wbr>お知らせします。</p>
-            <div class="price"><small>月<span class="nw">1〜2</span>回</small><b>4,000円</b></div>
-            <a class="ask-line dm" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg><span class="nw">インスタのDMで相談</span></a><a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
+            <p>別の先生をお招きして、月に1〜2回ひらいています。日程はインスタグラムでお知らせします。</p>
+            <div class="price"><small>月1〜2回</small><b>4,000円</b></div>
+            <a class="ask-line tel" href="tel:00000000000"><span class="nw">電話で相談する</span></a>
           </div>
         </article>
       </div>
@@ -437,27 +457,27 @@ p{margin:0 0 1.2em}
         <h3><svg class="mk"><use href="#mk"/></svg>料金表</h3>
         
         <div class="cols one">
-          <table class="tbl course"><tr><th>薬草茶と<wbr>おやつ</th><td>縁側で</td><td class="yen">1,500円</td></tr><tr><th>カウンセリング</th><td>60分</td><td class="yen">5,000円</td></tr><tr><th>カウンセリング</th><td>90分</td><td class="yen">7,000円</td></tr><tr><th>古民家ヨガ</th><td>6人まで。<wbr>曜日は<wbr>お問い合わせ<wbr>ください</td><td class="yen">2,500円</td></tr><tr><th>サウンドヒーリング</th><td>月<span class="nw">1〜2</span>回。<wbr>日程は<wbr>インスタグラムで<wbr>お知らせします</td><td class="yen">4,000円</td></tr><tr><th>茶葉</th><td>1袋。<wbr>ヨモギ茶・ドクダミ茶・ブレンドの<wbr>3種類。<wbr>店頭で<wbr>お求めいただけます</td><td class="yen">800円</td></tr></table>
+          <table class="tbl course"><tr><th>薬草茶とおやつ</th><td>縁側で</td><td class="yen">1,500円</td></tr><tr><th>カウンセリング</th><td>60分</td><td class="yen">5,000円</td></tr><tr><th>カウンセリング</th><td>90分</td><td class="yen">7,000円</td></tr><tr><th>古民家ヨガ</th><td>6人まで。曜日はお問い合わせください</td><td class="yen">2,500円</td></tr><tr><th>サウンドヒーリング</th><td>月1〜2回。日程はインスタグラムでお知らせします</td><td class="yen">4,000円</td></tr><tr><th>茶葉</th><td>1袋。ヨモギ茶・ドクダミ茶・ブレンドの3種類。店頭でお求めいただけます</td><td class="yen">800円</td></tr></table>
           
         </div>
         
       </div>
-      <p class="price-note muted center">どれに<wbr>するか<wbr>迷う<wbr>ときも、<wbr>お気軽に<wbr>お問い合わせ<wbr>ください。</p>
+      <p class="price-note muted center">どれにするか迷うときも、お気軽にお問い合わせください。</p>
     </div>
   </section>
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご予約・<wbr>お問い合わせ</h2></div>
-      <p class="muted center" style="margin-bottom:40px">インスタグラムの<wbr>DM<wbr>（メッセージ）か、<wbr>お電話で<wbr>どうぞ。</p>
-      <div class="ways n2"><div class="way way-dm"><h3>インスタグラムのDM</h3><p>@nemunoha_retreat へ、<wbr>メッセージで<wbr>どうぞ。</p><a class="btn btn-main" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>DMを送る</a></div><div class="way"><h3>お電話</h3><p>施術中は<wbr>電話に<wbr>出られません。<wbr>折り返しご連絡します。</p><a class="tel" href="tel:00000000000">000-0000-0000</a></div></div>
-      <div class="rules"><h4>お越しの前に</h4><ul><li>月〜水曜日は<wbr>お休みですが、<wbr>ご予約が<wbr>あれば<wbr>開ける<wbr>こともあります。</li><li>駅までの<wbr>送迎は、<wbr>ご予約の<wbr>ときに<wbr>ご相談ください。</li></ul></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご予約・お問い合わせ</h2></div>
+      <p class="muted center" style="margin-bottom:40px">インスタグラムのDM（メッセージ）か、お電話でどうぞ。</p>
+      <div class="ways n1"><div class="way"><h3>お電話</h3><p>施術中は電話に出られません。折り返しご連絡します。</p><a class="tel" href="tel:00000000000">000-0000-0000</a></div></div>
+      <div class="rules"><h4>お越しの前に</h4><ul><li>月〜水曜日はお休みですが、ご予約があれば開けることもあります。</li><li>駅までの送迎は、ご予約のときにご相談ください。</li></ul></div>
     </div>
   </section>
   <section id="access" class="sec access">
     <div class="wrap">
       <div>
         <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>access</i><h2>アクセス・営業日</h2></div>
-        <dl class="info"><div><dt>店名</dt><dd>古民家リトリート ねむの<wbr>葉</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇郡〇〇町〇〇 000<wbr>（見本）</dd></div><div><dt>アクセス</dt><dd>駅から<wbr>車で<wbr>約20分。<wbr>バスは<wbr>1日に<wbr>数本です。<wbr>ナビでは<wbr>1本手前の<wbr>道に<wbr>入ることが<wbr>あるので、<wbr>「<span class="nw">赤い郵便ポストの角を右</span>」へ。</dd></div><div><dt>営業時間</dt><dd>木・金・土・日　10:00〜16:00</dd></div><div><dt>定休日</dt><dd>月・火・水曜日<wbr>（ご予約が<wbr>あれば<wbr>開ける<wbr>こともあります）、<wbr>年末年始</dd></div><div><dt>駐車場</dt><dd>4台</dd></div><div><dt>冬の営業</dt><dd><span class="nw">1〜2</span>月の<wbr>営業は、<wbr>インスタグラムか<wbr>お電話で<wbr>ご案内します</dd></div><div><dt>送迎</dt><dd>駅までの<wbr>送迎は、<wbr>ご相談ください</dd></div><div><dt>インスタ</dt><dd>@nemunoha_retreat<wbr>（DMで<wbr>ご予約できます）</dd></div><div><dt>電話</dt><dd><a href="tel:00000000000">000-0000-0000</a></dd></div></dl>
+        <dl class="info"><div><dt>店名</dt><dd>古民家リトリート ねむの葉</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇郡〇〇町〇〇 000（見本）</dd></div><div><dt>アクセス</dt><dd>駅から車で約20分。バスは1日に数本です。ナビでは1本手前の道に入ることがあるので、「赤い郵便ポストの角を右」へ。</dd></div><div><dt>営業時間</dt><dd>木・金・土・日　10:00〜16:00</dd></div><div><dt>定休日</dt><dd>月・火・水曜日（ご予約があれば開けることもあります）、年末年始</dd></div><div><dt>駐車場</dt><dd>4台</dd></div><div><dt>冬の営業</dt><dd>1〜2月の営業は、インスタグラムかお電話でご案内します</dd></div><div><dt>送迎</dt><dd>駅までの送迎は、ご相談ください</dd></div><div><dt>インスタ</dt><dd>@nemunoha_retreat（DMでご予約できます）</dd></div><div><dt>電話</dt><dd><a href="tel:00000000000">000-0000-0000</a></dd></div></dl>
         <a class="route" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E3%80%87%E3%80%87%E7%9C%8C%E3%80%87%E3%80%87%E9%83%A1%E3%80%87%E3%80%87%E7%94%BA" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Googleマップで<wbr>道順を見る</a>
       </div>
       <div class="map"><iframe src="https://maps.google.com/maps?q=%E3%80%87%E3%80%87%E7%9C%8C%E3%80%87%E3%80%87%E9%83%A1%E3%80%87%E3%80%87%E7%94%BA&amp;z=15&amp;output=embed" title="ねむの葉の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
@@ -466,26 +486,26 @@ p{margin:0 0 1.2em}
   <section id="faq" class="sec faq">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list"><details><summary><span class="q">Q</span><span>予約は<wbr>どうすればいいですか？</span></summary><p><span class="a">A</span><span>インスタグラム<wbr>（@nemunoha_retreat）の<wbr>DMか、<wbr>お電話<wbr>（000-0000-0000）で<wbr>どうぞ。<wbr>施術中は<wbr>電話に<wbr>出られないため、<wbr>折り返しご連絡します。</span></p></details><details><summary><span class="q">Q</span><span>駐車場は<wbr>ありますか？</span></summary><p><span class="a">A</span><span>はい、<wbr>4台分あります。</span></p></details><details><summary><span class="q">Q</span><span>車が<wbr>なくても<wbr>行けますか？</span></summary><p><span class="a">A</span><span>駅から<wbr>車で<wbr>約20分です。<wbr>バスは<wbr>1日に<wbr>数本の<wbr>ため、<wbr>駅までの<wbr>送迎を<wbr>ご相談ください。<wbr>お迎えに<wbr>うかがえない<wbr>日も<wbr>あります。</span></p></details><details><summary><span class="q">Q</span><span>道が<wbr>分かりにくいと<wbr>聞きました。</span></summary><p><span class="a">A</span><span>ナビでは、<wbr>1本手前の<wbr>道に<wbr>入ってしまう<wbr>ことがあります。<wbr>「<span class="nw">赤い郵便ポストの角を右</span>」に<wbr>曲がってください。</span></p></details><details><summary><span class="q">Q</span><span>ひとりで<wbr>行っても<wbr>いいですか？</span></summary><p><span class="a">A</span><span>はい、<wbr>おひとりでも<wbr>どうぞ。<wbr>縁側で<wbr>薬草茶を<wbr>のみながら、<wbr>ゆっくり<wbr>お過ごしください。</span></p></details><details><summary><span class="q">Q</span><span>子ども<wbr>連れでも<wbr>行けますか？</span></summary><p><span class="a">A</span><span>小さな<wbr>お子さまは、<wbr>静かな<wbr>プログラムだと<wbr>難しい<wbr>ときが<wbr>あります。<wbr>お電話か<wbr>インスタグラムの<wbr>DMで、<wbr>お問い合わせ<wbr>ください。</span></p></details><details><summary><span class="q">Q</span><span>古民家ヨガは<wbr>何曜日ですか？</span></summary><p><span class="a">A</span><span>曜日は<wbr>お問い合わせ<wbr>ください。<wbr>6人までの<wbr>少人数です。</span></p></details><details><summary><span class="q">Q</span><span>冬も<wbr>営業していますか？</span></summary><p><span class="a">A</span><span>年末年始は<wbr>お休みです。<wbr><span class="nw">1〜2</span>月の<wbr>営業は、<wbr>インスタグラムか<wbr>お電話で<wbr>ご案内します。</span></p></details><details><summary><span class="q">Q</span><span>茶葉だけ<wbr>買えますか？</span></summary><p><span class="a">A</span><span>茶葉<wbr>（ヨモギ茶・ドクダミ茶・ブレンド）は、<wbr>店頭で<wbr>お求めいただけます。<wbr>1袋800円です。</span></p></details></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>予約はどうすればいいですか？</span></summary><p><span class="a">A</span><span>インスタグラム（@nemunoha_retreat）のDMか、お電話（000-0000-0000）でどうぞ。施術中は電話に出られないため、折り返しご連絡します。</span></p></details><details><summary><span class="q">Q</span><span>駐車場はありますか？</span></summary><p><span class="a">A</span><span>はい、4台分あります。</span></p></details><details><summary><span class="q">Q</span><span>車がなくても行けますか？</span></summary><p><span class="a">A</span><span>駅から車で約20分です。バスは1日に数本のため、駅までの送迎をご相談ください。お迎えにうかがえない日もあります。</span></p></details><details><summary><span class="q">Q</span><span>道が分かりにくいと聞きました。</span></summary><p><span class="a">A</span><span>ナビでは、1本手前の道に入ってしまうことがあります。「赤い郵便ポストの角を右」に曲がってください。</span></p></details><details><summary><span class="q">Q</span><span>ひとりで行ってもいいですか？</span></summary><p><span class="a">A</span><span>はい、おひとりでもどうぞ。縁側で薬草茶をのみながら、ゆっくりお過ごしください。</span></p></details><details><summary><span class="q">Q</span><span>子ども連れでも行けますか？</span></summary><p><span class="a">A</span><span>小さなお子さまは、静かなプログラムだと難しいときがあります。お電話かインスタグラムのDMで、お問い合わせください。</span></p></details><details><summary><span class="q">Q</span><span>古民家ヨガは何曜日ですか？</span></summary><p><span class="a">A</span><span>曜日はお問い合わせください。6人までの少人数です。</span></p></details><details><summary><span class="q">Q</span><span>冬も営業していますか？</span></summary><p><span class="a">A</span><span>年末年始はお休みです。1〜2月の営業は、インスタグラムかお電話でご案内します。</span></p></details><details><summary><span class="q">Q</span><span>茶葉だけ買えますか？</span></summary><p><span class="a">A</span><span>茶葉（ヨモギ茶・ドクダミ茶・ブレンド）は、店頭でお求めいただけます。1袋800円です。</span></p></details></div>
     </div>
   </section>
   <section id="contact" class="sec sns center">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>follow us</i><h2>SNS</h2></div>
-      <div class="sns-list"><a href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener">Instagram　@nemunoha_retreat<wbr>（DMで<wbr>ご予約）</a></div>
+      <div class="sns-list"><a href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener">Instagram　@nemunoha_retreat（DMでご予約）</a></div>
     </div>
   </section>
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="fname">古民家リトリート ねむの<wbr>葉</p>
-    <p>〒000-0000 〇〇県〇〇郡〇〇町〇〇 000<wbr>（見本）</p>
+    <p class="fname">古民家リトリート ねむの葉</p>
+    <p>〒000-0000 〇〇県〇〇郡〇〇町〇〇 000（見本）</p>
     <p>TEL <a href="tel:00000000000">000-0000-0000</a>　／　木・金・土・日　10:00〜16:00</p>
-    <nav aria-label="フッター"><a href="#greeting">ごあいさつ</a><a href="#menu">過ごし方と<wbr>料金</a><a href="#access">アクセス・営業日</a><a href="#faq">よくある質問</a></nav>
+    <nav aria-label="フッター"><a href="#greeting">ごあいさつ</a><a href="#menu">過ごし方と料金</a><a href="#access">アクセス・営業日</a><a href="#faq">よくある質問</a></nav>
     <p class="copy">© ねむの葉</p>
   </div>
 </footer>
-<nav class="spbar n2" aria-label="ご予約・ご相談"><a class="r" href="https://www.instagram.com/nemunoha_retreat/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>インスタのDM</a><a href="tel:00000000000">電話する</a></nav>
+<nav class="spbar n2" aria-label="ご予約・ご相談"><a href="tel:00000000000">電話する</a><a class="r" href="#menu">メニュー</a></nav>
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 // スマホのメニュー（開く・閉じる）と、上へ戻るボタン

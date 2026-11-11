@@ -266,5 +266,6 @@
   },
   "lightbox": true
  },
- "logo": "images/logo-leaf.svg"
+ "logo": "images/logo-leaf.svg",
+ "layout": "cards"
 }

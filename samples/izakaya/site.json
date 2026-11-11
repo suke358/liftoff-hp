@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "dark",
  "slug": "konara",
  "name": "居酒屋 こなら",
  "short_name": "こなら",
@@ -39,10 +40,10 @@
    "id": "course",
    "name": "おまかせコース",
    "text": "前菜・刺身・焼きもの・ごはん・甘味。2名さまから。",
-   "image": "images/menu-course.svg",
+   "image": "images/menu-course.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "おまかせコースの写真",
+   "alt": "おまかせコースのイメージ写真",
    "price": "4,400円",
    "price_note": "お一人"
   },
@@ -50,20 +51,20 @@
    "id": "sashimi",
    "name": "旬の刺身 盛り合わせ",
    "text": "その日の魚を3〜5種。",
-   "image": "images/menu-sashimi.svg",
+   "image": "images/menu-sashimi.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "旬の刺身 盛り合わせの写真",
+   "alt": "旬の刺身 盛り合わせのイメージ写真",
    "price": "1,650円"
   },
   {
    "id": "yaki",
    "name": "炭火の焼きもの",
    "text": "鶏・豚・野菜の串を1本から。",
-   "image": "images/menu-yaki.svg",
+   "image": "images/menu-yaki.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "炭火の焼きものの写真",
+   "alt": "炭火の焼きもののイメージ写真",
    "price": "330円〜",
    "price_note": "1本"
   },
@@ -71,10 +72,10 @@
    "id": "drink",
    "name": "飲みもの",
    "text": "地元の日本酒・生ビール・ソフトドリンク。",
-   "image": "images/menu-drink.svg",
+   "image": "images/menu-drink.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "飲みものの写真",
+   "alt": "飲みもののイメージ写真",
    "price": "550円〜"
   }
  ],
@@ -101,11 +102,12 @@
  ],
  "schema_type": "Restaurant",
  "area_served": "〇〇市",
+ "layout": "full",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1067,
+  "alt": "お店の雰囲気のイメージ写真"
  },
  "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "dark",
  "slug": "aozora",
  "name": "あおぞら農園 直売所",
  "short_name": "あおぞら農園",
@@ -39,20 +40,20 @@
    "id": "yasai",
    "name": "季節の野菜",
    "text": "朝とったものを、その日の分だけ。",
-   "image": "images/menu-yasai.svg",
+   "image": "images/menu-yasai.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "季節の野菜の写真",
+   "alt": "季節の野菜のイメージ写真",
    "price": "100円〜"
   },
   {
    "id": "kome",
    "name": "お米",
    "text": "自分の田んぼでとれたお米。精米したてをお渡しします。",
-   "image": "images/menu-kome.svg",
+   "image": "images/menu-kome.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "お米の写真",
+   "alt": "お米のイメージ写真",
    "price": "2,400円",
    "price_note": "5kg"
   },
@@ -60,20 +61,20 @@
    "id": "kudamono",
    "name": "果物",
    "text": "みかん・いちごなど、時期のもの。",
-   "image": "images/menu-kudamono.svg",
+   "image": "images/menu-kudamono.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "果物の写真",
+   "alt": "果物のイメージ写真",
    "price": "300円〜"
   },
   {
    "id": "kakou",
    "name": "手づくりの加工品",
    "text": "畑の果物で作ったジャム・ピクルス。",
-   "image": "images/menu-kakou.svg",
+   "image": "images/menu-kakou.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "手づくりの加工品の写真",
+   "alt": "手づくりの加工品のイメージ写真",
    "price": "500円〜"
   }
  ],
@@ -106,12 +107,12 @@
  ],
  "schema_type": "Store",
  "area_served": "〇〇市",
+ "layout": "full",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1600,
+  "h": 1067,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

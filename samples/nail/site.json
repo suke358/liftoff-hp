@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "tsumugi",
  "name": "nail & eyelash tsumugi",
  "short_name": "tsumugi",
@@ -39,30 +40,30 @@
    "id": "gel",
    "name": "ジェルネイル",
    "text": "色・デザインを相談しながら決めます。",
-   "image": "images/menu-gel.svg",
+   "image": "images/menu-gel.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "ジェルネイルの写真",
+   "alt": "ジェルネイルのイメージ写真",
    "price": "5,500円〜"
   },
   {
    "id": "off",
    "name": "つけかえ・オフ",
    "text": "ほかのお店でつけたものも、お受けしています。",
-   "image": "images/menu-off.svg",
+   "image": "images/menu-off.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "つけかえ・オフの写真",
+   "alt": "つけかえ・オフのイメージ写真",
    "price": "1,100円"
   },
   {
    "id": "ext",
    "name": "まつげエクステ",
    "text": "目の形に合わせて、1本ずつつけていきます。",
-   "image": "images/menu-ext.svg",
+   "image": "images/menu-ext.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "まつげエクステの写真",
+   "alt": "まつげエクステのイメージ写真",
    "price": "4,400円〜",
    "price_note": "80本"
   },
@@ -70,10 +71,10 @@
    "id": "perm",
    "name": "まつげパーマ",
    "text": "自分のまつげを、上向きに整えます。",
-   "image": "images/menu-perm.svg",
+   "image": "images/menu-perm.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "まつげパーマの写真",
+   "alt": "まつげパーマのイメージ写真",
    "price": "4,400円"
   }
  ],
@@ -100,12 +101,12 @@
  ],
  "schema_type": "BeautySalon",
  "area_served": "〇〇市",
+ "layout": "frame",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1105,
+  "h": 1600,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

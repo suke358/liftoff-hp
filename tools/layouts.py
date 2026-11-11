@@ -45,7 +45,7 @@ L['magazine'] = r'''/* 型：magazine（雑誌風。文が左・写真が右。�
 .hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;height:620px;box-shadow:-22px 22px 0 var(--accent-soft)}
 .hero .poster::after{display:none}
 .hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;padding:0 56px 0 0;max-width:none}
-.hero h1{font-size:2.6rem;font-size:clamp(1.9rem,3.8vw,3rem);line-height:1.6;border-left:3px solid var(--primary);padding-left:22px}
+.hero h1{font-size:2.3rem;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.6;border-left:3px solid var(--primary);padding-left:22px}  /* 2026/11/11 長い見出しが写真の下にもぐるので小さく */
 .menu-cards,.menu-cards.n4{display:block}
 .menu-cards{counter-reset:mz}
 .menu .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;background:transparent;box-shadow:none;border-radius:0;margin-bottom:56px;counter-increment:mz}
@@ -69,7 +69,7 @@ L['magazine'] = r'''/* 型：magazine（雑誌風。文が左・写真が右。�
 
 L['split'] = r'''/* 型：split（左右に分ける。写真は右いっぱい・角を大きく丸める。料金は一覧） */
 .hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
-.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;border-bottom-left-radius:180px}
+.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;border-bottom-left-radius:180px;margin-top:76px}  /* 2026/11/11 上のメニューが写真に重ならないように */
 .hero .poster::after{display:none}
 .hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;max-width:620px;padding:140px 56px 100px 9%}
 .menu-cards,.menu-cards.n4{display:block;max-width:880px;margin:0 auto}
@@ -83,7 +83,7 @@ L['split'] = r'''/* 型：split（左右に分ける。写真は右いっぱい�
 .menu .ask-line{-ms-flex-item-align:start;align-self:flex-start;padding:.5em 1.4em}
 @media (max-width:860px){
   .hero .wrap{grid-template-columns:1fr}
-  .hero .poster{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0;height:56vh;min-height:320px;border-bottom-left-radius:90px}
+  .hero .poster{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0;height:56vh;min-height:320px;border-bottom-left-radius:90px;margin-top:60px}
   .hero .poster img{position:absolute;height:100%}
   .hero-info{justify-self:stretch;padding:0;margin:32px 20px 0}
   .menu .card{grid-template-columns:1fr;padding:22px 0}

@@ -5,7 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
- "hero_style": "dark",
+ "hero_style": "light",
  "slug": "tekuteku",
  "name": "トリミングサロン てくてく",
  "short_name": "てくてく",
@@ -40,10 +40,10 @@
    "id": "shampoo",
    "name": "シャンプーコース",
    "text": "シャンプー・爪切り・耳そうじ・足まわりのカット。",
-   "image": "images/menu-shampoo.svg",
+   "image": "images/menu-shampoo.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "シャンプーコースの写真",
+   "alt": "シャンプーコースのイメージ写真",
    "price": "3,300円〜",
    "price_note": "小型犬"
   },
@@ -51,10 +51,10 @@
    "id": "cut",
    "name": "カットコース",
    "text": "シャンプーコースに、全身のカット。",
-   "image": "images/menu-cut.svg",
+   "image": "images/menu-cut.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "カットコースの写真",
+   "alt": "カットコースのイメージ写真",
    "price": "5,500円〜",
    "price_note": "小型犬"
   },
@@ -62,20 +62,20 @@
    "id": "part",
    "name": "部分ケア",
    "text": "爪切り・耳そうじ・肛門腺だけ、でも大丈夫。",
-   "image": "images/menu-part.svg",
+   "image": "images/menu-part.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "部分ケアの写真",
+   "alt": "部分ケアのイメージ写真",
    "price": "550円〜"
   },
   {
    "id": "sougei",
    "name": "送迎",
    "text": "〇〇市内は、お迎えとお送りをしています。",
-   "image": "images/menu-sougei.svg",
+   "image": "images/menu-sougei.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "送迎の写真",
+   "alt": "送迎のイメージ写真",
    "price": "片道 550円"
   }
  ],
@@ -102,11 +102,12 @@
  ],
  "schema_type": "LocalBusiness",
  "area_served": "〇〇市",
+ "layout": "pop",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1067,
+  "h": 1600,
+  "alt": "お店の雰囲気のイメージ写真"
  },
  "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

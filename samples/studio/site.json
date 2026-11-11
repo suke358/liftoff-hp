@@ -5,6 +5,7 @@
  "address": "〒000-0000 〇〇県〇〇市〇〇町1-2-3",
  "line_msg": "ホームページを見ました。{name}について相談したいです。",
  "info_eyebrow": "about",
+ "hero_style": "light",
  "slug": "hikarido",
  "name": "写真館 ひかり堂",
  "short_name": "ひかり堂",
@@ -39,40 +40,40 @@
    "id": "753",
    "name": "七五三",
    "text": "着物の着付けとヘアセット込み。",
-   "image": "images/menu-753.svg",
+   "image": "images/menu-753.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "七五三の写真",
+   "alt": "七五三のイメージ写真",
    "price": "22,000円〜"
   },
   {
    "id": "seijin",
    "name": "成人式・卒業",
    "text": "前撮り・後撮り、どちらも。",
-   "image": "images/menu-seijin.svg",
+   "image": "images/menu-seijin.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "成人式・卒業の写真",
+   "alt": "成人式・卒業のイメージ写真",
    "price": "16,500円〜"
   },
   {
    "id": "family",
    "name": "家族写真",
    "text": "お宮参り・入学・記念日に。ペットも一緒にどうぞ。",
-   "image": "images/menu-family.svg",
+   "image": "images/menu-family.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "家族写真の写真",
+   "alt": "家族写真のイメージ写真",
    "price": "11,000円〜"
   },
   {
    "id": "shoumei",
    "name": "証明写真",
    "text": "履歴書・パスポート・受験用。その場でお渡しします。",
-   "image": "images/menu-shoumei.svg",
+   "image": "images/menu-shoumei.jpg",
    "w": 1000,
    "h": 750,
-   "alt": "証明写真の写真",
+   "alt": "証明写真のイメージ写真",
    "price": "1,650円"
   }
  ],
@@ -99,12 +100,12 @@
  ],
  "schema_type": "LocalBusiness",
  "area_served": "〇〇市",
+ "layout": "magazine",
  "hero": {
-  "image": "images/hero.svg",
-  "w": 1200,
-  "h": 1500,
-  "alt": "お店の写真"
+  "image": "images/hero.jpg",
+  "w": 1067,
+  "h": 1600,
+  "alt": "お店の雰囲気のイメージ写真"
  },
- "_説明": "デザイン見本（架空のお店）。make_site.py で作った",
- "hero_style": "dark"
+ "_説明": "デザイン見本（架空のお店）。make_site.py で作った"
 }

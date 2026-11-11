@@ -20,7 +20,7 @@
 {"@context": "https://schema.org", "@type": "LocalBusiness", "name": "写真館 ひかり堂", "telephone": "+81--00-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇市〇〇町1-2-3"}, "areaServed": "〇〇市"}
 </script>
 <style>
-/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
@@ -44,6 +44,8 @@ h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
 p{margin:0 0 1.2em}
 .muted{color:var(--muted)}
 .center{text-align:center}
+.sample-note{margin:0;padding:0 16px;height:34px;line-height:34px;background:#333;color:#fff;font-size:.78rem;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* 見本のときだけ出る注（sample_note）。1行に固定 */
+.sample-note ~ .head{top:34px} /* 注がある分、ヘッダー（absolute）を下げる */
 .mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
 .photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .photo img{width:100%;height:auto}
@@ -63,7 +65,8 @@ p{margin:0 0 1.2em}
 .bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
 .bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
 .nav{display:flex;align-items:center;font-size:.86rem}
-.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px;white-space:nowrap}
+@media (min-width:861px) and (max-width:1180px){.bk{display:none}.nav a{margin-left:16px}}
 .nav a:hover{opacity:1;color:var(--accent-soft)}
 .nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
 .menubtn{display:none}
@@ -89,6 +92,11 @@ p{margin:0 0 1.2em}
 .eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
 .hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
 .hero .lead{color:#ddd8cc;line-height:2.1}
+.hero.has-banner{padding-top:74px;background:#000}
+.hero-banner{background:#000}
+.hero-banner img{display:block;width:100%;height:auto;max-width:1000px;margin:0 auto}
+.hero.has-banner .wrap{display:block;min-height:0}
+.hero.has-banner .hero-info{max-width:720px;margin:0 auto;padding:34px clamp(20px,6vw,90px) 70px}
 .addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
 .addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
 .hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}
@@ -147,7 +155,7 @@ p{margin:0 0 1.2em}
 .ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
 .ask-line:hover{background:#06c755;color:#fff}
 .ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
-.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary);font-family:inherit;font-size:.85rem;margin-top:14px}
 .ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
 .ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
 .ptable h3 .mk{margin-right:.45em}
@@ -241,6 +249,58 @@ p{margin:0 0 1.2em}
 .totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .totop.show{opacity:.92;visibility:visible}
 @media (max-width:860px){.totop{bottom:76px;right:12px}}
+/* 明るい上の部分（hero_style: light） */
+:root{--hero-style:light}
+.head .wrap{color:var(--ink)}
+.bk{color:var(--primary-deep)}
+.nav a:hover{color:var(--primary-deep)}
+@media (max-width:860px){
+  .menubtn{background:rgba(255,255,255,.75);color:var(--ink);border-color:var(--line)}
+  .head.open .nav{color:#f3efe6}
+}
+.hero{background:var(--pale);color:var(--ink)}
+.poster::after{background:linear-gradient(90deg,rgba(255,255,255,0),var(--pale))}
+.poster.plain{background:radial-gradient(70% 60% at 50% 45%,#fff,var(--bg2))}
+.plain-name{color:var(--primary-deep)}
+.eyebrow{color:var(--primary-deep)}
+.eyebrow::before{background:var(--primary-deep)}
+.hero .lead{color:var(--muted)}
+.addr{color:var(--ink);border-top-color:var(--line)}
+.toc a{color:var(--ink);background:#fff;border-color:var(--line)}
+.toc a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.hero .btn-ghost{border-color:var(--primary-deep);color:var(--primary-deep);background:#fff}
+.hero .btn-ghost:hover{border-color:var(--primary)}
+/* レイアウトの型：共通 */
+.hero .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.card > .card-body:first-child{border-top:4px solid var(--accent-soft)}
+.price small:empty{display:none}
+
+/* 型：magazine（雑誌風。文が左・写真が右。メニューはジグザグ） */
+.hero .wrap{width:auto;max-width:1180px;margin:0 auto;padding:140px 20px 90px;min-height:0;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center}
+.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;height:620px;box-shadow:-22px 22px 0 var(--accent-soft)}
+.hero .poster::after{display:none}
+.hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;padding:0 56px 0 0;max-width:none}
+.hero h1{font-size:2.3rem;font-size:clamp(1.7rem,3vw,2.6rem);line-height:1.6;border-left:3px solid var(--primary);padding-left:22px}  /* 2026/11/11 長い見出しが写真の下にもぐるので小さく */
+.menu-cards,.menu-cards.n4{display:block}
+.menu-cards{counter-reset:mz}
+.menu .card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;background:transparent;box-shadow:none;border-radius:0;margin-bottom:56px;counter-increment:mz}
+.menu .card:nth-child(even) .photo{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2}
+.menu .card .photo{border-radius:0}
+.menu .card-body{padding:10px 48px}
+.menu .card > .card-body:first-child .ask-line{-ms-flex-item-align:start;align-self:flex-start;padding:.55em 2.4em}
+.menu .card > .card-body:first-child{grid-column:1 / -1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 8px;margin-top:-24px}
+.menu .card h3{font-size:1.6rem}
+.menu .card h3::before{content:counter(mz,decimal-leading-zero);display:block;font-family:var(--latin);font-style:italic;font-size:1rem;color:var(--primary-deep);letter-spacing:.1em}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr;padding:96px 20px 20px}
+  .hero .poster{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0;height:300px;margin:0 0 0 12px;box-shadow:-12px 12px 0 var(--accent-soft)}
+  .hero .poster img{position:absolute;height:100%}
+  .hero-info{padding:0;margin:40px 0 0}
+  .menu .card{grid-template-columns:1fr;margin-bottom:40px}
+  .menu .card:nth-child(even) .photo{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0}
+  .menu .card-body{padding:18px 4px 0}
+  .menu .card > .card-body:first-child{margin-top:0;padding:22px 4px}
+}
 
 /* 見本帳にもどる（見本だけに出す） */
 .mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
@@ -262,11 +322,11 @@ p{margin:0 0 1.2em}
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <figure class="poster"><img src="images/hero.svg" alt="お店の写真" width="1200" height="1500" fetchpriority="high"></figure>
+      <figure class="poster"><img src="images/hero.jpg" alt="お店の雰囲気のイメージ写真" width="1067" height="1600" fetchpriority="high"></figure>
       <div class="hero-info">
         <p class="eyebrow">写真館｜〇〇市</p>
         <h1><span class="nw">その日の顔を、</span><br><span class="nw">ずっと残せるように。</span></h1>
-        <p class="lead">〇〇市の<wbr>写真館です。<wbr>七五三・成人式・家族写真・証明写真。<wbr>緊張しない、<wbr>ゆっくりした<wbr>撮影を<wbr>心がけています。</p>
+        <p class="lead">〇〇市の写真館です。七五三・成人式・家族写真・証明写真。緊張しない、ゆっくりした撮影を心がけています。</p>
         <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
         <div class="hero-btns"><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a><a class="btn btn-ghost" href="tel:0000000000">電話する <span class="nw">0000-00-0000</span></a></div>
         <ul class="toc" aria-label="このページの案内"><li><a href="#menu">撮影メニュー・料金</a></li><li><a href="#reserve">ご予約</a></li><li><a href="#access">写真館のこと</a></li><li><a href="#faq">よくある質問</a></li></ul>
@@ -276,58 +336,58 @@ p{margin:0 0 1.2em}
   <section id="menu" class="sec menu">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>撮影メニュー・料金</h2></div>
-      <p class="sec-lead center muted">料金は<wbr>見本です。</p>
+      <p class="sec-lead center muted">料金は見本です。</p>
       <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-753">七五三</a><a href="#m-seijin">成人式・卒業</a><a href="#m-family">家族写真</a><a href="#m-shoumei">証明写真</a></nav>
       <div class="menu-cards n4">
         <article class="card" id="m-753">
-          <div class="photo"><img src="images/menu-753.svg" alt="七五三の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-753.jpg" alt="七五三のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>七五三</h3>
             
-            <p>着物の<wbr>着付けと<wbr>ヘアセット込み。</p>
+            <p>着物の着付けとヘアセット込み。</p>
             <div class="price"><small></small><b>22,000円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-seijin">
-          <div class="photo"><img src="images/menu-seijin.svg" alt="成人式・卒業の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-seijin.jpg" alt="成人式・卒業のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>成人式・卒業</h3>
             
-            <p>前撮り・後撮り、<wbr>どちらも。</p>
+            <p>前撮り・後撮り、どちらも。</p>
             <div class="price"><small></small><b>16,500円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-family">
-          <div class="photo"><img src="images/menu-family.svg" alt="家族写真の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-family.jpg" alt="家族写真のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>家族写真</h3>
             
-            <p>お宮参り・入学・記念日に。<wbr>ペットも<wbr>一緒に<wbr>どうぞ。</p>
+            <p>お宮参り・入学・記念日に。ペットも一緒にどうぞ。</p>
             <div class="price"><small></small><b>11,000円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-shoumei">
-          <div class="photo"><img src="images/menu-shoumei.svg" alt="証明写真の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-shoumei.jpg" alt="証明写真のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>証明写真</h3>
             
-            <p>履歴書・パスポート・受験用。<wbr>その<wbr>場で<wbr>お渡しします。</p>
+            <p>履歴書・パスポート・受験用。その場でお渡しします。</p>
             <div class="price"><small></small><b>1,650円</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この撮影を<wbr>LINEで相談</span></a>
           </div>
         </article>
       </div>
-      <p class="price-note muted center">写真の<wbr>データと、<wbr>台紙や額は<wbr>メニューに<wbr>よって<wbr>変わります。<wbr>くわしくは<wbr>お問い合わせ<wbr>ください。</p>
+      <p class="price-note muted center">写真のデータと、台紙や額はメニューによって変わります。くわしくはお問い合わせください。</p>
     </div>
   </section>
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご予約</h2></div>
-      <p class="muted center" style="margin-bottom:40px">撮影は<wbr>ご予約制です<wbr>（証明写真は<wbr>ご予約なしで<wbr>どうぞ）。<wbr>衣装の<wbr>ご相談も<wbr>お気軽に。</p>
-      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
+      <p class="muted center" style="margin-bottom:40px">撮影はご予約制です（証明写真はご予約なしでどうぞ）。衣装のご相談もお気軽に。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、メッセージでご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は出られないことがあります。折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
       
     </div>
   </section>
@@ -335,7 +395,7 @@ p{margin:0 0 1.2em}
     <div class="wrap nomap">
       <div>
         <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>写真館のこと</h2></div>
-        <dl class="info"><div><dt>店名</dt><dd>写真館 ひかり堂</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>10:00〜18:00<wbr>（見本）</dd></div><div><dt>定休日</dt><dd>火曜日<wbr>（見本）</dd></div><div><dt>駐車場</dt><dd>4台（見本）</dd></div><div><dt>お支払い</dt><dd>現金・クレジットカード<wbr>（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
+        <dl class="info"><div><dt>店名</dt><dd>写真館 ひかり堂</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>10:00〜18:00（見本）</dd></div><div><dt>定休日</dt><dd>火曜日（見本）</dd></div><div><dt>駐車場</dt><dd>4台（見本）</dd></div><div><dt>お支払い</dt><dd>現金・クレジットカード（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
         
       </div>
       
@@ -344,7 +404,7 @@ p{margin:0 0 1.2em}
   <section id="faq" class="sec faq">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list"><details><summary><span class="q">Q</span><span>写真の<wbr>データは<wbr>もらえますか？</span></summary><p><span class="a">A</span><span>はい。<wbr>撮影メニューに<wbr>データが<wbr>付いています<wbr>（見本）。</span></p></details><details><summary><span class="q">Q</span><span>衣装の<wbr>持ち込みは<wbr>できますか？</span></summary><p><span class="a">A</span><span>はい。<wbr>お持ちの<wbr>着物・服でも<wbr>撮影できます。</span></p></details><details><summary><span class="q">Q</span><span>撮影は<wbr>どの<wbr>くらい<wbr>時間が<wbr>かかりますか？</span></summary><p><span class="a">A</span><span>七五三で、<wbr>着付けを<wbr>入れて<wbr>2時間ほどです<wbr>（見本）。</span></p></details></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>写真のデータはもらえますか？</span></summary><p><span class="a">A</span><span>はい。撮影メニューにデータが付いています（見本）。</span></p></details><details><summary><span class="q">Q</span><span>衣装の持ち込みはできますか？</span></summary><p><span class="a">A</span><span>はい。お持ちの着物・服でも撮影できます。</span></p></details><details><summary><span class="q">Q</span><span>撮影はどのくらい時間がかかりますか？</span></summary><p><span class="a">A</span><span>七五三で、着付けを入れて2時間ほどです（見本）。</span></p></details></div>
     </div>
   </section>
 </main>
@@ -352,12 +412,12 @@ p{margin:0 0 1.2em}
   <div class="wrap">
     <p class="fname">写真館 ひかり堂</p>
     <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3</p>
-    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　10:00〜18:00<wbr>（見本）</p>
+    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　10:00〜18:00（見本）</p>
     <nav aria-label="フッター"><a href="#menu">撮影メニュー・料金</a><a href="#access">写真館のこと</a><a href="#faq">よくある質問</a></nav>
     <p class="copy">© ひかり堂</p>
   </div>
 </footer>
-<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで<wbr>相談</a><a class="r" href="#menu">メニュー</a></nav>
+<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで相談</a><a class="r" href="#menu">メニュー</a></nav>
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 // スマホのメニュー（開く・閉じる）と、上へ戻るボタン
@@ -384,6 +444,7 @@ p{margin:0 0 1.2em}
   } catch (err) {}
 })();
 </script>
+
 <a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
 </body>
 </html>

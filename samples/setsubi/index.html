@@ -20,7 +20,7 @@
 {"@context": "https://schema.org", "@type": "HomeAndConstructionBusiness", "name": "みなと電気設備", "telephone": "+81--00-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇市〇〇町1-2-3"}, "areaServed": "〇〇市"}
 </script>
 <style>
-/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
+/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
@@ -44,6 +44,8 @@ h1,h2,h3{font-family:var(--head);font-weight:500;margin:0;line-height:1.7}
 p{margin:0 0 1.2em}
 .muted{color:var(--muted)}
 .center{text-align:center}
+.sample-note{margin:0;padding:0 16px;height:34px;line-height:34px;background:#333;color:#fff;font-size:.78rem;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} /* 見本のときだけ出る注（sample_note）。1行に固定 */
+.sample-note ~ .head{top:34px} /* 注がある分、ヘッダー（absolute）を下げる */
 .mk{display:inline-block;width:.9em;height:.9em;vertical-align:-.05em;fill:var(--primary-deep)}
 .photo{border-radius:var(--r);overflow:hidden;background:var(--bg2)}
 .photo img{width:100%;height:auto}
@@ -63,7 +65,8 @@ p{margin:0 0 1.2em}
 .bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
 .bk{font-size:.74rem;letter-spacing:.18em;color:var(--accent-soft);margin-left:12px}
 .nav{display:flex;align-items:center;font-size:.86rem}
-.nav a{text-decoration:none;opacity:.9;margin-left:24px}
+.nav a{text-decoration:none;opacity:.9;margin-left:24px;white-space:nowrap}
+@media (min-width:861px) and (max-width:1180px){.bk{display:none}.nav a{margin-left:16px}}
 .nav a:hover{opacity:1;color:var(--accent-soft)}
 .nav .rsv{background:var(--primary);color:#fff;padding:.5em 1.4em;border-radius:999px;opacity:1}
 .menubtn{display:none}
@@ -89,6 +92,11 @@ p{margin:0 0 1.2em}
 .eyebrow::before{content:"";width:36px;height:1px;background:var(--accent-soft);margin-right:14px;flex:none}
 .hero h1{font-size:2.1rem;font-size:clamp(1.6rem,3.2vw,2.5rem);letter-spacing:.14em;line-height:1.75;margin-bottom:22px}
 .hero .lead{color:#ddd8cc;line-height:2.1}
+.hero.has-banner{padding-top:74px;background:#000}
+.hero-banner{background:#000}
+.hero-banner img{display:block;width:100%;height:auto;max-width:1000px;margin:0 auto}
+.hero.has-banner .wrap{display:block;min-height:0}
+.hero.has-banner .hero-info{max-width:720px;margin:0 auto;padding:34px clamp(20px,6vw,90px) 70px}
 .addr{display:flex;font-size:.9rem;color:#e9e4d8;border-top:1px solid rgba(255,255,255,.18);padding-top:22px;margin-top:26px}
 .addr svg{width:1.1em;height:1.1em;flex:none;margin:.4em .6em 0 0;fill:var(--primary)}
 .hero-btns{display:flex;flex-wrap:wrap;margin:8px -6px 0}
@@ -147,7 +155,7 @@ p{margin:0 0 1.2em}
 .ask-line{display:flex;align-items:center;justify-content:center;margin-top:14px;text-decoration:none;font-size:.85rem;letter-spacing:.06em;color:#06a447;border:1.5px solid #06c755;border-radius:999px;padding:.6em 1em}
 .ask-line:hover{background:#06c755;color:#fff}
 .ask-line svg{width:1.1em;height:1.1em;margin-right:.45em;flex:none}
-.ask-line.tel{color:var(--primary-deep);border-color:var(--primary)}
+.ask-line.tel{color:var(--primary-deep);border-color:var(--primary);font-family:inherit;font-size:.85rem;margin-top:14px}
 .ptable{margin-top:56px;background:#fff;border-radius:var(--r);padding:44px clamp(18px,5vw,52px);scroll-margin-top:16px}
 .ptable h3{font-size:1.3rem;letter-spacing:.14em;margin-bottom:6px;display:flex;align-items:center}
 .ptable h3 .mk{margin-right:.45em}
@@ -241,6 +249,54 @@ p{margin:0 0 1.2em}
 .totop{position:fixed;right:14px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;text-decoration:none;opacity:0;visibility:hidden;-webkit-transition:opacity .3s;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 .totop.show{opacity:.92;visibility:visible}
 @media (max-width:860px){.totop{bottom:76px;right:12px}}
+/* 明るい上の部分（hero_style: light） */
+:root{--hero-style:light}
+.head .wrap{color:var(--ink)}
+.bk{color:var(--primary-deep)}
+.nav a:hover{color:var(--primary-deep)}
+@media (max-width:860px){
+  .menubtn{background:rgba(255,255,255,.75);color:var(--ink);border-color:var(--line)}
+  .head.open .nav{color:#f3efe6}
+}
+.hero{background:var(--pale);color:var(--ink)}
+.poster::after{background:linear-gradient(90deg,rgba(255,255,255,0),var(--pale))}
+.poster.plain{background:radial-gradient(70% 60% at 50% 45%,#fff,var(--bg2))}
+.plain-name{color:var(--primary-deep)}
+.eyebrow{color:var(--primary-deep)}
+.eyebrow::before{background:var(--primary-deep)}
+.hero .lead{color:var(--muted)}
+.addr{color:var(--ink);border-top-color:var(--line)}
+.toc a{color:var(--ink);background:#fff;border-color:var(--line)}
+.toc a:hover{border-color:var(--primary);color:var(--primary-deep)}
+.hero .btn-ghost{border-color:var(--primary-deep);color:var(--primary-deep);background:#fff}
+.hero .btn-ghost:hover{border-color:var(--primary)}
+/* レイアウトの型：共通 */
+.hero .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.card > .card-body:first-child{border-top:4px solid var(--accent-soft)}
+.price small:empty{display:none}
+
+/* 型：split（左右に分ける。写真は右いっぱい・角を大きく丸める。料金は一覧） */
+.hero .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.hero .poster{-webkit-box-ordinal-group:3;-ms-flex-order:2;order:2;border-bottom-left-radius:180px;margin-top:76px}  /* 2026/11/11 上のメニューが写真に重ならないように */
+.hero .poster::after{display:none}
+.hero-info{-webkit-box-ordinal-group:2;-ms-flex-order:1;order:1;max-width:620px;padding:140px 56px 100px 9%}
+.menu-cards,.menu-cards.n4{display:block;max-width:880px;margin:0 auto}
+.menu .card{display:grid;grid-template-columns:220px minmax(0,1fr);grid-gap:0 32px;align-items:center;background:transparent;box-shadow:none;border-radius:0;border-bottom:1px solid var(--line);padding:28px 0}
+.menu .card:first-child{border-top:1px solid var(--line)}
+.menu .card .photo{border-radius:999px 999px 18px 18px}
+.menu .card > .card-body:first-child{grid-column:1 / -1;border-top:0;padding:0 8px}
+.menu .card-body{padding:0}
+.menu .card .price{border-top:0;padding-top:0;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start}
+.menu .card .price small{margin-right:1em}
+.menu .ask-line{-ms-flex-item-align:start;align-self:flex-start;padding:.5em 1.4em}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr}
+  .hero .poster{-webkit-box-ordinal-group:1;-ms-flex-order:0;order:0;height:56vh;min-height:320px;border-bottom-left-radius:90px;margin-top:60px}
+  .hero .poster img{position:absolute;height:100%}
+  .hero-info{justify-self:stretch;padding:0;margin:32px 20px 0}
+  .menu .card{grid-template-columns:1fr;padding:22px 0}
+  .menu .card .photo{max-width:260px;margin-bottom:14px}
+}
 /* ---------- 部品（parts）共通 ---------- */
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
 .wrap.narrow{max-width:760px}
@@ -295,89 +351,89 @@ p{margin:0 0 1.2em}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></symbol></svg>
 <header class="head">
   <div class="wrap">
-    <a href="#top" class="brand" aria-label="みなと電気設備 トップへ"><span class="bn">みなと<wbr>電気設備</span><span class="bk">電気工事・水道設備｜〇〇市</span></a>
-    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">お仕事の内容</a><a href="#cases">工事の例</a><a href="#flow">ご依頼の流れ</a><a href="#access">みなと<wbr>電気設備に<wbr>ついて</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
+    <a href="#top" class="brand" aria-label="みなと電気設備 トップへ"><span class="bn">みなと電気設備</span><span class="bk">電気工事・水道設備｜〇〇市</span></a>
+    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">お仕事の内容</a><a href="#cases">工事の例</a><a href="#flow">ご依頼の流れ</a><a href="#access">みなと電気設備について</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <figure class="poster"><img src="images/hero.svg" alt="お店の写真" width="1200" height="1500" fetchpriority="high"></figure>
+      <figure class="poster"><img src="images/hero.jpg" alt="お店の雰囲気のイメージ写真" width="1600" height="1067" fetchpriority="high"></figure>
       <div class="hero-info">
         <p class="eyebrow">電気工事・水道設備｜〇〇市</p>
         <h1><span class="nw">コンセント1つから、</span><br><span class="nw">水まわりの困りごとまで。</span></h1>
-        <p class="lead">〇〇市の<wbr>電気・水道の<wbr>工事店です。<wbr>照明の<wbr>取りかえ・エアコンの<wbr>取りつけ・<wbr>水もれの<wbr>修理など、<wbr>小さな<wbr>工事から<wbr>お受けしています。</p>
+        <p class="lead">〇〇市の電気・水道の工事店です。照明の取りかえ・エアコンの取りつけ・水もれの修理など、小さな工事からお受けしています。</p>
         <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
         <div class="hero-btns"><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a><a class="btn btn-ghost" href="tel:0000000000">電話する <span class="nw">0000-00-0000</span></a></div>
-        <ul class="toc" aria-label="このページの案内"><li><a href="#menu">お仕事の内容</a></li><li><a href="#cases">工事の例</a></li><li><a href="#flow">ご依頼の流れ</a></li><li><a href="#reserve">ご相談・<wbr>お見積もり</a></li><li><a href="#access">みなと<wbr>電気設備に<wbr>ついて</a></li><li><a href="#faq">よくある質問</a></li></ul>
+        <ul class="toc" aria-label="このページの案内"><li><a href="#menu">お仕事の内容</a></li><li><a href="#cases">工事の例</a></li><li><a href="#flow">ご依頼の流れ</a></li><li><a href="#reserve">ご相談・お見積もり</a></li><li><a href="#access">みなと電気設備について</a></li><li><a href="#faq">よくある質問</a></li></ul>
       </div>
     </div>
   </section>
   <section id="menu" class="sec menu">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>お仕事の内容</h2></div>
-      <p class="sec-lead center muted">料金は<wbr>見本です。</p>
-      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-denki">電気工事</a><a href="#m-suidou">水道・トイレの<wbr>修理</a><a href="#m-aircon">エアコンの<wbr>取りつけ</a><a href="#m-kyuto">給湯器の<wbr>取りかえ</a></nav>
+      <p class="sec-lead center muted">料金は見本です。</p>
+      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-denki">電気工事</a><a href="#m-suidou">水道・トイレの修理</a><a href="#m-aircon">エアコンの取りつけ</a><a href="#m-kyuto">給湯器の取りかえ</a></nav>
       <div class="menu-cards n4">
         <article class="card" id="m-denki">
-          <div class="photo"><img src="images/menu-denki.svg" alt="電気工事の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-denki.jpg" alt="電気工事のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>電気工事</h3>
             
-            <p>コンセントの<wbr>増設・照明の<wbr>取りかえ・スイッチの<wbr>修理。</p>
+            <p>コンセントの増設・照明の取りかえ・スイッチの修理。</p>
             <div class="price"><small></small><b>3,300円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-suidou">
-          <div class="photo"><img src="images/menu-suidou.svg" alt="水道・トイレの修理の写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-suidou.jpg" alt="水道・トイレの修理のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
-            <h3>水道・トイレの<wbr>修理</h3>
+            <h3>水道・トイレの修理</h3>
             
-            <p>蛇口の<wbr>水もれ・トイレの<wbr>つまり・給水管の<wbr>取りかえ。</p>
+            <p>蛇口の水もれ・トイレのつまり・給水管の取りかえ。</p>
             <div class="price"><small></small><b>5,500円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-aircon">
-          <div class="photo"><img src="images/menu-aircon.svg" alt="エアコンの取りつけの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-aircon.jpg" alt="エアコンの取りつけのイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
-            <h3>エアコンの<wbr>取りつけ</h3>
+            <h3>エアコンの取りつけ</h3>
             
-            <p>取りつけ・取りはずし・<wbr>古い<wbr>ものの<wbr>引き取り。</p>
+            <p>取りつけ・取りはずし・古いものの引き取り。</p>
             <div class="price"><small>1台</small><b>16,500円〜</b></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事を<wbr>LINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-kyuto">
-          <div class="photo"><img src="images/menu-kyuto.svg" alt="給湯器の取りかえの写真" width="1000" height="750" loading="lazy"></div>
+          <div class="photo"><img src="images/menu-kyuto.jpg" alt="給湯器の取りかえのイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
-            <h3>給湯器の<wbr>取りかえ</h3>
+            <h3>給湯器の取りかえ</h3>
             
-            <p>お湯が<wbr>出ない・音が<wbr>する、<wbr>などの<wbr>ご相談も。</p>
-            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事をLINEで相談</span></a>
+            <p>お湯が出ない・音がする、などのご相談も。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この仕事を<wbr>LINEで相談</span></a>
           </div>
         </article>
       </div>
-      <p class="price-note muted center">料金は<wbr>家の<wbr>状態で<wbr>変わります。<wbr>見せていただいてから<wbr>お見積もりを<wbr>お出しします。</p>
+      <p class="price-note muted center">料金は家の状態で変わります。見せていただいてからお見積もりをお出しします。</p>
     </div>
   </section>
   <section id="cases" class="sec cases-sec">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>works</i><h2>工事の例</h2></div>
-      <p class="sec-lead center muted">工事の<wbr>前と<wbr>後を、<wbr>並べて<wbr>ご覧いただけます。</p>
+      <p class="sec-lead center muted">工事の前と後を、並べてご覧いただけます。</p>
       <div class="cases">
         <article class="case">
-          <figure><img src="images/case1-before.svg" alt="工事前のトイレ（見本）" width="1000" height="750" loading="lazy"><figcaption>工事前</figcaption></figure>
-          <figure class="after"><img src="images/case1-after.svg" alt="工事後のトイレ（見本）" width="1000" height="750" loading="lazy"><figcaption>工事後</figcaption></figure>
-          <div class="txt"><h3>トイレの<wbr>取りかえ<span class="meta">〇〇市　個人の<wbr>お宅</span></h3><p>古くなった<wbr>トイレを、<wbr>節水型の<wbr>ものに<wbr>取りかえました。<wbr>床の<wbr>張りかえも<wbr>一緒に。</p></div>
+          <figure><img src="images/case1-before.jpg" alt="工事前のトイレ（見本）" width="1000" height="750" loading="lazy"><figcaption>工事前</figcaption></figure>
+          <figure class="after"><img src="images/case1-after.jpg" alt="工事後のトイレ（見本）" width="1000" height="750" loading="lazy"><figcaption>工事後</figcaption></figure>
+          <div class="txt"><h3>トイレの取りかえ<span class="meta">〇〇市　個人のお宅</span></h3><p>古くなったトイレを、節水型のものに取りかえました。床の張りかえも一緒に。</p></div>
         </article>
         <article class="case">
-          <figure><img src="images/case2-before.svg" alt="工事前の分電盤（見本）" width="1000" height="750" loading="lazy"><figcaption>工事前</figcaption></figure>
-          <figure class="after"><img src="images/case2-after.svg" alt="工事後の分電盤（見本）" width="1000" height="750" loading="lazy"><figcaption>工事後</figcaption></figure>
-          <div class="txt"><h3>分電盤の<wbr>取りかえ<span class="meta">〇〇市　店舗</span></h3><p>ブレーカーが<wbr>よく<wbr>落ちるとの<wbr>ことで、<wbr>容量の<wbr>大きい<wbr>ものに<wbr>取りかえました。</p></div>
+          <figure><img src="images/case2-before.jpg" alt="工事前の分電盤（見本）" width="1000" height="750" loading="lazy"><figcaption>工事前</figcaption></figure>
+          <figure class="after"><img src="images/case2-after.jpg" alt="工事後の分電盤（見本）" width="1000" height="750" loading="lazy"><figcaption>工事後</figcaption></figure>
+          <div class="txt"><h3>分電盤の取りかえ<span class="meta">〇〇市　店舗</span></h3><p>ブレーカーがよく落ちるとのことで、容量の大きいものに取りかえました。</p></div>
         </article>
       </div>
     </div>
@@ -385,38 +441,38 @@ p{margin:0 0 1.2em}
   <section id="compare" class="sec compare-sec">
     <div class="wrap narrow">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>before / after</i><h2>工事の前と後</h2></div>
-      <p class="sec-lead center muted">つまみを<wbr>動かすと、<wbr>同じ<wbr>場所の<wbr>前と<wbr>後が<wbr>見比べられます。</p>
+      <p class="sec-lead center muted">つまみを動かすと、同じ場所の前と後が見比べられます。</p>
       <div class="cmp">
         <div class="cmp-frame" id="cmp-frame">
-          <div class="cmp-over" id="cmp-over"><img src="images/case1-before.svg" alt="工事前のトイレ（見本）" width="1000" height="750" loading="lazy"></div>
-          <img src="images/case1-after.svg" alt="工事後のトイレ（見本）" width="1000" height="750" loading="lazy">
+          <div class="cmp-over" id="cmp-over"><img src="images/case1-before.jpg" alt="工事前のトイレ（見本）" width="1000" height="750" loading="lazy"></div>
+          <img src="images/case1-after.jpg" alt="工事後のトイレ（見本）" width="1000" height="750" loading="lazy">
           <span class="cmp-line" id="cmp-line" aria-hidden="true"><i></i></span>
           <span class="cmp-tag l">工事前</span><span class="cmp-tag r">工事後</span>
         </div>
         <label class="cmp-range"><span>つまみを<wbr>動かして<wbr>見比べる</span><input type="range" id="cmp-range" min="0" max="100" value="50" aria-label="工事前と工事後を見比べる（左が工事前、右が工事後）"></label>
-        <p class="cmp-cap muted center">トイレの<wbr>取りかえ<wbr>（見本）</p>
+        <p class="cmp-cap muted center">トイレの取りかえ（見本）</p>
       </div>
     </div>
   </section>
   <section id="flow" class="sec flow">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>flow</i><h2>ご依頼の流れ</h2></div>
-      <ol class="steps"><li><h3>ご相談</h3><p>困っている<wbr>ことを<wbr>お知らせ<wbr>ください。<wbr>写真が<wbr>あると<wbr>早いです。</p></li><li><h3>下見</h3><p>おうちに<wbr>伺って、<wbr>様子を<wbr>見せていただきます。</p></li><li><h3>お見積もり</h3><p>内容と<wbr>金額を<wbr>お出しします。<wbr>決めるのは<wbr>その<wbr>あとで。</p></li><li><h3>工事</h3><p>日程を<wbr>決めて<wbr>工事します。<wbr>終わったら<wbr>一緒に<wbr>確かめます。</p></li></ol>
+      <ol class="steps"><li><h3>ご相談</h3><p>困っていることをお知らせください。写真があると早いです。</p></li><li><h3>下見</h3><p>おうちに伺って、様子を見せていただきます。</p></li><li><h3>お見積もり</h3><p>内容と金額をお出しします。決めるのはそのあとで。</p></li><li><h3>工事</h3><p>日程を決めて工事します。終わったら一緒に確かめます。</p></li></ol>
     </div>
   </section>
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご相談・<wbr>お見積もり</h2></div>
-      <p class="muted center" style="margin-bottom:40px">下見とお見積もりは<wbr>無料です<wbr>（見本）。<wbr>急ぎの<wbr>水もれは、<wbr>まず<wbr>お電話ください。</p>
-      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご相談・お見積もり</h2></div>
+      <p class="muted center" style="margin-bottom:40px">下見とお見積もりは無料です（見本）。急ぎの水もれは、まずお電話ください。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、メッセージでご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は出られないことがあります。折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
       
     </div>
   </section>
   <section id="access" class="sec access">
     <div class="wrap nomap">
       <div>
-        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>みなと<wbr>電気設備に<wbr>ついて</h2></div>
-        <dl class="info"><div><dt>店名</dt><dd>みなと<wbr>電気設備</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>8:30〜18:00<wbr>（見本）</dd></div><div><dt>定休日</dt><dd>日曜日<wbr>（見本）</dd></div><div><dt>対応エリア</dt><dd>〇〇市と<wbr>その<wbr>周辺<wbr>（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
+        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>みなと電気設備について</h2></div>
+        <dl class="info"><div><dt>店名</dt><dd>みなと電気設備</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>8:30〜18:00（見本）</dd></div><div><dt>定休日</dt><dd>日曜日（見本）</dd></div><div><dt>対応エリア</dt><dd>〇〇市とその周辺（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
         
       </div>
       
@@ -425,20 +481,20 @@ p{margin:0 0 1.2em}
   <section id="faq" class="sec faq">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list"><details><summary><span class="q">Q</span><span>急な<wbr>水もれでも<wbr>来て<wbr>もらえますか？</span></summary><p><span class="a">A</span><span>まず<wbr>お電話ください。<wbr>当日に<wbr>伺えない<wbr>こともあります。<wbr>応急の<wbr>止め方も<wbr>お伝えします。</span></p></details><details><summary><span class="q">Q</span><span>1か所だけでも<wbr>頼めますか？</span></summary><p><span class="a">A</span><span>はい、<wbr>コンセント1つから<wbr>お受けしています。</span></p></details><details><summary><span class="q">Q</span><span>見積もりの<wbr>あとで<wbr>断っても<wbr>いいですか？</span></summary><p><span class="a">A</span><span>はい、<wbr>大丈夫です<wbr>（見本）。</span></p></details></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>急な水もれでも来てもらえますか？</span></summary><p><span class="a">A</span><span>まずお電話ください。当日に伺えないこともあります。応急の止め方もお伝えします。</span></p></details><details><summary><span class="q">Q</span><span>1か所だけでも頼めますか？</span></summary><p><span class="a">A</span><span>はい、コンセント1つからお受けしています。</span></p></details><details><summary><span class="q">Q</span><span>見積もりのあとで断ってもいいですか？</span></summary><p><span class="a">A</span><span>はい、大丈夫です（見本）。</span></p></details></div>
     </div>
   </section>
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="fname">みなと<wbr>電気設備</p>
+    <p class="fname">みなと電気設備</p>
     <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3</p>
-    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　8:30〜18:00<wbr>（見本）</p>
-    <nav aria-label="フッター"><a href="#menu">お仕事の内容</a><a href="#cases">工事の例</a><a href="#flow">ご依頼の流れ</a><a href="#access">みなと<wbr>電気設備に<wbr>ついて</a><a href="#faq">よくある質問</a></nav>
-    <p class="copy">© みなと<wbr>電気設備</p>
+    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　8:30〜18:00（見本）</p>
+    <nav aria-label="フッター"><a href="#menu">お仕事の内容</a><a href="#cases">工事の例</a><a href="#flow">ご依頼の流れ</a><a href="#access">みなと電気設備について</a><a href="#faq">よくある質問</a></nav>
+    <p class="copy">© みなと電気設備</p>
   </div>
 </footer>
-<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで<wbr>相談</a><a class="r" href="#menu">メニュー</a></nav>
+<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで相談</a><a class="r" href="#menu">メニュー</a></nav>
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 // スマホのメニュー（開く・閉じる）と、上へ戻るボタン
@@ -484,6 +540,7 @@ p{margin:0 0 1.2em}
   frame.addEventListener('touchmove', at, {passive:true});
 })();
 </script>
+
 <a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
 </body>
 </html>
