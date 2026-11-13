@@ -1251,6 +1251,7 @@ def main():
     if len(sys.argv) < 3: sys.exit(__doc__)
     conf, outdir = sys.argv[1], os.path.expanduser(sys.argv[2])
     c = json.load(open(conf, encoding='utf-8'))
+    if c.get('pages'): import make_houjin; return make_houjin.main(conf, outdir)  # 法人の型（複数ページ。2026/11/13 段2a）。"pages" がなければ今までどおり
     os.makedirs(outdir, exist_ok=True)
     # 写真がまだないところは「写真が入ります」の仮画像（.svg）を入れる
     def need(obj, label, w, h, colors=None):

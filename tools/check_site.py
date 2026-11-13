@@ -276,7 +276,7 @@ def check_okiba(root, pages):
 
 def run_static(root):
     pages = sorted(glob.glob(os.path.join(root, '**', '*.html'), recursive=True))
-    pages = [p for p in pages if '/tools/' not in p and '/.git/' not in p and '/node_modules/' not in p]
+    pages = [p for p in pages if '/tools/' not in p and '/.git/' not in p and '/node_modules/' not in p and '/_tpl/' not in p]  # _tpl＝法人の型の 2b 用ひな形（印入り）は見ない（2026/11/13）
     top = os.path.join(root, 'index.html')
     if '--all' not in sys.argv: pages = [p for p in pages if p == top]
     if not os.path.exists(top): add('❌', 'ファイル', 'index.html がありません'); return []
