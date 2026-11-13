@@ -29,7 +29,7 @@ if TOP: DST = os.path.join(ROOT, 'index.html')
 # 画面の割り当て（左から順）。値は shian の <section> の id か class
 SCREENS = [
     # 2026/10/11 並びかえ（チャット決定）：ホームは「こんなこと」→ 見本（work）→「更新は」。「安心して」（trust）はできることから相談の上へ。前の並びは v6/
-    ('home',   'ホーム',     ['hero', 'worry', 'work', 'update']),
+    ('home',   'ホーム',     ['hero', 'worry', 'work', 'update', 'houjin']),  # 2026/11/14 法人向けの入口（houjin）を「更新は」のあとに
     ('dekiru', 'できること', ['can']),
     ('ryokin', '料金',       ['price']),
     ('nagare', '流れ',       ['flow', 'faq']),  # 2026/11/11 伐採の段（other）を外した。伐採の入口はフッターの1行とフォームのチェック
