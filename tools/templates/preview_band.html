@@ -1,0 +1,24 @@
+<!-- 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ、いちばん上に「確認用（まだ公開前です）」を出す。本番の住所では何もしない。元：liftoff-hp/tools/templates/preview_band.html（直すのはここだけ。make_site.py が読んで </body> の前に入れる） -->
+<script>
+(function () {
+  var h = String(window.location.hostname || '');
+  if (h.indexOf('preview-') !== 0) return;
+  if (document.getElementById('pv-band')) return;
+  var b = document.createElement('p');
+  b.id = 'pv-band';
+  b.setAttribute('role', 'note');
+  b.appendChild(document.createTextNode('確認用（まだ公開前です）'));
+  b.style.cssText = 'margin:0;padding:0 12px;height:34px;line-height:34px;background:#ffd54f;color:#3e2723;font-size:13px;font-weight:700;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;position:relative;z-index:60;border-bottom:1px solid #c8a415';
+  document.body.insertBefore(b, document.body.firstChild);
+  var hd = document.querySelector('header');
+  if (hd && window.getComputedStyle) {
+    var cs = window.getComputedStyle(hd);
+    if (cs.position === 'absolute') hd.style.top = ((parseFloat(cs.top) || 0) + 34) + 'px';
+  }
+  if (document.title.indexOf('【確認用】') !== 0) document.title = '【確認用】' + document.title;
+  var m = document.createElement('meta');
+  m.name = 'robots';
+  m.content = 'noindex';
+  document.getElementsByTagName('head')[0].appendChild(m);
+})();
+</script>

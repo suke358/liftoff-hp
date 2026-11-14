@@ -50,6 +50,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "layout" … レイアウトの型（2026/11/11）。full・magazine・split・cards・frame・pop のどれか。書かなければ今までと同じ。説明は tools/layouts.py
   "menu_cols" … メニューのカードを2列にする（2026/11/7）。2 と書くと、パソコン幅でも2列（スマホは1列）。4つのとき4列になって写真が小さくなるお店用。書かなければ今までと同じ（数で決まる）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
+確認用の帯（2026/11/14・部品 V）：どのサイトにも </body> の前に templates/preview_band.html を入れる。住所が preview- で始まるとき（preview_push.sh の確認用URL）だけ、
+  いちばん上に「確認用（まだ公開前です）」の帯が出て、題名の頭に【確認用】・noindex が付く。本番の住所では何も出ない（設定は要らない）。納品後は preview_push.sh --close で確認用を閉じる
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -110,6 +112,8 @@ def build(c):
     t = dict(THEMES[c.get('theme_base', 'salon')]); t.update(c.get('theme', {}))
     # Cloudflare Web Analytics（2026/10/22）：設定に analytics_token があれば </body> の直前に入れる。空なら入れない（独自ドメインを Cloudflare につないだお店は自動で数えるので不要）
     tok = str(c.get('analytics_token') or '').strip()
+    # 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ「確認用（まだ公開前です）」を出す。元は templates/preview_band.html の1か所
+    pv_band = open(os.path.join(HERE, 'templates', 'preview_band.html'), encoding='utf-8').read().strip()
     analytics = ('<!-- Cloudflare Web Analytics --><script defer src=\'https://static.cloudflareinsights.com/beacon.min.js\' data-cf-beacon=\'{"token": "' + e(tok) + '"}\'></script><!-- End Cloudflare Web Analytics -->') if tok else ''
     name, short = c['name'], c.get('short_name', c['name'])
     mark = MARKS.get(c.get('mark', 'heart'), MARKS['heart'])
@@ -439,6 +443,7 @@ def build(c):
 {js}
 </script>
 {analytics}
+{pv_band}
 </body>
 </html>
 '''

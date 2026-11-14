@@ -12,6 +12,7 @@
 # 使い方:  cd サイトのフォルダ && bash ~/src/liftoff-hp/tools/preview_push.sh [出ているか確かめる文字]
 #   例:    bash ~/src/liftoff-hp/tools/preview_push.sh                 → 出して、トップが 200 で HEAD の index.html と同じ中身になるのを待つ
 #          bash ~/src/liftoff-hp/tools/preview_push.sh 'id="irai-band"' → さらに、その文字がトップに何か所あるかも表示
+#          bash ~/src/liftoff-hp/tools/preview_push.sh --close           → 納品後に確認用を閉じる（「確認用の公開は終わりました」の1枚にする。--dry を足すと出さずに中身だけ見る。2026/11/14）
 #
 # 決まり：--force は、この道具の中で preview ブランチに出すときだけ使う（main には絶対に出さない。下の PREVIEW_BRANCH は変えない）
 set -u
@@ -50,6 +51,38 @@ if ! sed 's#//.*$##' wrangler.jsonc | grep -q '"previews"'; then
   exit 1
 fi
 PREVIEW_URL="https://preview-${NAME}.${DOMAIN}/"
+
+# --close：納品（本番に出した）あとに確認用を閉じる（2026/11/14）。preview ブランチを「確認用の公開は終わりました」の1枚だけにする
+#   作業中のフォルダ・main・HEAD は何も変えない（git の中だけで1枚のコミットを作り、preview にだけ --force で出す）。
+#   また確認用が要るときは、ふつうに preview_push.sh を動かせば元に戻る
+if [ "${1:-}" = "--close" ]; then
+  TMPC="$(mktemp -d)"
+  cat > "$TMPC/index.html" <<'HTML'
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>確認用の公開は終わりました</title>
+<style>body{margin:0;font-family:sans-serif;background:#f6f4ef;color:#333;text-align:center;padding:80px 20px;line-height:1.9}h1{font-size:20px;font-weight:700}</style></head>
+<body><h1>確認用ページの公開は終わりました</h1><p>このページは、制作中の確認のためのものでした。<br>本番のページをご覧ください。</p></body></html>
+HTML
+  IDX="$(git hash-object -w "$TMPC/index.html")" || { echo "❌ 閉じるページを作れませんでした"; exit 1; }
+  rm -rf "$TMPC"
+  WR="$(git rev-parse HEAD:wrangler.jsonc)" || { echo "❌ HEAD に wrangler.jsonc がありません"; exit 1; }
+  ENTRIES="$(printf '100644 blob %s\t404.html\n100644 blob %s\tindex.html\n100644 blob %s\twrangler.jsonc\n' "$IDX" "$IDX" "$WR")"
+  if AI="$(git rev-parse -q --verify HEAD:.assetsignore)"; then ENTRIES="$ENTRIES$(printf '\n100644 blob %s\t.assetsignore' "$AI")"; fi
+  TREE="$(printf '%s\n' "$ENTRIES" | git mktree)" || { echo "❌ 閉じるページの中身を作れませんでした"; exit 1; }
+  C="$(git commit-tree "$TREE" -m '確認用を閉じる（納品済み）')" || { echo "❌ 閉じるコミットを作れませんでした"; exit 1; }
+  echo "→ 確認用を閉じます: $PREVIEW_URL（preview ブランチだけ。main・作業中のフォルダは変えない）"
+  if [ "${2:-}" = "--dry" ]; then echo "（--dry：出さずに終わります。作ったコミット $C）"; git ls-tree "$C"; exit 0; fi
+  git push --force origin "$C:refs/heads/$PREVIEW_BRANCH" || { echo "❌ push できませんでした"; exit 1; }
+  start=$(date +%s); ok=no
+  while :; do
+    curl -s "$PREVIEW_URL" | grep -q '確認用ページの公開は終わりました' && { ok=yes; break; }
+    [ $(( $(date +%s) - start )) -ge $WAIT_SEC ] && break
+    sleep 15
+  done
+  if [ "$ok" = "yes" ]; then echo "✅ 確認用を閉じました（$(( $(date +%s) - start ))秒後）: $PREVIEW_URL"; else echo "⚠️ まだ前のページが見えます。少し待ってもう一度開いて確かめてください: $PREVIEW_URL"; fi
+  [ "$ok" = "yes" ]; exit $?
+fi
 
 echo "サイト: ${NAME}（${ROOT}）"
 if [ -f .okiba ]; then echo "置き場所: ${DOMAIN}（.okiba から）"; fi
