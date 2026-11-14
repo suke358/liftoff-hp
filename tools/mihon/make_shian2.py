@@ -561,7 +561,7 @@ must(anchor, js + '\n' + anchor)
 
 # ---- LINE のカードの番号（2026/10/10）：LINE はページの URL ごとにカードを覚えているので、カードの画像を変えたら、画像の名前を変えるのに加えてこの数字を次にする
 #      （トップの canonical・og:url・開いたときに足す ?v= の3つに入る。QR の URL・ページの場所は変えない）
-CARD_V = 6
+CARD_V = 7
 TOP_URL = 'https://liftoff-hp.liftoff-358.workers.dev/'
 if TOP:
     s = re.sub(r'(src|href)="\.\./(img/|samples/)', r'\1="\2', s)
