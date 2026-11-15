@@ -3,3 +3,7 @@ tools/daihon/tejun_parts.json
 # Python が作る一時ファイル
 __pycache__/
 *.pyc
+# 見本を作り直すときに残る古い写し(道具は消す扱い。2026/11/15 本人OK)
+samples/*/index.old.html
+# tap_test_shian2.py が作るヘッドレス Chrome の記録(ブラウザのプロファイル。2026/11/15 本人OK)
+tools/mihon/chrome-prof/
