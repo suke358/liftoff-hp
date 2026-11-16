@@ -145,6 +145,7 @@ def build(c):
         for n, (k, _v) in enumerate(secs):
             if k == before: secs.insert(n, item); return
         secs.append(item)
+    if 'worries' in P: secs.insert(0, ('worries', P['worries'].get('nav', 'お悩みから探す')))
     if 'voices' in P: _ins('flow' if c.get('flow') else 'reserve', ('voices', P['voices'].get('title', 'お客様の声')))
     if 'news' in P: _ins('reserve', ('news', P['news'].get('title', 'お知らせ')))
     nav = ''.join(f'<a href="#{k}">{e(v)}</a>' for k, v in secs if k not in ('reserve', 'voices', 'news'))  # 上の案内が長くなりすぎないよう、お客様の声・お知らせは目次（toc）だけに出す
@@ -426,7 +427,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{xp["credentials"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{xp["credentials"]}{xp["worries"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">

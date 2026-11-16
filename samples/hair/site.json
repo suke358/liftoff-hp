@@ -100,6 +100,29 @@
  ],
  "schema_type": "HairSalon",
  "area_served": "〇〇市",
+ "parts": {
+  "worries": {
+   "lead": "言葉にしにくいことも、そのままどうぞ。",
+   "items": [
+    {
+     "text": "くせが出て、朝まとまらない",
+     "to": "cut"
+    },
+    {
+     "text": "白髪を目立ちにくくしたい",
+     "to": "color"
+    },
+    {
+     "text": "ふんわりした形を手入れ少なめで",
+     "to": "perm"
+    },
+    {
+     "text": "ひとりでゆっくり過ごす時間がほしい",
+     "to": "spa"
+    }
+   ]
+  }
+ },
  "layout": "frame",
  "hero": {
   "image": "images/hero.jpg",

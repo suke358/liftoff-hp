@@ -120,6 +120,29 @@
  ],
  "schema_type": "RealEstateAgent",
  "area_served": "〇〇市",
+ "parts": {
+  "worries": {
+   "lead": "「まだ決めていない」段階のご相談も多いお店です（見本）。",
+   "items": [
+    {
+     "text": "転勤が決まって、急いで部屋を探したい",
+     "to": "chintai"
+    },
+    {
+     "text": "親の家を売るか貸すか迷っている",
+     "to": "baibai"
+    },
+    {
+     "text": "貸している部屋の入居者対応がたいへん",
+     "to": "kanri"
+    },
+    {
+     "text": "遠くの実家が空き家のままになっている",
+     "to": "akiya"
+    }
+   ]
+  }
+ },
  "layout": "magazine",
  "hero": {
   "image": "images/hero.jpg",

@@ -572,16 +572,18 @@ if TOP:
     must('<!-- 試しの版・切りかえ式（2026/10/9）。tools/mihon/make_shian2.py が shian/ から作る。直すときは shian/ か、その道具を直して作り直す -->',
          '<!-- 本番のトップ（2026/10/10 に切りかえ式 shian2 を本番に入れかえた。前の版は v5/）。tools/mihon/make_shian2.py --top が shian/ から作る。直すときは shian/ か、その道具を直して作り直す。公開準備ができるまで検索に出さない（noindex。本公開時に外す） -->')
     if '../' in s.replace('../samples', '').replace('../img', ''): print('注意：../ が残っている', s.count('../'))
-    # ---- アドレスバーに ?v=6 を足す（2026/10/10）：名刺の QR（https://liftoff-hp.liftoff-358.workers.dev/）から開いた人が
-    #      LINE に転送しても新しいカード（G3）が出るように、開いたときに history.replaceState で足す（再読みこみはしない。ほかの ? や # はそのまま。v がすでにあれば何もしない）
+    # ---- アドレスバーから ?v= を消す（2026/11/15 会議の決め・案A。前は 10/10 から ?v= を足していた）：
+    #      LINE に送られるのは canonical・og:url（?v= 付きのまま）なので、カードの新しさはそちらで保つ。アドレスバーは素の URL に見せる
+    #      （再読みこみはしない。ほかの ? や # はそのまま。弱点：アドレスバーの URL を手でコピーして LINE に貼ると ?v= なし＝古いカードが出ることがある）
     card_js = ('<script>\n'
-               '// アドレスバーに ?v=%d を足す（LINE に転送したとき新しいカードが出るように。カードを変えたら tools/mihon/make_shian2.py の CARD_V を次の数字に）\n'
+               '// アドレスバーから ?v= を消す（見た目をすっきり。LINE のカードは canonical の ?v=%d で新しいものが出る。カードを変えたら tools/mihon/make_shian2.py の CARD_V を次の数字に）\n'
                "(function(){ try {\n"
                "  var q = location.search || '';\n"
-               "  if (/[?&]v=/.test(q)) return;\n"
-               "  history.replaceState(history.state, '', location.pathname + (q ? q + '&' : '?') + 'v=%d' + (location.hash || ''));\n"
+               "  if (!/[?&]v=/.test(q)) return;\n"
+               "  var r = q.replace(/^\\?/, '').split('&').filter(function (x) { return x && x.split('=')[0] !== 'v'; }).join('&');\n"
+               "  history.replaceState(history.state, '', location.pathname + (r ? '?' + r : '') + (location.hash || ''));\n"
                "} catch (e) {} })();\n"
-               '</script>') % (CARD_V, CARD_V)
+               '</script>') % (CARD_V,)
     must('<link rel="canonical" href="%s?v=%d">' % (TOP_URL, CARD_V), '<link rel="canonical" href="%s?v=%d">\n' % (TOP_URL, CARD_V) + card_js)
 
 def hash_of(text):

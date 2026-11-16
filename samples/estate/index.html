@@ -20,7 +20,7 @@
 {"@context": "https://schema.org", "@type": "RealEstateAgent", "name": "そよかぜ不動産", "telephone": "+81--00-0000", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〒000-0000 〇〇県〇〇市〇〇町1-2-3"}, "areaServed": "〇〇市"}
 </script>
 <style>
-/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
+/* 言葉の切れ目で折り返す（ は BudouX で入れる） */
 .nw{white-space:nowrap}
 body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
 :root{
@@ -301,6 +301,20 @@ p{margin:0 0 1.2em}
   .menu .card-body{padding:18px 4px 0}
   .menu .card > .card-body:first-child{margin-top:0;padding:22px 4px}
 }
+/* ---------- 部品（parts）共通 ---------- */
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{-webkit-transition:none!important;transition:none!important;-webkit-animation:none!important;animation:none!important}}
+.wrap.narrow{max-width:760px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* 部品：悩みの言葉の入口（2026/11/15） */
+.worry-sec{background:var(--bg2)}
+.worry-list{list-style:none;margin:0 auto;padding:0;max-width:760px;display:grid;grid-template-columns:1fr 1fr;grid-gap:12px;gap:12px}
+.worry-list a{display:block;position:relative;background:#fff;border-radius:var(--r);padding:16px 40px 16px 20px;color:var(--ink);text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.05);line-height:1.7;min-height:44px}
+.worry-list .wq{display:block;font-weight:500}
+.worry-list small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.worry-list .wgo{position:absolute;right:16px;top:50%;margin-top:-.8em;font-size:1.3rem;line-height:1.6;color:var(--primary)}
+.worry-list a:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.worry-note{margin-top:18px;font-size:.86rem}
+@media (max-width:640px){.worry-list{grid-template-columns:1fr}}
 
 /* 見本帳にもどる（見本だけに出す） */
 .mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
@@ -314,8 +328,8 @@ p{margin:0 0 1.2em}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></symbol></svg>
 <header class="head">
   <div class="wrap">
-    <a href="#top" class="brand" aria-label="そよかぜ不動産 トップへ"><span class="bn">そよかぜ不動産</span><span class="bk">不動産｜〇〇市</span></a>
-    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#menu">お手伝いできること</a><a href="#flow">ご相談の流れ</a><a href="#access">そよかぜ不動産について</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
+    <a href="#top" class="brand" aria-label="そよかぜ不動産 トップへ"><span class="bn">そよかぜ<wbr>不動産</span><span class="bk">不動産｜〇〇市</span></a>
+    <nav class="nav" id="gnav" aria-label="ページ内"><a href="#worries">お悩みから<wbr>探す</a><a href="#menu">お手伝いできる<wbr>こと</a><a href="#flow">ご相談の流れ</a><a href="#access">そよかぜ<wbr>不動産に<wbr>ついて</a><a href="#faq">よくある質問</a><a href="#reserve" class="rsv">ご相談</a></nav>
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
@@ -326,27 +340,35 @@ p{margin:0 0 1.2em}
       <div class="hero-info">
         <p class="eyebrow">不動産｜〇〇市</p>
         <h1><span class="nw">住まいのことを、</span><br><span class="nw">近くで相談できる場所。</span></h1>
-        <p class="lead">〇〇市の小さな不動産店です。賃貸・売買・管理・空き家のご相談まで、ひとりの担当が最後までお話をうかがいます。</p>
+        <p class="lead">〇〇市の<wbr>小さな<wbr>不動産店です。<wbr>賃貸・売買・管理・<wbr>空き家の<wbr>ご相談まで、<wbr>ひとりの<wbr>担当が<wbr>最後まで<wbr>お話を<wbr>うかが<wbr>います。</p>
         <p class="addr"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span>〇〇県〇〇市</span></p>
         <div class="hero-btns"><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>LINEで<wbr>相談する</a><a class="btn btn-ghost" href="tel:0000000000">電話する <span class="nw">0000-00-0000</span></a></div>
-        <ul class="toc" aria-label="このページの案内"><li><a href="#menu">お手伝いできること</a></li><li><a href="#flow">ご相談の流れ</a></li><li><a href="#reserve">ご相談・お問い合わせ</a></li><li><a href="#access">そよかぜ不動産について</a></li><li><a href="#faq">よくある質問</a></li></ul>
+        <ul class="toc" aria-label="このページの案内"><li><a href="#worries">お悩みから<wbr>探す</a></li><li><a href="#menu">お手伝いできる<wbr>こと</a></li><li><a href="#flow">ご相談の流れ</a></li><li><a href="#reserve">ご相談・<wbr>お問い合わせ</a></li><li><a href="#access">そよかぜ<wbr>不動産に<wbr>ついて</a></li><li><a href="#faq">よくある質問</a></li></ul>
       </div>
+    </div>
+  </section>
+  <section id="worries" class="sec worry-sec">
+    <div class="wrap">
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>worries</i><h2>こんな<wbr>お悩みは<wbr>ありませんか</h2></div>
+      <p class="sec-lead center muted">「まだ<wbr>決めていない」段階の<wbr>ご相談も<wbr>多い<wbr>お店です<wbr>（見本）。</p>
+      <ul class="worry-list"><li><a href="#m-chintai"><span class="wq">転勤が<wbr>決まって、<wbr>急いで<wbr>部屋を<wbr>探したい</span><span class="wgo" aria-hidden="true">›</span></a></li><li><a href="#m-baibai"><span class="wq">親の<wbr>家を<wbr>売るか貸すか<wbr>迷っている</span><span class="wgo" aria-hidden="true">›</span></a></li><li><a href="#m-kanri"><span class="wq">貸している<wbr>部屋の<wbr>入居者対応が<wbr>たいへん</span><span class="wgo" aria-hidden="true">›</span></a></li><li><a href="#m-akiya"><span class="wq">遠くの<wbr>実家が<wbr>空き家の<wbr>ままに<wbr>なっている</span><span class="wgo" aria-hidden="true">›</span></a></li></ul>
+      
     </div>
   </section>
   <section id="menu" class="sec menu">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>お手伝いできること</h2></div>
-      <p class="sec-lead center muted">どのご相談も、まずはお話から。</p>
-      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-chintai">賃貸</a><a href="#m-baibai">売買</a><a href="#m-kanri">管理</a><a href="#m-akiya">空き家・相続のご相談</a></nav>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>menu</i><h2>お手伝いできる<wbr>こと</h2></div>
+      <p class="sec-lead center muted">どの<wbr>ご相談も、<wbr>まずは<wbr>お話から。</p>
+      <nav class="menu-tabs" aria-label="メニューの種類"><a href="#m-chintai">賃貸</a><a href="#m-baibai">売買</a><a href="#m-kanri">管理</a><a href="#m-akiya">空き家・相続の<wbr>ご相談</a></nav>
       <div class="menu-cards n4">
         <article class="card" id="m-chintai">
           <div class="photo"><img src="images/menu-chintai.jpg" alt="賃貸のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
             <h3>賃貸</h3>
             
-            <p>お部屋探しと、貸したい方のご相談。</p>
-            <div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談を<wbr>LINEで相談</span></a>
+            <p>お部屋探しと、<wbr>貸したい方の<wbr>ご相談。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談をLINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-baibai">
@@ -354,9 +376,9 @@ p{margin:0 0 1.2em}
           <div class="card-body">
             <h3>売買</h3>
             
-            <p>家・土地を買いたい方、売りたい方のご相談。</p>
-            <div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談を<wbr>LINEで相談</span></a>
+            <p>家・土地を<wbr>買いたい方、<wbr>売りたい方の<wbr>ご相談。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談をLINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-kanri">
@@ -364,44 +386,44 @@ p{margin:0 0 1.2em}
           <div class="card-body">
             <h3>管理</h3>
             
-            <p>貸している家・アパートの管理をお引き受けします。</p>
-            <div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談を<wbr>LINEで相談</span></a>
+            <p>貸している<wbr>家・アパートの<wbr>管理を<wbr>お引き<wbr>受けします。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談をLINEで相談</span></a>
           </div>
         </article>
         <article class="card" id="m-akiya">
           <div class="photo"><img src="images/menu-akiya.jpg" alt="空き家・相続のご相談のイメージ写真" width="1000" height="750" loading="lazy"></div>
           <div class="card-body">
-            <h3>空き家・相続のご相談</h3>
+            <h3>空き家・相続の<wbr>ご相談</h3>
             
-            <p>遠くにある実家のことなど、まずはお話をお聞かせください。</p>
-            <div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>
-            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談を<wbr>LINEで相談</span></a>
+            <p>遠くに<wbr>ある<wbr>実家の<wbr>ことなど、<wbr>まずは<wbr>お話を<wbr>お聞かせ<wbr>ください。</p>
+            <div class="price"><span class="ask">料金は<wbr>お問い合わせ<wbr>ください</span></div>
+            <a class="ask-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg><span class="nw">この相談をLINEで相談</span></a>
           </div>
         </article>
       </div>
-      <p class="price-note muted center">費用は内容で変わります。先にお見積もりをお出しし、ご納得いただいてから進めます。</p>
+      <p class="price-note muted center">費用は<wbr>内容で<wbr>変わります。<wbr>先に<wbr>お見積もりを<wbr>お出しし、<wbr>ご納得いただいてから<wbr>進めます。</p>
     </div>
   </section>
   <section id="flow" class="sec flow">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>flow</i><h2>ご相談の流れ</h2></div>
-      <ol class="steps"><li><h3>ご相談</h3><p>ご希望と、いまの状況をお聞かせください。</p></li><li><h3>ご提案</h3><p>いくつかの方法と、かかる費用をお伝えします。</p></li><li><h3>ご案内・下見</h3><p>お部屋や土地を一緒に見に行きます。</p></li><li><h3>ご契約</h3><p>内容を一つずつ確かめてから、契約します。</p></li></ol>
+      <ol class="steps"><li><h3>ご相談</h3><p>ご希望と、<wbr>いまの<wbr>状況を<wbr>お聞かせ<wbr>ください。</p></li><li><h3>ご提案</h3><p>いく<wbr>つかの<wbr>方法と、<wbr>かかる<wbr>費用を<wbr>お伝えします。</p></li><li><h3>ご案内・下見</h3><p>お部屋や<wbr>土地を<wbr>一緒に<wbr>見に<wbr>行きます。</p></li><li><h3>ご契約</h3><p>内容を<wbr>一つ<wbr>ずつ<wbr>確かめてから、<wbr>契約します。</p></li></ol>
     </div>
   </section>
   <section id="reserve" class="sec reserve dark">
     <div class="wrap">
-      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご相談・お問い合わせ</h2></div>
-      <p class="muted center" style="margin-bottom:40px">ご相談は無料です。LINEかお電話でどうぞ。</p>
-      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、メッセージでご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は出られないことがあります。折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
+      <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>contact</i><h2>ご相談・<wbr>お問い合わせ</h2></div>
+      <p class="muted center" style="margin-bottom:40px">ご相談は<wbr>無料です。<wbr>LINEか<wbr>お電話で<wbr>どうぞ。</p>
+      <div class="ways n2"><div class="way"><h3>LINE</h3><p>友だち追加して、<wbr>メッセージで<wbr>ご相談ください。</p><a class="btn btn-line" href="#reserve"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.9c0 .3-.2 1 .9.5s5.9-3.5 8-6C21.4 14.3 22 12.7 22 11c0-4.4-4.5-8-10-8z"/></svg>友だち追加</a></div><div class="way"><h3>お電話</h3><p>作業中は<wbr>出られない<wbr>ことがあります。<wbr>折り返しご連絡いたします。</p><a class="tel" href="tel:0000000000">0000-00-0000</a></div></div>
       
     </div>
   </section>
   <section id="access" class="sec access">
     <div class="wrap nomap">
       <div>
-        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>そよかぜ不動産について</h2></div>
-        <dl class="info"><div><dt>店名</dt><dd>そよかぜ不動産</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>9:30〜18:00（見本）</dd></div><div><dt>定休日</dt><dd>水曜日（見本）</dd></div><div><dt>駐車場</dt><dd>3台（見本）</dd></div><div><dt>免許番号</dt><dd>〇〇県知事（0）第00000号（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
+        <div class="sec-head"><i><svg class="mk"><use href="#mk"/></svg>about</i><h2>そよかぜ<wbr>不動産に<wbr>ついて</h2></div>
+        <dl class="info"><div><dt>店名</dt><dd>そよかぜ<wbr>不動産</dd></div><div><dt>住所</dt><dd>〒000-0000 〇〇県〇〇市〇〇町1-2-3</dd></div><div><dt>営業時間</dt><dd>9:30〜18:00<wbr>（見本）</dd></div><div><dt>定休日</dt><dd>水曜日<wbr>（見本）</dd></div><div><dt>駐車場</dt><dd>3台（見本）</dd></div><div><dt>免許番号</dt><dd>〇〇県知事<wbr>（0）<wbr>第00000号<wbr>（見本）</dd></div><div><dt>電話</dt><dd><a href="tel:0000000000">0000-00-0000</a></dd></div></dl>
         
       </div>
       
@@ -410,20 +432,20 @@ p{margin:0 0 1.2em}
   <section id="faq" class="sec faq">
     <div class="wrap">
       <div class="sec-head center"><i><svg class="mk"><use href="#mk"/></svg>q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list"><details><summary><span class="q">Q</span><span>相談だけでも大丈夫ですか？</span></summary><p><span class="a">A</span><span>はい。決めるのはあとで大丈夫です。</span></p></details><details><summary><span class="q">Q</span><span>遠くにある実家のことも相談できますか？</span></summary><p><span class="a">A</span><span>はい。〇〇市とその周辺でしたら、様子を見に伺います（見本）。</span></p></details><details><summary><span class="q">Q</span><span>費用はいつかかりますか？</span></summary><p><span class="a">A</span><span>契約が決まってからです。先にお見積もりをお出しします。</span></p></details></div>
+      <div class="faq-list"><details><summary><span class="q">Q</span><span>相談だけでも<wbr>大丈夫ですか？</span></summary><p><span class="a">A</span><span>はい。<wbr>決めるのは<wbr>あとで<wbr>大丈夫です。</span></p></details><details><summary><span class="q">Q</span><span>遠くに<wbr>ある<wbr>実家の<wbr>ことも<wbr>相談できますか？</span></summary><p><span class="a">A</span><span>はい。<wbr>〇〇市と<wbr>その<wbr>周辺でしたら、<wbr>様子を<wbr>見に<wbr>伺います<wbr>（見本）。</span></p></details><details><summary><span class="q">Q</span><span>費用は<wbr>いつかかりますか？</span></summary><p><span class="a">A</span><span>契約が<wbr>決まってからです。<wbr>先に<wbr>お見積もりを<wbr>お出しします。</span></p></details></div>
     </div>
   </section>
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="fname">そよかぜ不動産</p>
+    <p class="fname">そよかぜ<wbr>不動産</p>
     <p>〒000-0000 〇〇県〇〇市〇〇町1-2-3</p>
-    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　9:30〜18:00（見本）</p>
-    <nav aria-label="フッター"><a href="#menu">お手伝いできること</a><a href="#flow">ご相談の流れ</a><a href="#access">そよかぜ不動産について</a><a href="#faq">よくある質問</a></nav>
-    <p class="copy">© そよかぜ不動産</p>
+    <p>TEL <a href="tel:0000000000">0000-00-0000</a>　／　9:30〜18:00<wbr>（見本）</p>
+    <nav aria-label="フッター"><a href="#worries">お悩みから<wbr>探す</a><a href="#menu">お手伝いできる<wbr>こと</a><a href="#flow">ご相談の流れ</a><a href="#access">そよかぜ<wbr>不動産に<wbr>ついて</a><a href="#faq">よくある質問</a></nav>
+    <p class="copy">© そよかぜ<wbr>不動産</p>
   </div>
 </footer>
-<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで相談</a><a class="r" href="#menu">メニュー</a></nav>
+<nav class="spbar n3" aria-label="ご予約・ご相談"><a href="tel:0000000000">電話する</a><a class="l" href="#reserve">LINEで<wbr>相談</a><a class="r" href="#menu">メニュー</a></nav>
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 // スマホのメニュー（開く・閉じる）と、上へ戻るボタン
@@ -451,6 +473,30 @@ p{margin:0 0 1.2em}
 })();
 </script>
 
+<!-- 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ、いちばん上に「確認用（まだ公開前です）」を出す。本番の住所では何もしない。元：liftoff-hp/tools/templates/preview_band.html（直すのはここだけ。make_site.py が読んで body の閉じタグの前に入れる。注釈に閉じタグの文字を書かない＝後から入れる道具が注釈の中に入れてしまうため・11/15） -->
+<script>
+(function () {
+  var h = String(window.location.hostname || '');
+  if (h.indexOf('preview-') !== 0) return;
+  if (document.getElementById('pv-band')) return;
+  var b = document.createElement('p');
+  b.id = 'pv-band';
+  b.setAttribute('role', 'note');
+  b.appendChild(document.createTextNode('確認用（まだ公開前です）'));
+  b.style.cssText = 'margin:0;padding:0 12px;height:34px;line-height:34px;background:#ffd54f;color:#3e2723;font-size:13px;font-weight:700;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;position:relative;z-index:60;border-bottom:1px solid #c8a415';
+  document.body.insertBefore(b, document.body.firstChild);
+  var hd = document.querySelector('header');
+  if (hd && window.getComputedStyle) {
+    var cs = window.getComputedStyle(hd);
+    if (cs.position === 'absolute') hd.style.top = ((parseFloat(cs.top) || 0) + 34) + 'px';
+  }
+  if (document.title.indexOf('【確認用】') !== 0) document.title = '【確認用】' + document.title;
+  var m = document.createElement('meta');
+  m.name = 'robots';
+  m.content = 'noindex';
+  document.getElementsByTagName('head')[0].appendChild(m);
+})();
+</script>
 <a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
 </body>
 </html>

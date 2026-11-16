@@ -1,4 +1,4 @@
-<!-- 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ、いちばん上に「確認用（まだ公開前です）」を出す。本番の住所では何もしない。元：liftoff-hp/tools/templates/preview_band.html（直すのはここだけ。make_site.py が読んで </body> の前に入れる） -->
+<!-- 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ、いちばん上に「確認用（まだ公開前です）」を出す。本番の住所では何もしない。元：liftoff-hp/tools/templates/preview_band.html（直すのはここだけ。make_site.py が読んで body の閉じタグの前に入れる。注釈に閉じタグの文字を書かない＝後から入れる道具が注釈の中に入れてしまうため・11/15） -->
 <script>
 (function () {
   var h = String(window.location.hostname || '');

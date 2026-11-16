@@ -56,12 +56,12 @@ SAMPLES={
   lead='〇〇市の工務店です。リフォーム・修理・小さな困りごとまで、下見をしてからお見積もりします。',
   title_place='〇〇市の工務店・リフォーム',description='〇〇市の工務店「森野工務店」のホームページです（デザイン見本・架空のお店）。',
   theme_base='fresh',theme=dict(primary='#c0662b',primary_deep='#a25422',accent='#2b5d8a',accent_soft='#c9d6e3',pale='#f4ece4',dark='#1d2a36',dark2='#283846',bg='#f6f4f0',bg2='#ece8e1',ink='#23282e',muted='#646a70',line='#dcd6cc'),
-  mark='dot',font='gothic',menu_title='お仕事の内容',menu_word='仕事',menu_lead='小さな修理からお受けしています。',
+  mark='dot',font='gothic',menu_title='お仕事の内容・料金の目安',menu_word='仕事',menu_lead='小さな修理からお受けしています。料金は見本の仮の金額です。',
   menu_note='料金は家の状態で変わります。下見のうえでお見積もりをお出しします。',
-  menus=[menu('mizu','水まわり','台所・お風呂・トイレ・洗面所の取りかえや修理。',icon=['faucet']),
-         menu('yane','外壁・屋根','ぬりかえ・雨もりの修理・とい の取りかえ。',icon=['roof']),
-         menu('naisou','内装','壁紙・床・建具・手すりの取りつけなど。',icon=['house']),
-         menu('shuuri','小さな修理','戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。',icon=['tools'])],
+  menus=[menu('mizu','水まわり','台所・お風呂・トイレ・洗面所の取りかえや修理。','33,000円〜','目安・税込（見本の仮の金額）',icon=['faucet']),
+         menu('yane','外壁・屋根','ぬりかえ・雨もりの修理・とい の取りかえ。','22,000円〜','目安・税込（見本の仮の金額）',icon=['roof']),
+         menu('naisou','内装','壁紙・床・建具・手すりの取りつけなど。','16,500円〜','目安・税込（見本の仮の金額）',icon=['house']),
+         menu('shuuri','小さな修理','戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。','5,500円〜','目安・税込（見本の仮の金額）',icon=['tools'])],
   flow_title='ご依頼の流れ',flow=[dict(title='ご相談',text='困っていることをお知らせください。'),dict(title='下見',text='おうちに伺って、様子を見せていただきます。'),dict(title='お見積もり',text='内容と金額をお出しします。決めるのはそのあとで。'),dict(title='工事',text='日程を決めて工事します。終わったら一緒に確かめます。')],
   hours='8:00〜18:00（見本）',holiday='日曜日（見本）',service_area='〇〇市とその周辺（見本）',
   reserve_title='ご相談・お見積もり',info_title='森野工務店について',reserve_lead='下見とお見積もりは無料です（見本）。',
@@ -303,6 +303,21 @@ PHOTOS={
 'studio':dict(layout='magazine',hero_style='light',photos=dict(hero='写真館/studio_hero.jpg',**{'753':'写真館/studio_753.jpg'},seijin='写真館/studio_seijin.jpg',family='写真館/studio_family.jpg',shoumei='写真館/studio_shoumei.jpg')),
 }
 for _k,_v in PHOTOS.items(): SAMPLES[_k].update(_v)
+
+# 悩みの言葉の入口（2026/11/15 弱点表 3。手本でいちばん多い型。押すとメニューの該当箇所へ。効き目を言い切る言葉は使わない）
+WORRIES={
+'reform':dict(lead='どこに頼めばいいか分からないことから、お聞きします。',items=[
+  dict(text='台所の水がぽたぽた止まらない',to='mizu'),dict(text='雨の日に天井にしみが出てきた',to='yane'),
+  dict(text='壁紙のはがれや床のきしみが気になる',to='naisou'),dict(text='戸が重い・網戸が破れた。1か所だけでも頼める？',to='shuuri')],
+  note='どれに当たるか分からなくても大丈夫です（見本）。'),
+'hair':dict(lead='言葉にしにくいことも、そのままどうぞ。',items=[
+  dict(text='くせが出て、朝まとまらない',to='cut'),dict(text='白髪を目立ちにくくしたい',to='color'),
+  dict(text='ふんわりした形を手入れ少なめで',to='perm'),dict(text='ひとりでゆっくり過ごす時間がほしい',to='spa')]),
+'estate':dict(lead='「まだ決めていない」段階のご相談も多いお店です（見本）。',items=[
+  dict(text='転勤が決まって、急いで部屋を探したい',to='chintai'),dict(text='親の家を売るか貸すか迷っている',to='baibai'),
+  dict(text='貸している部屋の入居者対応がたいへん',to='kanri'),dict(text='遠くの実家が空き家のままになっている',to='akiya')]),
+}
+for _k,_v in WORRIES.items(): SAMPLES[_k]['c'].setdefault('parts',{})['worries']=_v
 def photo(src,dst,w,h=None,maxh=1600):
     """写真を書き出す（向きを直す・位置情報などを消す・大きさをそろえる）。h があればその比で真ん中を切ってから縮める"""
     from PIL import Image, ImageOps
@@ -366,6 +381,7 @@ for d in only:
     s=re.sub(r'href="(#[^"]*)" target="_blank" rel="noopener"', r'href="\1"', s)
     s=s.replace('<title>','<title>【見本】',1)
     s=s.replace('</style>',MIHON_CSS+'</style>',1)
+    assert s.count('</body>')==1, f'{d}: </body> が {s.count("</body>")} 個（注釈の中にもあると、もどるボタンが注釈に入って消える。11/15）'
     s=s.replace('</body>','<a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>\n</body>',1)
     open(p,'w',encoding='utf-8').write(s)
     for f in ('index.old.html',):

@@ -9,6 +9,7 @@ make_site.py の部品（belt・compare・calc・cases・form・shop）に、小
   notice      … ページの最上部の細い帯（臨時休業・繁忙期など）。1行
   credentials … 実績・資格の帯（「全国大会3位」「創業〇年」など。写真がなくても信頼が出る）
   strengths   … 選ばれる理由（番号つきカード 2〜4）
+  worries     … 悩みの言葉の入口（「こんなお悩みはありませんか」。押すと該当のメニューへ飛ぶ。2〜6。2026/11/15）
   news        … お知らせの一覧（日付つき。月の更新の成果が見える）
   voices      … お客様の声（本物だけ。consent: true が要る＝掲載の了承）
   hours       … 営業時間（受付時間）の表と「いま営業中／時間外」の表示（JS）
@@ -18,7 +19,7 @@ make_site.py の部品（belt・compare・calc・cases・form・shop）に、小
 """
 import re, json, html
 
-NAMES = ['notice', 'credentials', 'strengths', 'news', 'voices', 'hours', 'areas', 'video', 'lightbox']
+NAMES = ['notice', 'credentials', 'worries', 'strengths', 'news', 'voices', 'hours', 'areas', 'video', 'lightbox']
 DAYS = [('mon', '月'), ('tue', '火'), ('wed', '水'), ('thu', '木'), ('fri', '金'), ('sat', '土'), ('sun', '日')]
 
 
@@ -51,6 +52,10 @@ def validate(P, c):
         P['credentials']['items'] = [i for i in (P['credentials'].get('items') or []) if i.get('value') and i.get('label')]
         if not P['credentials']['items']:
             drop('credentials', '項目（items の value と label）がない')
+    if 'worries' in P:
+        P['worries']['items'] = [i for i in (P['worries'].get('items') or []) if str(i.get('text') or '').strip()]
+        if not P['worries']['items']:
+            drop('worries', '悩みの言葉（items の text）がない')
     if 'strengths' in P:
         P['strengths']['items'] = [i for i in (P['strengths'].get('items') or []) if i.get('title')]
         if not P['strengths']['items']:
@@ -89,7 +94,7 @@ def validate(P, c):
 # ---------- 画面（HTML） ----------
 def render(x):
     P = x['P']
-    out = {k: '' for k in ('notice', 'credentials', 'strengths', 'news', 'voices', 'hours', 'areas', 'video')}
+    out = {k: '' for k in ('notice', 'credentials', 'worries', 'strengths', 'news', 'voices', 'hours', 'areas', 'video')}
 
     if 'notice' in P:
         p = P['notice']
@@ -106,6 +111,25 @@ def render(x):
         out['credentials'] = f'''
   <section class="cred" aria-label="{e(p.get("title", "実績・資格"))}">
     <div class="wrap"><ul class="cred-list n{len(its)}">{lis}</ul></div>
+  </section>'''
+
+    if 'worries' in P:  # 悩みの言葉の入口（2026/11/15 弱点表 3）：相手の言葉で入口を作り、押すとメニューの該当箇所へ。to が無い項目は「メニューを見る」へ
+        p = P['worries']
+        its = p['items'][:6]
+        lis = ''
+        for i in its:
+            to = str(i.get('to') or '').strip().lstrip('#')
+            href = '#m-' + e(to) if to else '#menu'
+            sub = f'<small>{e(i["note"])}</small>' if i.get('note') else ''
+            lis += f'<li><a href="{href}"><span class="wq">{e(i["text"])}</span>{sub}<span class="wgo" aria-hidden="true">›</span></a></li>'
+        out['worries'] = f'''
+  <section id="worries" class="sec worry-sec">
+    <div class="wrap">
+      {_head(x, p.get("eyebrow", "worries"), p.get("title", "こんなお悩みはありませんか"))}
+      {_lead(p)}
+      <ul class="worry-list">{lis}</ul>
+      {f'<p class="worry-note muted center">{e(p["note"])}</p>' if p.get('note') else ''}
+    </div>
   </section>'''
 
     if 'strengths' in P:
@@ -250,6 +274,16 @@ CSS = {
 .cl{display:block;font-size:.88rem;line-height:1.7;letter-spacing:.1em}
 .cred-list small{display:block;font-size:.76rem;color:var(--muted);line-height:1.6;margin-top:2px}
 @media (max-width:640px){.cred{padding:22px 0}.cred-list,.cred-list.n3,.cred-list.n4{grid-template-columns:1fr 1fr}.cred-list li:nth-child(odd){border-left:0}.cred-list li:last-child:nth-child(odd){grid-column:1 / -1}.cv{font-size:1.6rem}}''',
+'worries': r'''/* 部品：悩みの言葉の入口（2026/11/15） */
+.worry-sec{background:var(--bg2)}
+.worry-list{list-style:none;margin:0 auto;padding:0;max-width:760px;display:grid;grid-template-columns:1fr 1fr;grid-gap:12px;gap:12px}
+.worry-list a{display:block;position:relative;background:#fff;border-radius:var(--r);padding:16px 40px 16px 20px;color:var(--ink);text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.05);line-height:1.7;min-height:44px}
+.worry-list .wq{display:block;font-weight:500}
+.worry-list small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.worry-list .wgo{position:absolute;right:16px;top:50%;margin-top:-.8em;font-size:1.3rem;line-height:1.6;color:var(--primary)}
+.worry-list a:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.worry-note{margin-top:18px;font-size:.86rem}
+@media (max-width:640px){.worry-list{grid-template-columns:1fr}}''',
 'strengths': r'''/* 部品：選ばれる理由 */
 .why{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);grid-gap:22px;gap:22px}
 .why.n2,.why.n4{grid-template-columns:repeat(2,1fr)}

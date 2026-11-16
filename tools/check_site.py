@@ -194,6 +194,12 @@ def check_card_v(src, rel):
     js = re.search(r"replaceState\([^<]*?'v=(\d+)'", src)
     can = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', src) or re.search(r'<link[^>]+href=["\']([^"\']+)["\'][^>]+rel=["\']canonical["\']', src)
     ogu = re.search(r'property=["\']og:url["\'][^>]+content=["\']([^"\']+)', src)
+    # 案A（2026/11/15）：アドレスバーから ?v= を消す JS のときは、JS に番号を持たない。canonical と og:url の2か所がそろっていればよい
+    if not js and re.search(r"アドレスバーから \?v= を消す", src) and re.search(r"replaceState\(", src):
+        cv, ov = (v_of(can.group(1)) if can else None), (v_of(ogu.group(1)) if ogu else None)
+        if not cv or not ov or cv != ov:
+            add('❌', 'カード', f'{rel}：LINE のカードの番号（?v=）が canonical・og:url でそろっていません → canonical v={cv}／og:url v={ov}（アドレスバーからは消す形。マニュアル 17）'); return
+        add('✅', 'カード', f'{rel}：LINE のカードの番号 ?v={cv}（canonical・og:url でそろっています。アドレスバーからは消す形）'); return
     got = {'アドレスバーの JS': js.group(1) if js else None, 'canonical': v_of(can.group(1)) if can else None, 'og:url': v_of(ogu.group(1)) if ogu else None}
     if not any(got.values()):
         add('⚠️', 'カード', f'{rel}：LINE のカードの番号（?v=）のしくみが入っていません（canonical・og:url・アドレスバーの JS。マニュアル 17）'); return
