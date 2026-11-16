@@ -309,14 +309,14 @@ WORRIES={
 'reform':dict(lead='どこに頼めばいいか分からないことから、お聞きします。',items=[
   dict(text='台所の水がぽたぽた止まらない',to='mizu'),dict(text='雨の日に天井にしみが出てきた',to='yane'),
   dict(text='壁紙のはがれや床のきしみが気になる',to='naisou'),dict(text='戸が重い・網戸が破れた。1か所だけでも頼める？',to='shuuri')],
-  note='どれに当たるか分からなくても大丈夫です。押すと、合う仕事の内容に移ります。'),
+  note='どれに当たるか分からないときは、そのままLINEでどうぞ。押すと、合う仕事の内容に移ります。'),
 'hair':dict(lead='言葉にしにくいことも、そのままどうぞ。',items=[
   dict(text='くせが出て、朝まとまらない',to='cut'),dict(text='白髪を目立ちにくくしたい',to='color'),
   dict(text='手入れが少なくてすむ、ふんわりした髪にしたい',to='perm'),dict(text='頭皮をほぐして、ゆっくりしたい',to='spa')],
   note='押すと、合うメニューに移ります。'),
 'estate':dict(lead='まだ決めていない段階でも、どうぞ。',items=[
   dict(text='転勤が決まって、急いで部屋を探したい',to='chintai'),dict(text='親の家を売るか貸すか迷っている',to='akiya'),
-  dict(text='貸している部屋の、借りている人とのやりとりがたいへん',to='kanri'),dict(text='遠くの実家が空き家のままになっている',to='akiya')],
+  dict(text='貸している部屋で、借りている人とのやりとりがたいへん',to='kanri'),dict(text='遠くの実家が空き家のままになっている',to='akiya')],
   note='押すと、合うご相談の内容に移ります。'),
 }
 for _k,_v in WORRIES.items(): SAMPLES[_k]['c'].setdefault('parts',{})['worries']=_v
