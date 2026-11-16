@@ -22,7 +22,7 @@ except ImportError:
 P = budoux.load_default_japanese_parser()
 SKIP = ('script', 'style', 'title', 'textarea', 'option', 'svg', 'head', 'noscript')
 # BudouX が間に切れ目を入れてしまう言葉（見つけたら足す）
-KEEP = ['よもぎ', 'ホームページ', 'Googleマップ', '目立ちにくく', 'ぽたぽた', 'はがれ']  # 11/17 見本の悩みの文で切れた3つを足した
+KEEP = ['よもぎ', 'ホームページ', 'Googleマップ', '目立ちにくく', 'ぽたぽた', 'はがれ', 'しにくい', 'ほぐして']  # 11/17 見本の悩みの文で切れた言葉を足した
 JA = re.compile(r'[぀-ヿ㐀-鿿]')
 
 

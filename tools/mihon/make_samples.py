@@ -56,12 +56,12 @@ SAMPLES={
   lead='〇〇市の工務店です。リフォーム・修理・小さな困りごとまで、下見をしてからお見積もりします。',
   title_place='〇〇市の工務店・リフォーム',description='〇〇市の工務店「森野工務店」のホームページです（デザイン見本・架空のお店）。',
   theme_base='fresh',theme=dict(primary='#c0662b',primary_deep='#a25422',accent='#2b5d8a',accent_soft='#c9d6e3',pale='#f4ece4',dark='#1d2a36',dark2='#283846',bg='#f6f4f0',bg2='#ece8e1',ink='#23282e',muted='#646a70',line='#dcd6cc'),
-  mark='dot',font='gothic',menu_title='お仕事の内容・料金の目安',menu_word='仕事',menu_lead='小さな修理からお受けしています。料金は見本の仮の金額です。',
+  mark='dot',font='gothic',menu_title='お仕事の内容・料金の目安',menu_word='仕事',menu_lead='小さな修理からお受けしています。料金は見本の仮の金額で、下見のうえでお見積もりをお出しします。',
   menu_note='料金は家の状態で変わります。下見のうえでお見積もりをお出しします。',
-  menus=[menu('mizu','水まわり','台所・お風呂・トイレ・洗面所の取りかえや修理。','33,000円〜','目安・税込（見本の仮の金額）',icon=['faucet']),
-         menu('yane','外壁・屋根','ぬりかえ・雨もりの修理・とい の取りかえ。','22,000円〜','目安・税込（見本の仮の金額）',icon=['roof']),
-         menu('naisou','内装','壁紙・床・建具・手すりの取りつけなど。','16,500円〜','目安・税込（見本の仮の金額）',icon=['house']),
-         menu('shuuri','小さな修理','戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。','5,500円〜','目安・税込（見本の仮の金額）',icon=['tools'])],
+  menus=[menu('mizu','水まわり','台所・お風呂・トイレ・洗面所の取りかえや修理。','33,000円〜','税込の目安（見本の仮の金額）',icon=['faucet']),
+         menu('yane','外壁・屋根','雨もりの部分修理・雨どいの取りかえ・ぬりかえ。','22,000円〜','税込の目安（見本の仮の金額）',icon=['roof']),
+         menu('naisou','内装','壁紙・床・建具（戸・ふすま）・手すりの取りつけなど。','16,500円〜','税込の目安（見本の仮の金額）',icon=['house']),
+         menu('shuuri','小さな修理','戸のたてつけ・網戸の張りかえなど、1か所からどうぞ。','5,500円〜','税込の目安（見本の仮の金額）',icon=['tools'])],
   flow_title='ご依頼の流れ',flow=[dict(title='ご相談',text='困っていることをお知らせください。'),dict(title='下見',text='おうちに伺って、様子を見せていただきます。'),dict(title='お見積もり',text='内容と金額をお出しします。決めるのはそのあとで。'),dict(title='工事',text='日程を決めて工事します。終わったら一緒に確かめます。')],
   hours='8:00〜18:00（見本）',holiday='日曜日（見本）',service_area='〇〇市とその周辺（見本）',
   reserve_title='ご相談・お見積もり',info_title='森野工務店について',reserve_lead='下見とお見積もりは無料です（見本）。',
@@ -309,13 +309,15 @@ WORRIES={
 'reform':dict(lead='どこに頼めばいいか分からないことから、お聞きします。',items=[
   dict(text='台所の水がぽたぽた止まらない',to='mizu'),dict(text='雨の日に天井にしみが出てきた',to='yane'),
   dict(text='壁紙のはがれや床のきしみが気になる',to='naisou'),dict(text='戸が重い・網戸が破れた。1か所だけでも頼める？',to='shuuri')],
-  note='どれに当たるか分からなくても大丈夫です（見本）。'),
+  note='どれに当たるか分からなくても大丈夫です。押すと、合う仕事の内容に移ります。'),
 'hair':dict(lead='言葉にしにくいことも、そのままどうぞ。',items=[
   dict(text='くせが出て、朝まとまらない',to='cut'),dict(text='白髪を目立ちにくくしたい',to='color'),
-  dict(text='ふんわりした形を手入れ少なめで',to='perm'),dict(text='ひとりでゆっくり過ごす時間がほしい',to='spa')]),
-'estate':dict(lead='「まだ決めていない」段階のご相談も多いお店です（見本）。',items=[
-  dict(text='転勤が決まって、急いで部屋を探したい',to='chintai'),dict(text='親の家を売るか貸すか迷っている',to='baibai'),
-  dict(text='貸している部屋の入居者対応がたいへん',to='kanri'),dict(text='遠くの実家が空き家のままになっている',to='akiya')]),
+  dict(text='手入れが少なくてすむ、ふんわりした髪にしたい',to='perm'),dict(text='頭皮をほぐして、ゆっくりしたい',to='spa')],
+  note='押すと、合うメニューに移ります。'),
+'estate':dict(lead='まだ決めていない段階でも、どうぞ。',items=[
+  dict(text='転勤が決まって、急いで部屋を探したい',to='chintai'),dict(text='親の家を売るか貸すか迷っている',to='akiya'),
+  dict(text='貸している部屋の、借りている人とのやりとりがたいへん',to='kanri'),dict(text='遠くの実家が空き家のままになっている',to='akiya')],
+  note='押すと、合うご相談の内容に移ります。'),
 }
 for _k,_v in WORRIES.items(): SAMPLES[_k]['c'].setdefault('parts',{})['worries']=_v
 def photo(src,dst,w,h=None,maxh=1600):
