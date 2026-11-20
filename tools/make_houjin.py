@@ -135,6 +135,8 @@ class Site:
         if 'contact' in self.P: bar.append(f'<a class="c" href="{r}contact/">お問い合わせ</a>')
         elif c.get('line_url'): bar.append(f'<a class="c" {ms.ext(c["line_url"])}>LINEで相談</a>')
         spbar = f'<nav class="spbar n{len(bar)}" aria-label="お問い合わせ">{"".join(bar)}</nav>' if bar else ''
+        # 制作者の行（© の下の1行。設定に credit_url があるときだけ。押すと自社サイトへ。2026/11/20）
+        credit = f'<p class="credit">制作：<a {ms.ext(c["credit_url"])}>Lift-Off（山口県防府市）</a></p>' if c.get('credit_url') else ''
         return f'''<!DOCTYPE html>
 <html lang="ja" class="no-js">
 <head>
@@ -181,6 +183,7 @@ class Site:
       <nav aria-label="フッター2">{foot_nav2}</nav>
     </div>
     <p class="copy">© {e(c.get('copyright', self.name))}</p>
+    {credit}
   </div>
 </footer>
 {spbar}
@@ -1072,6 +1075,9 @@ p{margin:0 0 1.1em}
 .foot nav a:hover{color:#fff;opacity:1}
 .foot .lic{font-size:.8rem;opacity:.85}
 .foot .copy{font-family:var(--latin);opacity:.6;margin:30px 0 0;font-size:.8rem;border-top:1px solid rgba(255,255,255,.14);padding-top:18px}
+.foot .credit{opacity:.6;margin:6px 0 0;font-size:.78rem}
+.foot .credit a{color:inherit;text-decoration:underline}
+.foot .credit a:hover{color:#fff}
 .foot p{margin:0 0 6px}
 @media (max-width:860px){.foot .cols{grid-template-columns:1fr 1fr}.foot .cols > div:first-child{grid-column:1 / -1}}
 /* スマホの下の固定ボタン・上へ */

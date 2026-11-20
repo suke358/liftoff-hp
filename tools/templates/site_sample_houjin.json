@@ -16,6 +16,7 @@
  "map_query": "",
  "founded": "",
  "licenses": ["建設業許可 〇〇県知事 許可（般-0）第00000号（見本）"],
+ "credit_url": "https://liftoff-hp.liftoff-358.workers.dev/",
  "hero": {"eyebrow": "Piping & Pump Systems", "catch_html": "水と設備を、<br>止めない。", "lead": "工場・公共施設の配管工事とポンプ設備の据付・保守（見本）。"},
  "trust": [{"value": "19〇〇", "unit": "年", "label": "創業"}, {"value": "〇〇", "unit": "件", "label": "施工実績"}, {"value": "〇", "unit": "名", "label": "有資格者"}],
  "about": {"title": "図面から据付、点検まで。\n一社で引き受けます。", "text": ["（会社の紹介を2〜3文で。見本）"]},
