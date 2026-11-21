@@ -502,7 +502,10 @@ def build(c):
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
             css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.22)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
                             OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.25)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
-    if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
+    if P:
+        pk = [k for k in PART_ORDER if k in P]
+        if 'events' in P and 'notice' not in pk: pk.insert(0, 'notice')  # events が最上部に出す「次のライブ」の帯は notice の見た目を使う（最後のテスト・バー 2026/11/22）
+        css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in pk)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
@@ -550,7 +553,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{xp["credentials"]}{xp["worries"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{xp["events"]}{xp["credentials"]}{xp["worries"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -1572,6 +1575,7 @@ PHOTO_WORDS = {
     'まつげ': ['lash'], 'パーマ': ['perm'], 'カット': ['cut'], 'カラー': ['color'], 'トリートメント': ['treat'], 'ヘッドスパ': ['spa', 'head'],
     'よもぎ': ['yomogi', 'steam'], '脱毛': ['datsumou', 'removal', 'smooth'], 'フェイシャル': ['facial', 'face'], 'ボディ': ['body'], '整体': ['seitai', 'massage'], '骨盤': ['pelvis', 'kotsuban'],
     'パン': ['bread', 'pan'], 'コーヒー': ['coffee'], 'ケーキ': ['cake', 'sweet'], 'ランチ': ['lunch', 'plate'], 'モーニング': ['morning', 'toast'],
+    'ジントニック': ['gin', 'tonic', 'cocktail'], 'カクテル': ['cocktail'], 'ウイスキー': ['whisk'], 'ビール': ['beer'], 'ワイン': ['wine'], 'おつまみ': ['food', 'snack', 'plate'], 'ライブ': ['live', 'stage', 'drums', 'music'],
     'リフォーム': ['reform', 'renov'], 'キッチン': ['kitchen'], '外壁': ['wall', 'exterior'], '屋根': ['roof'], '水回り': ['bath', 'sink'],
     '英会話': ['english', 'eikaiwa'], '学習': ['study', 'desk'], '車検': ['shaken', 'inspection'], '整備': ['repair', 'engine'], 'トリミング': ['trim', 'dog'], 'シャンプー': ['shampoo'],
 }
@@ -1817,6 +1821,16 @@ def fill_photos(c, outdir):
             bp['items'] = []
             for src in avail2[:6]:
                 it = {}; put2(it, src, '写真の帯', (c.get('short_name') or c['name']) + 'の写真', 4 / 3); bp['items'].append(it)
+    ev = P.get('events') or {}
+    import datetime as _dt
+    _today = (_dt.datetime.utcnow() + _dt.timedelta(hours=9)).date().isoformat()
+    _up = sorted([it for it in ev.get('items', []) if str(it.get('date') or '') >= _today], key=lambda it: str(it.get('date')))
+    need_ev = [it for it in _up[:1] if missing(it)]  # 写真が出るのは「次のイベント」だけなので、いちばん近い 1 件だけ入れる
+    if need_ev:  # イベントの写真（ライブの素材 live・stage を先に。最後のテスト「バー」2026/11/22）
+        avail2 = [p for p in rest if p[0] not in used]
+        pseudo = [dict(name=(it.get('title') or '') + ' ライブ', _ref=it) for it in need_ev]
+        for mm, src, how in match_menus(pseudo, avail2):
+            put2(mm['_ref'], src, 'イベント「' + mm['_ref'].get('title', '') + '」' + ('' if how == '順' else '（' + how + '）'), mm['_ref'].get('title', ''), 3 / 2)
     # 後半の区画（about・flow・reserve）：残った素材から。名前に hands・back・work・tool の付く「人の気配」の写真を先に（顔の出ない手元・後ろ姿。2026/11/22 本人の決め）。足りなければ入れない（止めない）
     if sec_slots:
         left = [p for p in rest if p[0] not in used]

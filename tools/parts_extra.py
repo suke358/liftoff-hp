@@ -16,10 +16,13 @@ make_site.py の部品（belt・compare・calc・cases・form・shop）に、小
   areas       … 対応エリア（市町の札）
   video       … 動画（YouTube。押したときだけ読み込む＝ページが重くならない）
   lightbox    … 写真をタップすると大きく見られる（帯・施工例・メニューの写真。設定は true だけ）
+  events      … ライブ・イベントの日（2026/11/22 最後のテスト「バー」）：次のイベントを大きく1つ＋これからの一覧（3件まで。終わった日は作るときに外し、開いたときも JS で下げる）＋
+                「この日は通常営業はお休み（貸し切り）」の一言＋「チケットを申し込む」→ 取り置きの申し込み（名前・枚数・連絡先。ticket.demo:true なら送らずに見本の文を出す。お金は動かさない）。
+                お知らせの帯（notice）が無ければ、次のイベントの帯を最上部に自動で出す（最初の画面から1回で見つかるように）
 """
 import re, json, html
 
-NAMES = ['notice', 'credentials', 'worries', 'strengths', 'news', 'voices', 'hours', 'areas', 'video', 'lightbox']
+NAMES = ['notice', 'credentials', 'worries', 'strengths', 'events', 'news', 'voices', 'hours', 'areas', 'video', 'lightbox']
 DAYS = [('mon', '月'), ('tue', '火'), ('wed', '水'), ('thu', '木'), ('fri', '金'), ('sat', '土'), ('sun', '日')]
 
 
@@ -60,6 +63,23 @@ def validate(P, c):
         P['strengths']['items'] = [i for i in (P['strengths'].get('items') or []) if i.get('title')]
         if not P['strengths']['items']:
             drop('strengths', '項目（items の title）がない')
+    if 'events' in P:
+        import datetime as _dt
+        today = (_dt.datetime.utcnow() + _dt.timedelta(hours=9)).date()
+        its = []
+        for i in (P['events'].get('items') or []):
+            iso = _iso(i.get('date'))
+            if not (iso and i.get('title')):
+                print('⚠️ events：日付（date）か題名（title）の無い項目は入れません：', i.get('title') or i.get('date')); continue
+            try: d = _dt.date.fromisoformat(iso)
+            except ValueError: print('⚠️ events：日付の書き方が違います（例 2026-11-29）：', i.get('date')); continue
+            if d < today: continue  # 終わったイベントは作るときに外す
+            i['_iso'] = iso; i['_wd'] = '月火水木金土日'[d.weekday()]; i['_md'] = f'{d.month}/{d.day}'
+            its.append(i)
+        its.sort(key=lambda i: i['_iso'])
+        P['events']['items'] = its[:int(P['events'].get('limit', 3))]
+        if not its:
+            drop('events', 'これからのイベント（items の date と title。今日以降）がない')
     if 'news' in P:
         P['news']['items'] = [i for i in (P['news'].get('items') or []) if i.get('text')]
         if not P['news']['items']:
@@ -94,7 +114,7 @@ def validate(P, c):
 # ---------- 画面（HTML） ----------
 def render(x):
     P = x['P']
-    out = {k: '' for k in ('notice', 'credentials', 'worries', 'strengths', 'news', 'voices', 'hours', 'areas', 'video')}
+    out = {k: '' for k in ('notice', 'credentials', 'worries', 'strengths', 'events', 'news', 'voices', 'hours', 'areas', 'video')}
 
     if 'notice' in P:
         p = P['notice']
@@ -147,6 +167,67 @@ def render(x):
       <ol class="why n{len(its)}">{cards}</ol>
     </div>
   </section>'''
+
+    if 'events' in P:
+        p = P['events']
+        its = p['items']
+        tk = p.get('ticket') if isinstance(p.get('ticket'), dict) else {}
+        btn_label = tk.get('button', 'チケットを<wbr>申し込む')
+        def meta(i):
+            tm = ' / '.join(x for x in ((('開場 ' + str(i["open"])) if i.get('open') else ''), (('開演 ' + str(i["start"])) if i.get('start') else '')) if x)
+            rows = [('出演', i.get('act')), ('時間', tm), ('料金', i.get('price'))]
+            return ''.join('<div><dt>' + e(k) + '</dt><dd>' + e(v) + '</dd></div>' for k, v in rows if v)
+        nx = its[0]
+        img = ('<div class="ev-photo"><img src="' + e(nx["image"]) + '" alt="' + e(nx.get("alt") or nx["title"]) + '" width="' + str(nx.get("w", 1200)) + '" height="' + str(nx.get("h", 800)) + '" loading="lazy"></div>') if nx.get('image') else ''
+        text_p = ('<p class="ev-text">' + e(nx["text"]) + '</p>') if nx.get('text') else ''
+        nlabel, ntitle = e(p.get('next_label', '次のイベント')), e(nx['title'])
+        feature = f'''
+      <article class="ev-next" data-date="{nx['_iso']}">
+        {img}<div class="ev-body">
+          <p class="ev-label">{nlabel}</p>
+          <p class="ev-date"><time datetime="{nx['_iso']}">{nx['_md']}</time><span class="ev-wd">（{nx['_wd']}）</span></p>
+          <h3>{ntitle}</h3>
+          <dl class="ev-meta">{meta(nx)}</dl>
+          {text_p}
+          <a class="btn btn-main ev-btn" href="#ticket">{btn_label}</a>
+        </div>
+      </article>'''
+        lis = ''
+        for i in its:
+            act = ('<span>' + e(i["act"]) + '</span>') if i.get('act') else ''
+            sub = e(' / '.join(x for x in ((('開演 ' + str(i["start"])) if i.get('start') else ''), (i.get('price') or '')) if x))
+            lis += '<li data-date="' + i["_iso"] + '"><time datetime="' + i["_iso"] + '">' + i["_md"] + '<small>（' + i["_wd"] + '）</small></time><span class="ev-t"><b>' + e(i["title"]) + '</b>' + act + '</span><span class="ev-s">' + sub + '</span></li>'
+        closed = '<p class="ev-closed"><b>' + e(p.get("closed_label", "イベントの日の営業")) + '</b>' + e(p.get("closed_note", "イベントの日は通常営業をお休みし、会場として貸し切りになります。")) + '</p>'
+        opts = ''.join('<option value="' + e(i["_md"] + "（" + i["_wd"] + "）" + i["title"]) + '">' + e(i["_md"]) + '（' + i["_wd"] + '）' + e(i["title"]) + '</option>' for i in its)
+        demo = tk.get('demo', True)
+        form_attr = 'action="#ticket" method="post" data-demo="1"' if demo else 'action="' + e(tk.get("endpoint", "")) + '" method="POST"'
+        t_title, t_lead, t_submit, t_note = e(tk.get('title', 'チケットの取り置き')), e(tk.get('lead', 'お名前と枚数を送っていただくと、当日の受付でお取り置きします。お支払いは当日、受付でお願いします。')), e(tk.get('submit', 'この内容で取り置きを申し込む')), e(tk.get('note', 'お金はこの画面では動きません。当日、受付でお支払いください。'))
+        ticket = f'''
+      <div class="ev-ticket" id="ticket">
+        <h3>{t_title}</h3>
+        <p class="muted">{t_lead}</p>
+        <form class="ev-form" {form_attr} novalidate>
+          <label><span>イベント</span><select name="イベント">{opts}</select></label>
+          <label><span>お名前<i class="req">必須</i></span><input name="お名前" required autocomplete="name"></label>
+          <label><span>枚数</span><select name="枚数"><option>1枚</option><option>2枚</option><option>3枚</option><option>4枚</option></select></label>
+          <label><span>ご連絡先（電話番号かメール）<i class="req">必須</i></span><input name="ご連絡先" required autocomplete="tel" placeholder="例：090-0000-0000"></label>
+          <button type="submit" class="btn btn-main">{t_submit}</button>
+          <p class="ev-note muted" id="ev-form-note" role="status">{t_note}</p>
+        </form>
+      </div>'''
+        head_html, lead_html = _head(x, p.get("eyebrow", "live"), p.get("title", "ライブ・イベント")), _lead(p)
+        out['events'] = f'''
+  <section id="events" class="sec event-sec">
+    <div class="wrap">
+      {head_html}
+      {lead_html}
+      {feature}
+      <ul class="ev-list" aria-label="これからのイベント">{lis}</ul>
+      {closed}{ticket}
+    </div>
+  </section>'''
+        if 'notice' not in P:  # 次のイベントの帯を最上部に（最初の画面から1回で見つかるように）
+            out['notice'] = '<p class="notice notice-ev" role="note"><a href="#events"><b>' + e(p.get("band_label", "次のライブ")) + '</b><span>' + nx["_md"] + '（' + nx["_wd"] + '）' + e(nx["title"]) + '</span><i>' + e(p.get("band_link", "くわしく")) + ' ›</i></a></p>'  # 帯ぜんぶが押せる（スマホで文が切れても押せるように）
 
     if 'news' in P:
         p = P['news']
@@ -260,6 +341,8 @@ CSS = {
 .notice{margin:0;padding:0 16px;height:34px;line-height:34px;background:var(--primary-deep);color:#fff;font-size:.8rem;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .notice b{display:inline-block;margin-right:.8em;font-weight:500;line-height:1.5;border:1px solid rgba(255,255,255,.6);border-radius:999px;padding:0 .8em}
 .notice a{color:#fff;margin-left:.8em}
+.notice-ev a{display:block;color:#fff;text-decoration:none;margin:0}
+.notice-ev i{font-style:normal;margin-left:.8em;text-decoration:underline;text-underline-offset:.2em}
 .notice ~ .head{top:34px}
 .sample-note ~ .notice ~ .head{top:68px}''',
 'credentials': r'''/* 部品：実績・資格の帯 */
@@ -292,6 +375,42 @@ CSS = {
 .why h3{font-size:1.15rem;letter-spacing:.1em;margin-bottom:8px}
 .why p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.95}
 @media (max-width:760px){.why,.why.n2,.why.n4{grid-template-columns:1fr}}''',
+'events': r'''/* 部品：ライブ・イベントの日（2026/11/22） */
+.event-sec{background:var(--bg2)}
+.ev-next{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-gap:0;gap:0;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08);max-width:1000px;margin:0 auto}
+.ev-photo{min-height:260px;background:var(--dark)}
+.ev-photo img{display:block;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.ev-body{padding:30px 30px 28px}
+.ev-label{display:inline-block;margin:0 0 8px;font-size:.78rem;letter-spacing:.2em;color:#fff;background:var(--primary);border-radius:999px;padding:.15em 1em;line-height:1.9}
+.ev-date{margin:0;font-family:var(--latin);font-size:2.4rem;line-height:1.1;color:var(--primary-deep);letter-spacing:.04em}
+.ev-date .ev-wd{font-family:var(--head);font-size:1rem;margin-left:.2em;color:var(--muted)}
+.ev-next h3{font-size:1.4rem;letter-spacing:.1em;margin:10px 0 12px;font-family:var(--hand);font-weight:400}
+.ev-meta{margin:0 0 14px}
+.ev-meta div{display:grid;grid-template-columns:4em 1fr;padding:6px 0;border-bottom:1px solid var(--line);font-size:.93rem}
+.ev-meta dt{color:var(--muted)}.ev-meta dd{margin:0}
+.ev-text{margin:0 0 16px;font-size:.93rem;color:var(--muted)}
+.ev-btn{width:100%}
+.ev-list{list-style:none;max-width:1000px;margin:34px auto 0;padding:0;border-top:1px solid var(--line)}
+.ev-list li{display:flex;flex-wrap:wrap;align-items:baseline;padding:14px 4px;border-bottom:1px solid var(--line);line-height:1.8}
+.ev-list time{font-family:var(--latin);font-size:1.15rem;color:var(--primary-deep);letter-spacing:.06em;margin-right:16px;white-space:nowrap;min-width:5.2em}
+.ev-list time small{font-family:var(--head);font-size:.8rem;color:var(--muted)}
+.ev-t{flex:1 1 14em;min-width:0}.ev-t b{display:block;font-family:var(--head);font-weight:500;letter-spacing:.08em}.ev-t span{display:block;font-size:.86rem;color:var(--muted)}
+.ev-s{font-size:.86rem;color:var(--muted);white-space:nowrap;margin-left:auto}
+.ev-list li.past{display:none}
+.ev-closed{max-width:1000px;margin:18px auto 0;font-size:.9rem;color:var(--muted);background:var(--pale);border-radius:12px;padding:12px 16px}
+.ev-closed b{font-family:var(--head);font-weight:500;color:var(--primary-deep);margin-right:.8em}
+.ev-ticket{max-width:760px;margin:44px auto 0;background:#fff;border-radius:var(--r);padding:30px 28px;box-shadow:0 10px 30px rgba(0,0,0,.06);scroll-margin-top:16px}
+.ev-ticket h3{font-size:1.2rem;letter-spacing:.12em;margin:0 0 6px}
+.ev-ticket > p{margin:0 0 18px;font-size:.92rem}
+.ev-form label{display:block;margin-bottom:14px;font-size:.9rem}
+.ev-form label > span{display:block;margin-bottom:6px;font-family:var(--head);letter-spacing:.08em}
+.ev-form .req{font-style:normal;font-size:.72rem;color:#fff;background:var(--primary);border-radius:999px;padding:0 .7em;margin-left:.6em;vertical-align:middle}
+.ev-form input,.ev-form select{font:inherit;font-size:16px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);width:100%;min-height:50px;display:block}
+.ev-form input:focus,.ev-form select:focus{border-color:var(--primary);outline:none}
+.ev-form button{width:100%;margin-top:6px}
+.ev-note{margin:12px 0 0;font-size:.84rem}
+.ev-form.sent .ev-note{color:var(--primary-deep);font-weight:500}
+@media (max-width:860px){.ev-next{grid-template-columns:1fr}.ev-photo{min-height:0;height:220px}.ev-body{padding:22px 20px 24px}.ev-date{font-size:2rem}.ev-s{margin-left:0;flex-basis:100%;padding-left:6.3em}.ev-ticket{padding:24px 18px}}''',
 'news': r'''/* 部品：お知らせ */
 .news-sec{background:var(--bg2)}
 .news-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
@@ -348,6 +467,27 @@ CSS = {
 
 # ---------- 動き（JS。var・function だけ） ----------
 JS = {
+'events': r'''// 部品：ライブ・イベントの日。開いたときに終わった日を下げる（作るときにも外しているが、公開後に日が過ぎたとき用）。取り置きの申し込みは見本（data-demo）なら送らずに文を出す
+(function(){
+  var now = new Date(), jst = new Date(now.getTime() + (now.getTimezoneOffset() + 540) * 60000);
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  var today = jst.getFullYear() + '-' + pad(jst.getMonth() + 1) + '-' + pad(jst.getDate());
+  var lis = document.querySelectorAll('.ev-list li[data-date]'), left = 0;
+  for (var i = 0; i < lis.length; i++) { if (lis[i].getAttribute('data-date') < today) lis[i].className += ' past'; else left++; }
+  var nx = document.querySelector('.ev-next[data-date]');
+  if (nx && nx.getAttribute('data-date') < today) { nx.style.display = 'none'; }
+  var f = document.querySelector('.ev-form');
+  if (f && f.getAttribute('data-demo')) {
+    f.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var note = document.getElementById('ev-form-note');
+      var name = f.querySelector('[name="お名前"]'), tel = f.querySelector('[name="ご連絡先"]');
+      if (!name.value || !tel.value) { if (note) note.textContent = 'お名前とご連絡先を入れてください。'; return; }
+      f.className += ' sent';
+      if (note) note.textContent = '見本のページのため、送信はしていません。本物のお店では、ここで「受け付けました。当日お待ちしています」と出て、お店にメールが届きます。';
+    });
+  }
+})();''',
 'hours': r'''// 部品：営業時間。いま（日本時間）が営業中か、時間外ならいつからかを出す。JS がないときは表だけ出る
 (function(){
   var b = document.getElementById('hrs-badge'); if (!b) return;
