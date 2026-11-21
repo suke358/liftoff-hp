@@ -79,6 +79,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
 部品の写真の自動入れ（2026/11/22・⑥-3 1周目）：belt・cases・compare・shop に写真が無ければ、業種の素材から入れる。施工例・見比べは 〇〇_before.jpg ↔ 〇〇_after.jpg の組（カードより後回しにはしない。足りなければその項目を外す）、
   商品は名前の手がかり＞物撮り（足りなければ写真なし）、帯は名前の手がかり＞残り（足りなければ使った写真をもう一度。印を出す）。仮の絵は残さない。見本は templates/site_sample_buhin.json
 部品の見た目を本体にそろえる（2026/11/22・⑥-3 2周目）：帯・施工例・見比べの写真にも色味の統一（TONE_CSS）と同じ影、帯の余白を .sec と同じに、小見出しの字間をカードと同じに
+区画ごとの背景（2026/11/22・⑥-3 3周目）：部品の区画（写真の帯・施工例・見比べ・料金の目安・お客様の声・お知らせ・受付時間・対応エリア・選ばれる理由 など）と流れに、直前と違う見え方の背景（無地・薄い色・点・罫線・斜めの帯）を上から順に振る（vary_backgrounds）。同じ見え方が続かない。"design": false で無地
 写真を 1 ページ 8 枚以上に（2026/11/22・⑥-2 ネイル8周目。本人「写真が7枚以下で Googleマップに載る写真と変わらない」）：後半の区画の写真に よくある質問の横（faq。PC は左に縦長・スマホは上に横長の帯）と
   店舗情報の小さい写真（about2。大きい写真の角に重ねる正方形）を足した。素材の残りから入れる（足りなければ入れない・止めない）。大きさを変えて同じ構図のくり返しにしない。"sec_photos" の書き方は同じ
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
@@ -493,7 +494,7 @@ def build(c):
         light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
         # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
         css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
-        if c.get('design', True): css += '\n' + DESIGN_CSS  # 背景のデザイン（⑥-2 5周目）。"design": false で前の無地に
+        if c.get('design', True): css += '\n' + DESIGN_CSS + '\n' + BGV_CSS  # 背景のデザイン（⑥-2 5周目）＋区画ごとの背景（⑥-3 3周目）。"design": false で前の無地に
         tone = c.get('photo_tone', True)
         if tone:  # 写真の色味をそろえる（⑥-2 ネイル6周目）
             css += '\n' + TONE_CSS.replace('PHOTO_TONE', tone if isinstance(tone, str) else PHOTO_TONE.get(c.get('theme_base', ''), 'saturate(.9)'))
@@ -568,6 +569,7 @@ def build(c):
 </html>
 '''
     out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
+    if c.get('design', True) and not c.get('layout'): out = vary_backgrounds(out)  # 区画ごとの背景（⑥-3 3周目。同じ見え方が続かないように）
     return out
 
 CSS = r'''/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
@@ -947,6 +949,33 @@ def add_sec_en(html):
         if not txt or len(txt) > 16 or 'data-en' in m.group(1): return m.group(0)
         return f'<div class="sec-head{m.group(1)}" data-en="{txt}"><i>{m.group(2)}</i>'
     return re.sub(r'<div class="sec-head([^"]*)"><i>(.*?)</i>', f, html, flags=re.S)
+
+BG_LOOK_FIXED = {'hero': 'hero', 'dark': 'dark', 'menu': 'grad', 'access': 'lines', 'faq': 'dots', 'sns': 'pale', 'cred': 'soft'}  # 背景が決まっている区画（変えない）
+BG_LOOKS = ['plain', 'soft', 'dots', 'lines', 'band']  # 部品の区画に順に振る背景（CSS の .sec.bgv-〇〇）
+
+def vary_backgrounds(html):
+    """区画ごとの背景（2026/11/22 ⑥-3 3周目。指示書「部品の区画にも模様。同じ背景が3つ続かない」）：
+    <main> の区画を上から見て、背景が決まっていない区画（部品・流れ など）に、直前と違う見え方（無地・薄い色・点・罫線・斜めの帯）を順に振る。
+    決まっている区画（最初の画面・メニューの面のずらし・暗いご相談・店舗情報の罫線・質問の点・下の段）はそのまま。"design": false・型（layout）のときは呼ばない"""
+    prev = ['hero']; n = [0]
+    def f(m):
+        cls = m.group(1).split()
+        fixed = next((BG_LOOK_FIXED[k] for k in cls if k in BG_LOOK_FIXED), None)
+        if fixed or 'sec' not in cls: prev.append(fixed or 'other'); return m.group(0)
+        for _ in BG_LOOKS:
+            look = BG_LOOKS[n[0] % len(BG_LOOKS)]; n[0] += 1
+            if look != prev[-1] and not (look == 'soft' and prev[-1] == 'grad'): break  # 直前と同じ見え方にしない（メニューの面のずらしの次に薄い色も避ける）
+        prev.append(look)
+        return m.group(0).replace('class="' + m.group(1) + '"', 'class="' + m.group(1) + ' bgv-' + look + '"', 1)
+    return re.sub(r'<section(?: id="[^"]*")? class="([^"]*)"', f, html)
+
+BGV_CSS = r'''/* 区画ごとの背景（⑥-3 3周目）：vary_backgrounds が部品の区画に順に振る。同じ見え方が続かないように */
+.sec.bgv-plain{background-color:var(--bg);background-image:none}
+.sec.bgv-soft{background-color:var(--bg2);background-image:none}
+.sec.bgv-dots{background-color:var(--bg);background-image:-webkit-radial-gradient(rgba(0,0,0,.09) 1px,rgba(0,0,0,0) 1.6px);background-image:radial-gradient(rgba(0,0,0,.09) 1px,rgba(0,0,0,0) 1.6px);background-size:22px 22px}
+.sec.bgv-lines{background-color:var(--pale);background-image:-webkit-repeating-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0) 31px,rgba(0,0,0,.05) 31px,rgba(0,0,0,.05) 32px);background-image:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 31px,rgba(0,0,0,.05) 31px,rgba(0,0,0,.05) 32px)}
+.sec.bgv-band{background-color:var(--bg);background-image:-webkit-linear-gradient(top,var(--bg2) 0,var(--bg2) 56%,rgba(0,0,0,0) 56%);background-image:linear-gradient(172deg,var(--bg2) 0,var(--bg2) 56%,rgba(0,0,0,0) 56%)}
+'''
 
 HERO_SP_CSS = r'''/* トップの写真（⑥-1）：上の端に薄い影・スマホで大きく */
 .poster::before{content:"";position:absolute;top:0;left:0;right:0;height:150px;background:-webkit-linear-gradient(top,HERO_SHADE_A,HERO_SHADE_B);background:linear-gradient(180deg,HERO_SHADE_A,HERO_SHADE_B);pointer-events:none;z-index:1}
