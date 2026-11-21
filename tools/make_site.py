@@ -68,6 +68,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   スマホではトップの写真が画面の高さの 6 割になる（最初の画面の半分以上が写真。layout の型を使うときは型の決まりのまま）。仮の絵が残っていないかは check_site.py が ❌ で止める
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
+下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
+  設定に無いものは出ない。地図は下の段に移したので、店舗情報の欄には "access_map": true のときだけ出る
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -340,7 +342,9 @@ def build(c):
     mq = c.get('map_query')
     route = f'<a class="route" {ext("https://www.google.com/maps/dir/?api=1&destination=" + urllib.parse.quote(mq))}>{PIN}Googleマップで<wbr>道順を見る</a>' if mq and c.get('show_route', True) else ''
     # 地図と道順のボタンは別々に出し入れできる（2026/11/7）：show_map:false で地図（埋め込み）だけ、show_route:false で「道順を見る」だけ消す。どちらも書かなければ両方出る
-    mapf = f'<div class="map"><iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>' if mq and c.get('show_map', True) else ''
+    map_iframe = f'<iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' if mq and c.get('show_map', True) else ''
+    # 地図は下の段（フッター）に出す（2026/11/21 ⑥-2 2周目）。店舗情報の欄にも出したいお店だけ "access_map": true
+    mapf = f'<div class="map">{map_iframe}</div>' if map_iframe and c.get('access_map') else ''
     access_html = f'''
   <section id="access" class="sec access">
     <div class="wrap{' nomap' if not mapf else ''}">
@@ -352,6 +356,15 @@ def build(c):
       {mapf}
     </div>
   </section>'''
+
+    # ---------- 下の段（フッター）：地図・住所・電話・営業時間・定休日・道順（2026/11/21 ⑥-2 2周目。本人「Googleマップなし ×」。設定に無いものは出ない） ----------
+    foot_rows = []
+    if c.get('address'): foot_rows.append(f'<p><span class="flabel">住所</span><span>{e(c["address"])}</span></p>')
+    if tel: foot_rows.append(f'<p><span class="flabel">TEL</span><span><a href="tel:{tel_d}">{e(tel)}</a></span></p>')
+    if c.get('hours'): foot_rows.append(f'<p><span class="flabel">営業時間</span><span>{e(c["hours"])}</span></p>')
+    if c.get('holiday'): foot_rows.append(f'<p><span class="flabel">定休日</span><span>{e(c["holiday"])}</span></p>')
+    foot_map = f'<div class="foot-map">{map_iframe}</div>' if map_iframe else ''
+    foot_info = f'<div class="foot-grid{" nomap" if not foot_map else ""}"><div class="foot-info"><p class="fname">{e(name)}</p>{"".join(foot_rows)}{route}</div>{foot_map}</div>'
 
     # ---------- よくある質問 ----------
     faq = ''.join(f'<details><summary><span class="q">Q</span><span>{e(f["q"])}</span></summary><p><span class="a">A</span><span>{e(f["a"])}</span></p></details>' for f in c.get('faq', []))
@@ -473,9 +486,7 @@ def build(c):
 </main>
 <footer class="foot">
   <div class="wrap">
-    <p class="fname">{e(name)}</p>
-    {f'<p>{e(c["address"])}</p>' if c.get('address') else ''}
-    {f'<p>TEL <a href="tel:{tel_d}">{e(tel)}</a>{("　／　" + e(c["hours"])) if c.get("hours") else ""}</p>' if tel else ''}
+    {foot_info}
     <nav aria-label="フッター">{nav}</nav>
     <p class="copy">© {e(short)}</p>
   </div>
@@ -711,6 +722,18 @@ p{margin:0 0 1.2em}
 .foot nav{display:flex;flex-wrap:wrap;margin:20px -10px}
 .foot nav a{margin:4px 10px;text-decoration:none;opacity:.85}
 .foot .copy{font-family:var(--latin);font-style:italic;opacity:.7;margin:0}
+/* 下の段の地図・住所・電話・時間（⑥-2） */
+.foot-grid{display:grid;grid-template-columns:1fr 1fr;grid-gap:40px;gap:40px;align-items:start;margin-bottom:28px}
+.foot-grid.nomap{grid-template-columns:1fr}
+.foot-info p{margin:0 0 10px;line-height:1.75;display:flex;align-items:baseline}
+.foot-info .fname{display:block;margin-bottom:18px}
+.foot-info .flabel{display:inline-block;width:5.4em;min-width:5.4em;margin-right:.6em;color:rgba(255,255,255,.55);font-size:.78rem;letter-spacing:.12em}
+.foot-info a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
+.foot-info .route{display:inline-flex;width:auto;margin-top:12px;background:var(--primary);color:#fff;padding:.8em 1.3em;font-size:.86rem}
+.foot-info .route svg{fill:#fff}
+.foot-map{border-radius:var(--r);overflow:hidden;min-height:260px;background:rgba(255,255,255,.08)}
+.foot-map iframe{width:100%;height:100%;min-height:260px;border:0;display:block}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr;grid-gap:22px;gap:22px}.foot-map,.foot-map iframe{min-height:210px}.foot-info .flabel{width:5em;min-width:5em}}
 .spbar{display:none}
 @media (max-width:860px){
   .spbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--dark);border-top:1px solid var(--accent-soft);padding-bottom:env(safe-area-inset-bottom)}
