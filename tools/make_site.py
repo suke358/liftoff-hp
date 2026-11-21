@@ -76,8 +76,6 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
-ネット予約の入口（2026/11/22・⑥-2 ネイル10・11周目）：reserve_url があるとき、ご予約の欄でもネット予約を先頭に（最初の画面・下の帯と同じ「いま使える窓口を先に」）。
-  最初の画面の「ネットで予約する」は、スマホでは下の固定の帯に同じものがあるので出さない（本人「下のバーに出てるから、いらない気がする」）。PC は帯が無いので出る。"hero_reserve_btn": true でスマホにも出す
 写真を 1 ページ 8 枚以上に（2026/11/22・⑥-2 ネイル8周目。本人「写真が7枚以下で Googleマップに載る写真と変わらない」）：後半の区画の写真に よくある質問の横（faq。PC は左に縦長・スマホは上に横長の帯）と
   店舗情報の小さい写真（about2。大きい写真の角に重ねる正方形）を足した。素材の残りから入れる（足りなければ入れない・止めない）。大きさを変えて同じ構図のくり返しにしない。"sec_photos" の書き方は同じ
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
@@ -189,7 +187,7 @@ def build(c):
 
     # ---------- 予約・相談の入口（いま使えるものを先に） ----------
     first_btns = []
-    if has_rsv: first_btns.append(f'<a class="btn btn-main btn-rsv" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a>')  # スマホでは下の帯に同じボタンがあるので出さない（⑥-2 ネイル11周目。"hero_reserve_btn": true で出す）
+    if has_rsv: first_btns.append(f'<a class="btn btn-main" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a>')
     if has_line: first_btns.append(f'<a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}LINEで<wbr>相談する</a>')
     if dm: first_btns.append(f'<a class="btn btn-main btn-dm" {ext(dm)}>{IG_ICON}インスタの<wbr>DMで予約・相談</a>')
     if tel: first_btns.append(f'<a class="btn btn-ghost" href="tel:{tel_d}">電話する <span class="nw">{e(tel)}</span></a>')
@@ -499,8 +497,6 @@ def build(c):
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
             css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.22)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
                             OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.25)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
-    # 最初の画面の「ネットで予約する」は、スマホでは下の固定の帯に同じものがあるので出さない（2026/11/22 ⑥-2 ネイル11周目。本人「下のバーに出てるから、いらない気がする」）。PC は帯が無いので出る。"hero_reserve_btn": true で前のとおりスマホにも出す
-    if has_rsv and not c.get('hero_reserve_btn'): css += '\n@media (max-width:860px){.hero-btns .btn-rsv{display:none}}'
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
