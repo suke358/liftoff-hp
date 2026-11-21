@@ -355,14 +355,15 @@ def build(c):
 
     # ---------- 予約・相談 ----------
     ways = []
+    # ネット予約は欄の先頭（最初の画面・下の帯と同じ「いま使える窓口を先に」。2026/11/22 ⑥-2 ネイル10周目。前は LINE・電話のあと）
+    if has_rsv:
+        ways.append(f'<div class="way"><h3>ネット予約</h3><p>空いている日時を見て、24時間いつでもご予約いただけます。</p><a class="btn btn-main" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a></div>')
     if has_line:
         ways.append(f'<div class="way"><h3>LINE</h3><p>{e(c.get("line_text","友だち追加して、メッセージでご相談ください。"))}</p><a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}友だち追加</a></div>')
     if dm:
         ways.append(f'<div class="way way-dm"><h3>インスタグラムのDM</h3><p>{e(c.get("dm_text","インスタグラムのメッセージで、お気軽にどうぞ。"))}</p><a class="btn btn-main" {ext(dm)}>{IG_ICON}DMを送る</a></div>')
     if tel:
         ways.append(f'<div class="way"><h3>お電話</h3><p>{e(c.get("tel_note","作業中は出られないことがあります。折り返しご連絡いたします。"))}</p><a class="tel" href="tel:{tel_d}">{e(tel)}</a></div>')
-    if has_rsv:
-        ways.append(f'<div class="way"><h3>ネット予約</h3><p>空いている日時を見て、24時間いつでもご予約いただけます。</p><a class="btn btn-main" {ext(c["reserve_url"])}>ネットで<wbr>予約する</a></div>')
     if 'form' in P:
         ways.append(f'<div class="way"><h3>フォーム</h3><p>{e(P["form"].get("way_text","選んで送るだけ。24時間いつでも送れます。"))}</p><a class="btn btn-main" href="#form">フォームで<wbr>送る</a></div>')
     elif c.get('form_url'):
