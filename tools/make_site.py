@@ -79,6 +79,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
 手書き風フォント（2026/11/22・⑥-2 6周目）：区画の見出し（h2）とトップの一言（h1）に Google Fonts の手書き風（Klee One・Yomogi・Zen Kurenaido・Yusei Magic・Kaisei Decol。無料・表記不要）。
   設定の "hand_font": "Klee One" ＞ 業種（HAND_BY_GYOUSHU）＞ 雰囲気（HAND_BY_THEME）。"hand_font": false で切る。本文は今までのまま
+料金の目安（2026/11/22・⑥-2 7周目）：メニューのカードは menus[].price があるときだけ「料金の目安」の札つきで出す（price_note で札の文を変えられる）。無ければ「料金はお問い合わせください」のまま（分からない料金は作らない）
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -256,7 +257,8 @@ def build(c):
     cards = []
     for m in menus:
         img = f'<div class="photo"><img src="{e(m["image"])}" alt="{e(m.get("alt", m["name"]))}" width="{m.get("w",1000)}" height="{m.get("h",750)}" loading="lazy"></div>' if m.get('image') else ''
-        price = f'<div class="price"><small>{e(m.get("price_note",""))}</small><b>{e(m["price"])}</b></div>' if m.get('price') else '<div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>'
+        # 料金の目安（2026/11/22 ⑥-2 7周目）：price があるときだけ。price_note が無ければ「料金の目安」。無ければ今までどおり「お問い合わせください」
+        price = f'<div class="price"><small>{e(m.get("price_note") or "料金の目安")}</small><b>{e(m["price"])}</b></div>' if m.get('price') else '<div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>'
         sub = ''.join(f'<li>{e(x)}</li>' for x in m.get('items', []))
         ask = ''
         if has_line:
@@ -568,6 +570,7 @@ p{margin:0 0 1.2em}
 /* ヘッダー */
 .head{position:absolute;top:0;left:0;right:0;z-index:30}
 .head .wrap{display:flex;justify-content:space-between;align-items:center;height:84px;color:#f3efe6}
+.head .wrap{text-shadow:0 1px 10px rgba(0,0,0,.6),0 0 2px rgba(0,0,0,.45)}  /* 店名・小見出しが明るい写真の上でも読めるように（⑥-2。影を薄くした分の補い） */
 .brand{display:flex;align-items:center;text-decoration:none}
 .brand img{width:46px;height:46px;border-radius:10px;margin-right:12px}
 .bn{font-family:var(--head);font-size:1.15rem;letter-spacing:.14em}
@@ -859,7 +862,7 @@ HERO_SP_CSS = r'''/* トップの写真（⑥-1）：上の端に薄い影・ス
 
 LIGHT_HERO_CSS = r'''/* 明るい上の部分（hero_style: light） */
 :root{--hero-style:light}
-.head .wrap{color:var(--ink)}
+.head .wrap{color:var(--ink);text-shadow:none}
 .bk{color:var(--primary-deep)}
 .nav a:hover{color:var(--primary-deep)}
 @media (max-width:860px){
