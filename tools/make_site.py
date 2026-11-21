@@ -66,6 +66,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   写真が足りない・フォルダが無い・"業種" が無いときは ⚠️ で止まり、何も書かない（黙って仮の絵にしない）。
   ごあいさつ・部品（belt・cases・shop・compare）の写真はまだ自動では入れない（⑥-3）。設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す）。
   スマホではトップの写真が画面の高さの 6 割になる（最初の画面の半分以上が写真。layout の型を使うときは型の決まりのまま）。仮の絵が残っていないかは check_site.py が ❌ で止める
+連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
+  1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -317,8 +319,7 @@ def build(c):
         ways.append(f'<div class="way"><h3>フォーム</h3><p>{e(P["form"].get("way_text","選んで送るだけ。24時間いつでも送れます。"))}</p><a class="btn btn-main" href="#form">フォームで<wbr>送る</a></div>')
     elif c.get('form_url'):
         ways.append(f'<div class="way"><h3>フォーム</h3><p>24時間いつでも送れます。</p><a class="btn btn-main" {ext(c["form_url"])}>フォームを開く</a></div>')
-    if not ways:
-        ways.append(f'<div class="way"><h3>準備中</h3><p>{e(c.get("pending_text","連絡先は準備中です。"))}</p></div>')
+    if not ways: sys.exit('⚠️ 止めました：連絡の入口（tel・line_url・form・dm_url・reserve_url）が設定に1つもありません（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     rules = ''.join(f'<li>{e(x)}</li>' for x in c.get('rules', []))
     ctx = dict(c=c, P=P, I=I, has_line=has_line, tel=tel, tel_d=tel_d, name=name, short=short)
     reserve_html = f'''
@@ -1431,6 +1432,9 @@ def main():
     need(cp.get('before'), '見比べの' + cp.get('label_before', '作業前')); need(cp.get('after'), '見比べの' + cp.get('label_after', '作業後'))
     if lack: sys.exit('⚠️ 止めました（何も書きかえていません）：写真がありません → ' + '／'.join(lack) +
                       '\n   設定に書いた場所に写真を置くか、設定からその写真（部品）を外してください（仮の絵は作りません。2026/11/21 ⑥-1）')
+    # 連絡の入口（2026/11/21 ⑥-2）：電話・LINE・フォーム・インスタのDM・ネット予約のどれも無ければ ⚠️ で止まる（前は「準備中」の欄を出していた。お客さんがそこで止まる・作りかけに見えるのでやめた）
+    if not (c.get('tel') or c.get('line_url') or c.get('reserve_url') or c.get('dm_url') or c.get('form_url') or 'form' in P):
+        sys.exit('⚠️ 止めました（何も書きかえていません）：連絡の入口が設定に1つもありません → "tel"（電話）・"line_url"（LINE）・"parts" の "form"（フォーム）・"dm_url"・"reserve_url" のどれか1つを書いてください（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     # ②トップとメニューのカードに写真が無ければ、設定の "業種" の素材写真を入れる（足りなければ ⚠️ で止まる）
     fill_photos(c, outdir)
     s = build(c)
