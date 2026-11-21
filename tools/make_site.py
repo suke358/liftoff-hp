@@ -76,6 +76,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
+部品の写真の自動入れ（2026/11/22・⑥-3 1周目）：belt・cases・compare・shop に写真が無ければ、業種の素材から入れる。施工例・見比べは 〇〇_before.jpg ↔ 〇〇_after.jpg の組（カードより後回しにはしない。足りなければその項目を外す）、
+  商品は名前の手がかり＞物撮り（足りなければ写真なし）、帯は名前の手がかり＞残り（足りなければ使った写真をもう一度。印を出す）。仮の絵は残さない。見本は templates/site_sample_buhin.json
+部品の見た目を本体にそろえる（2026/11/22・⑥-3 2周目）：帯・施工例・見比べの写真にも色味の統一（TONE_CSS）と同じ影、帯の余白を .sec と同じに、小見出しの字間をカードと同じに
 写真を 1 ページ 8 枚以上に（2026/11/22・⑥-2 ネイル8周目。本人「写真が7枚以下で Googleマップに載る写真と変わらない」）：後半の区画の写真に よくある質問の横（faq。PC は左に縦長・スマホは上に横長の帯）と
   店舗情報の小さい写真（about2。大きい写真の角に重ねる正方形）を足した。素材の残りから入れる（足りなければ入れない・止めない）。大きさを変えて同じ構図のくり返しにしない。"sec_photos" の書き方は同じ
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
@@ -765,7 +768,9 @@ p{margin:0 0 1.2em}
 .route{display:flex;align-items:center;justify-content:center;margin-top:18px;text-decoration:none;background:var(--dark);color:#fbf7ef;border-radius:999px;padding:.95em 1.4em;letter-spacing:.12em;font-size:.92rem}
 .route svg{width:1.1em;height:1.1em;fill:var(--primary);margin-right:.5em}
 /* 店舗情報の地図は「道順を見る」のすぐ下に小さめ（⑥-2 ネイル9周目。本人「道順の下は地図に」。下の段の地図と2つになるので、下の段の方を小さくした） */
-.map{border-radius:var(--r);overflow:hidden;height:240px;margin-top:18px;background:var(--bg2)}
+.map{border-radius:var(--r);overflow:hidden;height:240px;margin-top:18px;background:var(--bg2);position:relative}
+.map::before{content:"Googleマップ";position:absolute;left:0;right:0;top:50%;margin-top:-.7em;text-align:center;color:var(--muted);font-size:.85rem;letter-spacing:.2em}  /* 読み込みの間の文字（⑥-3 2周目。空の箱に見えないように） */
+.map iframe{position:relative}
 .map iframe{width:100%;height:100%;border:0;display:block}
 @media (max-width:860px){.access .wrap{grid-template-columns:1fr;grid-gap:36px;gap:36px}.info{padding:4px 18px}.info div{grid-template-columns:5.5em 1fr}.map{height:200px}}
 /* よくある質問 */
@@ -902,7 +907,7 @@ OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出�
 
 # 写真の色味をそろえる（2026/11/22 ⑥-2 ネイル6周目。AI が毎回「写真の色味がばらばら」）。雰囲気（theme_base）ごとの薄いフィルター。"photo_tone": false で切る・文字列で指定
 PHOTO_TONE = {'salon': 'saturate(.85) sepia(.1) contrast(1.02)', 'wa': 'saturate(.88) sepia(.08)', 'fresh': 'saturate(.95) contrast(1.02)', 'simple': 'saturate(.9)', 'jouhin': 'saturate(.85) sepia(.1)', 'genki': 'saturate(1.02)'}
-TONE_CSS = '.photo img,.poster img,.sec-photo img,.reserve .sec-bg img{-webkit-filter:PHOTO_TONE;filter:PHOTO_TONE}'
+TONE_CSS = '.photo img,.poster img,.sec-photo img,.reserve .sec-bg img,.b-shot img,.case figure img,.cmp-frame img{-webkit-filter:PHOTO_TONE;filter:PHOTO_TONE}'  # 部品（帯・施工例・見比べ）の写真にも（⑥-3 2周目）
 
 # 背景のデザイン（2026/11/22 ⑥-2 5周目。本人「デザイン性が欲しい」・⑭の「重ね・切りかえ・模様」）。色はテーマの変数だけを使う（どの組でも破綻しない）
 DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後ろに薄い英字（重ね）・区画の模様・斜めの切りかえ・写真の重ね枠 */
@@ -1257,7 +1262,7 @@ PARTS_CSS = {
 .wrap.narrow{max-width:760px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}''',
 'belt': r'''/* 部品：写真の帯（横にゆっくり流れる） */
-.belt-sec{padding:72px 0 56px;background:var(--bg2)}
+.belt-sec{background:var(--bg2)}  /* 余白は .sec と同じ（⑥-3 2周目。前は 72/56px で詰まって見えた） */
 .belt-sec .sec-head{margin-bottom:28px}
 .belt-sec .sec-lead{margin:-12px auto 24px}
 .belt{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:6px 0 10px}
@@ -1268,13 +1273,13 @@ PARTS_CSS = {
 .b-shot{display:block;border-radius:var(--r);overflow:hidden;background:var(--bg);box-shadow:0 10px 26px rgba(0,0,0,.08)}
 .b-shot img{width:100%;height:auto}
 .belt-track figcaption{display:flex;align-items:baseline;margin-top:10px;font-size:.92rem}
-.belt-track figcaption b{font-family:var(--head);font-weight:500;letter-spacing:.08em}
+.belt-track figcaption b{font-family:var(--head);font-weight:500;letter-spacing:.12em;font-size:1.02rem}  /* カードの小見出しと同じ字間（⑥-3 2周目） */
 .belt-track figcaption small{font-size:.8rem;color:var(--muted);margin-left:10px}
 .belt-note{font-size:.82rem;margin:8px 20px 0}
-@media (max-width:760px){.belt-sec{padding:56px 0 44px}.belt-track li{width:260px;margin-right:16px}}''',
+@media (max-width:760px){.belt-track li{width:260px;margin-right:16px}}''',
 'compare': r'''/* 部品：前と後の見比べ（つまみ） */
 .compare-sec{background:var(--pale)}
-.cmp-frame{position:relative;overflow:hidden;border-radius:var(--r);background:var(--bg2);-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:ew-resize}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--r);background:var(--bg2);box-shadow:0 10px 30px rgba(0,0,0,.06);-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none;cursor:ew-resize}
 .cmp-frame > img{width:100%;height:auto;display:block}
 .cmp-over{position:absolute;top:0;left:0;bottom:0;width:50%;overflow:hidden}
 .cmp-over img{width:200%;max-width:none;height:auto;display:block}
@@ -1330,12 +1335,12 @@ PARTS_CSS = {
 .cases-sec{background:var(--bg2)}
 .cases{display:grid;grid-gap:56px;gap:56px;max-width:1000px;margin:0 auto}
 .case{display:grid;grid-template-columns:1fr 1fr;grid-gap:18px;gap:18px}
-.case figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg)}
+.case figure{margin:0;position:relative;border-radius:var(--r);overflow:hidden;background:var(--bg);box-shadow:0 10px 30px rgba(0,0,0,.06)}  /* カードと同じ影（⑥-3 2周目） */
 .case figure img{width:100%;height:auto;display:block}
 .case figcaption{position:absolute;left:0;top:0;background:rgba(0,0,0,.6);color:#fff;font-family:var(--head);font-size:.85rem;letter-spacing:.2em;padding:.35em 1.1em;border-radius:0 0 12px 0;line-height:1.7}
 .case figure.after figcaption{background:var(--primary)}
 .case .txt{grid-column:1 / -1;display:grid;grid-template-columns:16em 1fr;grid-gap:28px;gap:28px;border-top:1px solid var(--line);padding-top:18px}
-.case h3{font-size:1.15rem;letter-spacing:.14em}
+.case h3{font-size:1.2rem;letter-spacing:.12em}  /* カードの小見出しと同じ（⑥-3 2周目） */
 .case .txt p{margin:0;font-size:.93rem;color:var(--muted)}
 .case .meta{display:block;font-size:.8rem;color:var(--muted);font-family:var(--gothic);letter-spacing:.1em;margin-top:4px}
 @media (max-width:760px){.case{grid-template-columns:1fr}.case .txt{grid-template-columns:1fr;grid-gap:6px;gap:6px}.cases{grid-gap:44px;gap:44px}}''',
@@ -1739,9 +1744,17 @@ def fill_photos(c, outdir):
     if bp is not None:
         avail2 = [p for p in rest if p[0] not in used]
         if need_belt:
+            # 帯は景色（全景）を先に。物撮り・手元は明るさ・寄りがそろわないので後ろへ（⑥-3 2周目。AI「1枚目だけ暗くて寄りすぎ」）
+            is_object = lambda n: any(k in n.lower() for k in OBJECT_WORDS)
+            avail2 = [p for p in avail2 if not is_object(p[0]) and not is_people(p[0])] + [p for p in avail2 if is_people(p[0]) and not is_object(p[0])] + [p for p in avail2 if is_object(p[0])]
+            scenery = [p for p in avail2 if not is_object(p[0]) and not is_people(p[0])]
             pseudo = [dict(name=it.get('title', ''), _ref=it) for it in need_belt]
-            for m, src, how in match_menus(pseudo, avail2):
+            for m, src, how in match_menus(pseudo, scenery or avail2):  # まず景色だけで名前合わせ→順
                 put2(m['_ref'], src, '写真の帯「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], 4 / 3)
+            left_b = [p for p in avail2 if p[0] not in used]
+            for it in need_belt:  # 景色が足りなければ残り（手元→物撮り）
+                if missing(it) and left_b:
+                    src = left_b.pop(0); put2(it, src, '写真の帯「' + it.get('title', '') + '」（景色が足りないので手元の写真）', it.get('title', ''), 4 / 3)
             again = [p for p in rest if p[0] not in set(n for n, _ in heroes[:1])]  # 足りなければ、使った写真をもう一度（トップ以外）
             for it in need_belt:
                 if missing(it) and again:
