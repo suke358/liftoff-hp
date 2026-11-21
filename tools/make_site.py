@@ -52,12 +52,41 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 確認用の帯（2026/11/14・部品 V）：どのサイトにも </body> の前に templates/preview_band.html を入れる。住所が preview- で始まるとき（preview_push.sh の確認用URL）だけ、
   いちばん上に「確認用（まだ公開前です）」の帯が出て、題名の頭に【確認用】・noindex が付く。本番の住所では何も出ない（設定は要らない）。納品後は preview_push.sh --close で確認用を閉じる
+道具の版（2026/11/21・順0「既存の店を守る」）：作った index.html の目印の注釈に「道具の版 〇〇〇〇〇〇〇」を書く（見た目を決めるファイル make_site.py・parts_extra.py・layouts.py・
+  wbr.py・templates/ を最後に直した commit の7けた。未 commit の直しがあれば + が付く）。公開先のあるサイト（フォルダに wrangler.jsonc がある＝お店のサイト。見本帳 samples/ には無い）を
+  作り直すとき、前の index.html の版が今の道具と違えば ⚠️ で止まり、何も書きかえない（道具を直したあとの「電話番号1か所直し」で見た目が黙って変わるのを防ぐ。
+  版の記録がない＝11/21 より前の道具で作ったページも止まる）。見比べて作り直すと決めたら --uwagaki を付ける（index.old.html と diff で見比べる）。
+  直す前の道具（2026/11/20 まで）は git のタグ tools-v1（commit 7071235）で取り出せる（例 git checkout tools-v1 -- tools/）。検査は tools/test_make_site_version.py
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 DEFAULT_DOMAIN = 'liftoff-358.workers.dev'  # 公開先の住所の後ろ（Lift-Off 自社）。.okiba があればそちら
+
+VERSION_FILES = ['tools/make_site.py', 'tools/parts_extra.py', 'tools/layouts.py', 'tools/wbr.py', 'tools/templates']  # 出来上がりの見た目を決めるファイル（道具の版はこれで決まる）
+
+def tool_version():
+    """道具の版（2026/11/21 順0）：VERSION_FILES を最後に直した commit の7けた。未 commit の直しがあれば + を付ける。git が使えなければ「不明」"""
+    root = os.path.dirname(HERE)
+    try:
+        v = subprocess.run(['git', '-C', root, 'log', '-1', '--format=%h', '--'] + VERSION_FILES, capture_output=True, text=True).stdout.strip()
+        if not v: return '不明'
+        dirty = subprocess.run(['git', '-C', root, 'status', '--porcelain', '--'] + VERSION_FILES, capture_output=True, text=True).stdout.strip()
+        return v + ('+' if dirty else '')
+    except Exception:
+        return '不明'
+
+TOOL_VERSION = tool_version()
+
+def stamped_version(path):
+    """前に作った index.html の目印の注釈から「道具の版」を読む。書いてなければ None（2026/11/21 より前の道具で作ったページ）"""
+    try:
+        s = open(path, encoding='utf-8').read()
+    except Exception:
+        return None
+    m = re.search(r'tools/make_site\.py で作った（設定：[^）]*?・道具の版 ([^）\s]+)）', s)
+    return m.group(1) if m else None
 
 def read_okiba(folder):
     """サイトのフォルダの .okiba から、公開先の住所の後ろを読む（2026/11/11。preview_push.sh・push_small.sh の read_okiba と同じ読み方）。
@@ -418,7 +447,7 @@ def build(c):
 <script>document.documentElement.className = 'js';</script>{card_js}
 </head>
 <body>
-<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json）。直すときは設定を直して作り直すか、このファイルを直接直す -->{sample_note}{xp["notice"]}
+<!-- このページは tools/make_site.py で作った（設定：{e(c.get('slug',''))}.json・道具の版 {e(TOOL_VERSION)}）。直すときは設定を直して作り直すか、このファイルを直接直す -->{sample_note}{xp["notice"]}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 24 24">{mark}</symbol></svg>
 <header class="head">
   <div class="wrap">
@@ -1254,10 +1283,18 @@ def placeholder(path, w, h, label, colors=('#ece5da', '#d9cfc0')):
 ''')
 
 def main():
-    if len(sys.argv) < 3: sys.exit(__doc__)
-    conf, outdir = sys.argv[1], os.path.expanduser(sys.argv[2])
+    args = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if len(args) < 2: sys.exit(__doc__)
+    conf, outdir = args[0], os.path.expanduser(args[1])
     c = json.load(open(conf, encoding='utf-8'))
     if c.get('pages'): import make_houjin; return make_houjin.main(conf, outdir)  # 法人の型（複数ページ。2026/11/13 段2a）。"pages" がなければ今までどおり
+    # 安全弁（2026/11/21 順0「既存の店を守る」）：公開先のあるサイト（wrangler.jsonc あり）を、前と違う版の道具で作り直すときは止まる（見本帳 samples/ は wrangler.jsonc が無いので止めない）
+    p_old = os.path.join(outdir, 'index.html')
+    if os.path.exists(p_old) and os.path.exists(os.path.join(outdir, 'wrangler.jsonc')) and '--uwagaki' not in sys.argv:
+        old = stamped_version(p_old)
+        if old != TOOL_VERSION:
+            sys.exit(f'⚠️ 止めました（何も書きかえていません）：{p_old} は道具の版「{old or "記録なし（2026/11/21 より前の道具）"}」で作ったページで、今の道具は「{TOOL_VERSION}」です。\n'
+                     '   道具が変わっているので、作り直すと見た目が変わるかもしれません。作り直すなら --uwagaki を付けて動かし、できた index.html を前の index.old.html と見比べてください（diff index.old.html index.html）')
     os.makedirs(outdir, exist_ok=True)
     # 写真がまだないところは「写真が入ります」の仮画像（.svg）を入れる
     def need(obj, label, w, h, colors=None):
@@ -1288,7 +1325,7 @@ def main():
     p = os.path.join(outdir, 'index.html')
     if os.path.exists(p): shutil.copy(p, os.path.join(outdir, 'index.old.html'))
     open(p, 'w', encoding='utf-8').write(s)
-    print('作りました：', p)
+    print('作りました：', p, f'（道具の版 {TOOL_VERSION}）')
     # 「ページが見つかりません」ページ（404.html）。2026/10/21 決定事項 08
     p404 = os.path.join(outdir, '404.html')
     open(p404, 'w', encoding='utf-8').write(build_404(c))
