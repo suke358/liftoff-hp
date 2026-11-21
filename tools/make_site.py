@@ -77,6 +77,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
   暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
+手書き風フォント（2026/11/22・⑥-2 6周目）：区画の見出し（h2）とトップの一言（h1）に Google Fonts の手書き風（Klee One・Yomogi・Zen Kurenaido・Yusei Magic・Kaisei Decol。無料・表記不要）。
+  設定の "hand_font": "Klee One" ＞ 業種（HAND_BY_GYOUSHU）＞ 雰囲気（HAND_BY_THEME）。"hand_font": false で切る。本文は今までのまま
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -460,6 +462,9 @@ def build(c):
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
     css = css.replace('{{head_font}}', head_font)
+    hf = hand_font(c, t)  # 手書き風フォント（⑥-2 6周目）
+    css = css.replace('{{hand_font}}', (f'"{hf}",' if hf else '') + 'var(--head)')
+    if hf: css += '\n' + HAND_CSS
     belt_html, calc_html, cases_html, compare_html, shop_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx), part_shop(ctx)
     xp = parts_extra.render(ctx)  # 追加の部品の HTML（notice・credentials・strengths・news・voices・hours・areas・video）
     sample_note = f'<p class="sample-note" role="note">{e(c["sample_note"])}</p>' if c.get('sample_note') else ''
@@ -481,7 +486,7 @@ def build(c):
 {og}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700{('&family=' + HAND_FONTS[hf]) if hf else ''}&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {json.dumps(ld, ensure_ascii=False)}
 </script>
@@ -533,6 +538,7 @@ body{word-break:keep-all;overflow-wrap:anywhere;line-break:strict}
   --gothic:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic","Noto Sans CJK JP",sans-serif;
   --latin:"Cormorant Garamond","Shippori Mincho B1",serif;
   --head:{{head_font}};
+  --hand:{{hand_font}};
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -796,6 +802,26 @@ DM_CSS = r'''/* インスタグラムの DM の入口（dm_url。2026/11/7） */
 # スマホのトップの写真（2026/11/21 ⑥-1）：型（layout）を使わないときだけ足す。写真を画面の高さの 6 割にして、最初の画面の半分以上が写真になる形
 # （前は写真の高さが成り行きで、横長の写真だと画面の 3 割ほどだった）。px の予備を先に書く（古いスマホ対策）
 # 写真の上の端に薄い影（HERO_SHADE）：ヘッダーの店名・メニューの文字が、明るい空などの上でも読めるように。濃い上の部分は黒の影、明るい上の部分（hero_style light）は白の影
+# 手書き風フォント（2026/11/22 ⑥-2 6周目。本人「手書き風フォントを使いたい」）。Google Fonts の無料・SIL Open Font License（表記不要）のものだけ
+HAND_FONTS = {'Klee One': 'Klee+One:wght@400;600', 'Yomogi': 'Yomogi', 'Zen Kurenaido': 'Zen+Kurenaido', 'Yusei Magic': 'Yusei+Magic', 'Kaisei Decol': 'Kaisei+Decol:wght@400;500'}
+HAND_BY_GYOUSHU = {'造園': 'Klee One', 'カフェ': 'Yomogi', 'パン屋': 'Yomogi', 'まつげ': 'Zen Kurenaido', 'ネイル': 'Zen Kurenaido', 'よもぎ蒸し': 'Klee One', '美容室': 'Zen Kurenaido', '整体': 'Klee One',
+                   '学習塾': 'Klee One', '英語教室': 'Yomogi', '居酒屋': 'Yusei Magic', 'スポーツ店': 'Yusei Magic', '農家の直売': 'Yomogi', '工務店': 'Klee One', '古民家・リトリート': 'Klee One', 'トリミング': 'Yomogi'}
+HAND_BY_THEME = {'salon': 'Klee One', 'wa': 'Klee One', 'fresh': 'Yomogi', 'simple': 'Klee One', 'jouhin': 'Zen Kurenaido', 'genki': 'Yusei Magic'}
+HAND_CSS = r'''/* 見出しと一言に手書き風フォント（⑥-2 6周目） */
+.sec-head h2,.hero h1{font-family:var(--hand);font-weight:400;letter-spacing:.1em}
+.hero h1{font-size:2.3rem;font-size:clamp(1.75rem,3.5vw,2.75rem);line-height:1.7}
+.sec-head h2{font-size:1.9rem;font-size:clamp(1.6rem,3vw,2.2rem)}
+'''
+
+def hand_font(c, t):
+    """手書き風フォントの名前（HAND_FONTS の鍵）か None。設定の hand_font ＞ 業種 ＞ 雰囲気（theme_base）＞ Klee One。false なら None"""
+    v = c.get('hand_font', True)
+    if v is False or v == '': return None
+    if isinstance(v, str):
+        if v in HAND_FONTS: return v
+        print(f'⚠️ hand_font「{v}」は使えません（使えるもの：' + '・'.join(HAND_FONTS) + '）。業種・雰囲気から選びます')
+    return HAND_BY_GYOUSHU.get(str(c.get('業種') or '').strip()) or HAND_BY_THEME.get(c.get('theme_base', ''), 'Klee One')
+
 # 背景のデザイン（2026/11/22 ⑥-2 5周目。本人「デザイン性が欲しい」・⑭の「重ね・切りかえ・模様」）。色はテーマの変数だけを使う（どの組でも破綻しない）
 DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後ろに薄い英字（重ね）・区画の模様・斜めの切りかえ・写真の重ね枠 */
 .sec-head{position:relative;z-index:0}
