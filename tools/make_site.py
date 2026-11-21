@@ -71,7 +71,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
-  設定に無いものは出ない。地図は下の段に移したので、店舗情報の欄には "access_map": true のときだけ出る
+  設定に無いものは出ない。店舗情報の欄の「道順を見る」のすぐ下にも小さめの地図を出す（2026/11/22・⑥-2 ネイル9周目。本人「道順の下は地図に」。"access_map": false で店舗情報の欄の地図だけ消える。下の段の地図は少し小さくした）
 後半の区画の写真（2026/11/22・⑥-2 4周目。本人「もう少し写真の枚数が欲しい」）：店舗情報の横（about。地図が無いとき）・ご依頼の流れの横（flow）・ご相談の背景（reserve）に、
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
@@ -390,20 +390,20 @@ def build(c):
     route = f'<a class="route" {ext("https://www.google.com/maps/dir/?api=1&destination=" + urllib.parse.quote(mq))}>{PIN}Googleマップで<wbr>道順を見る</a>' if mq and c.get('show_route', True) else ''
     # 地図と道順のボタンは別々に出し入れできる（2026/11/7）：show_map:false で地図（埋め込み）だけ、show_route:false で「道順を見る」だけ消す。どちらも書かなければ両方出る
     map_iframe = f'<iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' if mq and c.get('show_map', True) else ''
-    # 地図は下の段（フッター）に出す（2026/11/21 ⑥-2 2周目）。店舗情報の欄にも出したいお店だけ "access_map": true
-    mapf = f'<div class="map">{map_iframe}</div>' if map_iframe and c.get('access_map') else ''
-    ap = sec_photo('about')  # 地図が店舗情報の欄に無いときは、代わりに仕事の様子の写真（⑥-2 4周目）
+    # 地図は「道順を見る」のすぐ下にも出す（2026/11/22 ⑥-2 ネイル9周目。本人「道順の下は地図に」。前は下の段だけで、店舗情報の欄は "access_map": true のときだけだった）。"access_map": false で店舗情報の欄の地図だけ消える
+    mapf = f'<div class="map">{map_iframe}</div>' if map_iframe and c.get('access_map', True) else ''
+    ap = sec_photo('about')  # 店舗情報の横の仕事の様子の写真（⑥-2 4周目）
     ap2 = sec_photo('about2', 'sec-photo sec-photo2') if ap else ''  # 大きい写真の角に重ねる小さい写真（⑥-2 ネイル8周目。大きさに変化）
     if ap: ap = f'<div class="sec-photos">{ap}{ap2}</div>'
     access_html = f'''
   <section id="access" class="sec access">
-    <div class="wrap{' nomap' if not (mapf or ap) else ''}">
+    <div class="wrap{' nomap' if not ap else ''}">
       <div>
         <div class="sec-head"><i>{I()}{e(c.get("info_eyebrow","access"))}</i><h2>{e(c.get("info_title","店舗情報"))}</h2></div>
         <dl class="info">{info}</dl>
-        {route}
+        {route}{mapf}
       </div>
-      {mapf or ap}
+      {ap}
     </div>
   </section>'''
 
@@ -763,9 +763,10 @@ p{margin:0 0 1.2em}
 .info dd{margin:0}
 .route{display:flex;align-items:center;justify-content:center;margin-top:18px;text-decoration:none;background:var(--dark);color:#fbf7ef;border-radius:999px;padding:.95em 1.4em;letter-spacing:.12em;font-size:.92rem}
 .route svg{width:1.1em;height:1.1em;fill:var(--primary);margin-right:.5em}
-.map{border-radius:var(--r);overflow:hidden;min-height:400px;background:var(--bg2)}
-.map iframe{width:100%;height:100%;min-height:400px;border:0;display:block}
-@media (max-width:860px){.access .wrap{grid-template-columns:1fr;grid-gap:36px;gap:36px}.info{padding:4px 18px}.info div{grid-template-columns:5.5em 1fr}.map,.map iframe{min-height:280px}}
+/* 店舗情報の地図は「道順を見る」のすぐ下に小さめ（⑥-2 ネイル9周目。本人「道順の下は地図に」。下の段の地図と2つになるので、下の段の方を小さくした） */
+.map{border-radius:var(--r);overflow:hidden;height:240px;margin-top:18px;background:var(--bg2)}
+.map iframe{width:100%;height:100%;border:0;display:block}
+@media (max-width:860px){.access .wrap{grid-template-columns:1fr;grid-gap:36px;gap:36px}.info{padding:4px 18px}.info div{grid-template-columns:5.5em 1fr}.map{height:200px}}
 /* よくある質問 */
 .faq{background:var(--bg2)}
 .faq-list{max-width:820px;margin:0 auto}
@@ -784,7 +785,8 @@ p{margin:0 0 1.2em}
 .flow .wrap.has-photo{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);grid-gap:56px;gap:56px;align-items:center;max-width:1100px}
 .flow .wrap.has-photo .sec-head{grid-column:1/-1}
 .flow .wrap.has-photo .steps{margin:0;max-width:none}
-.access .sec-photo{min-height:400px}
+.access .sec-photo{min-height:0;height:460px}
+.access .sec-photos{-ms-flex-item-align:start;align-self:start}  /* 列の高さに伸ばさない（重ねる小さい写真が大きい写真から離れないように。ネイル9周目で直した） */
 .reserve.has-bg{position:relative;overflow:hidden}
 .reserve .sec-bg{position:absolute;top:0;left:0;right:0;bottom:0;margin:0}
 .reserve .sec-bg img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;opacity:.35}
@@ -818,9 +820,9 @@ p{margin:0 0 1.2em}
 .foot-info a{color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.4)}
 .foot-info .route{display:inline-flex;width:auto;margin-top:12px;background:var(--primary);color:#fff;padding:.8em 1.3em;font-size:.86rem}
 .foot-info .route svg{fill:#fff}
-.foot-map{border-radius:var(--r);overflow:hidden;min-height:260px;background:rgba(255,255,255,.08)}
-.foot-map iframe{width:100%;height:100%;min-height:260px;border:0;display:block}
-@media (max-width:860px){.foot-grid{grid-template-columns:1fr;grid-gap:22px;gap:22px}.foot-map,.foot-map iframe{min-height:210px}.foot-info .flabel{width:5em;min-width:5em}}
+.foot-map{border-radius:var(--r);overflow:hidden;min-height:200px;background:rgba(255,255,255,.08)}
+.foot-map iframe{width:100%;height:100%;min-height:200px;border:0;display:block}
+@media (max-width:860px){.foot-grid{grid-template-columns:1fr;grid-gap:22px;gap:22px}.foot-map,.foot-map iframe{min-height:170px}.foot-info .flabel{width:5em;min-width:5em}}
 .spbar{display:none}
 @media (max-width:860px){
   .spbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--dark);border-top:1px solid var(--accent-soft);padding-bottom:env(safe-area-inset-bottom)}
