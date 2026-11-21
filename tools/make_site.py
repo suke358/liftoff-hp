@@ -61,7 +61,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
 写真の自動入れ（2026/11/21・⑥-1「写真」。本人の採点「写真がない＝2点」を二度と出さない）：
   トップ（hero）とメニューのカード（menus）に写真が無い（image が空・ファイルが無い・前の道具の仮の絵 .svg）とき、設定の "業種"（例 "造園"。~/src/_素材写真/ のフォルダ名）の
   写真を images/ に写して入れる。使うのは _素材写真/素材一覧.md に載っていて「商用可・表記不要」のものだけ（一覧に無い写真はフォルダにあっても使わない）。
-  トップは名前に hero が付く写真、カードは残りを一覧の順に（名前に owner が付く人物の写真は、お店の人と間違われるので使わない）。
+  トップは名前に hero が付く写真、カードは残り。どちらも明るい順（平均の明るさ。2026/11/21 ⑥-2 3周目。前は一覧の順）。名前に owner が付く人物の写真は、お店の人と間違われるので使わない。
+  暗い写真（平均の明るさ 105 未満）は写すときに最大 1.3 倍まで明るくする。トップの写真の上の影は薄め（黒 .3）
   写した先は、設定の image が .jpg ならその名前（例 images/menu-sentei.jpg。あとでお店の写真に同じ名前で差しかえられる）、それ以外は元の名前。カードの写真は設定の w:h（無ければ 4:3）に真ん中を切る（Pillow があるとき）
   写真が足りない・フォルダが無い・"業種" が無いときは ⚠️ で止まり、何も書かない（黙って仮の絵にしない）。
   ごあいさつ・部品（belt・cases・shop・compare）の写真はまだ自動では入れない（⑥-3）。設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す）。
@@ -436,7 +437,8 @@ def build(c):
     if c.get('layout'): css += '\n' + layouts.css(c['layout'])  # レイアウトの型（2026/11/11。tools/layouts.py）
     else:  # 型を使わないときだけ：写真の上の端に影・スマホでトップの写真を画面の 6 割の高さに（2026/11/21 ⑥-1。型は layouts.py の決まりのまま）
         light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
-        css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.7)' if light else 'rgba(0,0,0,.5)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
+        # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
+        css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -1361,12 +1363,27 @@ def jpeg_size(path):
     except Exception:
         return None
 
+BRIGHT_MIN = 105   # 写真の平均の明るさ（0〜255）がこれ未満なら、写すときに少し明るくする（⑥-2 3周目）
+BRIGHT_MAX_GAIN = 1.3
+
+def photo_brightness(path):
+    """写真の平均の明るさ（0〜255。Pillow が無ければ 128）。明るい素材を先に選ぶのに使う（2026/11/21 ⑥-2 3周目）"""
+    try:
+        from PIL import Image, ImageStat
+        im = Image.open(path).convert('L'); im.thumbnail((200, 200))
+        return ImageStat.Stat(im).mean[0]
+    except Exception:
+        return 128
+
 def copy_photo(src, dst, ratio=None):
-    """素材写真を images/ に写す。ratio（w/h）があれば真ん中をその比に切る（Pillow があるとき。無ければそのまま写す）。向きを直し、位置情報などは消える"""
+    """素材写真を images/ に写す。ratio（w/h）があれば真ん中をその比に切る（Pillow があるとき。無ければそのまま写す）。向きを直し、位置情報などは消える。
+    暗い写真（平均の明るさ BRIGHT_MIN 未満）は BRIGHT_MAX_GAIN 倍まで少し明るくする（2026/11/21 ⑥-2 3周目）"""
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     try:
-        from PIL import Image, ImageOps
+        from PIL import Image, ImageOps, ImageEnhance, ImageStat
         im = ImageOps.exif_transpose(Image.open(src)).convert('RGB')
+        b = ImageStat.Stat(im.convert('L')).mean[0]
+        if b < BRIGHT_MIN: im = ImageEnhance.Brightness(im).enhance(min(BRIGHT_MAX_GAIN, BRIGHT_MIN / max(b, 1)))
         if ratio:
             W, H = im.size
             if W / H > ratio: nw = int(H * ratio); im = im.crop(((W - nw) // 2, 0, (W - nw) // 2 + nw, H))
@@ -1402,6 +1419,7 @@ def fill_photos(c, outdir):
         sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真のフォルダ {folder} がありません（今あるフォルダ：' + '・'.join(stock_folders()) +
                  '。写真の取り方は _素材写真/素材の探し方と置き方.md）')
     photos = stock_photos(gy)
+    photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))  # 明るい素材を先に（⑥-2 3周目。前は素材一覧.md の順）
     heroes = [p for p in photos if 'hero' in p[0].lower()]
     rest = [p for p in photos if 'hero' not in p[0].lower() and 'owner' not in p[0].lower()]  # 人物（owner）はお店の人と間違われるので使わない
     if need_hero and not heroes and rest: heroes, rest = rest[:1], rest[1:]
