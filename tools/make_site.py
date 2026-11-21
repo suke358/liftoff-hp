@@ -79,6 +79,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
 手書き風フォント（2026/11/22・⑥-2 6周目）：区画の見出し（h2）とトップの一言（h1）に Google Fonts の手書き風（Klee One・Yomogi・Zen Kurenaido・Yusei Magic・Kaisei Decol。無料・表記不要）。
   設定の "hand_font": "Klee One" ＞ 業種（HAND_BY_GYOUSHU）＞ 雰囲気（HAND_BY_THEME）。"hand_font": false で切る。本文は今までのまま
+重ねる型（2026/11/22・⑥-2 ネイル1周目。AI が毎回「最初の画面に写真と文字の重ねが無い」）：型（layout）を使わないページは、最初の画面で写真の上に小見出し・一言・ボタンを重ね、
+  文（lead）・場所・目次は写真の下の帯に出す。暗い／明るい上の部分（hero_style）に合わせて影の色が変わる。"hero_overlay": false で前の形（写真と文の面が分かれる）
 料金の目安（2026/11/22・⑥-2 7周目）：メニューのカードは menus[].price があるときだけ「料金の目安」の札つきで出す（price_note で札の文を変えられる）。無ければ「料金はお問い合わせください」のまま（分からない料金は作らない）
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
@@ -216,7 +218,28 @@ def build(c):
         hero_vis = ''
         hb_cls = ' has-banner'
         hb_html = f'<div class="hero-banner"><img src="{e(hero["banner"])}" alt="{e(hero.get("alt", short))}" width="{hero.get("w", 1170)}" height="{hero.get("h", 424)}" fetchpriority="high"></div>\n    '
-    hero_html = f'''
+    # 重ねる型（2026/11/22 ⑥-2 ネイル1周目）：写真があり・横長のヘッダー画像でなく・型（layout）を使わないとき。"hero_overlay": false で前の形
+    ov = bool(hero.get('image')) and not hero.get('banner') and not c.get('layout') and c.get('hero_overlay', True)
+    addr_html = f'<p class="addr">{PIN}<span>{e(c.get("area") or c.get("address",""))}</span></p>' if (c.get("area") or c.get("address")) else ''
+    if ov:
+        hero_html = f'''
+  <section class="hero ov{hb_cls}">
+    {hb_html}<div class="wrap">
+      {hero_vis}
+      <div class="hero-info hero-over">
+        <p class="eyebrow">{e(c.get("kind",""))}</p>
+        <h1>{c.get("catch_html") or e(c.get("catch",""))}</h1>
+        <div class="hero-btns">{''.join(first_btns)}</div>
+      </div>
+    </div>
+    <div class="hero-under"><div class="hu">
+      <p class="lead">{e(c.get("lead",""))}</p>
+      {addr_html}
+      <ul class="toc" aria-label="このページの案内">{toc}</ul>
+    </div></div>
+  </section>'''
+    else:
+        hero_html = f'''
   <section class="hero{hb_cls}">
     {hb_html}<div class="wrap">
       {hero_vis}
@@ -224,7 +247,7 @@ def build(c):
         <p class="eyebrow">{e(c.get("kind",""))}</p>
         <h1>{c.get("catch_html") or e(c.get("catch",""))}</h1>
         <p class="lead">{e(c.get("lead",""))}</p>
-        {f'<p class="addr">{PIN}<span>{e(c.get("area") or c.get("address",""))}</span></p>' if (c.get("area") or c.get("address")) else ''}
+        {addr_html}
         <div class="hero-btns">{''.join(first_btns)}</div>
         <ul class="toc" aria-label="このページの案内">{toc}</ul>
       </div>
@@ -459,6 +482,9 @@ def build(c):
         # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
         css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
         if c.get('design', True): css += '\n' + DESIGN_CSS  # 背景のデザイン（⑥-2 5周目）。"design": false で前の無地に
+        if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
+            css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.55)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 12px rgba(255,255,255,.75)') if light else
+                            OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.45)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -824,6 +850,32 @@ def hand_font(c, t):
         if v in HAND_FONTS: return v
         print(f'⚠️ hand_font「{v}」は使えません（使えるもの：' + '・'.join(HAND_FONTS) + '）。業種・雰囲気から選びます')
     return HAND_BY_GYOUSHU.get(str(c.get('業種') or '').strip()) or HAND_BY_THEME.get(c.get('theme_base', ''), 'Klee One')
+
+# 重ねる型（2026/11/22 ⑥-2 ネイル1周目。AI が「最初の画面に写真と文字の重ねが無い」と毎回書いた分）。OV_〜 は build で 暗い／明るい上の部分に合わせて置きかえる
+OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出し・一言・ボタンを重ねる（"hero_overlay": false で前の形） */
+.hero.ov .wrap{display:block;position:relative;min-height:600px;min-height:min(100vh,900px)}
+.hero.ov .poster{position:absolute;top:0;left:0;right:0;bottom:0;height:auto;min-height:0}
+.hero.ov .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.hero.ov .poster::after{display:block;left:0;width:auto;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 30%,OV_MID 68%,OV_END 100%);background:linear-gradient(180deg,rgba(0,0,0,0) 30%,OV_MID 68%,OV_END 100%)}
+.hero.ov .hero-over{position:absolute;left:0;right:0;bottom:0;z-index:2;max-width:none;padding:0 6% 60px;margin:0}
+.hero.ov .hero-over .eyebrow{margin-bottom:14px}
+.hero.ov .hero-over h1{color:OV_TEXT;font-size:2.8rem;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.6;margin-bottom:26px;text-shadow:OV_SHADOW}
+.hero.ov .hero-btns{max-width:600px}
+.hero-under{padding:30px 0 44px}
+.hero-under .hu{max-width:1180px;margin:0 auto;padding:0 6%}
+.hero-under .lead{max-width:760px;margin:0}
+.hero-under .addr{margin-top:22px;padding-top:18px}
+@media (max-width:860px){
+  .hero.ov .wrap{min-height:560px;min-height:88vh}
+  .hero.ov .poster{height:auto}
+  .hero.ov .poster::after{display:block}
+  .hero.ov .hero-over{padding:0 20px 26px}
+  .hero.ov .hero-over h1{font-size:2rem;margin-bottom:18px}
+  .hero.ov .hero-btns .btn{flex:1 1 100%}
+  .hero-under{padding:22px 0 10px}
+  .hero-under .hu{padding:0 20px}
+}
+'''
 
 # 背景のデザイン（2026/11/22 ⑥-2 5周目。本人「デザイン性が欲しい」・⑭の「重ね・切りかえ・模様」）。色はテーマの変数だけを使う（どの組でも破綻しない）
 DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後ろに薄い英字（重ね）・区画の模様・斜めの切りかえ・写真の重ね枠 */
