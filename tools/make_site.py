@@ -76,6 +76,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
+写真を 1 ページ 8 枚以上に（2026/11/22・⑥-2 ネイル8周目。本人「写真が7枚以下で Googleマップに載る写真と変わらない」）：後半の区画の写真に よくある質問の横（faq。PC は左に縦長・スマホは上に横長の帯）と
+  店舗情報の小さい写真（about2。大きい写真の角に重ねる正方形）を足した。素材の残りから入れる（足りなければ入れない・止めない）。大きさを変えて同じ構図のくり返しにしない。"sec_photos" の書き方は同じ
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
   暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
   PC 幅では区画の見せ方に変化（2026/11/22 ネイル4周目）：カードの段違い・流れ（写真が無いとき）は横一列・質問は2列・店舗情報の写真を表に少し重ねる
@@ -391,6 +393,8 @@ def build(c):
     # 地図は下の段（フッター）に出す（2026/11/21 ⑥-2 2周目）。店舗情報の欄にも出したいお店だけ "access_map": true
     mapf = f'<div class="map">{map_iframe}</div>' if map_iframe and c.get('access_map') else ''
     ap = sec_photo('about')  # 地図が店舗情報の欄に無いときは、代わりに仕事の様子の写真（⑥-2 4周目）
+    ap2 = sec_photo('about2', 'sec-photo sec-photo2') if ap else ''  # 大きい写真の角に重ねる小さい写真（⑥-2 ネイル8周目。大きさに変化）
+    if ap: ap = f'<div class="sec-photos">{ap}{ap2}</div>'
     access_html = f'''
   <section id="access" class="sec access">
     <div class="wrap{' nomap' if not (mapf or ap) else ''}">
@@ -414,11 +418,12 @@ def build(c):
 
     # ---------- よくある質問 ----------
     faq = ''.join(f'<details><summary><span class="q">Q</span><span>{e(f["q"])}</span></summary><p><span class="a">A</span><span>{e(f["a"])}</span></p></details>' for f in c.get('faq', []))
+    qp = sec_photo('faq')  # よくある質問の横の写真（⑥-2 ネイル8周目。PC は左に縦長・スマホは上に横長の帯）
     faq_html = f'''
   <section id="faq" class="sec faq">
-    <div class="wrap">
+    <div class="wrap{' has-photo' if qp else ''}">
       <div class="sec-head center"><i>{I()}q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
-      <div class="faq-list">{faq}</div>
+      {qp}<div class="faq-list">{faq}</div>
     </div>
   </section>'''
 
@@ -786,6 +791,15 @@ p{margin:0 0 1.2em}
 .reserve .sec-bg::after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:-webkit-linear-gradient(top,rgba(0,0,0,.35),rgba(0,0,0,.62));background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.62))}
 .reserve.has-bg .wrap{position:relative;z-index:1}
 @media (max-width:860px){.flow .wrap.has-photo{grid-template-columns:1fr;grid-gap:28px;gap:28px}.flow .sec-photo{height:240px}.access .sec-photo{min-height:0;height:240px}}
+/* 写真を 1 ページ 8 枚以上に（⑥-2 ネイル8周目。本人「写真が7枚以下」）：店舗情報の大きい写真の角に小さい正方形を重ねる・よくある質問の横に写真。大きさを変えて同じ構図のくり返しにしない */
+.sec-photos{position:relative;margin-bottom:30px}
+.sec-photos .sec-photo2{position:absolute;left:-10px;bottom:-30px;width:40%;max-width:210px;min-height:0;height:auto;border:4px solid #fff;border-radius:var(--r);box-shadow:0 10px 28px rgba(0,0,0,.18);background:#fff}
+.sec-photos .sec-photo2 img{height:auto;border-radius:calc(var(--r) - 4px)}
+.faq .wrap.has-photo{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);grid-gap:48px;gap:48px;align-items:start;max-width:1100px}
+.faq .wrap.has-photo .sec-head{grid-column:1/-1}
+.faq .wrap.has-photo .faq-list{max-width:none;margin:0;display:block}
+.faq .sec-photo{height:380px}
+@media (max-width:860px){.faq .wrap.has-photo{grid-template-columns:1fr;grid-gap:24px;gap:24px}.faq .sec-photo{min-height:0;height:190px}.access .sec-photos .sec-photo2{height:auto;left:-6px;bottom:-24px;width:38%}.sec-photos{margin-bottom:26px}}
 /* SNS・下 */
 .sns{background:var(--pale)}
 .sns-list{display:flex;flex-wrap:wrap;justify-content:center}
@@ -903,6 +917,7 @@ DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後�
 .sec-photo{overflow:visible;position:relative;z-index:0}
 .sec-photo img{border-radius:var(--r)}
 .sec-photo::after{content:"";position:absolute;top:14px;left:14px;right:-14px;bottom:-14px;border:1px solid var(--accent-soft);border-radius:var(--r);z-index:-1}
+.sec-photos .sec-photo2{z-index:2}.sec-photos .sec-photo2::after{display:none}  /* 重ねる小さい写真には枠線を付けない（ネイル8周目） */
 @media (max-width:860px){.sec-head::before{top:-.3em}.sec-photo::after{top:10px;left:10px;right:-10px;bottom:-10px}}
 /* 区画の見せ方に変化（⑥-2 ネイル4周目）：カードの段違い・流れは横一列・質問は2列・店舗情報の写真を表に重ねる（PC 幅だけ） */
 @media (min-width:861px){
@@ -913,7 +928,7 @@ DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後�
   .flow .wrap:not(.has-photo) .steps li::before{left:50%;margin-left:-22px}
   .flow .wrap:not(.has-photo) .steps li::after{left:calc(50% + 30px);right:calc(-50% + 30px);top:21px;bottom:auto;border-left:0;border-top:2px dotted var(--line)}
   .faq-list{max-width:1000px;display:grid;grid-template-columns:1fr 1fr;grid-gap:0 20px;gap:0 20px;align-items:start}
-  .access .wrap:not(.nomap) .sec-photo{margin-left:-48px;margin-top:40px;z-index:1}
+  .access .wrap:not(.nomap) .sec-photos{margin-left:-48px;margin-top:40px;z-index:1}
 }
 '''
 
@@ -1616,7 +1631,8 @@ def fill_photos(c, outdir):
     need_menus = [m for m in c.get('menus', []) if missing(m)]
     # 後半の区画の写真（2026/11/22 ⑥-2 4周目）：about（店舗情報の横）・flow（流れの横）・reserve（ご相談の背景）。"sec_photos": false で入れない
     spc = c.get('sec_photos')
-    sec_slots = [] if spc is False else [k for k in ('about', 'flow', 'reserve') if missing((spc if isinstance(spc, dict) else {}).get(k))]
+    # faq（よくある質問の横）・about2（店舗情報の小さい写真）は ⑥-2 ネイル8周目（本人「写真が7枚以下」→ 1ページ 8枚以上に。大きさを変えて同じ構図のくり返しにしない）
+    sec_slots = [] if spc is False else [k for k in ('about', 'flow', 'reserve', 'faq', 'about2') if missing((spc if isinstance(spc, dict) else {}).get(k))]
     if not need_hero and not need_menus and not sec_slots: return
     where = (['トップ（hero）'] if need_hero else []) + ['メニュー「' + m['name'] + '」' for m in need_menus]
     gy = str(c.get('業種') or '').strip()
@@ -1662,7 +1678,7 @@ def fill_photos(c, outdir):
         used = set(n for n, _ in heroes[:1]) if need_hero else set()
         used |= set(src[0] for (_m, src, _h) in assign)
         left = [p for p in rest if p[0] not in used]
-        ratios = {'about': 4 / 3, 'flow': 4 / 5, 'reserve': 16 / 9}
+        ratios = {'about': 4 / 3, 'flow': 4 / 5, 'reserve': 16 / 9, 'faq': 3 / 2, 'about2': 1}  # faq は横長・about2 は正方形（大きさに変化。ネイル8周目）
         import math
         def pick(k):  # 人の気配の写真を先に、その中で枠の縦横（ratios）に近いものを選ぶ
             pool = [p for p in left if is_people(p[0])] or left
@@ -1673,7 +1689,8 @@ def fill_photos(c, outdir):
             best = min(pool, key=dist); left.remove(best); return best
         order = [pick(k) for k in sec_slots]
         order = [p for p in order if p]
-        labels = {'about': c.get('info_title', '店舗情報') + 'の横', 'flow': c.get('flow_title', 'ご依頼の流れ') + 'の横', 'reserve': c.get('reserve_title', 'ご予約・ご相談') + 'の背景'}
+        labels = {'about': c.get('info_title', '店舗情報') + 'の横', 'flow': c.get('flow_title', 'ご依頼の流れ') + 'の横', 'reserve': c.get('reserve_title', 'ご予約・ご相談') + 'の背景',
+                  'faq': 'よくある質問の横', 'about2': c.get('info_title', '店舗情報') + 'の小さい写真'}
         if not isinstance(c.get('sec_photos'), dict): c['sec_photos'] = {}
         for k, src in zip(sec_slots, order):
             o = c['sec_photos'].setdefault(k, {})
