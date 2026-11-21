@@ -83,6 +83,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   設定の "hand_font": "Klee One" ＞ 業種（HAND_BY_GYOUSHU）＞ 雰囲気（HAND_BY_THEME）。"hand_font": false で切る。本文は今までのまま
 重ねる型（2026/11/22・⑥-2 ネイル1周目。AI が毎回「最初の画面に写真と文字の重ねが無い」）：型（layout）を使わないページは、最初の画面で写真の上に小見出し・一言・ボタンを重ね、
   文（lead）・場所・目次は写真の下の帯に出す。暗い／明るい上の部分（hero_style）に合わせて影の色が変わる。"hero_overlay": false で前の形（写真と文の面が分かれる）
+写真の色味（2026/11/22・⑥-2 ネイル6周目）：型を使わないページの写真（トップ・カード・後半の区画）に、雰囲気ごとの薄いフィルター（PHOTO_TONE。彩度を少し落とし、ほんのり同じ色に寄せる）。"photo_tone": false で切る・文字列で指定
 料金の目安（2026/11/22・⑥-2 7周目）：メニューのカードは menus[].price があるときだけ「料金の目安」の札つきで出す（price_note で札の文を変えられる）。無ければ「料金はお問い合わせください」のまま（分からない料金は作らない）
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
@@ -484,6 +485,9 @@ def build(c):
         # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
         css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
         if c.get('design', True): css += '\n' + DESIGN_CSS  # 背景のデザイン（⑥-2 5周目）。"design": false で前の無地に
+        tone = c.get('photo_tone', True)
+        if tone:  # 写真の色味をそろえる（⑥-2 ネイル6周目）
+            css += '\n' + TONE_CSS.replace('PHOTO_TONE', tone if isinstance(tone, str) else PHOTO_TONE.get(c.get('theme_base', ''), 'saturate(.9)'))
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
             css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.32)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
                             OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.3)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
@@ -878,6 +882,10 @@ OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出�
   .hero-under .hu{padding:0 20px}
 }
 '''
+
+# 写真の色味をそろえる（2026/11/22 ⑥-2 ネイル6周目。AI が毎回「写真の色味がばらばら」）。雰囲気（theme_base）ごとの薄いフィルター。"photo_tone": false で切る・文字列で指定
+PHOTO_TONE = {'salon': 'saturate(.85) sepia(.1) contrast(1.02)', 'wa': 'saturate(.88) sepia(.08)', 'fresh': 'saturate(.95) contrast(1.02)', 'simple': 'saturate(.9)', 'jouhin': 'saturate(.85) sepia(.1)', 'genki': 'saturate(1.02)'}
+TONE_CSS = '.photo img,.poster img,.sec-photo img,.reserve .sec-bg img{-webkit-filter:PHOTO_TONE;filter:PHOTO_TONE}'
 
 # 背景のデザイン（2026/11/22 ⑥-2 5周目。本人「デザイン性が欲しい」・⑭の「重ね・切りかえ・模様」）。色はテーマの変数だけを使う（どの組でも破綻しない）
 DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後ろに薄い英字（重ね）・区画の模様・斜めの切りかえ・写真の重ね枠 */
