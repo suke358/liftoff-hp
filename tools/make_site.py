@@ -1492,6 +1492,8 @@ PHOTO_WORDS = {
     '英会話': ['english', 'eikaiwa'], '学習': ['study', 'desk'], '車検': ['shaken', 'inspection'], '整備': ['repair', 'engine'], 'トリミング': ['trim', 'dog'], 'シャンプー': ['shampoo'],
 }
 
+OBJECT_WORDS = ['bottle', 'tool', 'shelf', 'product', 'item', 'goods']  # 物撮りらしい素材の名前。カードの写真としては最後に使う
+
 def menu_tokens(m):
     """メニュー1つの手がかり：(種類, 英字) の集まり。stock（設定で指定）＞ id ＞ 名前の言葉"""
     toks = set()
@@ -1518,7 +1520,8 @@ def match_menus(menus, photos):
     for s, i, j in pairs:
         if i in got or j in used: continue
         got[i] = j; used.add(j)
-    rest = [j for j in range(len(photos)) if j not in used]
+    is_object = lambda n: any(k in n.lower() for k in OBJECT_WORDS)  # 物撮り（瓶・道具・棚）は、手がかりの無いカードには最後に回す（ネイル5周目）
+    rest = [j for j in range(len(photos)) if j not in used and not is_object(photos[j][0])] + [j for j in range(len(photos)) if j not in used and is_object(photos[j][0])]
     out = []
     for i, m in enumerate(menus):
         if i in got: out.append((m, photos[got[i]], '名前の手がかり'))
