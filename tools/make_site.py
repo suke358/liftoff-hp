@@ -78,6 +78,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
 背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
   暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
+  PC 幅では区画の見せ方に変化（2026/11/22 ネイル4周目）：カードの段違い・流れ（写真が無いとき）は横一列・質問は2列・店舗情報の写真を表に少し重ねる
 手書き風フォント（2026/11/22・⑥-2 6周目）：区画の見出し（h2）とトップの一言（h1）に Google Fonts の手書き風（Klee One・Yomogi・Zen Kurenaido・Yusei Magic・Kaisei Decol。無料・表記不要）。
   設定の "hand_font": "Klee One" ＞ 業種（HAND_BY_GYOUSHU）＞ 雰囲気（HAND_BY_THEME）。"hand_font": false で切る。本文は今までのまま
 重ねる型（2026/11/22・⑥-2 ネイル1周目。AI が毎回「最初の画面に写真と文字の重ねが無い」）：型（layout）を使わないページは、最初の画面で写真の上に小見出し・一言・ボタンを重ね、
@@ -895,6 +896,17 @@ DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後�
 .sec-photo img{border-radius:var(--r)}
 .sec-photo::after{content:"";position:absolute;top:14px;left:14px;right:-14px;bottom:-14px;border:1px solid var(--accent-soft);border-radius:var(--r);z-index:-1}
 @media (max-width:860px){.sec-head::before{top:-.3em}.sec-photo::after{top:10px;left:10px;right:-10px;bottom:-10px}}
+/* 区画の見せ方に変化（⑥-2 ネイル4周目）：カードの段違い・流れは横一列・質問は2列・店舗情報の写真を表に重ねる（PC 幅だけ） */
+@media (min-width:861px){
+  .menu-cards.n4 .card:nth-child(even),.menu-cards.n3 .card:nth-child(2){margin-top:36px}
+  .menu-cards.n4,.menu-cards.n3{align-items:start}
+  .flow .wrap:not(.has-photo) .steps{max-width:none;display:grid;grid-template-columns:repeat(4,1fr);grid-gap:28px;gap:28px}
+  .flow .wrap:not(.has-photo) .steps li{padding:64px 0 0;text-align:center}
+  .flow .wrap:not(.has-photo) .steps li::before{left:50%;margin-left:-22px}
+  .flow .wrap:not(.has-photo) .steps li::after{left:calc(50% + 30px);right:calc(-50% + 30px);top:21px;bottom:auto;border-left:0;border-top:2px dotted var(--line)}
+  .faq-list{max-width:1000px;display:grid;grid-template-columns:1fr 1fr;grid-gap:0 20px;gap:0 20px;align-items:start}
+  .access .wrap:not(.nomap) .sec-photo{margin-left:-48px;margin-top:40px;z-index:1}
+}
 '''
 
 def add_sec_en(html):
