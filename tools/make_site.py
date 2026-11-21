@@ -484,8 +484,8 @@ def build(c):
         css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
         if c.get('design', True): css += '\n' + DESIGN_CSS  # 背景のデザイン（⑥-2 5周目）。"design": false で前の無地に
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
-            css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.55)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 12px rgba(255,255,255,.75)') if light else
-                            OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.45)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
+            css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.32)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
+                            OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.3)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -857,7 +857,7 @@ OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出�
 .hero.ov .wrap{display:block;position:relative;min-height:600px;min-height:min(100vh,900px)}
 .hero.ov .poster{position:absolute;top:0;left:0;right:0;bottom:0;height:auto;min-height:0}
 .hero.ov .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
-.hero.ov .poster::after{display:block;left:0;width:auto;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 30%,OV_MID 68%,OV_END 100%);background:linear-gradient(180deg,rgba(0,0,0,0) 30%,OV_MID 68%,OV_END 100%)}
+.hero.ov .poster::after{display:block;left:0;width:auto;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 42%,OV_MID 74%,OV_END 100%);background:linear-gradient(180deg,rgba(0,0,0,0) 42%,OV_MID 74%,OV_END 100%)}  /* 膜は薄く・下寄りに（ネイル3周目。写真の力を残す） */
 .hero.ov .hero-over{position:absolute;left:0;right:0;bottom:0;z-index:2;max-width:none;padding:0 6% 60px;margin:0}
 .hero.ov .hero-over .eyebrow{margin-bottom:14px}
 .hero.ov .hero-over h1{color:OV_TEXT;font-size:2.8rem;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.6;margin-bottom:26px;text-shadow:OV_SHADOW}
