@@ -489,8 +489,8 @@ def build(c):
         if tone:  # 写真の色味をそろえる（⑥-2 ネイル6周目）
             css += '\n' + TONE_CSS.replace('PHOTO_TONE', tone if isinstance(tone, str) else PHOTO_TONE.get(c.get('theme_base', ''), 'saturate(.9)'))
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
-            css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.32)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
-                            OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.3)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
+            css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.22)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
+                            OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.25)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -862,9 +862,9 @@ OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出�
 .hero.ov .wrap{display:block;position:relative;min-height:600px;min-height:min(100vh,900px)}
 .hero.ov .poster{position:absolute;top:0;left:0;right:0;bottom:0;height:auto;min-height:0}
 .hero.ov .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
-.hero.ov .poster::after{display:block;left:0;width:auto;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 42%,OV_MID 74%,OV_END 100%);background:linear-gradient(180deg,rgba(0,0,0,0) 42%,OV_MID 74%,OV_END 100%)}  /* 膜は薄く・下寄りに（ネイル3周目。写真の力を残す） */
+.hero.ov .poster::after{display:block;left:0;width:auto;background:-webkit-linear-gradient(top,rgba(0,0,0,0) 50%,OV_MID 80%,OV_END 100%);background:linear-gradient(180deg,rgba(0,0,0,0) 50%,OV_MID 80%,OV_END 100%)}  /* 膜はさらに薄く・下寄りに（ネイル3→7周目。写真の力を残し、文字は影で読ませる） */
 .hero.ov .hero-over{position:absolute;left:0;right:0;bottom:0;z-index:2;max-width:none;padding:0 6% 60px;margin:0}
-.hero.ov .hero-over .eyebrow{margin-bottom:14px}
+.hero.ov .hero-over .eyebrow{margin-bottom:14px;font-weight:700;text-shadow:OV_SHADOW}  /* 小見出し（地名）が写真に埋もれないように（ネイル7周目） */
 .hero.ov .hero-over h1{color:OV_TEXT;font-size:2.8rem;font-size:clamp(2rem,4.2vw,3.4rem);line-height:1.6;margin-bottom:26px;text-shadow:OV_SHADOW}
 .hero.ov .hero-btns{max-width:600px}
 .hero-under{padding:30px 0 44px}
