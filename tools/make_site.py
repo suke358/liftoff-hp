@@ -62,6 +62,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   トップ（hero）とメニューのカード（menus）に写真が無い（image が空・ファイルが無い・前の道具の仮の絵 .svg）とき、設定の "業種"（例 "造園"。~/src/_素材写真/ のフォルダ名）の
   写真を images/ に写して入れる。使うのは _素材写真/素材一覧.md に載っていて「商用可・表記不要」のものだけ（一覧に無い写真はフォルダにあっても使わない）。
   トップは名前に hero が付く写真、カードは残り。どちらも明るい順（平均の明るさ。2026/11/21 ⑥-2 3周目。前は一覧の順）。名前に owner が付く人物の写真は、お店の人と間違われるので使わない。
+  カードは、メニューの "stock"（素材の名前の一部）＞ id（gel・off…）＞ 名前の言葉（PHOTO_WORDS。剪定→prun など）と素材のファイル名を照らして、合う組から当てる（2026/11/22 ネイル2周目）。手がかりが無ければ順に
   暗い写真（平均の明るさ 105 未満）は写すときに最大 1.3 倍まで明るくする。トップの写真の上の影は薄め（黒 .3）
   写した先は、設定の image が .jpg ならその名前（例 images/menu-sentei.jpg。あとでお店の写真に同じ名前で差しかえられる）、それ以外は元の名前。カードの写真は設定の w:h（無ければ 4:3）に真ん中を切る（Pillow があるとき）
   写真が足りない・フォルダが無い・"業種" が無いときは ⚠️ で止まり、何も書かない（黙って仮の絵にしない）。
@@ -1468,6 +1469,50 @@ def stock_folders():
     try: return sorted(d for d in os.listdir(STOCK_ROOT) if os.path.isdir(os.path.join(STOCK_ROOT, d)) and not d.startswith('_'))
     except Exception: return []
 
+# メニューの名前の言葉 → 素材のファイル名に入っていそうな英字（2026/11/22 ⑥-2 ネイル2周目「カードの写真を仕事の名前に合う素材から」）。増やすのはここだけ
+PHOTO_WORDS = {
+    'ジェル': ['gel'], 'ケア': ['care'], 'オフ': ['off'], '長さ出し': ['ext', 'long'], 'フット': ['foot', 'pedi'], 'アート': ['art'], 'ハンド': ['hand'],
+    '剪定': ['prun', 'shears', 'sentei'], '伐採': ['fell', 'saw', 'log', 'bassai'], '外構': ['exterior', 'wall', 'fence', 'stone', 'path', 'gaikou'], '庭': ['garden', 'niwa', 'yard'], '植栽': ['plant'],
+    'まつげ': ['lash'], 'パーマ': ['perm'], 'カット': ['cut'], 'カラー': ['color'], 'トリートメント': ['treat'], 'ヘッドスパ': ['spa', 'head'],
+    'よもぎ': ['yomogi', 'steam'], '脱毛': ['datsumou', 'removal', 'smooth'], 'フェイシャル': ['facial', 'face'], 'ボディ': ['body'], '整体': ['seitai', 'massage'], '骨盤': ['pelvis', 'kotsuban'],
+    'パン': ['bread', 'pan'], 'コーヒー': ['coffee'], 'ケーキ': ['cake', 'sweet'], 'ランチ': ['lunch', 'plate'], 'モーニング': ['morning', 'toast'],
+    'リフォーム': ['reform', 'renov'], 'キッチン': ['kitchen'], '外壁': ['wall', 'exterior'], '屋根': ['roof'], '水回り': ['bath', 'sink'],
+    '英会話': ['english', 'eikaiwa'], '学習': ['study', 'desk'], '車検': ['shaken', 'inspection'], '整備': ['repair', 'engine'], 'トリミング': ['trim', 'dog'], 'シャンプー': ['shampoo'],
+}
+
+def menu_tokens(m):
+    """メニュー1つの手がかり：(種類, 英字) の集まり。stock（設定で指定）＞ id ＞ 名前の言葉"""
+    toks = set()
+    if m.get('stock'): toks.add(('stock', str(m['stock']).lower()))
+    mid = str(m.get('id') or '').lower()
+    if len(mid) >= 3: toks.add(('id', mid))
+    name = str(m.get('name') or '')
+    for jp, ens in PHOTO_WORDS.items():
+        if jp in name: toks.update(('word', w) for w in ens)
+    return toks
+
+def match_menus(menus, photos):
+    """メニューと素材を、名前の手がかりが合う組から当てる（stock 5点・id 3点・言葉 2点）。手がかりの無いメニューは残りを順に（景色→人の気配）。
+    返り：[(menu, (name, path)), …]（メニューの順）。写真が足りなければ足りない分は入らない"""
+    pairs = []
+    for i, m in enumerate(menus):
+        for j, (n, _) in enumerate(photos):
+            nl = n.lower(); s = 0
+            for kind, t in menu_tokens(m):
+                if t in nl: s += {'stock': 5, 'id': 3, 'word': 2}[kind]
+            if s: pairs.append((s, i, j))
+    pairs.sort(key=lambda x: (-x[0], x[1], x[2]))
+    got, used = {}, set()
+    for s, i, j in pairs:
+        if i in got or j in used: continue
+        got[i] = j; used.add(j)
+    rest = [j for j in range(len(photos)) if j not in used]
+    out = []
+    for i, m in enumerate(menus):
+        if i in got: out.append((m, photos[got[i]], '名前の手がかり'))
+        elif rest: out.append((m, photos[rest.pop(0)], '順'))
+    return out
+
 def stock_photos(gyoushu):
     """業種のフォルダの写真を、_素材写真/素材一覧.md に載っている順に返す（利用条件が「商用可・表記不要」で、ファイルが実際にあるものだけ）。
     返り：[(ファイル名, フルパス), …]。一覧が無ければ []（一覧に無い写真は、フォルダにあっても使わない）"""
@@ -1478,8 +1523,9 @@ def stock_photos(gyoushu):
         cells = [x.strip() for x in line.strip().strip('|').split('|')]
         if len(cells) < 4 or not cells[0].startswith(gyoushu + '/'): continue
         if '商用可' not in cells[3] or '表記不要' not in cells[3]: continue
-        p = os.path.join(STOCK_ROOT, cells[0])
-        if os.path.exists(p): out.append((os.path.basename(cells[0]), p))
+        rel = cells[0].split('（')[0].split('(')[0].strip()  # 「ネイル/nail4.jpg（薄紫の背景に…）」のような注釈つきも読む（2026/11/22）
+        p = os.path.join(STOCK_ROOT, rel)
+        if os.path.exists(p): out.append((os.path.basename(rel), p))
     return out
 
 def jpeg_size(path):
@@ -1584,13 +1630,14 @@ def fill_photos(c, outdir):
         print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
     if need_hero:
         c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)
-    for m, src in zip(need_menus, rest):
+    assign = match_menus(need_menus, rest)  # 仕事・メニューの名前に合う素材から（2026/11/22 ⑥-2 ネイル2周目）
+    for m, src, how in assign:
         r = (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3
-        put(m, src, 'メニュー「' + m['name'] + '」', m['name'], r)
+        put(m, src, 'メニュー「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], r)
     # 後半の区画（about・flow・reserve）：残った素材から。名前に hands・back・work・tool の付く「人の気配」の写真を先に（顔の出ない手元・後ろ姿。2026/11/22 本人の決め）。足りなければ入れない（止めない）
     if sec_slots:
         used = set(n for n, _ in heroes[:1]) if need_hero else set()
-        used |= set(n for (_, (n, _p)) in zip(need_menus, rest))
+        used |= set(src[0] for (_m, src, _h) in assign)
         left = [p for p in rest if p[0] not in used]
         ratios = {'about': 4 / 3, 'flow': 4 / 5, 'reserve': 16 / 9}
         import math
