@@ -22,7 +22,7 @@
      （Claude の作業場所からは消せないので、担当者のターミナルで消す）
   6. 最後に「本公開の日にやること（ファイルの外）」の一覧を出す（Cloudflare の転送 など。2026/10/21 決定事項 08）
 """
-import sys, os, re, datetime
+import sys, os, re, datetime, subprocess
 
 REMOVE_DIRS = re.compile(r'^(v\d+|new|kuro|logo-mihon|old|test|draft|tmp)$')
 REMOVE_FILES = re.compile(r'\.(bak|orig)$|^_')
@@ -51,6 +51,12 @@ def main():
     if len(a) < 2: print(__doc__); sys.exit(1)
     root, domain = os.path.expanduser(a[0]).rstrip('/'), a[1].rstrip('/')
     apply = '--apply' in sys.argv
+    # 了承の止め役（2026/11/22 本番へ）：しさくんから来たお店は、写真の了承が「未」なら本公開に進めない（案件カードが無いお店は通る）
+    guard = os.path.expanduser('~/src/sonoba-shisaku/tools/honban_guard.py')
+    if os.path.isfile(guard):
+        g = subprocess.run([sys.executable, guard, root], capture_output=True, text=True)
+        print(g.stdout.strip())
+        if g.returncode != 0: print('❌ 本公開の準備に進めません（上の理由）'); sys.exit(1)
     keep = ['samples']
     extra = []  # --from= で足す仮のURL（ココナラ用の置き場所など。2026/11/7）
     for x in sys.argv:

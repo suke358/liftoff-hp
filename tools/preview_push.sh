@@ -87,6 +87,11 @@ fi
 echo "サイト: ${NAME}（${ROOT}）"
 if [ -f .okiba ]; then echo "置き場所: ${DOMAIN}（.okiba から）"; fi
 echo "出すコミット: $(git log --oneline -1)"
+# 了承の止め役（2026/11/22 本番へ）：しさくんから来たお店は、写真の了承が「未」なら確認用にも出さない（確認用URLも外から見えるため。案件カードが無いお店は通る）
+GUARD="$HOME/src/sonoba-shisaku/tools/honban_guard.py"
+if [ -f "$GUARD" ]; then
+  python3 "$GUARD" "$ROOT" || { echo "❌ 出していません：写真の了承が済んでいません（案件カード）"; exit 1; }
+fi
 if [ -n "$(git status --short | grep -v 'DS_Store' | grep -v '^??')" ]; then
   echo "⚠️ commit していない直しがあります（下）。出るのは commit した分だけです"
   git status --short | grep -v 'DS_Store' | grep -v '^??'
