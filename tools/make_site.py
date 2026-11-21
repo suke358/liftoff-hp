@@ -71,6 +71,10 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
   設定に無いものは出ない。地図は下の段に移したので、店舗情報の欄には "access_map": true のときだけ出る
+後半の区画の写真（2026/11/22・⑥-2 4周目。本人「もう少し写真の枚数が欲しい」）：店舗情報の横（about。地図が無いとき）・ご依頼の流れの横（flow）・ご相談の背景（reserve）に、
+  業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
+  名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
+  注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -297,14 +301,21 @@ def build(c):
   </section>'''
 
     # ---------- 流れ ----------
+    # 後半の区画の写真（2026/11/22 ⑥-2 4周目。fill_photos が sec_photos に入れる。設定に書いてもよい）
+    SP = c.get('sec_photos') if isinstance(c.get('sec_photos'), dict) else {}
+    def sec_photo(k, cls='sec-photo'):
+        o = SP.get(k) or {}
+        if not o.get('image'): return ''
+        return f'<figure class="{cls}"><img src="{e(o["image"])}" alt="{e(o.get("alt",""))}" width="{o.get("w",1200)}" height="{o.get("h",900)}" loading="lazy"></figure>'
     flow_html = ''
     if c.get('flow'):
         steps = ''.join(f'<li><h3>{e(s["title"])}</h3><p>{e(s.get("text",""))}</p></li>' for s in c['flow'])
+        fp = sec_photo('flow')
         flow_html = f'''
   <section id="flow" class="sec flow">
-    <div class="wrap">
+    <div class="wrap{' has-photo' if fp else ''}">
       <div class="sec-head center"><i>{I()}flow</i><h2>{e(c.get("flow_title","ご依頼の流れ"))}</h2></div>
-      <ol class="steps">{steps}</ol>
+      {fp}<ol class="steps">{steps}</ol>
     </div>
   </section>'''
 
@@ -325,8 +336,9 @@ def build(c):
     if not ways: sys.exit('⚠️ 止めました：連絡の入口（tel・line_url・form・dm_url・reserve_url）が設定に1つもありません（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     rules = ''.join(f'<li>{e(x)}</li>' for x in c.get('rules', []))
     ctx = dict(c=c, P=P, I=I, has_line=has_line, tel=tel, tel_d=tel_d, name=name, short=short)
+    rp = sec_photo('reserve', 'sec-bg')
     reserve_html = f'''
-  <section id="reserve" class="sec reserve dark">
+  <section id="reserve" class="sec reserve dark{' has-bg' if rp else ''}">{rp}
     <div class="wrap">
       <div class="sec-head center"><i>{I()}contact</i><h2>{e(c.get("reserve_title","ご予約・ご相談"))}</h2></div>
       {f'<p class="muted center" style="margin-bottom:40px">{e(c["reserve_lead"])}</p>' if c.get("reserve_lead") else ''}
@@ -346,15 +358,16 @@ def build(c):
     map_iframe = f'<iframe src="https://maps.google.com/maps?q={urllib.parse.quote(mq)}&amp;z=15&amp;output=embed" title="{e(short)}の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>' if mq and c.get('show_map', True) else ''
     # 地図は下の段（フッター）に出す（2026/11/21 ⑥-2 2周目）。店舗情報の欄にも出したいお店だけ "access_map": true
     mapf = f'<div class="map">{map_iframe}</div>' if map_iframe and c.get('access_map') else ''
+    ap = sec_photo('about')  # 地図が店舗情報の欄に無いときは、代わりに仕事の様子の写真（⑥-2 4周目）
     access_html = f'''
   <section id="access" class="sec access">
-    <div class="wrap{' nomap' if not mapf else ''}">
+    <div class="wrap{' nomap' if not (mapf or ap) else ''}">
       <div>
         <div class="sec-head"><i>{I()}{e(c.get("info_eyebrow","access"))}</i><h2>{e(c.get("info_title","店舗情報"))}</h2></div>
         <dl class="info">{info}</dl>
         {route}
       </div>
-      {mapf}
+      {mapf or ap}
     </div>
   </section>'''
 
@@ -715,6 +728,19 @@ p{margin:0 0 1.2em}
 .faq .q,.faq .a{flex:none;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;font-family:var(--latin);font-style:italic;margin-right:14px}
 .faq .q{background:var(--primary);color:#fff}
 .faq .a{background:var(--pale);color:var(--primary-deep)}
+/* 後半の区画の写真（⑥-2 4周目）：流れの横・店舗情報の横・ご相談の背景 */
+.sec-photo{margin:0;border-radius:var(--r);overflow:hidden;background:var(--bg2)}
+.sec-photo img{display:block;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.flow .wrap.has-photo{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);grid-gap:56px;gap:56px;align-items:center;max-width:1100px}
+.flow .wrap.has-photo .sec-head{grid-column:1/-1}
+.flow .wrap.has-photo .steps{margin:0;max-width:none}
+.access .sec-photo{min-height:400px}
+.reserve.has-bg{position:relative;overflow:hidden}
+.reserve .sec-bg{position:absolute;top:0;left:0;right:0;bottom:0;margin:0}
+.reserve .sec-bg img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;opacity:.35}
+.reserve .sec-bg::after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background:-webkit-linear-gradient(top,rgba(0,0,0,.35),rgba(0,0,0,.62));background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.62))}
+.reserve.has-bg .wrap{position:relative;z-index:1}
+@media (max-width:860px){.flow .wrap.has-photo{grid-template-columns:1fr;grid-gap:28px;gap:28px}.flow .sec-photo{height:240px}.access .sec-photo{min-height:0;height:240px}}
 /* SNS・下 */
 .sns{background:var(--pale)}
 .sns-list{display:flex;flex-wrap:wrap;justify-content:center}
@@ -1407,21 +1433,28 @@ def fill_photos(c, outdir):
     hero = c.get('hero') or {}
     need_hero = not hero.get('banner') and missing(hero)
     need_menus = [m for m in c.get('menus', []) if missing(m)]
-    if not need_hero and not need_menus: return
+    # 後半の区画の写真（2026/11/22 ⑥-2 4周目）：about（店舗情報の横）・flow（流れの横）・reserve（ご相談の背景）。"sec_photos": false で入れない
+    spc = c.get('sec_photos')
+    sec_slots = [] if spc is False else [k for k in ('about', 'flow', 'reserve') if missing((spc if isinstance(spc, dict) else {}).get(k))]
+    if not need_hero and not need_menus and not sec_slots: return
     where = (['トップ（hero）'] if need_hero else []) + ['メニュー「' + m['name'] + '」' for m in need_menus]
     gy = str(c.get('業種') or '').strip()
     if not gy:
+        if not (need_hero or need_menus): return  # 後半の区画だけなら、業種が無ければ黙って入れない
         sys.exit('⚠️ 止めました（何も書きかえていません）：' + '・'.join(where) + ' に写真がありません。\n'
                  f'   設定に "業種": "〇〇" を1行足すと、{STOCK_ROOT}/〇〇/ の写真を自動で入れます（今あるフォルダ：' + '・'.join(stock_folders()) + '）。\n'
                  '   または、設定に書いた場所（images/〜）に写真を置いてください（仮の絵は作りません。2026/11/21）')
     folder = os.path.join(STOCK_ROOT, gy)
     if not os.path.isdir(folder):
+        if not (need_hero or need_menus): return
         sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真のフォルダ {folder} がありません（今あるフォルダ：' + '・'.join(stock_folders()) +
                  '。写真の取り方は _素材写真/素材の探し方と置き方.md）')
     photos = stock_photos(gy)
     photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))  # 明るい素材を先に（⑥-2 3周目。前は素材一覧.md の順）
     heroes = [p for p in photos if 'hero' in p[0].lower()]
     rest = [p for p in photos if 'hero' not in p[0].lower() and 'owner' not in p[0].lower()]  # 人物（owner）はお店の人と間違われるので使わない
+    is_people = lambda n: any(k in n.lower() for k in ('hands', 'back', 'work', 'tool'))  # 人の気配（顔の出ない手元・後ろ姿）
+    rest = [p for p in rest if not is_people(p[0])] + [p for p in rest if is_people(p[0])]  # カードには景色を先に。人の気配は後半の区画へ（⑥-2 4周目）
     if need_hero and not heroes and rest: heroes, rest = rest[:1], rest[1:]
     if (need_hero and not heroes) or len(rest) < len(need_menus):
         sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真が足りません → 要る：' + '・'.join(where) + f'（{len(where)}枚）／使える：{len(photos)}枚'
@@ -1442,6 +1475,29 @@ def fill_photos(c, outdir):
     for m, src in zip(need_menus, rest):
         r = (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3
         put(m, src, 'メニュー「' + m['name'] + '」', m['name'], r)
+    # 後半の区画（about・flow・reserve）：残った素材から。名前に hands・back・work・tool の付く「人の気配」の写真を先に（顔の出ない手元・後ろ姿。2026/11/22 本人の決め）。足りなければ入れない（止めない）
+    if sec_slots:
+        used = set(n for n, _ in heroes[:1]) if need_hero else set()
+        used |= set(n for (_, (n, _p)) in zip(need_menus, rest))
+        left = [p for p in rest if p[0] not in used]
+        ratios = {'about': 4 / 3, 'flow': 4 / 5, 'reserve': 16 / 9}
+        import math
+        def pick(k):  # 人の気配の写真を先に、その中で枠の縦横（ratios）に近いものを選ぶ
+            pool = [p for p in left if is_people(p[0])] or left
+            if not pool: return None
+            def dist(p):
+                wh = jpeg_size(p[1]) or (4, 3)
+                return abs(math.log((wh[0] / wh[1]) / ratios[k]))
+            best = min(pool, key=dist); left.remove(best); return best
+        order = [pick(k) for k in sec_slots]
+        order = [p for p in order if p]
+        labels = {'about': c.get('info_title', '店舗情報') + 'の横', 'flow': c.get('flow_title', 'ご依頼の流れ') + 'の横', 'reserve': c.get('reserve_title', 'ご予約・ご相談') + 'の背景'}
+        if not isinstance(c.get('sec_photos'), dict): c['sec_photos'] = {}
+        for k, src in zip(sec_slots, order):
+            o = c['sec_photos'].setdefault(k, {})
+            if not (o.get('image') and o['image'].lower().endswith(('.jpg', '.jpeg'))): o['image'] = f'images/sec-{k}.jpg'
+            put(o, src, labels[k], (c.get('short_name') or c['name']) + 'の仕事の様子', ratios[k])
+        for k in sec_slots[len(order):]: print(f'（{labels[k]} の写真は、業種の素材が足りないので入れません）')
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
