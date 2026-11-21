@@ -75,6 +75,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
   注意：お店の写真がそろっていてメニューの自動入れが無いときは、素材がメニューと重なることがある（そのときは設定の sec_photos に書く）
+背景のデザイン（2026/11/22・⑥-2 5周目。本人「デザイン性が欲しい」）：型（layout）を使わないページに、見出しの後ろの薄い英字（重ね）・メニューの面のずらし・店舗情報の罫線・よくある質問の点の模様・
+  暗い区画と下の段の上の端の斜めの切りかえ・後半の写真の重ね枠を入れる。色はテーマの変数だけ。"design": false で前の無地に戻る
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -452,6 +454,7 @@ def build(c):
         light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
         # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
         css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
+        if c.get('design', True): css += '\n' + DESIGN_CSS  # 背景のデザイン（⑥-2 5周目）。"design": false で前の無地に
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -516,6 +519,7 @@ def build(c):
 </body>
 </html>
 '''
+    out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
     return out
 
 CSS = r'''/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
@@ -792,6 +796,33 @@ DM_CSS = r'''/* インスタグラムの DM の入口（dm_url。2026/11/7） */
 # スマホのトップの写真（2026/11/21 ⑥-1）：型（layout）を使わないときだけ足す。写真を画面の高さの 6 割にして、最初の画面の半分以上が写真になる形
 # （前は写真の高さが成り行きで、横長の写真だと画面の 3 割ほどだった）。px の予備を先に書く（古いスマホ対策）
 # 写真の上の端に薄い影（HERO_SHADE）：ヘッダーの店名・メニューの文字が、明るい空などの上でも読めるように。濃い上の部分は黒の影、明るい上の部分（hero_style light）は白の影
+# 背景のデザイン（2026/11/22 ⑥-2 5周目。本人「デザイン性が欲しい」・⑭の「重ね・切りかえ・模様」）。色はテーマの変数だけを使う（どの組でも破綻しない）
+DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後ろに薄い英字（重ね）・区画の模様・斜めの切りかえ・写真の重ね枠 */
+.sec-head{position:relative;z-index:0}
+.sec-head::before{content:attr(data-en);position:absolute;left:0;top:-.42em;font-family:var(--latin);font-style:italic;font-weight:500;font-size:5.2rem;font-size:clamp(3.6rem,8vw,6.5rem);line-height:1;letter-spacing:.02em;color:var(--ink);opacity:.07;pointer-events:none;white-space:nowrap;z-index:-1;text-transform:capitalize}
+.sec-head.center::before{left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%)}
+.dark .sec-head::before{color:#fff;opacity:.09}
+.sec-head i,.sec-head h2{position:relative}
+.menu{background-color:var(--bg);background-image:-webkit-linear-gradient(top,var(--bg2) 0,var(--bg2) 46%,rgba(0,0,0,0) 46%);background-image:linear-gradient(180deg,var(--bg2) 0,var(--bg2) 46%,rgba(0,0,0,0) 46%)}
+.access{background-color:var(--bg);background-image:-webkit-repeating-linear-gradient(top,rgba(0,0,0,0) 0,rgba(0,0,0,0) 31px,rgba(0,0,0,.05) 31px,rgba(0,0,0,.05) 32px);background-image:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 31px,rgba(0,0,0,.05) 31px,rgba(0,0,0,.05) 32px)}
+.faq{background-color:var(--bg2);background-image:-webkit-radial-gradient(rgba(0,0,0,.1) 1px,rgba(0,0,0,0) 1.6px);background-image:radial-gradient(rgba(0,0,0,.1) 1px,rgba(0,0,0,0) 1.6px);background-size:22px 22px}
+.sec.dark,.foot{position:relative;z-index:0}
+.sec.dark::before,.foot::before{content:"";position:absolute;left:0;right:0;top:-26px;height:60px;background:var(--dark);-webkit-transform:skewY(-1.5deg);transform:skewY(-1.5deg);z-index:-1}
+.reserve.has-bg{overflow:visible}
+.sec-photo{overflow:visible;position:relative;z-index:0}
+.sec-photo img{border-radius:var(--r)}
+.sec-photo::after{content:"";position:absolute;top:14px;left:14px;right:-14px;bottom:-14px;border:1px solid var(--accent-soft);border-radius:var(--r);z-index:-1}
+@media (max-width:860px){.sec-head::before{top:-.3em}.sec-photo::after{top:10px;left:10px;right:-10px;bottom:-10px}}
+'''
+
+def add_sec_en(html):
+    """見出しの後ろの薄い英字（⑥-2 5周目）：各区画の小見出し（sec-head の i の文字。menu・flow など）を data-en に写す（CSS の content:attr(data-en) が使う。JS なし・部品の見出しにも効く）"""
+    def f(m):
+        txt = re.sub(r'<[^>]+>', '', m.group(2)).strip()
+        if not txt or len(txt) > 16 or 'data-en' in m.group(1): return m.group(0)
+        return f'<div class="sec-head{m.group(1)}" data-en="{txt}"><i>{m.group(2)}</i>'
+    return re.sub(r'<div class="sec-head([^"]*)"><i>(.*?)</i>', f, html, flags=re.S)
+
 HERO_SP_CSS = r'''/* トップの写真（⑥-1）：上の端に薄い影・スマホで大きく */
 .poster::before{content:"";position:absolute;top:0;left:0;right:0;height:150px;background:-webkit-linear-gradient(top,HERO_SHADE_A,HERO_SHADE_B);background:linear-gradient(180deg,HERO_SHADE_A,HERO_SHADE_B);pointer-events:none;z-index:1}
 @media (max-width:860px){
