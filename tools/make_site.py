@@ -1017,7 +1017,7 @@ def parts_conf(c):
     if 'cases' in P and not P['cases'].get('items'): print('⚠️ cases：施工例（items）がないので入れません'); del P['cases']
     if 'compare' in P and not (P['compare'].get('before') and P['compare'].get('after')):
         cs = (P.get('cases') or {}).get('items') or []
-        if cs: P['compare'].setdefault('before', cs[0]['before']); P['compare'].setdefault('after', cs[0]['after'])  # 施工例の1つ目を借りる
+        if cs: P['compare'].setdefault('before', cs[0].setdefault('before', {})); P['compare'].setdefault('after', cs[0].setdefault('after', {}))  # 施工例の1つ目を借りる（同じ辞書。写真の自動入れで施工例が埋まれば見比べも埋まる。⑥-3 1周目）
         else: print('⚠️ compare：前と後の写真（before・after）がないので入れません'); del P['compare']
     if 'calc' in P and not P['calc'].get('items'): print('⚠️ calc：項目（items）がないので入れません'); del P['calc']
     if 'shop' in P:
@@ -1636,7 +1636,18 @@ def fill_photos(c, outdir):
     spc = c.get('sec_photos')
     # faq（よくある質問の横）・about2（店舗情報の小さい写真）は ⑥-2 ネイル8周目（本人「写真が7枚以下」→ 1ページ 8枚以上に。大きさを変えて同じ構図のくり返しにしない）
     sec_slots = [] if spc is False else [k for k in ('about', 'flow', 'reserve', 'faq', 'about2') if missing((spc if isinstance(spc, dict) else {}).get(k))]
-    if not need_hero and not need_menus and not sec_slots: return
+    # 部品の写真（2026/11/22 ⑥-3 1周目）：belt・cases・compare・shop に写真が無ければ、業種の素材から入れる（下の「部品の写真」）
+    P = c.get('_P') if isinstance(c.get('_P'), dict) else {}
+    cs, cp, sp, bp = P.get('cases') or {}, P.get('compare'), P.get('shop') or {}, P.get('belt')
+    need_pairs = sum(1 for it in cs.get('items', []) if missing(it.get('before')) or missing(it.get('after')))
+    borrowed = bool(cs.get('items')) and cp is not None and cp.get('before') is cs['items'][0].get('before')  # 施工例の1つ目を借りている（parts_conf）→ 施工例が埋まれば埋まる
+    cp_need = cp is not None and not borrowed and bool(cp.get('before') or cp.get('after')) and (missing(cp.get('before')) or missing(cp.get('after')))
+    if cp_need: need_pairs += 1
+    need_shop = [it for it in sp.get('items', []) if missing(it)]
+    need_belt = [it for it in (bp.get('items') or [])] if bp is not None else []
+    need_belt = [it for it in need_belt if missing(it)]
+    part_need = need_pairs or need_shop or need_belt or (bp is not None and not bp.get('items'))
+    if not need_hero and not need_menus and not sec_slots and not part_need: return
     where = (['トップ（hero）'] if need_hero else []) + ['メニュー「' + m['name'] + '」' for m in need_menus]
     gy = str(c.get('業種') or '').strip()
     if not gy:
@@ -1672,14 +1683,76 @@ def fill_photos(c, outdir):
         print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
     if need_hero:
         c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)
-    assign = match_menus(need_menus, rest)  # 仕事・メニューの名前に合う素材から（2026/11/22 ⑥-2 ネイル2周目）
+    # before/after の組（施工例・見比べ用。〇〇_before.jpg ↔ 〇〇_after.jpg）を先に取り分ける。カードの分が足りなくなるなら組をほどく（カードが先）
+    pairs = []
+    if need_pairs:
+        byname = {n: (n, pth) for n, pth in rest}
+        for n in list(byname):
+            a = n.replace('before', 'after')
+            if 'before' in n.lower() and a != n and a in byname and len(pairs) < need_pairs: pairs.append((byname[n], byname[a]))
+    reserved = set(n for pr in pairs for n, _ in pr)
+    avail = [p for p in rest if p[0] not in reserved]
+    while len(avail) < len(need_menus) and pairs:
+        pr = pairs.pop(); reserved -= set(n for n, _ in pr); avail = [p for p in rest if p[0] not in reserved]
+    assign = match_menus(need_menus, avail)  # 仕事・メニューの名前に合う素材から（2026/11/22 ⑥-2 ネイル2周目）
     for m, src, how in assign:
         r = (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3
         put(m, src, 'メニュー「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], r)
+    used = set(n for n, _ in heroes[:1]) if need_hero else set()
+    used |= set(src[0] for (_m, src, _h) in assign)
+    # ---------- 部品の写真（2026/11/22 ⑥-3 1周目。仮の絵は残さない） ----------
+    # 施工例（cases）・見比べ（compare）は before/after の組から。商品（shop）は名前の手がかり＞物撮り（瓶・道具・棚）。写真の帯（belt）は残り。
+    # 素材が足りないとき：施工例は入らない項目を外す（組が無いのに作らない）、商品は写真なしで出す、帯は使った写真をもう一度使う（印を出す）。止めない
+    def put2(o, src, label, alt, ratio):
+        put(o, src, label, alt, ratio); used.add(src[0])
+    lb, la = cs.get('label_before', '作業前'), cs.get('label_after', '作業後')
+    for it in cs.get('items', []):
+        if missing(it.get('before')) or missing(it.get('after')):
+            if not pairs:
+                print(f'⚠️ 施工例「{it.get("title", "")}」：before/after の組の素材が足りないので外します（_素材写真/{gy}/ に 〇〇_before.jpg と 〇〇_after.jpg の組を足す）'); it['_drop'] = True; continue
+            b, a = pairs.pop(0)
+            it.setdefault('before', {}); it.setdefault('after', {})
+            put2(it['before'], b, '施工例「' + it.get('title', '') + '」の' + lb, lb, 4 / 3)
+            put2(it['after'], a, '施工例「' + it.get('title', '') + '」の' + la, la, 4 / 3)
+    if cs.get('items'):
+        cs['items'] = [it for it in cs['items'] if not it.get('_drop')]
+        if not cs['items']: print('⚠️ 施工例：写真が入らないので部品ごと外します'); P.pop('cases', None)
+    if cp_need:
+        if pairs:
+            b, a = pairs.pop(0); cp.setdefault('before', {}); cp.setdefault('after', {})
+            put2(cp['before'], b, '見比べの' + cp.get('label_before', '作業前'), cp.get('label_before', '作業前'), 4 / 3)
+            put2(cp['after'], a, '見比べの' + cp.get('label_after', '作業後'), cp.get('label_after', '作業後'), 4 / 3)
+        elif P.get('cases'):
+            cp.pop('before', None); cp.pop('after', None); print('見比べ：before/after の組が足りないので、施工例の1つ目の写真を使います')
+        else:
+            print('⚠️ 見比べ：before/after の組の素材が無いので外します'); P.pop('compare', None)
+    if need_shop:
+        avail2 = [p for p in rest if p[0] not in used]
+        is_object = lambda n: any(k in n.lower() for k in OBJECT_WORDS)
+        got = match_menus(need_shop, [p for p in avail2 if is_object(p[0])])  # 物撮りを先に
+        done = set(id(m) for m, _, _ in got)
+        got += match_menus([m for m in need_shop if id(m) not in done], [p for p in avail2 if not is_object(p[0]) and p[0] not in set(s[0] for _, s, _ in got)])
+        for m, src, how in got:
+            put2(m, src, '商品「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3)
+        for m in need_shop:
+            if missing(m): print(f'⚠️ 商品「{m["name"]}」：素材が足りないので写真なしで出します'); m.pop('image', None)
+    if bp is not None:
+        avail2 = [p for p in rest if p[0] not in used]
+        if need_belt:
+            pseudo = [dict(name=it.get('title', ''), _ref=it) for it in need_belt]
+            for m, src, how in match_menus(pseudo, avail2):
+                put2(m['_ref'], src, '写真の帯「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], 4 / 3)
+            again = [p for p in rest if p[0] not in set(n for n, _ in heroes[:1])]  # 足りなければ、使った写真をもう一度（トップ以外）
+            for it in need_belt:
+                if missing(it) and again:
+                    src = again.pop(0); put2(it, src, '写真の帯「' + it.get('title', '') + '」（素材が足りないので、ほかの区画と同じ写真）', it.get('title', ''), 4 / 3)
+            bp['items'] = [it for it in bp['items'] if not missing(it)]
+        elif not bp.get('items') and len(avail2) >= 3:  # items が無ければ、まだ使っていない素材で帯を作る（3枚未満なら今までどおりメニューの写真）
+            bp['items'] = []
+            for src in avail2[:6]:
+                it = {}; put2(it, src, '写真の帯', (c.get('short_name') or c['name']) + 'の写真', 4 / 3); bp['items'].append(it)
     # 後半の区画（about・flow・reserve）：残った素材から。名前に hands・back・work・tool の付く「人の気配」の写真を先に（顔の出ない手元・後ろ姿。2026/11/22 本人の決め）。足りなければ入れない（止めない）
     if sec_slots:
-        used = set(n for n, _ in heroes[:1]) if need_hero else set()
-        used |= set(src[0] for (_m, src, _h) in assign)
         left = [p for p in rest if p[0] not in used]
         ratios = {'about': 4 / 3, 'flow': 4 / 5, 'reserve': 16 / 9, 'faq': 3 / 2, 'about2': 1}  # faq は横長・about2 は正方形（大きさに変化。ネイル8周目）
         import math
@@ -1716,8 +1789,13 @@ def main():
                      '   道具が変わっているので、作り直すと見た目が変わるかもしれません。作り直すなら --uwagaki を付けて動かし、できた index.html を前の index.old.html と見比べてください（diff index.old.html index.html）')
     os.makedirs(outdir, exist_ok=True)
     # 写真（2026/11/21 ⑥-1）：仮の絵（「写真が入ります」の .svg）はもう作らない
-    # ①ごあいさつ・部品（belt・cases・shop・compare）は、設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す。自動入れは ⑥-3）
     P = parts_conf(c)
+    # 連絡の入口（2026/11/21 ⑥-2）：電話・LINE・フォーム・インスタのDM・ネット予約のどれも無ければ ⚠️ で止まる（前は「準備中」の欄を出していた。お客さんがそこで止まる・作りかけに見えるのでやめた）
+    if not (c.get('tel') or c.get('line_url') or c.get('reserve_url') or c.get('dm_url') or c.get('form_url') or 'form' in P):
+        sys.exit('⚠️ 止めました（何も書きかえていません）：連絡の入口が設定に1つもありません → "tel"（電話）・"line_url"（LINE）・"parts" の "form"（フォーム）・"dm_url"・"reserve_url" のどれか1つを書いてください（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
+    # ①トップ・メニューのカード・後半の区画・部品（belt・cases・shop・compare）に写真が無ければ、設定の "業種" の素材写真を入れる（トップとカードが足りなければ ⚠️ で止まる。部品は 2026/11/22 ⑥-3 1周目から）
+    fill_photos(c, outdir)
+    # ②それでも、ごあいさつ・部品に設定に書いた写真が無ければ ⚠️ で止まる（写真を置くか、設定から外す。仮の絵は作らない）
     lack = []
     def need(obj, label):
         if obj and obj.get('image') and not os.path.exists(os.path.join(outdir, obj['image'])): lack.append(label + '：' + obj['image'])
@@ -1731,11 +1809,6 @@ def main():
     need(cp.get('before'), '見比べの' + cp.get('label_before', '作業前')); need(cp.get('after'), '見比べの' + cp.get('label_after', '作業後'))
     if lack: sys.exit('⚠️ 止めました（何も書きかえていません）：写真がありません → ' + '／'.join(lack) +
                       '\n   設定に書いた場所に写真を置くか、設定からその写真（部品）を外してください（仮の絵は作りません。2026/11/21 ⑥-1）')
-    # 連絡の入口（2026/11/21 ⑥-2）：電話・LINE・フォーム・インスタのDM・ネット予約のどれも無ければ ⚠️ で止まる（前は「準備中」の欄を出していた。お客さんがそこで止まる・作りかけに見えるのでやめた）
-    if not (c.get('tel') or c.get('line_url') or c.get('reserve_url') or c.get('dm_url') or c.get('form_url') or 'form' in P):
-        sys.exit('⚠️ 止めました（何も書きかえていません）：連絡の入口が設定に1つもありません → "tel"（電話）・"line_url"（LINE）・"parts" の "form"（フォーム）・"dm_url"・"reserve_url" のどれか1つを書いてください（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
-    # ②トップとメニューのカードに写真が無ければ、設定の "業種" の素材写真を入れる（足りなければ ⚠️ で止まる）
-    fill_photos(c, outdir)
     s = build(c)
     try:
         sys.path.insert(0, HERE); import wbr
