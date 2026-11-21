@@ -11,7 +11,8 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   python3 make_site.py <設定.json> <作るフォルダ>
     例）python3 make_site.py ~/src/liftoff-hp/tools/templates/site_sample.json ~/src/yamaguchi-zouteisha
   ・作るフォルダに index.html を書く（前の index.html があれば index.old.html に残す）
-  ・画像は設定に書いた場所（images/〜）に自分で入れる。ないときは「写真が入ります」の仮画像を入れる
+  ・画像は設定に書いた場所（images/〜）に自分で入れる。トップとメニューのカードに写真が無いときは、設定の "業種" のフォルダ（~/src/_素材写真/<業種>/）から
+    自動で入れる（下の「写真の自動入れ」）。仮の絵（「写真が入ります」の .svg）は作らない（2026/11/21 ⑥-1）
   ・最後に check_site.py（公開前チェック）を自動で走らせる
 設定の書き方は templates/site_sample.json（山口造庭舎のデモ）を見る。分からない情報は書かない（空にすると、その行は出ない）
   "url_base" … 公開URL（例 "https://〇〇.liftoff-358.workers.dev/"）。書くと og:url・canonical・LINE のカード画像（og_image）の URL が入る
@@ -57,6 +58,14 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   作り直すとき、前の index.html の版が今の道具と違えば ⚠️ で止まり、何も書きかえない（道具を直したあとの「電話番号1か所直し」で見た目が黙って変わるのを防ぐ。
   版の記録がない＝11/21 より前の道具で作ったページも止まる）。見比べて作り直すと決めたら --uwagaki を付ける（index.old.html と diff で見比べる）。
   直す前の道具（2026/11/20 まで）は git のタグ tools-v1（commit 7071235）で取り出せる（例 git checkout tools-v1 -- tools/）。検査は tools/test_make_site_version.py
+写真の自動入れ（2026/11/21・⑥-1「写真」。本人の採点「写真がない＝2点」を二度と出さない）：
+  トップ（hero）とメニューのカード（menus）に写真が無い（image が空・ファイルが無い・前の道具の仮の絵 .svg）とき、設定の "業種"（例 "造園"。~/src/_素材写真/ のフォルダ名）の
+  写真を images/ に写して入れる。使うのは _素材写真/素材一覧.md に載っていて「商用可・表記不要」のものだけ（一覧に無い写真はフォルダにあっても使わない）。
+  トップは名前に hero が付く写真、カードは残りを一覧の順に（名前に owner が付く人物の写真は、お店の人と間違われるので使わない）。
+  写した先は、設定の image が .jpg ならその名前（例 images/menu-sentei.jpg。あとでお店の写真に同じ名前で差しかえられる）、それ以外は元の名前。カードの写真は設定の w:h（無ければ 4:3）に真ん中を切る（Pillow があるとき）
+  写真が足りない・フォルダが無い・"業種" が無いときは ⚠️ で止まり、何も書かない（黙って仮の絵にしない）。
+  ごあいさつ・部品（belt・cases・shop・compare）の写真はまだ自動では入れない（⑥-3）。設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す）。
+  スマホではトップの写真が画面の高さの 6 割になる（最初の画面の半分以上が写真。layout の型を使うときは型の決まりのまま）。仮の絵が残っていないかは check_site.py が ❌ で止める
 """
 import sys, os, re, json, html, shutil, subprocess, urllib.parse
 
@@ -411,6 +420,9 @@ def build(c):
     if dm: css += '\n' + DM_CSS
     if m2: css += '\n' + MENU2_CSS
     if c.get('layout'): css += '\n' + layouts.css(c['layout'])  # レイアウトの型（2026/11/11。tools/layouts.py）
+    else:  # 型を使わないときだけ：写真の上の端に影・スマホでトップの写真を画面の 6 割の高さに（2026/11/21 ⑥-1。型は layouts.py の決まりのまま）
+        light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
+        css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.7)' if light else 'rgba(0,0,0,.5)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
     if P: css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in PART_ORDER if k in P)
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
@@ -724,6 +736,17 @@ DM_CSS = r'''/* インスタグラムの DM の入口（dm_url。2026/11/7） */
 .ask-line.dm + .ask-line.tel{margin-top:8px}
 @media (max-width:860px){.spbar a.r svg{width:1.1em;height:1.1em;margin-right:.35em;vertical-align:-.2em}}
 '''
+
+# スマホのトップの写真（2026/11/21 ⑥-1）：型（layout）を使わないときだけ足す。写真を画面の高さの 6 割にして、最初の画面の半分以上が写真になる形
+# （前は写真の高さが成り行きで、横長の写真だと画面の 3 割ほどだった）。px の予備を先に書く（古いスマホ対策）
+# 写真の上の端に薄い影（HERO_SHADE）：ヘッダーの店名・メニューの文字が、明るい空などの上でも読めるように。濃い上の部分は黒の影、明るい上の部分（hero_style light）は白の影
+HERO_SP_CSS = r'''/* トップの写真（⑥-1）：上の端に薄い影・スマホで大きく */
+.poster::before{content:"";position:absolute;top:0;left:0;right:0;height:150px;background:-webkit-linear-gradient(top,HERO_SHADE_A,HERO_SHADE_B);background:linear-gradient(180deg,HERO_SHADE_A,HERO_SHADE_B);pointer-events:none;z-index:1}
+@media (max-width:860px){
+  .poster{height:420px;height:62vh;min-height:380px}
+  .poster img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+  .poster.plain{height:auto;min-height:220px}
+}'''
 
 LIGHT_HERO_CSS = r'''/* 明るい上の部分（hero_style: light） */
 :root{--hero-style:light}
@@ -1273,14 +1296,110 @@ PARTS_JS = {
 
 PARTS_CSS.update(parts_extra.CSS); PARTS_JS.update(parts_extra.JS)  # 追加の部品の見た目と動き（parts_extra.py）
 
-def placeholder(path, w, h, label, colors=('#ece5da', '#d9cfc0')):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    open(path, 'w', encoding='utf-8').write(f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{colors[0]}"/><stop offset="1" stop-color="{colors[1]}"/></linearGradient></defs>
-<rect width="{w}" height="{h}" fill="url(#g)"/>
-<text x="{w/2}" y="{h/2}" text-anchor="middle" font-family="'Hiragino Sans','Noto Sans CJK JP',sans-serif" font-size="{max(28, w//28)}" letter-spacing="3" fill="#8a7d6a">{html.escape(label)}</text>
-</svg>
-''')
+STOCK_ROOT = os.path.join(os.path.dirname(os.path.dirname(HERE)), '_素材写真')  # 素材写真の置き場所（~/src/_素材写真。業種ごとのフォルダ。2026/11/6 決定）
+FAKE_TEXT = '写真が入ります'  # 前の道具（2026/11/20 まで）が作っていた仮の絵の文。残っていれば置きかえる・check_site.py は ❌
+
+def stock_folders():
+    """_素材写真/ の業種のフォルダ名（_ で始まるものは除く）"""
+    try: return sorted(d for d in os.listdir(STOCK_ROOT) if os.path.isdir(os.path.join(STOCK_ROOT, d)) and not d.startswith('_'))
+    except Exception: return []
+
+def stock_photos(gyoushu):
+    """業種のフォルダの写真を、_素材写真/素材一覧.md に載っている順に返す（利用条件が「商用可・表記不要」で、ファイルが実際にあるものだけ）。
+    返り：[(ファイル名, フルパス), …]。一覧が無ければ []（一覧に無い写真は、フォルダにあっても使わない）"""
+    lst = os.path.join(STOCK_ROOT, '素材一覧.md')
+    if not os.path.exists(lst): return []
+    out = []
+    for line in open(lst, encoding='utf-8'):
+        cells = [x.strip() for x in line.strip().strip('|').split('|')]
+        if len(cells) < 4 or not cells[0].startswith(gyoushu + '/'): continue
+        if '商用可' not in cells[3] or '表記不要' not in cells[3]: continue
+        p = os.path.join(STOCK_ROOT, cells[0])
+        if os.path.exists(p): out.append((os.path.basename(cells[0]), p))
+    return out
+
+def jpeg_size(path):
+    """JPEG の幅と高さ（Pillow なしで読む。読めなければ None）"""
+    try:
+        with open(path, 'rb') as f:
+            if f.read(2) != b'\xff\xd8': return None
+            while True:
+                b = f.read(1)
+                while b and b != b'\xff': b = f.read(1)
+                while b == b'\xff': b = f.read(1)
+                if not b: return None
+                mk = b[0]
+                if mk in (0x01, 0xd8) or 0xd0 <= mk <= 0xd7: continue
+                ln = int.from_bytes(f.read(2), 'big')
+                if 0xc0 <= mk <= 0xcf and mk not in (0xc4, 0xc8, 0xcc):
+                    f.read(1); h = int.from_bytes(f.read(2), 'big'); w = int.from_bytes(f.read(2), 'big'); return w, h
+                f.seek(ln - 2, 1)
+    except Exception:
+        return None
+
+def copy_photo(src, dst, ratio=None):
+    """素材写真を images/ に写す。ratio（w/h）があれば真ん中をその比に切る（Pillow があるとき。無ければそのまま写す）。向きを直し、位置情報などは消える"""
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    try:
+        from PIL import Image, ImageOps
+        im = ImageOps.exif_transpose(Image.open(src)).convert('RGB')
+        if ratio:
+            W, H = im.size
+            if W / H > ratio: nw = int(H * ratio); im = im.crop(((W - nw) // 2, 0, (W - nw) // 2 + nw, H))
+            else: nh = int(W / ratio); im = im.crop((0, (H - nh) // 2, W, (H - nh) // 2 + nh))
+        if im.size[0] > 1600: im = im.resize((1600, int(im.size[1] * 1600 / im.size[0])), Image.LANCZOS)
+        im.save(dst, 'JPEG', quality=82, optimize=True, progressive=True)
+    except ImportError:
+        shutil.copy(src, dst)
+
+def fill_photos(c, outdir):
+    """トップ（hero）とメニューのカード（menus）に写真が無いところへ、業種の素材写真を入れる（2026/11/21 ⑥-1「写真」）。
+    ・無い＝image が空／ファイルが outdir に無い／前の道具の仮の絵（FAKE_TEXT の入った .svg）
+    ・設定の image・w・h を写した写真に書きかえる（alt は設定のまま。無ければ付ける）。設定ファイル（site.json）は書きかえない（次に作り直しても同じ写真が入る）
+    ・足りない・フォルダが無い・"業種" が無い → ⚠️ で止まり、何も書かない（黙って仮の絵にしない）"""
+    def missing(o):
+        if not (o and o.get('image')): return True
+        p = os.path.join(outdir, o['image'])
+        if not os.path.exists(p): return True
+        if p.endswith('.svg') and FAKE_TEXT in open(p, encoding='utf-8', errors='ignore').read(): return True
+        return False
+    hero = c.get('hero') or {}
+    need_hero = not hero.get('banner') and missing(hero)
+    need_menus = [m for m in c.get('menus', []) if missing(m)]
+    if not need_hero and not need_menus: return
+    where = (['トップ（hero）'] if need_hero else []) + ['メニュー「' + m['name'] + '」' for m in need_menus]
+    gy = str(c.get('業種') or '').strip()
+    if not gy:
+        sys.exit('⚠️ 止めました（何も書きかえていません）：' + '・'.join(where) + ' に写真がありません。\n'
+                 f'   設定に "業種": "〇〇" を1行足すと、{STOCK_ROOT}/〇〇/ の写真を自動で入れます（今あるフォルダ：' + '・'.join(stock_folders()) + '）。\n'
+                 '   または、設定に書いた場所（images/〜）に写真を置いてください（仮の絵は作りません。2026/11/21）')
+    folder = os.path.join(STOCK_ROOT, gy)
+    if not os.path.isdir(folder):
+        sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真のフォルダ {folder} がありません（今あるフォルダ：' + '・'.join(stock_folders()) +
+                 '。写真の取り方は _素材写真/素材の探し方と置き方.md）')
+    photos = stock_photos(gy)
+    heroes = [p for p in photos if 'hero' in p[0].lower()]
+    rest = [p for p in photos if 'hero' not in p[0].lower() and 'owner' not in p[0].lower()]  # 人物（owner）はお店の人と間違われるので使わない
+    if need_hero and not heroes and rest: heroes, rest = rest[:1], rest[1:]
+    if (need_hero and not heroes) or len(rest) < len(need_menus):
+        sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真が足りません → 要る：' + '・'.join(where) + f'（{len(where)}枚）／使える：{len(photos)}枚'
+                 f'（{folder}。素材一覧.md に載っていて商用可・表記不要のものだけ。人物（owner）は数えません）。\n'
+                 '   写真を足して素材一覧.md に1行足すか（_素材写真/素材の探し方と置き方.md）、設定に書いた場所に写真を置いてください')
+    def put(o, src, label, alt, ratio):
+        name, path = src
+        rel = o['image'] if (o.get('image') and o['image'].lower().endswith(('.jpg', '.jpeg'))) else 'images/' + name
+        dst = os.path.join(outdir, rel)
+        if not os.path.exists(dst): copy_photo(path, dst, ratio)
+        o['image'] = rel
+        wh = jpeg_size(dst)
+        if wh: o['w'], o['h'] = wh
+        if not o.get('alt'): o['alt'] = alt
+        print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
+    if need_hero:
+        c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)
+    for m, src in zip(need_menus, rest):
+        r = (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3
+        put(m, src, 'メニュー「' + m['name'] + '」', m['name'], r)
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
@@ -1296,26 +1415,24 @@ def main():
             sys.exit(f'⚠️ 止めました（何も書きかえていません）：{p_old} は道具の版「{old or "記録なし（2026/11/21 より前の道具）"}」で作ったページで、今の道具は「{TOOL_VERSION}」です。\n'
                      '   道具が変わっているので、作り直すと見た目が変わるかもしれません。作り直すなら --uwagaki を付けて動かし、できた index.html を前の index.old.html と見比べてください（diff index.old.html index.html）')
     os.makedirs(outdir, exist_ok=True)
-    # 写真がまだないところは「写真が入ります」の仮画像（.svg）を入れる
-    def need(obj, label, w, h, colors=None):
-        if obj and obj.get('image') and not os.path.exists(os.path.join(outdir, obj['image'])):
-            if obj['image'].endswith('.svg'): placeholder(os.path.join(outdir, obj['image']), obj.get('w', w), obj.get('h', h), label, colors or ('#ece5da', '#d9cfc0'))
-            else: print('⚠️ 写真がありません：', obj['image'])
-    need(c.get('hero'), 'トップの写真が入ります', c.get('hero', {}).get('w', 1600), c.get('hero', {}).get('h', 1000))
-    need(c.get('greeting'), 'ごあいさつの写真が入ります', 800, 1000)
-    for m in c.get('menus', []): need(m, m['name'] + 'の写真が入ります', m.get('w', 1000), m.get('h', 750))
-    # 部品の写真（前＝灰色っぽく、後＝緑っぽく。仮画像でも見比べが分かるように）
+    # 写真（2026/11/21 ⑥-1）：仮の絵（「写真が入ります」の .svg）はもう作らない
+    # ①ごあいさつ・部品（belt・cases・shop・compare）は、設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す。自動入れは ⑥-3）
     P = parts_conf(c)
-    BEFORE, AFTER = ('#d8d2c6', '#b9b1a3'), ('#dfe9d6', '#b3cc9f')
-    for it in (P.get('belt') or {}).get('items', []): need(it, (it.get('title') or '') + 'の写真が入ります', 1000, 750)
+    lack = []
+    def need(obj, label):
+        if obj and obj.get('image') and not os.path.exists(os.path.join(outdir, obj['image'])): lack.append(label + '：' + obj['image'])
+    need(c.get('greeting'), 'ごあいさつ')
+    for it in (P.get('belt') or {}).get('items', []): need(it, '写真の帯「' + (it.get('title') or '') + '」')
     cs = P.get('cases') or {}
     for it in cs.get('items', []):
-        need(it.get('before'), cs.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
-        need(it.get('after'), cs.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)
-    for it in (P.get('shop') or {}).get('items', []): need(it, it['name'] + 'の写真が入ります', 1000, 750)
+        need(it.get('before'), '施工例の' + cs.get('label_before', '作業前')); need(it.get('after'), '施工例の' + cs.get('label_after', '作業後'))
+    for it in (P.get('shop') or {}).get('items', []): need(it, '商品「' + it['name'] + '」')
     cp = P.get('compare') or {}
-    need(cp.get('before'), cp.get('label_before', '作業前') + 'の写真が入ります', 1000, 750, BEFORE)
-    need(cp.get('after'), cp.get('label_after', '作業後') + 'の写真が入ります', 1000, 750, AFTER)
+    need(cp.get('before'), '見比べの' + cp.get('label_before', '作業前')); need(cp.get('after'), '見比べの' + cp.get('label_after', '作業後'))
+    if lack: sys.exit('⚠️ 止めました（何も書きかえていません）：写真がありません → ' + '／'.join(lack) +
+                      '\n   設定に書いた場所に写真を置くか、設定からその写真（部品）を外してください（仮の絵は作りません。2026/11/21 ⑥-1）')
+    # ②トップとメニューのカードに写真が無ければ、設定の "業種" の素材写真を入れる（足りなければ ⚠️ で止まる）
+    fill_photos(c, outdir)
     s = build(c)
     try:
         sys.path.insert(0, HERE); import wbr

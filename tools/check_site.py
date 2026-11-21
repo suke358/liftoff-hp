@@ -29,6 +29,8 @@
   12. 置き場所（2026/11/11）：サイトのフォルダに .okiba（ココナラのお客さんのサイト。公開先は別アカウント omise-site）があるのに、調べるページや site.json に
      Lift-Off 自社の住所 liftoff-358 の文字があれば ❌（site.json の url_base などを .okiba の住所に直して make_site.py で作り直す）。.okiba の中身が読めなければ ❌。
      .okiba のないサイト（Lift-Off 自社）は調べない（今までと同じ結果）
+  14. 仮の文・仮の絵（2026/11/21 ⑥-1）：「〇〇の写真が入ります」だけの短い文・ページの中の <svg> にその文・img が指す .svg がその仮の絵 → ❌（本物の文「お店で撮った写真が入ります。」は数えない）。
+     最初の画面（hero）に写真が無い（poster plain）なら ⚠️。前の道具の見本の設定で作ったページが「写真がない」と採点された（11/21）のを二度と出さない
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -327,6 +329,23 @@ def run_static(root):
         if is_top and n_bg: add('✅', '画像', f'CSS の背景などの画像 {n_bg} 枚：ファイルあり')
 
         if is_top: check_colors(src, rel)  # 色の差（2026/10/31）
+
+        # 仮の文・仮の絵（2026/11/21 ⑥-1）：「写真が入ります」の文がページに残っている、または img が指す .svg がその仮の絵なら ❌（make_site.py はもう作らない。前の道具で作ったページに残る）
+        fake = []
+        # 仮の文＝「〇〇の写真が入ります」だけの短い文（自社トップの「お店で撮った写真が入ります。」のような本物の文は数えない）。<svg> の中の文字も見る（par.text は svg を飛ばす）
+        for tx, line in par.text:
+            tx = tx.strip()
+            if tx.endswith('写真が入ります') and len(tx) <= 20: fake.append(f'{line}行目 文「{tx}」')
+        for m in re.finditer(r'<svg\b.*?</svg>', src, re.S):
+            if '写真が入ります' in m.group(0): fake.append(f'{src.count(chr(10), 0, m.start()) + 1}行目 ページの中の <svg> に「写真が入ります」')
+        for t, d, line in par.tags:
+            u = (d.get('src') or '').split('?')[0]
+            if t == 'img' and u.endswith('.svg') and not re.match(r'(https?:|//|data:)', u):
+                f = os.path.normpath(os.path.join(os.path.dirname(p), u))
+                if os.path.exists(f) and '写真が入ります' in open(f, encoding='utf-8', errors='ignore').read(): fake.append(f'{line}行目 {u}')
+        if fake: add('❌', '仮の絵', f'{rel}：仮の文・仮の絵が残っています → ' + '／'.join(fake) + '（設定に "業種" を書いて make_site.py で作り直すか、写真を置く）')
+        elif is_top: add('✅', '仮の絵', f'{rel}：仮の文・仮の絵なし')
+        if is_top and 'class="poster plain"' in src: add('⚠️', '写真', f'{rel}：最初の画面に写真がありません（設定に hero の写真か "業種" を書いて作り直す）')
 
         # 電話番号
         tels = set()
