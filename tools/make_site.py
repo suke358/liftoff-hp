@@ -71,7 +71,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
-  設定に無いものは出ない。店舗情報の欄の「道順を見る」のすぐ下にも小さめの地図を出す（2026/11/22・⑥-2 ネイル9周目。本人「道順の下は地図に」。"access_map": false で店舗情報の欄の地図だけ消える。下の段の地図は少し小さくした）
+  設定に無いものは出ない。地図は店舗情報の欄の「道順を見る」のすぐ下に出す（2026/11/22・⑥-2 ネイル9周目。本人「道順の下は地図に」）。**地図は 1 か所だけ**（2026/11/22 本人「Googleマップ 2回でてくる ×」）："access_map": false のときだけ下の段に出る。check_site.py は地図が 2 つあれば ❌
 後半の区画の写真（2026/11/22・⑥-2 4周目。本人「もう少し写真の枚数が欲しい」）：店舗情報の横（about。地図が無いとき）・ご依頼の流れの横（flow）・ご相談の背景（reserve）に、
   業種の素材の残りから写真を入れる（"sec_photos": {"about": {"image": "images/sec-about.jpg"}, …} と設定に書いてもよい。"sec_photos": false で入れない）。
   名前に hands・back・work・tool の付く「人の気配」の写真（顔の出ない手元・後ろ姿）を先に使う。足りなければ入れない（止めない）。
@@ -419,7 +419,8 @@ def build(c):
     if tel: foot_rows.append(f'<p><span class="flabel">TEL</span><span><a href="tel:{tel_d}">{e(tel)}</a></span></p>')
     if c.get('hours'): foot_rows.append(f'<p><span class="flabel">営業時間</span><span>{e(c["hours"])}</span></p>')
     if c.get('holiday'): foot_rows.append(f'<p><span class="flabel">定休日</span><span>{e(c["holiday"])}</span></p>')
-    foot_map = f'<div class="foot-map">{map_iframe}</div>' if map_iframe else ''
+    # 地図は 1 か所だけ（2026/11/22 本人「Googleマップ 2回でてくる ×」＝壊れ）：店舗情報の「道順を見る」の下に出したときは下の段には出さない。"access_map": false のときだけ下の段に出る
+    foot_map = f'<div class="foot-map">{map_iframe}</div>' if map_iframe and not mapf else ''
     foot_info = f'<div class="foot-grid{" nomap" if not foot_map else ""}"><div class="foot-info"><p class="fname">{e(name)}</p>{"".join(foot_rows)}{route}</div>{foot_map}</div>'
 
     # ---------- よくある質問 ----------

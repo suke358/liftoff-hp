@@ -29,6 +29,7 @@
   12. 置き場所（2026/11/11）：サイトのフォルダに .okiba（ココナラのお客さんのサイト。公開先は別アカウント omise-site）があるのに、調べるページや site.json に
      Lift-Off 自社の住所 liftoff-358 の文字があれば ❌（site.json の url_base などを .okiba の住所に直して make_site.py で作り直す）。.okiba の中身が読めなければ ❌。
      .okiba のないサイト（Lift-Off 自社）は調べない（今までと同じ結果）
+  15. 地図の埋め込み（2026/11/22）：Googleマップの iframe が 1 ページに 2 つ以上あれば ❌（本人「Googleマップ 2回でてくる ×」。1 か所だけ）
   14. 仮の文・仮の絵（2026/11/21 ⑥-1）：「〇〇の写真が入ります」だけの短い文・ページの中の <svg> にその文・img が指す .svg がその仮の絵 → ❌（本物の文「お店で撮った写真が入ります。」は数えない）。
      最初の画面（hero）に写真が無い（poster plain）なら ⚠️。前の道具の見本の設定で作ったページが「写真がない」と採点された（11/21）のを二度と出さない
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
@@ -355,6 +356,9 @@ def run_static(root):
         for m in re.finditer(r'"telephone"\s*:\s*"([^"]+)"', src): tels.add(norm_tel(m.group(1)))
         tels = {t for t in tels if t and not set(t) <= {'0'}}
         if len(tels) > 1: add('❌', '電話番号', f'{rel}：番号が {len(tels)} 種類あります → ' + '／'.join(sorted(tels)))
+        # 地図の埋め込みは 1 ページに 1 つだけ（2026/11/22 本人「Googleマップ 2回でてくる ×」＝お客さんに見える壊れ。make_site.py は道順の下だけに出す）
+        maps_n = len(re.findall(r'<iframe[^>]+maps\.google\.com/maps\?', src)) + len(re.findall(r'<iframe[^>]+google\.com/maps/embed', src))
+        if maps_n > 1: add('❌', '地図', f'{rel}：Googleマップの埋め込みが {maps_n} つあります（1 ページに 1 つだけ。店舗情報の「道順を見る」の下に出す。下の段にも出ているなら make_site.py で作り直す）')
         elif tels and is_top: add('✅', '電話番号', f'{rel}：{next(iter(tels))} でそろっています')
 
         # 使ってはいけない言葉
