@@ -505,6 +505,7 @@ def build(c):
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
             css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.22)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
                             OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.25)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
+    if a1: css += '\n' + A1_CSS  # 写真の見せ方を A1 に寄せる（2026/11/24 おしゃれの基準③。"photo_style":"a1" のときだけ）
     if P:
         pk = [k for k in PART_ORDER if k in P]
         if 'events' in P and 'notice' not in pk: pk.insert(0, 'notice')  # events が最上部に出す「次のライブ」の帯は notice の見た目を使う（最後のテスト・バー 2026/11/22）
@@ -1006,6 +1007,14 @@ DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後�
   .faq-list{max-width:1000px;display:grid;grid-template-columns:1fr 1fr;grid-gap:0 20px;gap:0 20px;align-items:start}
   .access .wrap:not(.nomap) .sec-photos{margin-left:-48px;margin-top:40px;z-index:1}
 }
+'''
+
+# 写真の見せ方を A1（手本）に寄せる（2026/11/24 おしゃれの基準③）。"photo_style":"a1" のときだけ足す CSS。実在のお店の形・文・写真は写していない（取り出したのは決まりだけ）
+A1_CSS = r'''/* A1 の見せ方 4：緑の LINE ボタンは最初の画面と下の固定の帯だけ。カードの「LINE で相談」は文字のリンク、ご相談の友だち追加は細い枠 */
+.card .ask-line{border:0;border-radius:0;padding:0;margin-top:12px;justify-content:flex-start;font-size:.78rem;letter-spacing:.1em;color:var(--muted);text-decoration:underline;text-underline-offset:.35em}
+.card .ask-line svg{width:.95em;height:.95em;opacity:.55}
+.reserve .btn-line{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.7)}
+.reserve .btn-line:hover{background:rgba(255,255,255,.1)}
 '''
 
 def strip_eyebrow_en(html):
