@@ -1774,6 +1774,8 @@ def match_menus(menus, photos):
         elif rest: out.append((m, photos[rest.pop(0)], '順'))
     return out
 
+STOCK_USED = set()  # この1回の作成で使った素材の元の名前（fill_photos と fill_a1 で共有。同じ素材を別の名前（sec-about.jpg と band-3.jpg など）で 2 回使わないため。2026/11/24 想永 05:41）
+
 def stock_photos(gyoushu):
     """業種のフォルダの写真を、_素材写真/素材一覧.md に載っている順に返す（利用条件が「商用可・表記不要」で、ファイルが実際にあるものだけ）。
     返り：[(ファイル名, フルパス), …]。一覧が無ければ []（一覧に無い写真は、フォルダにあっても使わない）"""
@@ -1901,6 +1903,7 @@ def fill_photos(c, outdir):
         if wh: o['w'], o['h'] = wh
         if not o.get('alt'): o['alt'] = alt
         o['source'] = 'stock'  # 素材写真＝札「写真はイメージです」が付く（2026/11/24 壊し役 4）
+        STOCK_USED.add(name)
         print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
     if need_hero:
         c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)
@@ -2028,7 +2031,9 @@ def fill_a1(c, outdir):
         elif isinstance(o, list):
             for v in o: walk(v)
     walk(c)
-    photos = [p for p in stock_photos(gy) if 'owner' not in p[0].lower() and os.path.basename(p[0]) not in used and not os.path.exists(os.path.join(outdir, 'images', os.path.basename(p[0])))]
+    # 「もう images/ にある」では除かない：完成図の係は前の周の images/ を写して次の周を作るので、前の周に入れた飛行機が除かれて別の素材（木の車）が 1画面目の後ろに入った（想永 05:41）。
+    # 除くのは、設定が指している名前（used）と、この作成で fill_photos が使った元の名前（STOCK_USED。sec-about.jpg などに名前が変わっていても分かる）
+    photos = [p for p in stock_photos(gy) if 'owner' not in p[0].lower() and os.path.basename(p[0]) not in used and p[0] not in STOCK_USED]
     photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))
     def take(prefer=None):
         if not photos: return None
@@ -2042,7 +2047,7 @@ def fill_a1(c, outdir):
         o['image'] = rel; wh = jpeg_size(dst)
         if wh: o['w'], o['h'] = wh
         if not o.get('alt'): o['alt'] = ''
-        o['source'] = 'stock'; used.add(os.path.basename(rel))
+        o['source'] = 'stock'; used.add(os.path.basename(rel)); STOCK_USED.add(name)
         print(f'写真を入れました（A1）：{label} ← _素材写真/{gy}/{name} → {rel}')
     if hero.get('image') and not (hero.get('bg') or {}).get('image'):
         src = take('hero')
