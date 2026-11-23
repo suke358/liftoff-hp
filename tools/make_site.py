@@ -232,7 +232,28 @@ def build(c):
     # 重ねる型（2026/11/22 ⑥-2 ネイル1周目）：写真があり・横長のヘッダー画像でなく・型（layout）を使わないとき。"hero_overlay": false で前の形
     ov = bool(hero.get('image')) and not hero.get('banner') and not c.get('layout') and c.get('hero_overlay', True)
     addr_html = f'<p class="addr">{PIN}<span>{e(c.get("area") or c.get("address",""))}</span></p>' if (c.get("area") or c.get("address")) else ''
-    if ov:
+    if a1 and hero.get('image') and not hero.get('banner'):
+        # A1 の見せ方 6（2026/11/24 おしゃれの基準③・壊し役 3）：1画面目＝お店の写真（hero.image）が主役で大きく前、素材（hero.bg。source:stock で札）は後ろの雰囲気。文字は一言と小見出しとボタンだけ。重ねは囲み（stage）の中で切る
+        bg = hero.get('bg') or {}
+        bg_html = f'<figure class="hero-a1-bg"><img src="{e(bg["image"])}" alt="{e(bg.get("alt",""))}" width="{bg.get("w",1600)}" height="{bg.get("h",1000)}"></figure>' if bg.get('image') else ''
+        hero_html = f'''
+  <section class="hero a1">
+    <div class="hero-a1-stage{' has-bg' if bg_html else ''}">
+      {bg_html}
+      <div class="hero-a1-text">
+        <p class="eyebrow">{e(c.get("kind",""))}</p>
+        <h1>{c.get("catch_html") or e(c.get("catch",""))}</h1>
+        <div class="hero-btns">{''.join(first_btns)}</div>
+      </div>
+      <figure class="hero-a1-main"><img src="{e(hero["image"])}" alt="{e(hero.get("alt","イメージ"))}" width="{hero.get("w",1600)}" height="{hero.get("h",1000)}" fetchpriority="high"></figure>
+    </div>
+    <div class="hero-under"><div class="hu">
+      <p class="lead">{e(c.get("lead",""))}</p>
+      {addr_html}
+      <ul class="toc" aria-label="このページの案内">{toc}</ul>
+    </div></div>
+  </section>'''
+    elif ov:
         hero_html = f'''
   <section class="hero ov{hb_cls}">
     {hb_html}<div class="wrap">
@@ -518,6 +539,7 @@ def build(c):
     css = css.replace('{{hand_font}}', (f'"{hf}",' if hf else '') + 'var(--head)')
     if hf: css += '\n' + HAND_CSS
     belt_html, calc_html, cases_html, compare_html, shop_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx), part_shop(ctx)
+    bands = a1_bands(c) if a1 else ['', '', '']  # A1 の見せ方 6：写真の帯（大小の重ね・ずらし）を文の段の間に。写真の帯と白・灰の段が交互になる
     xp = parts_extra.render(ctx)  # 追加の部品の HTML（notice・credentials・strengths・news・voices・hours・areas・video）
     sample_note = f'<p class="sample-note" role="note">{e(c["sample_note"])}</p>' if c.get('sample_note') else ''
 
@@ -557,7 +579,7 @@ def build(c):
     <button type="button" class="menubtn" aria-expanded="false" aria-controls="gnav"><i aria-hidden="true"></i>メニュー</button>
   </div>
 </header>
-<main id="top">{hero_html}{xp["events"]}{xp["credentials"]}{xp["worries"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{sns_html}
+<main id="top">{hero_html}{xp["events"]}{xp["credentials"]}{xp["worries"]}{greet}{xp["strengths"]}{belt_html}{menu_html}{bands[0]}{shop_html}{calc_html}{cases_html}{compare_html}{xp["video"]}{xp["voices"]}{flow_html}{bands[1]}{xp["news"]}{reserve_html}{xp["hours"]}{xp["areas"]}{access_html}{faq_html}{bands[2]}{sns_html}
 </main>
 <footer class="foot">
   <div class="wrap">
@@ -1021,7 +1043,68 @@ A1_CSS = r'''/* A1 の見せ方 4：緑の LINE ボタンは最初の画面と�
 .sec.a1-white{background-color:var(--bg);background-image:none}
 .sec.a1-gray{background-color:var(--bg2);background-image:none}
 .sec+.sec.a1-white,.sec+.sec.a1-gray{border-top:1px solid var(--line)}
+/* A1 の見せ方 6-④：本文は小さく細く、見出しは大きく細い字で字間を広く、余白を広く（本人 ◎ の余白：白を広く・文は 1 行ずつ短く） */
+body{font-size:14.5px;line-height:2.1;letter-spacing:.08em}
+.sec{padding:130px 0}
+.sec-head{margin-bottom:46px}
+.sec-head h2{font-weight:500;font-size:1.9rem;font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:.24em;line-height:1.7}
+.sec-lead,.price-note,.reserve .muted.center,.belt-note{max-width:30em;margin-left:auto;margin-right:auto}
+.card p{font-size:.86rem;line-height:1.95}
+.card h3{font-weight:500;letter-spacing:.16em}
+.owner h3,.steps h3{font-weight:500;letter-spacing:.16em}
+.card{border-radius:6px}.card .photo img,.sec-photo img,.b-shot img{border-radius:6px}
+/* A1 の見せ方 6-①：1画面目＝画面いっぱい。お店の写真（主役）を大きく前に、素材（後ろ）は薄く。重ねは囲み（stage）の中で切る（横はみ出し 0） */
+.hero.a1{background:var(--dark);color:#fff}
+.hero.a1 .hero-a1-stage{position:relative;overflow:hidden;min-height:620px;min-height:min(92vh,900px);background:var(--dark)}
+.hero.a1 .hero-a1-bg{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;z-index:0}
+.hero.a1 .hero-a1-bg img{position:absolute;top:0;left:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover;opacity:.5;-webkit-filter:saturate(.6);filter:saturate(.6)}
+.hero.a1 .hero-a1-bg .img-note{right:auto;left:16px;bottom:14px;z-index:4}
+.hero.a1 .hero-a1-text{position:absolute;left:6%;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);width:44%;z-index:2;text-shadow:0 2px 16px rgba(0,0,0,.45)}
+.hero.a1 .hero-a1-text .eyebrow{color:rgba(255,255,255,.85);font-weight:500;margin-bottom:18px}
+.hero.a1 .hero-a1-text h1{color:#fff;font-weight:500;font-size:2.4rem;font-size:clamp(1.7rem,3.6vw,3rem);letter-spacing:.2em;line-height:1.75;margin:0 0 30px}
+.hero.a1 .hero-a1-main{position:absolute;right:5%;bottom:-7%;width:42%;max-width:520px;margin:0;z-index:1;border:6px solid #fff;box-shadow:0 18px 50px rgba(0,0,0,.35);background:#fff}
+.hero.a1 .hero-a1-main img{width:100%;height:auto}
+.hero.a1 .hero-under{background:var(--bg);color:var(--ink);padding:70px 0 44px}
+.hero.a1 .hero-under .lead{max-width:30em;margin:0 auto;text-align:center}
+.hero.a1 .hero-under .addr{justify-content:center;border-top:0}
+/* A1 の見せ方 6-②③：写真の帯＝大きい写真と小さい写真を重ねてずらす（囲みの中で切る）。横に流れる帯も大小をずらす */
+.pband{padding:40px 0 60px;overflow:hidden;background:var(--bg)}
+.pband .pb-wrap{position:relative;width:min(1100px,100% - 40px);margin:0 auto;height:0;padding-bottom:54%}
+.pband figure{margin:0;position:absolute}
+.pband .pb-big{left:-4%;top:0;width:70%}
+.pband .pb-small{right:0;bottom:0;width:38%;border:6px solid #fff;box-shadow:0 14px 40px rgba(0,0,0,.22);background:#fff}
+.pband.alt .pb-big{left:auto;right:-4%}.pband.alt .pb-small{right:auto;left:0}
+.pband img{width:100%;height:auto;display:block}
+.pband .pb-big img{border-radius:4px}
+.pband.one .pb-big{left:0;width:100%}.pband.one .pb-wrap{padding-bottom:46%}
+.belt-track li:nth-child(even){margin-top:48px}
+.belt-track li:nth-child(3n){width:280px}
+@media (max-width:860px){
+  body{font-size:14px}
+  .sec{padding:84px 0}
+  .hero.a1 .hero-a1-stage{min-height:0;padding:96px 0 0}
+  .hero.a1 .hero-a1-text{position:static;-webkit-transform:none;transform:none;width:auto;padding:0 22px 18px}
+  .hero.a1 .hero-a1-main{position:relative;right:auto;bottom:auto;width:80%;margin:0 0 -24px auto;border-width:5px}
+  .hero.a1 .hero-under{padding:50px 0 24px}
+  .pband .pb-wrap{padding-bottom:72%}
+  .pband .pb-big{width:78%}.pband .pb-small{width:46%;border-width:4px}
+  .belt-track li:nth-child(even){margin-top:30px}
+}
 '''
+
+def a1_bands(c):
+    """A1 の見せ方 6：写真の帯（文の段の間に入れる「大きい写真＋小さい写真の重ね」）。c["bands"]＝写真の配列（image・w・h・alt・source）。2 枚ずつ 1 つの帯に、最大 3 つ。
+    写真は fill_a1（素材）か設定で入れる。無ければ帯は出ない。同じ写真は 2 回使わない（fill_a1 が見る）"""
+    ph = [p for p in (c.get('bands') or []) if isinstance(p, dict) and p.get('image')]
+    out = []
+    for i in range(3):
+        pair = ph[i * 2:i * 2 + 2]
+        if not pair: out.append(''); continue
+        big = pair[0]; small = pair[1] if len(pair) > 1 else None
+        figs = f'<figure class="pb-big"><img src="{e(big["image"])}" alt="{e(big.get("alt",""))}" width="{big.get("w",1200)}" height="{big.get("h",800)}" loading="lazy"></figure>'
+        if small: figs += f'<figure class="pb-small"><img src="{e(small["image"])}" alt="{e(small.get("alt",""))}" width="{small.get("w",800)}" height="{small.get("h",800)}" loading="lazy"></figure>'
+        out.append(f'\n  <section class="pband{" alt" if i % 2 else ""}{" one" if not small else ""}" aria-label="写真"><div class="pb-wrap">{figs}</div></section>')
+    return out
 
 def a1_backgrounds(html):
     """A1 の見せ方：背景が決まっていない区画（暗い区画・最初の画面・写真の帯の区画を除く）に、白（a1-white）と薄い灰（a1-gray）を交互に振る。模様・斜めは使わない（2026/11/24 おしゃれの基準③ 5・6）"""
@@ -1928,6 +2011,50 @@ def fill_photos(c, outdir):
             put(o, src, labels[k], (c.get('short_name') or c['name']) + 'の仕事の様子', ratios[k])
         for k in sec_slots[len(order):]: print(f'（{labels[k]} の写真は、業種の素材が足りないので入れません）')
 
+def fill_a1(c, outdir):
+    """A1 の見せ方（"photo_style":"a1"）の素材：①1画面目の後ろ（hero.bg）②写真の帯（bands。2 枚×最大 3）を、業種の素材の「まだ使っていない物」から入れる（2026/11/24 おしゃれの基準③ 1・壊し役 3）。
+    お店の写真は差しかえない（hero.image はそのまま主役）。素材は source:stock（札が付く）。同じ写真は 2 回使わない。業種のフォルダが無い・足りないときは入れない（止めない）"""
+    if c.get('photo_style') != 'a1': return
+    gy = str(c.get('業種') or '').strip()
+    if not gy or not os.path.isdir(os.path.join(STOCK_ROOT, gy)): print('（A1 の見せ方：業種の素材が無いので、1画面目の後ろと写真の帯は入れません）'); return
+    hero = c.get('hero') or {}
+    used = set()  # もう使っている写真のファイル名（素材の名前の末尾と、images/ の中の名前）
+    def walk(o):
+        if isinstance(o, dict):
+            if isinstance(o.get('image'), str): used.add(os.path.basename(o['image']))
+            for v in o.values(): walk(v)
+        elif isinstance(o, list):
+            for v in o: walk(v)
+    walk(c)
+    photos = [p for p in stock_photos(gy) if 'owner' not in p[0].lower() and os.path.basename(p[0]) not in used and not os.path.exists(os.path.join(outdir, 'images', os.path.basename(p[0])))]
+    photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))
+    def take(prefer=None):
+        if not photos: return None
+        i = next((k for k, p in enumerate(photos) if prefer and prefer in p[0].lower()), 0)
+        return photos.pop(i)
+    def put(o, src, label, ratio):
+        name, path = src
+        rel = o['image'] if (o.get('image') and o['image'].lower().endswith(('.jpg', '.jpeg'))) else 'images/' + os.path.basename(name)
+        dst = os.path.join(outdir, rel)
+        if not os.path.exists(dst): copy_photo(path, dst, ratio)
+        o['image'] = rel; wh = jpeg_size(dst)
+        if wh: o['w'], o['h'] = wh
+        if not o.get('alt'): o['alt'] = ''
+        o['source'] = 'stock'; used.add(os.path.basename(rel))
+        print(f'写真を入れました（A1）：{label} ← _素材写真/{gy}/{name} → {rel}')
+    if hero.get('image') and not (hero.get('bg') or {}).get('image'):
+        src = take('hero')
+        if src: hero['bg'] = {}; put(hero['bg'], src, '1画面目の後ろ（雰囲気）', 16 / 10)
+    bands = c.get('bands')
+    if not isinstance(bands, list): bands = []; c['bands'] = bands
+    have = len([b for b in bands if isinstance(b, dict) and b.get('image')])
+    k = have
+    while k < 6 and photos:
+        src = take()
+        o = {'image': 'images/band-%d.jpg' % (k + 1)}; put(o, src, '写真の帯 %d' % (k + 1), 3 / 2 if k % 2 == 0 else 1)
+        bands.append(o); k += 1
+    if k < 2: print('（A1 の見せ方：写真の帯に入れる素材が足りません（%d 枚）。帯は少なめになります）' % k)
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     if len(args) < 2: sys.exit(__doc__)
@@ -1949,6 +2076,7 @@ def main():
         sys.exit('⚠️ 止めました（何も書きかえていません）：連絡の入口が設定に1つもありません → "tel"（電話）・"line_url"（LINE）・"parts" の "form"（フォーム）・"dm_url"・"reserve_url" のどれか1つを書いてください（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     # ①トップ・メニューのカード・後半の区画・部品（belt・cases・shop・compare）に写真が無ければ、設定の "業種" の素材写真を入れる（トップとカードが足りなければ ⚠️ で止まる。部品は 2026/11/22 ⑥-3 1周目から）
     fill_photos(c, outdir)
+    fill_a1(c, outdir)  # A1 の見せ方の素材（1画面目の後ろ・写真の帯。2026/11/24）。"photo_style":"a1" でなければ何もしない
     # ②それでも、ごあいさつ・部品に設定に書いた写真が無ければ ⚠️ で止まる（写真を置くか、設定から外す。仮の絵は作らない）
     lack = []
     def need(obj, label):
