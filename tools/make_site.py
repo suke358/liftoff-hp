@@ -231,9 +231,10 @@ def build(c):
         hb_html = f'<div class="hero-banner"><img src="{e(hero["banner"])}" alt="{e(hero.get("alt", short))}" width="{hero.get("w", 1170)}" height="{hero.get("h", 424)}" fetchpriority="high"></div>\n    '
     # 重ねる型（2026/11/22 ⑥-2 ネイル1周目）：写真があり・横長のヘッダー画像でなく・型（layout）を使わないとき。"hero_overlay": false で前の形
     ov = bool(hero.get('image')) and not hero.get('banner') and not c.get('layout') and c.get('hero_overlay', True)
+    if a1 and hero.get('image') and not hero.get('banner'): ov = True  # A1 の見せ方：素材が無くても写真を画面いっぱいに（型があっても）
     addr_html = f'<p class="addr">{PIN}<span>{e(c.get("area") or c.get("address",""))}</span></p>' if (c.get("area") or c.get("address")) else ''
-    if a1 and hero.get('image') and not hero.get('banner'):
-        # A1 の見せ方 6（2026/11/24 おしゃれの基準③・壊し役 3）：1画面目＝お店の写真（hero.image）が主役で大きく前、素材（hero.bg。source:stock で札）は後ろの雰囲気。文字は一言と小見出しとボタンだけ。重ねは囲み（stage）の中で切る
+    if a1 and hero.get('image') and not hero.get('banner') and (hero.get('bg') or {}).get('image'):
+        # A1 の見せ方 6（素材の後ろ（hero.bg）が無いときは、下の重ねる型＝お店の写真を画面いっぱいに。濃い地に写真 1 枚の形にはしない。秋 04:54 の直し）（2026/11/24 おしゃれの基準③・壊し役 3）：1画面目＝お店の写真（hero.image）が主役で大きく前、素材（hero.bg。source:stock で札）は後ろの雰囲気。文字は一言と小見出しとボタンだけ。重ねは囲み（stage）の中で切る
         bg = hero.get('bg') or {}
         bg_html = f'<figure class="hero-a1-bg"><img src="{e(bg["image"])}" alt="{e(bg.get("alt",""))}" width="{bg.get("w",1600)}" height="{bg.get("h",1000)}"></figure>' if bg.get('image') else ''
         hero_html = f'''
@@ -1066,6 +1067,7 @@ body{font-size:14.5px;line-height:2.1;letter-spacing:.08em}
 .hero.a1 .hero-a1-main img{width:100%;height:auto}
 .hero.a1 .hero-under{background:var(--bg);color:var(--ink);padding:70px 0 44px}
 .hero.a1 .hero-under .lead{max-width:30em;margin:0 auto;text-align:center}
+.hero.a1 .hero-under .lead,.hero.ov .hero-under .lead,.hero.ov .hero-under .addr,.hero.ov .hero-under .toc a{color:var(--ink)}  /* 最初の画面の下の文が薄くて読めない（秋 04:54）を直す。A1 のとき */
 .hero.a1 .hero-under .addr{justify-content:center;border-top:0}
 /* A1 の見せ方 6-②③：写真の帯＝大きい写真と小さい写真を重ねてずらす（囲みの中で切る）。横に流れる帯も大小をずらす */
 .pband{padding:40px 0 60px;overflow:hidden;background:var(--bg)}
