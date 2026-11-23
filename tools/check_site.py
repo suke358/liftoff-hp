@@ -425,6 +425,9 @@ def run_static(root):
             soon = src.count('準備中')
             if '<h3>準備中</h3>' in src: add('❌', '準備中', f'{rel}：ご予約・ご相談の欄が「準備中」のままです（連絡の入口がお客さんに無い）→ 設定に tel・line_url・form のどれかを書いて make_site.py で作り直す（2026/11/21 ⑥-2）')
             elif soon: add('⚠️', '準備中', f'「準備中」が {soon} か所あります（本公開までにURLを入れる）')
+            # 「(案)」の消し忘れ（2026/11/24 指示書「おしゃれの基準と採点の物差し」：確かめてから使う文に付けた印が本番に残らないように）
+            an = len(re.findall(r'[（(]案[)）]', text))
+            if an: add('⚠️', '仮の文', f'{rel}：「(案)」が {an} か所あります（店主に確かめてから本物の文に直す。本公開までに消す）')
         # Cloudflare Web Analytics（2026/10/22）：設定（site.json）に analytics_token があるのに、数える一文がないページは ❌
         if is_top:
             tok = ''

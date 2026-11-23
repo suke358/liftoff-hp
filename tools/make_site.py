@@ -291,7 +291,8 @@ def build(c):
     for m in menus:
         img = f'<div class="photo"><img src="{e(m["image"])}" alt="{e(m.get("alt", m["name"]))}" width="{m.get("w",1000)}" height="{m.get("h",750)}" loading="lazy"></div>' if m.get('image') else ''
         # 料金の目安（2026/11/22 ⑥-2 7周目）：price があるときだけ。price_note が無ければ「料金の目安」。無ければ今までどおり「お問い合わせください」
-        price = f'<div class="price"><small>{e(m.get("price_note") or "料金の目安")}</small><b>{e(m["price"])}</b></div>' if m.get('price') else '<div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>'
+        # 値段の欄ごと出さない（2026/11/24 おしゃれの基準 7「空欄の扱い」：値段が無いときは「お問い合わせください」で埋めず、欄を出さない）："menu_price": false
+        price = f'<div class="price"><small>{e(m.get("price_note") or "料金の目安")}</small><b>{e(m["price"])}</b></div>' if m.get('price') else ('' if c.get('menu_price', True) is False else '<div class="price"><span class="ask">料金は<wbr>お問い合わせください</span></div>')
         sub = ''.join(f'<li>{e(x)}</li>' for x in m.get('items', []))
         ask = ''
         if has_line:
@@ -573,7 +574,8 @@ def build(c):
 </body>
 </html>
 '''
-    out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
+    if c.get('eyebrow_en', True) is False: out = strip_eyebrow_en(out)  # 英字の飾りを出さない（2026/11/24 おしゃれの基準 6：英字と日本語で同じ意味を 2 回言わない）
+    else: out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
     if c.get('design', True) and not c.get('layout'): out = vary_backgrounds(out)  # 区画ごとの背景（⑥-3 3周目。同じ見え方が続かないように）
     return out
 
@@ -969,6 +971,15 @@ DESIGN_CSS = r'''/* 背景のデザイン（⑥-2 5周目）：見出しの後�
   .access .wrap:not(.nomap) .sec-photos{margin-left:-48px;margin-top:40px;z-index:1}
 }
 '''
+
+def strip_eyebrow_en(html):
+    """区画の見出しの小さな英字（sec-head の <i> の文字。menu・flow など）を消し、印（svg）だけ残す（"eyebrow_en": false。2026/11/24 おしゃれの基準 6「英字の飾り＋日本語の見出しで同じ意味を 2 回言わない」。
+    薄い英字（data-en）も付けない。最初の画面の小見出し（地名）は別の class なので残る）"""
+    def f(m):
+        inner = m.group(2)
+        svg = re.match(r'\s*(<svg\b.*?</svg>)', inner, re.S)
+        return m.group(1) + (svg.group(1) if svg else '') + '</i>'
+    return re.sub(r'(<div class="sec-head[^"]*">\s*<i>)(.*?)</i>', f, html, flags=re.S)
 
 def add_sec_en(html):
     """見出しの後ろの薄い英字（⑥-2 5周目）：各区画の小見出し（sec-head の i の文字。menu・flow など）を data-en に写す（CSS の content:attr(data-en) が使う。JS なし・部品の見出しにも効く）"""
