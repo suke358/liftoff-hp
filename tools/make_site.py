@@ -188,6 +188,7 @@ def build(c):
     tel = c.get('tel', ''); tel_d = ''.join(ch for ch in tel if ch.isdigit())
     I = lambda: '<svg class="mk"><use href="#mk"/></svg>'
     P = parts_conf(c)  # 入れる部品（"parts"）。{} なら部品なし
+    a1 = c.get('photo_style') == 'a1'  # 写真の見せ方を A1（手本）に寄せる（2026/11/24 おしゃれの基準③。付けなければ今までと同じ出力）
     W = reserve_words(c)  # 予約・相談の言葉（介護系は「見学・体験・ご相談」。2026/11/22）
 
     # ---------- 予約・相談の入口（いま使えるものを先に） ----------
@@ -574,10 +575,42 @@ def build(c):
 </body>
 </html>
 '''
-    if c.get('eyebrow_en', True) is False: out = strip_eyebrow_en(out)  # 英字の飾りを出さない（2026/11/24 おしゃれの基準 6：英字と日本語で同じ意味を 2 回言わない）
+    if c.get('eyebrow_en', True) is False or a1: out = strip_eyebrow_en(out)  # 英字の飾りを出さない（2026/11/24 おしゃれの基準 6：英字と日本語で同じ意味を 2 回言わない。A1 の見せ方では必ず）
     else: out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
-    if c.get('design', True) and not c.get('layout'): out = vary_backgrounds(out)  # 区画ごとの背景（⑥-3 3周目。同じ見え方が続かないように）
+    if a1: out = a1_backgrounds(out)  # A1 の見せ方：区画の背景は白と薄い灰の交互（模様・斜めなし。2026/11/24 おしゃれの基準③）
+    elif c.get('design', True) and not c.get('layout'): out = vary_backgrounds(out)  # 区画ごとの背景（⑥-3 3周目。同じ見え方が続かないように）
+    out = mark_sources(out, c)  # 写真の出どころ（source：own＝お店の写真／stock＝素材）を img に書き、素材には「写真はイメージです」の札（2026/11/24 おしゃれの基準③ 壊し役 4）
     return out
+
+# ======================================================================
+# 写真の出どころ（2026/11/24 おしゃれの基準③ 壊し役 4）：site.json の写真ごとの "source"（"own"＝お店が撮って了承した写真／"stock"＝素材・見本）を
+# <img data-source="…"> に写し、stock には「写真はイメージです」の札を付ける。source の無い写真は今までどおり（何も付けない）。check_site.py が「素材に札・お店の写真に札なし」を確かめる
+# ======================================================================
+IMG_NOTE = '<span class="img-note" aria-hidden="true">写真はイメージです</span>'
+
+def photo_sources(c):
+    """設定の中の {写真の道: source}（image と source を持つ dict を全部）"""
+    out = {}
+    def walk(o):
+        if isinstance(o, dict):
+            if isinstance(o.get('image'), str) and o.get('source') in ('own', 'stock'): out[o['image']] = o['source']
+            for v in o.values(): walk(v)
+        elif isinstance(o, list):
+            for v in o: walk(v)
+    walk(c); return out
+
+def mark_sources(html, c):
+    srcs = photo_sources(c)
+    if not srcs: return html
+    def f(m):
+        tag = m.group(0)
+        if 'data-source=' in tag: return tag
+        sm = re.search(r'\bsrc="([^"]+)"', tag)
+        if not sm or sm.group(1) not in srcs: return tag
+        s = srcs[sm.group(1)]
+        tag = tag[:-1].rstrip('/') + f' data-source="{s}">'
+        return tag + (IMG_NOTE if s == 'stock' else '')
+    return re.sub(r'<img\b[^>]*>', f, html)
 
 CSS = r'''/* 言葉の切れ目で折り返す（<wbr> は BudouX で入れる） */
 .nw{white-space:nowrap}
@@ -597,6 +630,9 @@ html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:2;letter-spacing:.06em}
 img{max-width:100%;height:auto;display:block}
+/* 素材写真の札「写真はイメージです」（2026/11/24 おしゃれの基準③ 壊し役 4。source:"stock" の写真だけに付く） */
+.photo,.b-shot,.sec-photo,.sec-bg,.card .photo,.case figure,.pb-big,.pb-small,.hero-a1-bg,.hero-a1-main{position:relative}
+.img-note{position:absolute;right:8px;bottom:8px;z-index:3;font-family:var(--gothic);font-size:.62rem;line-height:1;letter-spacing:.08em;color:#fff;background:rgba(0,0,0,.42);padding:.45em .7em;border-radius:999px;pointer-events:none;white-space:nowrap}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--primary);outline-offset:4px}
 .wrap{width:min(1100px,100% - 40px);margin-left:auto;margin-right:auto}
@@ -1754,6 +1790,7 @@ def fill_photos(c, outdir):
         wh = jpeg_size(dst)
         if wh: o['w'], o['h'] = wh
         if not o.get('alt'): o['alt'] = alt
+        o['source'] = 'stock'  # 素材写真＝札「写真はイメージです」が付く（2026/11/24 壊し役 4）
         print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
     if need_hero:
         c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)

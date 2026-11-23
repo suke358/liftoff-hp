@@ -402,6 +402,19 @@ def run_static(root):
                 add('⚠️', 'リンク', f'{rel} {line}行目：外部リンクに rel="noopener" がありません')
             if t == 'img' and 'alt' not in d:
                 add('⚠️', '画像', f'{rel} {line}行目：画像の説明（alt）がありません → {d.get("src","")}')
+        # 写真の出どころの札（2026/11/24 おしゃれの基準③ 壊し役 4）：data-source="stock"（素材・見本）の写真には「写真はイメージです」の札が要り、"own"（お店の写真）には付いていてはいけない
+        # （あとでお店の写真に差しかえても札が残らないように、札は source から自動で付く。source の無い写真は見ない）
+        for m in re.finditer(r'<img\b[^>]*\bdata-source="(stock|own)"[^>]*>', src):
+            nxt = src[m.end():m.end() + 200].lstrip()
+            has = nxt.startswith('<span class="img-note"')
+            sm = re.search(r'\bsrc="([^"]+)"', m.group(0)); u = sm.group(1) if sm else ''
+            ln = src.count('\n', 0, m.start()) + 1
+            if m.group(1) == 'stock' and not has: add('❌', '写真', f'{rel} {ln}行目：素材写真 {u} に「写真はイメージです」の札がありません（source:"stock" → make_site.py が付ける）')
+            if m.group(1) == 'own' and has: add('❌', '写真', f'{rel} {ln}行目：お店の写真 {u} に「写真はイメージです」の札が付いています（お店の写真には付けない）')
+        # 同じ写真を 2 回使っていないか（2026/11/24 おしゃれの基準③ 1「同じ写真を2回使わない」）。見比べ（compare）は施工例と同じ写真を使うので数えない
+        imgs_src = [d.get('src', '') for t, d, line in par.tags if t == 'img' and d.get('src') and not d['src'].endswith('.svg')]
+        dup = sorted(set(s for s in imgs_src if imgs_src.count(s) > 1))
+        if dup and 'cmp-frame' not in src: add('⚠️', '写真', f'{rel}：同じ写真を 2 回以上使っています → ' + '／'.join(dup[:5]))
 
         if is_top:
             if re.search(r'<meta[^>]+name=["\']robots["\'][^>]+noindex', src):
