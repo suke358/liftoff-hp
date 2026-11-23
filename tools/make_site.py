@@ -1015,7 +1015,23 @@ A1_CSS = r'''/* A1 の見せ方 4：緑の LINE ボタンは最初の画面と�
 .card .ask-line svg{width:.95em;height:.95em;opacity:.55}
 .reserve .btn-line{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.7)}
 .reserve .btn-line:hover{background:rgba(255,255,255,.1)}
+/* A1 の見せ方 5：斜めの切りかえをやめる（本人「外す＝まっすぐに」）。まっすぐの区切り＋余白で分ける。模様の背景も使わない（白と薄い灰の交互は a1_backgrounds が振る） */
+.sec.dark::before,.foot::before{display:none}
+.sec.bgv-band,.menu,.access,.faq{background-image:none}
+.sec.a1-white{background-color:var(--bg);background-image:none}
+.sec.a1-gray{background-color:var(--bg2);background-image:none}
+.sec+.sec.a1-white,.sec+.sec.a1-gray{border-top:1px solid var(--line)}
 '''
+
+def a1_backgrounds(html):
+    """A1 の見せ方：背景が決まっていない区画（暗い区画・最初の画面・写真の帯の区画を除く）に、白（a1-white）と薄い灰（a1-gray）を交互に振る。模様・斜めは使わない（2026/11/24 おしゃれの基準③ 5・6）"""
+    n = [0]
+    def f(m):
+        cls = m.group(1).split()
+        if 'sec' not in cls or 'dark' in cls or 'hero' in cls or 'pband' in cls: return m.group(0)
+        look = 'a1-white' if n[0] % 2 == 0 else 'a1-gray'; n[0] += 1
+        return m.group(0).replace('class="' + m.group(1) + '"', 'class="' + m.group(1) + ' ' + look + '"', 1)
+    return re.sub(r'<section(?: id="[^"]*")? class="([^"]*)"', f, html)
 
 def strip_eyebrow_en(html):
     """区画の見出しの小さな英字（sec-head の <i> の文字。menu・flow など）を消し、印（svg）だけ残す（"eyebrow_en": false。2026/11/24 おしゃれの基準 6「英字の飾り＋日本語の見出しで同じ意味を 2 回言わない」。
