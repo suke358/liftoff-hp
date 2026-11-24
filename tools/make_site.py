@@ -1074,7 +1074,8 @@ body{font-size:14.5px;line-height:2.1;letter-spacing:.08em}
 .hero.a1 .hero-a1-main img{width:100%;height:auto}
 .hero.a1 .hero-under{background:var(--bg);color:var(--ink);padding:70px 0 44px}
 .hero.a1 .hero-under .lead{max-width:30em;margin:0 auto;text-align:center}
-.hero.a1 .hero-under .lead,.hero.ov .hero-under .lead,.hero.ov .hero-under .addr,.hero.ov .hero-under .toc a{color:var(--ink)}  /* 最初の画面の下の文が薄くて読めない（秋 04:54）を直す。A1 のとき */
+.hero.a1 .hero-under .lead,.hero.a1 .hero-under .addr,.hero.a1 .hero-under .toc a,.hero.a1 .hero-under .eyebrow,.hero.ov .hero-under .lead,.hero.ov .hero-under .addr,.hero.ov .hero-under .toc a{color:var(--ink)}  /* 最初の画面の下の文が薄くて読めない（秋 04:54）を直す。A1 のときは目次・住所・小見出しも（2026/11/24 通し試験：地の色に薄い緑で読めなかった） */
+.hero.a1 .hero-under .toc a{border-color:var(--line)}
 .hero.a1 .hero-under .addr{justify-content:center;border-top:0}
 /* A1 の見せ方 6-②③：写真の帯＝大きい写真と小さい写真を重ねてずらす（囲みの中で切る）。横に流れる帯も大小をずらす */
 .pband{padding:40px 0 60px;overflow:hidden;background:var(--bg)}
@@ -1868,6 +1869,7 @@ def crop_roles(c, outdir):
         elif isinstance(o, list):
             for v in o: walk(v)
     walk({kk: v for kk, v in c.items() if kk != '_a1_roles'})
+    cands.sort(key=lambda cd: 0 if cd['source'] == 'own' else 1)  # お店の写真を先に当てる（素材は足りないときだけ。2026/11/24 本人の決め 1）。同じ出どころの中では設定の順のまま
     if not cands: sys.exit('⚠️ 止めました（何も書きかえていません）：配置の型（a1trace）に使う写真が設定に 1 枚もありません（hero・menus・parts.belt に写真を書くか、"業種" を書いて素材を入れる）')
     order = list(trace_a1.ROLE_ORDER)
     pick = {r: cands[i % len(cands)] for i, r in enumerate(order)}
@@ -2106,7 +2108,8 @@ def fill_a1(c, outdir):
         if not o.get('alt'): o['alt'] = ''
         o['source'] = 'stock'; used.add(os.path.basename(rel)); STOCK_USED.add(name)
         print(f'写真を入れました（A1）：{label} ← _素材写真/{gy}/{name} → {rel}')
-    if hero.get('image') and not (hero.get('bg') or {}).get('image'):
+    # 1画面目の後ろ（素材）は、お店の写真（source own）が 1画面目にあるときは入れない＝お店の写真が画面いっぱいの大きな写真になる（2026/11/24 通し試験 おもちゃは想永：コーヒー豆の棚が大きく出た。本人の決め 1）
+    if hero.get('image') and not (hero.get('bg') or {}).get('image') and hero.get('source') != 'own':
         src = take('hero')
         if src: hero['bg'] = {}; put(hero['bg'], src, '1画面目の後ろ（雰囲気）', 16 / 10)
     bands = c.get('bands')

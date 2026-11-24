@@ -36,12 +36,12 @@ def spy(src, dst, ratio=None):
     copied.append((os.path.basename(src), os.path.relpath(dst, root))); return _orig(src, dst, ratio)
 make_site.copy_photo = spy
 
-def build(outdir, images_from=None):
-    """仮のお店で fill_photos → fill_a1（make_site の main と同じ順）。images_from があれば先にその images/ を写す（完成図の係の周の重ね方）"""
+def build(outdir, images_from=None, src='stock'):
+    """仮のお店で fill_photos → fill_a1（make_site の main と同じ順）。images_from があれば先にその images/ を写す（完成図の係の周の重ね方）。src＝1画面目の写真の出どころ"""
     os.makedirs(os.path.join(outdir, 'images'), exist_ok=True)
     if images_from: shutil.copytree(os.path.join(images_from, 'images'), os.path.join(outdir, 'images'), dirs_exist_ok=True)
     Image.new('RGB', (900, 1200), (90, 90, 90)).save(os.path.join(outdir, 'images', 'hero.jpg'), quality=85)
-    c = {'name': 'ためしの店', 'hero': {'image': 'images/hero.jpg', 'source': 'own'}, 'menus': [], 'photo_style': 'a1', '業種': gy}
+    c = {'name': 'ためしの店', 'hero': {'image': 'images/hero.jpg', 'source': src}, 'menus': [], 'photo_style': 'a1', '業種': gy}
     make_site.STOCK_USED.clear(); del copied[:]
     make_site.fill_photos(c, outdir); make_site.fill_a1(c, outdir)
     return c, list(copied)
@@ -49,7 +49,10 @@ def build(outdir, images_from=None):
 d1 = os.path.join(root, '周1'); c1, cp1 = build(d1)
 d2 = os.path.join(root, '周2'); c2, cp2 = build(d2, images_from=d1)
 bg1 = os.path.basename(((c1.get('hero') or {}).get('bg') or {}).get('image') or ''); bg2 = os.path.basename(((c2.get('hero') or {}).get('bg') or {}).get('image') or '')
-check(bg1 == names[0] and bg2 == names[0], '1 1画面目の後ろは 1 回目も 2 回目も hero 入りの名前の素材', (bg1, bg2))
+check(bg1 == names[0] and bg2 == names[0], '1 1画面目の後ろは 1 回目も 2 回目も hero 入りの名前の素材（1画面目が見本の写真のとき）', (bg1, bg2))
+# 1画面目がお店の写真（source own）なら、後ろの素材は入れない＝お店の写真が大きな写真になる（2026/11/24 通し試験 本人の決め 1）
+d3 = os.path.join(root, '周own'); c3, cp3 = build(d3, src='own')
+check(not ((c3.get('hero') or {}).get('bg') or {}).get('image'), '1b 1画面目がお店の写真なら後ろの素材は入れない', (c3.get('hero') or {}).get('bg'))
 srcs1 = [s for s, _ in cp1]
 check(len(srcs1) == len(set(srcs1)) and len(make_site.STOCK_USED) == len(set(srcs1)), '2 同じ素材を 1 回の作成で 2 回使わない', (srcs1, sorted(make_site.STOCK_USED)))
 stocks = []

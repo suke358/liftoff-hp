@@ -36,6 +36,7 @@
      ①釣り合い＝隣り合う写真（data-pair の組）の幅の比が 1：2 を超える／全幅の写真の下の正方形（data-under-wide）が幅 390 で 50％ 未満 → ⚠️
      ②重なり＝縦書きの文（.vt）が 1 列 12 字を超える（ブラウザなしでも）／縦書きが写真の主役の帯（真ん中 60％）に重なる（ブラウザで測る）→ ⚠️
      どちらも ⚠️（push_small.sh は止めない。本人の決め 11/24）。決まりは tools/templates/配置の型.md
+  17. 薄い字（2026/11/24 通し試験）：ブラウザで、文字の色と後ろの地の色の差（コントラスト比）が 3.0 未満の文字があれば ⚠️（背景が写真・半透明の所は見ない。幅 390・1280）
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -498,6 +499,29 @@ A1_JS = r"""(w)=>{
   return [...new Set(out)];
 }"""
 
+# 薄い字（2026/11/24 通し試験：最初の画面の下の目次が地の色に薄い緑で読めなかった。本人の決め 4）：文字の色と、その後ろの地の色（背景の写真があれば調べない）の差が 3.0 未満なら ⚠️。ブラウザで測る
+THIN_MIN = 3.0
+THIN_JS = r"""(need)=>{
+  const out=[]; const vis=e=>{const r=e.getBoundingClientRect();const s=getComputedStyle(e);return r.width>0&&r.height>0&&s.visibility!=='hidden'&&s.display!=='none'&&parseFloat(s.opacity)>0.05;};
+  const parse=c=>{const m=String(c).match(/rgba?\(([^)]+)\)/); if(!m) return null; const p=m[1].split(',').map(x=>parseFloat(x)); return {r:p[0],g:p[1],b:p[2],a:p.length>3?p[3]:1};};
+  const lum=c=>{const f=v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);};return 0.2126*f(c.r)+0.7152*f(c.g)+0.0722*f(c.b);};
+  const over=(fg,bg)=>({r:fg.r*fg.a+bg.r*(1-fg.a),g:fg.g*fg.a+bg.g*(1-fg.a),b:fg.b*fg.a+bg.b*(1-fg.a),a:1});
+  const bgOf=e=>{let n=e; while(n&&n!==document.documentElement){const s=getComputedStyle(n); if(s.backgroundImage&&s.backgroundImage!=='none') return 'image'; const c=parse(s.backgroundColor); if(c&&c.a>0.9) return c; if(c&&c.a>0) return 'mixed'; if(n.tagName==='IMG'||n.tagName==='VIDEO'||n.tagName==='SVG') return 'image'; n=n.parentElement;} const b=parse(getComputedStyle(document.body).backgroundColor); return (b&&b.a>0.9)?b:{r:255,g:255,b:255,a:1};};
+  // 写真・背景の画像の上に乗っている字は見ない（白い字に影など、地の色では測れない）。画面の外でも分かるように、ページ全体の座標で重なりを見る
+  const pics=[...document.querySelectorAll('img,video,canvas,svg')].concat([...document.querySelectorAll('*')].filter(x=>(getComputedStyle(x).backgroundImage||'none')!=='none')).map(x=>x.getBoundingClientRect()).filter(q=>q.width>20&&q.height>20);
+  // 字の始め・真ん中・終わりの 3 点のどれかが写真の上なら「写真の上の字」（写真と写真のすき間をまたぐ大きな 1 語も含む）
+  const hasImgBehind=e=>{const r=e.getBoundingClientRect(); const pts=[[r.left+r.width/2,r.top+r.height/2],[r.left+4,r.top+4],[r.right-4,r.bottom-4]]; return pts.some(([cx,cy])=>pics.some(q=>cx>=q.left&&cx<=q.right&&cy>=q.top&&cy<=q.bottom));};
+  const seen=new Set();
+  document.querySelectorAll('a,p,li,span,h1,h2,h3,h4,dt,dd,td,th,label,button,small,b,strong,em,i,summary,figcaption').forEach(e=>{
+    const t=[...e.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent.trim()).join('').trim(); if(t.length<2) return;
+    if(!vis(e)) return; const s=getComputedStyle(e); if(parseFloat(s.fontSize)<9) return;
+    const fg=parse(s.color); if(!fg) return; const bg=bgOf(e); if(bg==='image'||bg==='mixed') return; if(hasImgBehind(e)) return;
+    const f=fg.a<1?over(fg,bg):fg; const l1=lum(f), l2=lum(bg); const ratio=(Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+    if(ratio<need){const key=t.slice(0,12); if(seen.has(key)) return; seen.add(key); out.push(key+'（'+ratio.toFixed(1)+'・'+e.tagName.toLowerCase()+(e.className?'.'+String(e.className).split(' ')[0]:'')+'）');}
+  });
+  return out.slice(0,8);
+}"""
+
 def run_browser(root):
     try:
         from playwright.sync_api import sync_playwright
@@ -505,7 +529,7 @@ def run_browser(root):
         add('⚠️', 'はみ出し', 'ブラウザが使えないので、はみ出しは調べていません（Claude の作業場所で調べる）'); return
     top = 'file://' + os.path.abspath(os.path.join(root, 'index.html'))
     a1 = is_a1trace(open(os.path.join(root, 'index.html'), encoding='utf-8', errors='ignore').read())
-    bad = []; a1_bad = {}
+    bad = []; a1_bad = {}; thin = {}
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for w in WIDTHS:
@@ -518,10 +542,14 @@ def run_browser(root):
             if a1 and w in (390, 1280):  # 配置の型：釣り合い・重なり（スマホ 390 とパソコン 1280 で測る）
                 for line in pg.evaluate(A1_JS, w):
                     area, msg = line.split('|', 1); a1_bad.setdefault((area, msg), []).append(str(w))
+            if w in (390, 1280):  # 薄い字（文字と地の色の差 3.0 未満）
+                for line in pg.evaluate(THIN_JS, THIN_MIN): thin.setdefault(line, []).append(str(w))
             pg.close()
         b.close()
     if bad: add('❌', 'はみ出し', '横にはみ出しています → ' + '、'.join(bad))
     else: add('✅', 'はみ出し', '幅 ' + '・'.join(map(str, WIDTHS)) + ' ではみ出しなし')
+    if thin: add('⚠️', '薄い字', '文字が地の色に溶けて読みにくい（差 %.1f 未満）→ ' % THIN_MIN + '／'.join(f'{k}' for k in list(thin)[:8]) + '（文字の色を濃く。幅 ' + '・'.join(sorted(set(sum(thin.values(), [])))) + '）')
+    else: add('✅', '薄い字', '文字と地の色の差は %.1f 以上（背景が写真の所は見ていない。幅 390・1280）' % THIN_MIN)
     if a1:
         for (area, msg), ws in sorted(a1_bad.items()): add('⚠️', area, f'幅{"・".join(ws)}：{msg}')
         if not a1_bad: add('✅', '釣り合い', '配置の型：隣り合う写真の幅の比・全幅の下の正方形・縦書きの重なりは決まりの中（幅 390・1280）')
