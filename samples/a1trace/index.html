@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ja" data-layout="a1trace">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- 本公開前は検索に出さない設定。本公開のときに tools/launch.py で外す -->
+<meta name="robots" content="noindex,nofollow">
+<title>喫茶 こもれび｜〇〇市の喫茶店</title>
+<meta name="description" content="〇〇市の喫茶店「こもれび」のホームページです（デザイン見本・架空のお店）。">
+<meta name="theme-color" content="#22272e">
+<meta property="og:title" content="喫茶 こもれび">
+<meta property="og:description" content="〇〇市の喫茶店「こもれび」のホームページです（デザイン見本・架空のお店）。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="images/a1/hero_r.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500&family=Zen+Kaku+Gothic+New:wght@300;400&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "CafeOrCoffeeShop", "name": "喫茶 こもれび", "address": {"@type": "PostalAddress", "addressCountry": "JP", "streetAddress": "〇〇県〇〇市〇〇町1-2-3"}}
+</script>
+<style>
+
+:root{--bg:#f1efe9;--gap:#e4e1da;--band:#6b5e55;--ink:#22272e}
+*{box-sizing:border-box}
+html{font-size:14px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:#f1efe9;color:#22272e;font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;font-weight:300;font-size:1rem;line-height:2;letter-spacing:.06em;word-break:keep-all;overflow-wrap:break-word;overflow-x:hidden}
+img{display:block;max-width:100%}
+.ph{-webkit-filter:saturate(.78);filter:saturate(.78)}
+.mi{font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-weight:400}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ul,dl,dd,dt{margin:0;padding:0}
+ul{list-style:none}
+.sg{display:inline-block;vertical-align:middle;margin-right:.7em;width:18px;height:10px}
+.btn{display:inline-block;border:1px solid currentColor;border-radius:999px;padding:.35em 1.6em;font-size:.82rem;letter-spacing:.14em;line-height:1.9}
+.cover{position:absolute;left:0;top:0;width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+.img-note{position:absolute;left:8px;bottom:8px;z-index:3;font-size:.62rem;line-height:1;letter-spacing:.08em;color:#fff;background:rgba(0,0,0,.42);padding:.45em .7em;border-radius:999px;pointer-events:none;white-space:nowrap}
+.sample-note{position:fixed;left:0;right:0;top:0;z-index:30;margin:0;text-align:center;font-size:.72rem;line-height:1.8;background:rgba(0,0,0,.6);color:#fff}
+
+/* 1画面目 */
+.hero{position:relative;height:92vh;min-height:620px;max-height:820px;overflow:hidden;background:#e4e1da}
+.hero .p1{position:absolute;left:0;top:0;bottom:0;width:36%;overflow:hidden}
+.hero .p2{position:absolute;right:0;top:0;bottom:0;width:57%;overflow:hidden}
+.hero .p1 img,.hero .p2 img{-webkit-filter:saturate(.78) brightness(.84);filter:saturate(.78) brightness(.84)}
+.hero .word{position:absolute;left:32%;top:50%;margin:0;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);font-size:6.0rem;letter-spacing:.22em;text-indent:.22em;line-height:1.2;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.4);white-space:nowrap}
+.hero .name{position:absolute;left:30px;top:30px;font-size:.86rem;letter-spacing:.24em;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5);line-height:1.6}
+.hero .toc{position:absolute;left:30px;bottom:30px;font-size:.86rem;line-height:2.1;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+.hero .guide{position:absolute;right:30px;bottom:192px;width:300px;text-align:right;font-size:.74rem;line-height:1.9;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.hero .card{position:absolute;right:30px;bottom:30px;width:300px;background:#22272e;color:#fff;border-radius:8px;padding:14px;overflow:hidden}
+.hero .card img{float:left;width:62px;height:62px;margin-right:14px;-o-object-fit:cover;object-fit:cover}
+.hero .card .img-note{display:none}
+.hero .card p{font-size:.95rem;line-height:1.6;margin-bottom:6px;letter-spacing:.12em}
+.hero .card .btn{font-size:.7rem;padding:.1em 1.1em}
+.card:after{content:"";display:block;clear:both}
+.bar{height:72px;background:#f1efe9;border-top:1px solid #22272e;padding:0 30px;overflow:hidden}
+.bar .l{float:left;padding-top:12px;font-size:.78rem;line-height:1.75}
+.bar .l b{font-weight:400;letter-spacing:.2em;margin-right:1em}
+.bar .r{float:right;padding-top:20px;font-size:.78rem}
+.bar .r span{margin-right:1.2em;letter-spacing:.14em}
+
+/* 2画面目 */
+.s2{position:relative}
+.s2 .wide{position:relative;height:0;padding-bottom:42%;overflow:hidden}
+.s2 .wide img{-webkit-filter:saturate(.78);filter:saturate(.78)}
+.vt{position:absolute;-webkit-writing-mode:vertical-rl;writing-mode:vertical-rl;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.s2 .vt{left:5%;top:7%;font-size:2.1rem;letter-spacing:.3em;line-height:1.7}
+.s2 .yoko{position:absolute;right:6%;top:10%;margin:0;text-align:right;color:#fff;font-size:2.1rem;line-height:1.75;letter-spacing:.2em;text-shadow:0 1px 8px rgba(0,0,0,.55)}
+.s2 .band{background:#6b5e55;color:#fff;padding:48px 0 96px 6%;overflow:hidden}
+.s2 .lc{float:left;width:56%}
+.s2 .rc{float:right;width:38%;margin-right:6%;padding-top:60px}
+.s2 .rc.one{width:34%;padding-top:150px}
+.s2 .tag{text-align:right;font-size:.8rem;letter-spacing:.2em;margin-bottom:10px}
+.s2 h2{font-size:2.4rem;line-height:1.7;letter-spacing:0.3em;margin-bottom:18px}
+.s2 .small{font-size:.8rem;margin-top:110px}
+.s2 .sqs{overflow:hidden}
+.s2 .sqs .a{float:left;width:48%}
+.s2 .sqs .b{float:right;width:48%;margin-top:40px}
+.sqs .a,.sqs .b,.s2 .rc .sq{position:relative;height:0;padding-bottom:48%;overflow:hidden}
+.s2 .rc .sq{padding-bottom:100%}
+.s2 .rc img{-webkit-filter:saturate(.78);filter:saturate(.78)}
+
+/* 4段目 はじめて */
+.s4{background:#f1efe9;padding:120px 0 110px;overflow:hidden}
+.s4 .top{overflow:hidden;padding:0 6%}
+.s4 .lt{float:left;width:52%}
+.s4 .lab{font-size:.78rem;letter-spacing:.3em;margin-bottom:14px}
+.s4 h2{font-size:1.7rem;font-weight:500;line-height:1.8;letter-spacing:0.3em;margin-bottom:18px}
+.s4 .lt p.t{font-size:.92rem;line-height:2.2}
+.s4 .rt{float:right;width:40%}
+.s4 .rt .sq{position:relative;height:0;padding-bottom:78%;width:78%;margin-left:auto;overflow:hidden}
+.s4 .rt .two{overflow:hidden}
+.s4 .rt .two .a{float:left;width:46%}
+.s4 .rt .two .b{float:right;width:46%;margin-top:40px}
+.s4 .rt .two .a,.s4 .rt .two .b{position:relative;height:0;padding-bottom:46%;overflow:hidden}
+.s4 .rt img{-webkit-filter:saturate(.78);filter:saturate(.78)}
+.s4 .flow{margin-top:96px;padding:0 6%;overflow:hidden}
+.s4 .flow li{float:left;width:29%;margin-right:6.5%;border-top:1px solid #22272e;padding-top:26px}
+.s4 .flow li:last-child{margin-right:0}
+.flow .n{font-size:.72rem;letter-spacing:.2em}
+.flow h3{font-size:1.08rem;line-height:1.7;margin:4px 0 6px;letter-spacing:0.3em}
+.flow p{font-size:.88rem;line-height:2}
+
+/* 3段目 商品 */
+.s3{position:relative}
+.s3 .wide{position:relative;height:0;padding-bottom:40%;overflow:hidden}
+.s3 .wide img{-webkit-filter:saturate(.78);filter:saturate(.78)}
+.s3 .vt{left:6%;top:3%;z-index:2;font-size:4.2rem;letter-spacing:.3em;line-height:1.3}
+.s3 .fuda{background:#e4e1da;text-align:right;padding:14px 6%;font-size:1rem;letter-spacing:0.3em;line-height:2}
+.s3 .txt{position:relative;background:#22272e;color:#fff;padding:120px 0 130px;overflow:hidden}
+.s3 .txt .bgi{position:absolute;left:0;top:0;width:100%;height:100%;opacity:.42;-o-object-fit:cover;object-fit:cover}
+.s3 .txt .img-note{left:16px;bottom:16px}
+.s3 .col{position:relative;width:560px;max-width:92%;margin:0 auto;border-left:1px solid rgba(255,255,255,.6);padding-left:40px}
+.s3 .col h3{font-size:1.25rem;line-height:1.7;letter-spacing:0.3em;margin-bottom:2px}
+.s3 .col p{font-size:.9rem;line-height:2}
+.s3 .col .g{margin-bottom:34px}
+.s3 .col .lk{display:inline-block;border-bottom:1px solid #fff;font-size:.9rem;line-height:1.9}
+
+/* 5段目 */
+.s5{padding:130px 0 120px;overflow:hidden}
+.s5 .stag{position:relative;height:0;padding-bottom:66%;margin-bottom:236px}
+.s5 .stag .a{position:absolute;left:3%;top:0;width:43%;height:81.8%;overflow:hidden}
+.s5 .stag .b{position:absolute;left:46%;top:140px;width:45%;height:100%;overflow:hidden}
+.s5 .stag img{-webkit-filter:saturate(.78);filter:saturate(.78)}
+.s5 .stag .vt{left:46%;margin-left:-.7em;top:46%;z-index:2;color:#22272e;font-size:3rem;letter-spacing:.3em;line-height:1.3;text-shadow:0 0 14px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)}
+.s5 .two{margin-top:0;padding:0 6%;overflow:hidden}
+.s5 .two .lt{float:left;width:44%}
+.s5 .two .rt{float:right;width:48%}
+.s5 h2{font-size:1.6rem;font-weight:500;line-height:1.8;letter-spacing:0.3em;margin-bottom:14px}
+.s5 .lab{font-size:.78rem;letter-spacing:.3em;margin-bottom:14px}
+.s5 table{border-collapse:collapse;width:100%;margin:10px 0 22px;font-size:.88rem}
+.s5 th,.s5 td{border-top:1px solid #22272e;border-bottom:1px solid #22272e;padding:8px 0;text-align:left;vertical-align:top;font-weight:300;line-height:1.8}
+.s5 th{width:5em;font-weight:400;letter-spacing:.2em}
+.faq li{border-top:1px solid #22272e;padding:14px 0}
+.faq li:last-child{border-bottom:1px solid #22272e}
+.faq .q{font-size:.92rem;font-weight:400}
+.faq .n{display:inline-block;width:3.2em;font-size:.72rem;letter-spacing:.14em}
+.faq .a{font-size:.88rem;padding-left:3.2em}
+
+/* 6段目 */
+.s6{background:#22272e;color:#fff;text-align:center;padding:110px 6% 120px}
+.s6 h2{font-size:1.8rem;letter-spacing:.2em;margin-bottom:12px}
+.s6 p{font-size:.88rem;margin-bottom:24px}
+
+/* 最後 */
+.foot{position:relative;height:380px;overflow:hidden;background:#22272e}
+.foot img{-webkit-filter:saturate(.78) brightness(.85);filter:saturate(.78) brightness(.85)}
+.foot .w{position:absolute;left:30px;bottom:50px;font-size:5rem;line-height:1.2;letter-spacing:.2em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.foot .c{position:absolute;left:30px;bottom:16px;font-size:.72rem;color:rgba(255,255,255,.75);letter-spacing:.1em}
+.fixbar,.totop{display:none}
+
+@media (max-width:899px){
+ body{padding-bottom:56px}
+ .hero{height:auto;min-height:0;max-height:none;padding-bottom:0;overflow:hidden}
+ .hero .p1,.hero .p2{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:100%}
+ .hero .p1{height:225px}
+ .hero .p2{height:460px;margin-top:40px}
+ .hero .word{left:26px;top:150px;margin:0;-webkit-transform:none;transform:none;-webkit-writing-mode:vertical-rl;writing-mode:vertical-rl;font-size:3.3rem;text-indent:0;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+ .hero .name{left:20px;top:20px;font-size:.8rem}
+ .hero .toc{display:none}
+ .hero .guide{right:22px;bottom:206px;width:230px;font-size:.68rem}
+ .hero .card{left:22px;right:auto;bottom:22px;width:auto;min-width:176px;max-width:230px}  /* 札は左下（右下の「↑」と重ねない）。min-width が無いと札が縮んで一言が 1 字ずつ割れる */
+ .hero .card img{width:52px;height:52px}
+ .s2 .yoko{right:16px;top:14px;font-size:1rem;letter-spacing:.08em;line-height:1.6;white-space:nowrap}
+ .s2 .yoko br{display:none}
+ .bar{height:auto;padding:12px 20px;min-height:52px}
+ .bar .r{display:none}
+ .bar .l{float:none;padding-top:0}
+ .s2 .wide{padding-bottom:62%}
+ .s2 .vt{font-size:1.25rem;top:6%;line-height:1.7}
+ .s2 .band{padding:34px 0 60px 6%}
+ .s2 .lc{float:none;width:auto;margin-right:6%}
+ .s2 h2{font-size:1.75rem;letter-spacing:.2em}
+ .s2 .small{margin-top:30px}
+ .s2 .rc,.s2 .rc.one{float:none;width:88%;margin:40px 6% 0 0;padding-top:0}
+ .s2 .sqs .a{float:none;width:62%}
+ .s2 .sqs .b{float:none;width:62%;margin:-30px 0 0 auto}
+ .sqs .a,.sqs .b{padding-bottom:62%}
+ .s2 .rc .sq{width:70%;padding-bottom:70%;margin-left:auto}
+ .s4{padding:80px 0 70px}
+ .s4 .lt,.s4 .rt{float:none;width:auto}
+ .s4 .rt{margin-top:26px}
+ .s4 .rt .sq{width:92%;padding-bottom:70%}
+ .s4 .rt .two{width:92%;margin-left:auto}
+ .s4 .flow{margin-top:50px}
+ .s4 .flow li{float:none;width:auto;margin:0 0 34px}
+ .s4 h2{font-size:1.5rem;letter-spacing:.2em}
+ .s3 .wide{padding-bottom:88%}
+ .s3 .vt{font-size:3rem;left:22px;right:auto}
+ .s3 .txt{padding:70px 0 80px}
+ .s3 .col{padding-left:24px}
+ .s5{padding:70px 0 80px}
+ .s5 .stag{height:auto;padding-bottom:0;margin-bottom:60px;position:relative}
+ .s5 .stag .a,.s5 .stag .b{position:relative;left:auto;top:auto;height:0;overflow:hidden}
+ .s5 .stag .a{width:74%;padding-bottom:70%;margin-left:32px}
+ .s5 .stag .b{width:60%;padding-bottom:72%;margin:-40px 15% 0 auto}
+ .s5 .stag .vt{left:auto;right:19%;top:auto;bottom:18px;margin-left:0;color:#fff;font-size:2.4rem;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+ .s5 .two{margin-top:0}
+ .s5 .two .lt,.s5 .two .rt{float:none;width:auto}
+ .s5 .two .rt{margin-top:40px}
+ .s5 h2{font-size:1.4rem;letter-spacing:.2em}
+ .s6{padding:70px 6% 80px}
+ .foot{height:280px}
+ .foot .w{font-size:3.6rem}
+ .fixbar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:20;background:#22272e;color:#fff;height:56px;overflow:hidden;border-top:1px solid rgba(255,255,255,.25)}
+ .fixbar a{float:left;width:33.33%;text-align:center;font-size:.8rem;letter-spacing:.14em;line-height:56px}
+ .totop{display:block;position:fixed;right:14px;bottom:70px;z-index:21;width:36px;height:36px;border:1px solid #22272e;border-radius:50%;background:rgba(255,255,255,.8);text-align:center;line-height:34px;font-size:.9rem}
+}
+
+
+/* 見本帳にもどる（見本だけに出す） */
+.mihon{position:fixed;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);bottom:16px;z-index:200;background:rgba(25,25,25,.85);color:#fff !important;font:500 12px/1.4 "Hiragino Sans","Noto Sans CJK JP",sans-serif;letter-spacing:.06em;padding:.7em 1.3em;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.mihon:hover{background:#000}
+@media (max-width:899px){.mihon{bottom:78px}}
+</style>
+</head>
+<body id="top" class="a1trace">
+<!-- このページは tools/make_site.py で作った（設定：komorebi-a1.json・道具の版 81239d1・配置の型 a1trace・つまみの種 1124）。直すときは設定を直して作り直す --><p class="sample-note" role="note">※画面は<wbr>架空の<wbr>お店の<wbr>見本です</p>
+
+<header>
+<section class="hero">
+ <div class="p1" data-pair="hero"><img class="cover" src="images/a1/hero_l.jpg" width="900" height="1343" alt="モーニング" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div>
+ <div class="p2" data-pair="hero"><img class="cover" src="images/a1/hero_r.jpg" width="960" height="864" alt="日替わりランチ" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div>
+ <p class="word mi" aria-hidden="true">こもれび</p>
+ <h1 class="name mi">喫茶 こもれび</h1>
+ <ul class="toc">
+  <li><a href="#about">朝の<wbr>コーヒーから、</a></li>
+  <li><a href="#first">はじめての<wbr>方も、<wbr>ふらりと</a></li>
+  <li><a href="#items">きょうの一皿</a></li>
+  <li><a href="#shop">お店と質問</a></li>
+ </ul>
+ <p class="guide">〇〇市の<wbr>小さな<wbr>喫茶店です。<wbr>モーニングと<wbr>日替わりの<wbr>ランチ、<wbr>店で<wbr>焼いた<wbr>お菓子を、<wbr>ひとつずつ<wbr>ご用意しています。</p>
+ <div class="card">
+  <img class="ph" src="images/a1/sq_d.jpg" width="520" height="520" alt="こもれびの仕事の様子" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span>
+  <p class="mi">モーニング</p>
+  <a class="btn" href="#items">メニューを<wbr>見る</a>
+ </div>
+</section>
+<div class="bar">
+ <div class="l"><b class="mi">お店</b>〇〇県〇〇市〇〇町1-2-3<br>朝の<wbr>コーヒーから、<wbr>昼の<wbr>ひと<wbr>休みまで。</div>
+ <div class="r"><span>LINE での<wbr>ご相談</span><a class="btn" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener">LINE で<wbr>相談する</a></div>
+</div>
+</header>
+<main>
+<section class="s2" id="about">
+ <div class="wide"><img class="cover" src="images/a1/wide1.jpg" width="960" height="536" alt="焼き菓子" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span><p class="vt mi">朝の<wbr>コーヒーから、<br>昼の<wbr>ひと<wbr>休みまで。</p></div>
+ <div class="band">
+  <div class="lc">
+   <p class="tag">〇〇市 ・ 喫茶・<wbr>焼き菓子</p>
+   <h2 class="mi">〇〇市の<wbr>小さな<wbr>喫茶店です。</h2>
+   <a class="btn" href="#items">きょうの一皿</a>
+   <p class="small">モーニングと<wbr>日替わりの<wbr>ランチ、<wbr>店で<wbr>焼いた<wbr>お菓子を、<wbr>ひとつずつ<wbr>ご用意しています。</p>
+  </div>
+  <div class="rc"><div class="sqs"><div class="a" data-pair="sq2" data-under-wide><img class="cover" src="images/a1/sq_a.jpg" width="800" height="800" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div><div class="b" data-pair="sq2" data-under-wide><img class="cover" src="images/a1/sq_b.jpg" width="800" height="800" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div></div></div>
+ </div>
+</section>
+<section class="s4" id="first">
+ <div class="top">
+  <div class="lt">
+   <p class="lab"><svg class="sg" viewBox="0 0 18 10" aria-hidden="true"><path d="M3 1.5h9v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" fill="currentColor"/><path d="M12 2.6h1.6a1.6 1.6 0 0 1 0 3.2H12" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M3 9.4h9" stroke="currentColor" stroke-width="1"/></svg>はじめての<wbr>方へ</p>
+   <h2 class="mi">はじめての<wbr>方も、<wbr>ふらりと</h2>
+   <p class="t">予約なしで<wbr>どうぞ。<wbr> 空いている<wbr>席へ。<wbr>おひとりの<wbr>方も<wbr>多い<wbr>お店です。</p>
+  </div>
+  <div class="rt"><div class="sq" data-pair="sq4"><img class="cover" src="images/a1/sq_c.jpg" width="800" height="800" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div></div>
+ </div>
+ <ul class="flow">
+  <li><p class="n">(01)</p><h3 class="mi">お店へ</h3><p>予約なしで<wbr>どうぞ。</p></li>
+  <li><p class="n">(02)</p><h3 class="mi">席につく</h3><p>空いている<wbr>席へ。<wbr>おひとりの<wbr>方も<wbr>多い<wbr>お店です。</p></li>
+  <li><p class="n">(03)</p><h3 class="mi">ゆっくり</h3><p>本を<wbr>読んだり、<wbr>窓の<wbr>外を<wbr>なが<wbr>めたり。</p></li>
+ </ul>
+</section>
+<section class="s3" id="items">
+ <div class="wide"><img class="cover" src="images/a1/wide2.jpg" width="960" height="639" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div>
+ <p class="vt mi">一皿</p>
+ <p class="fuda mi"><svg class="sg" viewBox="0 0 18 10" aria-hidden="true"><path d="M3 1.5h9v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" fill="currentColor"/><path d="M12 2.6h1.6a1.6 1.6 0 0 1 0 3.2H12" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M3 9.4h9" stroke="currentColor" stroke-width="1"/></svg>きょうの一皿</p>
+ <div class="txt">
+  <img class="bgi" src="images/a1/dark.jpg" width="960" height="600" alt="こもれびのイメージ" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span>
+  <div class="col">
+   <div class="g"><h3 class="mi">モーニング</h3><p>トーストとゆで<wbr>卵、<wbr>小さな<wbr>サラダに、<wbr>お好きな<wbr>飲みものを。</p></div>
+   <div class="g"><h3 class="mi">日替わりランチ</h3><p>週ごとに<wbr>変わる、<wbr>ごはんと<wbr>おかずの<wbr>定食です。</p></div>
+   <div class="g"><h3 class="mi">焼き菓子</h3><p>店で<wbr>焼いた<wbr>スコーンや<wbr>クッキーを、<wbr>日に<wbr>よって<wbr> 2〜3 種類。</p></div>
+   <a class="lk" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener">持ち帰りや<wbr>取り置きの<wbr>ご相談も、<wbr>LINE で<wbr>お気軽に<wbr>どうぞ。</a>
+  </div>
+ </div>
+</section>
+<section class="s5" id="shop">
+ <div class="stag">
+  <div class="a" data-pair="stag"><img class="cover" src="images/a1/tall_a.jpg" width="760" height="950" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div>
+  <div class="b" data-pair="stag"><img class="cover" src="images/a1/tall_b.jpg" width="840" height="1050" alt="こもれびの写真" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span></div>
+  <p class="vt mi" aria-hidden="true">ひと息</p>
+ </div>
+ <div class="two">
+  <div class="lt">
+   <p class="lab"><svg class="sg" viewBox="0 0 18 10" aria-hidden="true"><path d="M3 1.5h9v4a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z" fill="currentColor"/><path d="M12 2.6h1.6a1.6 1.6 0 0 1 0 3.2H12" fill="none" stroke="currentColor" stroke-width="1.1"/><path d="M3 9.4h9" stroke="currentColor" stroke-width="1"/></svg>お店のこと</p>
+   <h2 class="mi">喫茶 こもれび</h2>
+   <table>
+    <tr><th>店名</th><td>喫茶 こもれび</td></tr>
+    <tr><th>住所</th><td>〇〇県〇〇市〇〇町1-2-3</td></tr>
+    <tr><th>営業時間</th><td>8:00〜17:00<wbr>（見本）</td></tr>
+    <tr><th>定休日</th><td>水曜日<wbr>（見本）</td></tr>
+   </table>
+   <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B1%B1%E5%8F%A3%E7%9C%8C%E9%98%B2%E5%BA%9C%E5%B8%82" target="_blank" rel="noopener">Googleマップで<wbr>道順を<wbr>見る</a>
+  </div>
+  <div class="rt">
+   <p class="lab">よくある質問</p>
+   <ul class="faq">
+    <li><p class="q"><span class="n">(01)</span>予約は<wbr>できますか？</p><p class="a">ランチだけ、<wbr>前日までに<wbr> LINE で<wbr>お受けしています<wbr>（見本）。</p></li>
+    <li><p class="q"><span class="n">(02)</span>子ども<wbr>連れでも<wbr>大丈夫ですか？</p><p class="a">はい。<wbr>子ども<wbr>用の<wbr>いすを<wbr>ご用意しています<wbr>（見本）。</p></li>
+    <li><p class="q"><span class="n">(03)</span>お菓子の<wbr>持ち帰りは<wbr>できますか？</p><p class="a">はい、<wbr>できます。<wbr>数に<wbr>限りが<wbr>あるので、<wbr>取り置きは<wbr> LINE で<wbr>どうぞ<wbr>（見本）。</p></li>
+   </ul>
+  </div>
+ </div>
+</section>
+<section class="s6" id="line">
+ <h2 class="mi">ご相談</h2>
+ <p>ケーキの<wbr>取り置きや<wbr>貸し切りは、<wbr>LINE で<wbr>お気軽に<wbr>どうぞ。</p>
+ <a class="btn" href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener" style="border-color:#fff">LINE で<wbr>相談する</a>
+</section>
+</main>
+<footer class="foot">
+ <img class="cover" src="images/a1/foot.jpg" width="960" height="600" alt="こもれびの仕事の様子" data-source="stock"><span class="img-note" aria-hidden="true">写真は<wbr>イメージです</span>
+ <p class="w mi">こもれび</p>
+ <p class="c">&copy; こもれび</p>
+</footer>
+<nav class="fixbar" aria-label="下のメニュー">
+ <a href="https://line.me/R/ti/p/@example" target="_blank" rel="noopener">LINE で<wbr>相談</a><a href="#items">メニュー</a><a href="#shop">お店</a>
+</nav>
+<a class="totop" href="#top" aria-label="上へ">&uarr;</a>
+
+<!-- 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ、いちばん上に「確認用（まだ公開前です）」を出す。本番の住所では何もしない。元：liftoff-hp/tools/templates/preview_band.html（直すのはここだけ。make_site.py が読んで body の閉じタグの前に入れる。注釈に閉じタグの文字を書かない＝後から入れる道具が注釈の中に入れてしまうため・11/15） -->
+<script>
+(function () {
+  var h = String(window.location.hostname || '');
+  if (h.indexOf('preview-') !== 0) return;
+  if (document.getElementById('pv-band')) return;
+  var b = document.createElement('p');
+  b.id = 'pv-band';
+  b.setAttribute('role', 'note');
+  b.appendChild(document.createTextNode('確認用（まだ公開前です）'));
+  b.style.cssText = 'margin:0;padding:0 12px;height:34px;line-height:34px;background:#ffd54f;color:#3e2723;font-size:13px;font-weight:700;text-align:center;letter-spacing:.06em;white-space:nowrap;overflow:hidden;position:relative;z-index:60;border-bottom:1px solid #c8a415';
+  document.body.insertBefore(b, document.body.firstChild);
+  var hd = document.querySelector('header');
+  if (hd && window.getComputedStyle) {
+    var cs = window.getComputedStyle(hd);
+    if (cs.position === 'absolute') hd.style.top = ((parseFloat(cs.top) || 0) + 34) + 'px';
+  }
+  if (document.title.indexOf('【確認用】') !== 0) document.title = '【確認用】' + document.title;
+  var m = document.createElement('meta');
+  m.name = 'robots';
+  m.content = 'noindex';
+  document.getElementsByTagName('head')[0].appendChild(m);
+})();
+</script>
+<a class="mihon" href="../index.html">デザイン見本（架空のお店）｜見本帳にもどる</a>
+</body>
+</html>
