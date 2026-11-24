@@ -32,6 +32,10 @@
   15. 地図の埋め込み（2026/11/22）：Googleマップの iframe が 1 ページに 2 つ以上あれば ❌（本人「Googleマップ 2回でてくる ×」。1 か所だけ）
   14. 仮の文・仮の絵（2026/11/21 ⑥-1）：「〇〇の写真が入ります」だけの短い文・ページの中の <svg> にその文・img が指す .svg がその仮の絵 → ❌（本物の文「お店で撮った写真が入ります。」は数えない）。
      最初の画面（hero）に写真が無い（poster plain）なら ⚠️。前の道具の見本の設定で作ったページが「写真がない」と採点された（11/21）のを二度と出さない
+  16. 配置の型（make_site の "layout":"a1trace"。ページに data-layout="a1trace" があるときだけ。2026/11/24）：
+     ①釣り合い＝隣り合う写真（data-pair の組）の幅の比が 1：2 を超える／全幅の写真の下の正方形（data-under-wide）が幅 390 で 50％ 未満 → ⚠️
+     ②重なり＝縦書きの文（.vt）が 1 列 12 字を超える（ブラウザなしでも）／縦書きが写真の主役の帯（真ん中 60％）に重なる（ブラウザで測る）→ ⚠️
+     どちらも ⚠️（push_small.sh は止めない。本人の決め 11/24）。決まりは tools/templates/配置の型.md
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -441,6 +445,7 @@ def run_static(root):
             # 「(案)」の消し忘れ（2026/11/24 指示書「おしゃれの基準と採点の物差し」：確かめてから使う文に付けた印が本番に残らないように）
             an = len(re.findall(r'[（(]案[)）]', text))
             if an: add('⚠️', '仮の文', f'{rel}：「(案)」が {an} か所あります（店主に確かめてから本物の文に直す。本公開までに消す）')
+        check_a1_static(src, rel)  # 配置の型（a1trace）の縦書きの字数（2026/11/24）
         # Cloudflare Web Analytics（2026/10/22）：設定（site.json）に analytics_token があるのに、数える一文がないページは ❌
         if is_top:
             tok = ''
@@ -466,13 +471,41 @@ def run_static(root):
     if not old_found: add('✅', '古いスマホ', '崩れやすい書き方は見つかりませんでした（予備ありのものは除く）')
     return pages
 
+def is_a1trace(src): return 'data-layout="a1trace"' in src
+
+def check_a1_static(src, rel):
+    """配置の型（a1trace）だけ（2026/11/24 案_配置の型を道具に入れる 4）：縦書きの文（.vt）は 1 列 12 字まで（型の「はみ出さない 3」）。超えたら ⚠️ 重なり（押し通さない＝⚠️ なので push_small は止めない）"""
+    if not is_a1trace(src): return
+    long = []
+    for m in re.finditer(r'<p class="vt[^"]*"[^>]*>(.*?)</p>', src, re.S):
+        for col in re.split(r'<br\s*/?>', m.group(1)):
+            t = html.unescape(re.sub(r'<[^>]+>', '', col)).strip()
+            if len(t) > 12: long.append(t)
+    if long: add('⚠️', '重なり', f'{rel}：縦書きの文が 12 字を超えています（1 列 12 字まで。長い一言は横書き 2 行に）→ ' + '／'.join(long[:3]))
+
+# 配置の型（a1trace）の釣り合い・重なり（2026/11/24 案 4。配置の型.md の「写真の大きさの釣り合い」「はみ出さない」）。ブラウザで測る。見つけても ⚠️（push_small は止めない）
+A1_JS = r"""(w)=>{
+  const out=[]; const R=e=>e.getBoundingClientRect();
+  const groups={};
+  document.querySelectorAll('[data-pair]').forEach(e=>{const k=e.getAttribute('data-pair');(groups[k]=groups[k]||[]).push(e);});
+  for(const k in groups){const ws=groups[k].map(e=>R(e).width).filter(x=>x>0); if(ws.length<2) continue; const mx=Math.max(...ws), mn=Math.min(...ws);
+    if(mn>0 && mx/mn>2.05) out.push('釣り合い|隣り合う写真（'+k+'）の幅の比が 1：'+(mx/mn).toFixed(1)+'（1：2 まで）');}
+  if(w<760){document.querySelectorAll('[data-under-wide]').forEach(e=>{const r=R(e); if(r.width>0 && r.width<w*0.5) out.push('釣り合い|全幅の写真の下の正方形が幅の '+Math.round(r.width/w*100)+'％（50％ 以上に）');});}
+  document.querySelectorAll('.vt').forEach(v=>{const r=R(v); if(r.width===0) return; const cx=(r.left+r.right)/2, cy=(r.top+r.bottom)/2;
+    const imgs=v.parentElement?[...v.parentElement.querySelectorAll('img')]:[];
+    imgs.forEach(im=>{const q=R(im); if(q.width===0) return; if(cy<q.top||cy>q.bottom) return; const rel=(cx-q.left)/q.width;
+      if(rel>0.2 && rel<0.8) out.push('重なり|縦書き「'+(v.textContent||'').trim().slice(0,8)+'」が写真の主役の帯（真ん中 60％）に重なっています（左右どちらかの 25％ に置くか、写真のほうを動かす）');});});
+  return [...new Set(out)];
+}"""
+
 def run_browser(root):
     try:
         from playwright.sync_api import sync_playwright
     except Exception:
         add('⚠️', 'はみ出し', 'ブラウザが使えないので、はみ出しは調べていません（Claude の作業場所で調べる）'); return
     top = 'file://' + os.path.abspath(os.path.join(root, 'index.html'))
-    bad = []
+    a1 = is_a1trace(open(os.path.join(root, 'index.html'), encoding='utf-8', errors='ignore').read())
+    bad = []; a1_bad = {}
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for w in WIDTHS:
@@ -482,10 +515,16 @@ def run_browser(root):
             if sw > w + 1:
                 who = pg.evaluate("""(w)=>[...document.querySelectorAll('body *')].filter(e=>{const r=e.getBoundingClientRect();const cs=getComputedStyle(e);return r.right>w+1&&cs.position!=='fixed'&&r.width>0}).slice(0,3).map(e=>e.tagName.toLowerCase()+(e.className?'.'+String(e.className).split(' ')[0]:'')).join(' / ')""", w)
                 bad.append(f'幅{w}：{sw}px（{who}）')
+            if a1 and w in (390, 1280):  # 配置の型：釣り合い・重なり（スマホ 390 とパソコン 1280 で測る）
+                for line in pg.evaluate(A1_JS, w):
+                    area, msg = line.split('|', 1); a1_bad.setdefault((area, msg), []).append(str(w))
             pg.close()
         b.close()
     if bad: add('❌', 'はみ出し', '横にはみ出しています → ' + '、'.join(bad))
     else: add('✅', 'はみ出し', '幅 ' + '・'.join(map(str, WIDTHS)) + ' ではみ出しなし')
+    if a1:
+        for (area, msg), ws in sorted(a1_bad.items()): add('⚠️', area, f'幅{"・".join(ws)}：{msg}')
+        if not a1_bad: add('✅', '釣り合い', '配置の型：隣り合う写真の幅の比・全幅の下の正方形・縦書きの重なりは決まりの中（幅 390・1280）')
 
 def promised_not(flat, start, end):
     """言葉が「…」の中にあり、その 」 の直後（「などの」があってもよい）が「約束はしません」なら True
