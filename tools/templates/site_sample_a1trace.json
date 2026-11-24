@@ -8,6 +8,8 @@
   "layout": "a1trace",
   "knobs_seed": 1124,
   "a1_words": {"hero": "こもれび", "s3": "一皿", "s5": "ひと息"},
+  "crops": {"dark": ["sec-faq.jpg"]},
+  "_crops の注": "3段目の文の後ろ（dark）は、素材の自動の当てはめだと cafe_hero.jpg（外国語の看板が写っている）になるので、文字の写っていないコーヒーの写真（よくある質問の横に入る sec-faq.jpg＝cafe5_coffee_decanter）に。範囲を省いたので真ん中 70％（本人 11/24）",
   "name": "喫茶 こもれび",
   "short_name": "こもれび",
   "kind": "喫茶・焼き菓子｜〇〇市",
