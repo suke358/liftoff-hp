@@ -49,6 +49,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   "map_query" … 地図と「Googleマップで道順を見る」の行き先（店名＋住所など）。空ならどちらも出ない
   "show_map" / "show_route" … 地図（埋め込み）と「道順を見る」ボタンを別々に消す（2026/11/7）。false と書くと出ない。書かなければ両方出る（住所を出したくないお店は show_map:false など）
   "layout" … レイアウトの型（2026/11/11）。full・magazine・split・cards・frame・pop のどれか。書かなければ今までと同じ。説明は tools/layouts.py
+              "a1trace"（2026/11/24）… 配置の型（A1 の写真の配置をなぞる形。想永 _8・_9 から）。これだけは別の道具 tools/trace_a1.py がページ全体を作る（部品・layouts.py の CSS は使わない）。
+              つまみは "knobs_seed"（tools/kuji.py のくじ。同じ種なら同じ答え）と "knobs"（1 つずつ上書き）、大きな 1 語は "a1_words"、写真の切る範囲は "crops"（書かない役は真ん中 70％）。
+              写真は設定にある写真（hero・menus・parts.belt・bands・sec_photos …の順）から 12 の役に当てて images/a1/ に切り出す（crop_roles）。決まりは tools/templates/配置の型.md・見本は templates/site_sample_a1trace.json
   "menu_cols" … メニューのカードを2列にする（2026/11/7）。2 と書くと、パソコン幅でも2列（スマホは1列）。4つのとき4列になって写真が小さくなるお店用。書かなければ今までと同じ（数で決まる）
   "analytics_token" … Cloudflare Web Analytics のトークン（2026/10/22）。書くと数える一文が入る。独自ドメインを Cloudflare につないだお店は自動で数えるので空でよい
 確認用の帯（2026/11/14・部品 V）：どのサイトにも </body> の前に templates/preview_band.html を入れる。住所が preview- で始まるとき（preview_push.sh の確認用URL）だけ、
@@ -98,7 +101,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 
 DEFAULT_DOMAIN = 'liftoff-358.workers.dev'  # 公開先の住所の後ろ（Lift-Off 自社）。.okiba があればそちら
 
-VERSION_FILES = ['tools/make_site.py', 'tools/parts_extra.py', 'tools/layouts.py', 'tools/wbr.py', 'tools/templates']  # 出来上がりの見た目を決めるファイル（道具の版はこれで決まる）
+VERSION_FILES = ['tools/make_site.py', 'tools/parts_extra.py', 'tools/layouts.py', 'tools/trace_a1.py', 'tools/kuji.py', 'tools/wbr.py', 'tools/templates']  # 出来上がりの見た目を決めるファイル（道具の版はこれで決まる）
 
 def tool_version():
     """道具の版（2026/11/21 順0）：VERSION_FILES を最後に直した commit の7けた。未 commit の直しがあれば + を付ける。git が使えなければ「不明」"""
@@ -172,6 +175,10 @@ def line_url(c, msg=None):
 def ext(url): return f'href="{e(url)}" target="_blank" rel="noopener"'
 
 def build(c):
+    if c.get('layout') == 'a1trace':  # 配置の型（2026/11/24）：ページ全体を tools/trace_a1.py が作る。写真の役は main の crop_roles が c['_a1_roles'] に入れる
+        import trace_a1
+        pv_band = open(os.path.join(HERE, 'templates', 'preview_band.html'), encoding='utf-8').read().strip()
+        return trace_a1.build(c, c.get('_a1_roles') or {}, {'version': TOOL_VERSION, 'pv_band': pv_band})
     t = dict(THEMES[c.get('theme_base', 'salon')]); t.update(c.get('theme', {}))
     # Cloudflare Web Analytics（2026/10/22）：設定に analytics_token があれば </body> の直前に入れる。空なら入れない（独自ドメインを Cloudflare につないだお店は自動で数えるので不要）
     tok = str(c.get('analytics_token') or '').strip()
@@ -1840,6 +1847,56 @@ def copy_photo(src, dst, ratio=None):
     except ImportError:
         shutil.copy(src, dst)
 
+def crop_roles(c, outdir):
+    """配置の型（"layout":"a1trace"。2026/11/24）：設定にある写真を 12 の役（tools/trace_a1.py の ROLES）に当て、役ごとの比に切って images/a1/<役>.jpg に書く。
+    ・当てる順：設定の中の写真を上から（hero → menus → parts.belt → bands → sec_photos …。同じファイルは 1 回）、trace_a1.ROLE_ORDER の順に。足りなければ 2 周目（同じ元でも切り方が違えば別の写真に見える）
+    ・つまみ：swap（寄り↔並び＝1画面目の 2 枚の元を入れかえ／正方形3枚の順を回す）・shift（切る位置を上下にずらす％。下端は端で止める）
+    ・設定の "crops": {"役": ["元のファイル名", [左, 上, 右, 下]]} があればそれを使う（元の写真の座標。範囲を省くと真ん中 70％）
+    ・書かない役は、役の比で「真ん中 70％」（写真を説明にしない＝寄せて切る。型の 0 共通の決まり）
+    戻り：{役: {'image': 'images/a1/役.jpg', 'w', 'h', 'source', 'alt'}}。写真が 1 枚も無ければ ⚠️ で止まる"""
+    import trace_a1
+    from PIL import Image, ImageOps
+    k = trace_a1.knobs_for(c)
+    cands, seen = [], set()
+    def walk(o):
+        if isinstance(o, dict):
+            im = o.get('image')
+            if isinstance(im, str) and im.lower().endswith(('.jpg', '.jpeg', '.png')) and not im.startswith('images/a1/'):
+                p = os.path.join(outdir, im)
+                if os.path.isfile(p) and im not in seen: seen.add(im); cands.append({'path': p, 'name': os.path.basename(im), 'source': o.get('source'), 'alt': o.get('alt') or ''})
+            for v in o.values(): walk(v)
+        elif isinstance(o, list):
+            for v in o: walk(v)
+    walk({kk: v for kk, v in c.items() if kk != '_a1_roles'})
+    if not cands: sys.exit('⚠️ 止めました（何も書きかえていません）：配置の型（a1trace）に使う写真が設定に 1 枚もありません（hero・menus・parts.belt に写真を書くか、"業種" を書いて素材を入れる）')
+    order = list(trace_a1.ROLE_ORDER)
+    pick = {r: cands[i % len(cands)] for i, r in enumerate(order)}
+    if k['swap'].startswith('寄り'): pick['hero_l'], pick['hero_r'] = pick['hero_r'], pick['hero_l']
+    elif k['swap'].startswith('正方形'): pick['sq_a'], pick['sq_b'], pick['sq_c'] = pick['sq_b'], pick['sq_c'], pick['sq_a']
+    crops = c.get('crops') if isinstance(c.get('crops'), dict) else {}
+    by_name = {cd['name']: cd for cd in cands}
+    out = {}
+    for role, (w, ratio) in trace_a1.ROLES.items():
+        box = None; cd = pick[role]
+        if role in crops and isinstance(crops[role], list) and crops[role]:
+            nm = os.path.basename(str(crops[role][0]))
+            if nm not in by_name: sys.exit(f'⚠️ 止めました（何も書きかえていません）：crops の {role} の写真 {nm} が設定の写真の中にありません')
+            cd = by_name[nm]
+            if len(crops[role]) > 1 and isinstance(crops[role][1], list) and len(crops[role][1]) == 4: box = [int(v) for v in crops[role][1]]
+        im = ImageOps.exif_transpose(Image.open(cd['path'])).convert('RGB'); W, H = im.size
+        if not box:
+            bw, bh = (W, W / ratio) if W / H <= ratio else (H * ratio, H)  # 役の比で入る最大の枠
+            bw, bh = bw * .7, bh * .7  # 真ん中 70％（寄せて切る）
+            cx = (W - bw) / 2; cy = (H - bh) / 2 + (H - bh) / 2 * (k['shift'] / 100.0)  # shift：余りの中で上下にずらす（端で止まる）
+            cy = max(0, min(H - bh, cy))
+            box = [int(cx), int(cy), int(cx + bw), int(cy + bh)]
+        cimg = im.crop(tuple(box)); h = max(1, round(cimg.height * w / cimg.width))
+        rel = f'images/a1/{role}.jpg'; dst = os.path.join(outdir, rel); os.makedirs(os.path.dirname(dst), exist_ok=True)
+        cimg.resize((w, h), Image.LANCZOS).save(dst, 'JPEG', quality=86, optimize=True, progressive=True)
+        out[role] = {'image': rel, 'w': w, 'h': h, 'source': cd['source'], 'alt': cd['alt'], '_元': cd['name']}
+    print('配置の型：写真 %d 枚を 12 の役に切り出しました（images/a1/）：' % len(cands) + '／'.join(f'{r}←{out[r]["_元"]}' for r in order))
+    return out
+
 def fill_photos(c, outdir):
     """トップ（hero）とメニューのカード（menus）に写真が無いところへ、業種の素材写真を入れる（2026/11/21 ⑥-1「写真」）。
     ・無い＝image が空／ファイルが outdir に無い／前の道具の仮の絵（FAKE_TEXT の入った .svg）
@@ -2084,6 +2141,7 @@ def main():
     # ①トップ・メニューのカード・後半の区画・部品（belt・cases・shop・compare）に写真が無ければ、設定の "業種" の素材写真を入れる（トップとカードが足りなければ ⚠️ で止まる。部品は 2026/11/22 ⑥-3 1周目から）
     fill_photos(c, outdir)
     fill_a1(c, outdir)  # A1 の見せ方の素材（1画面目の後ろ・写真の帯。2026/11/24）。"photo_style":"a1" でなければ何もしない
+    if c.get('layout') == 'a1trace': c['_a1_roles'] = crop_roles(c, outdir)  # 配置の型（2026/11/24）：設定の写真を 12 の役に切り出す（images/a1/）。足りなければ ⚠️ で止まる
     # ②それでも、ごあいさつ・部品に設定に書いた写真が無ければ ⚠️ で止まる（写真を置くか、設定から外す。仮の絵は作らない）
     lack = []
     def need(obj, label):
