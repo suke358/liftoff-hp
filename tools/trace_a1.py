@@ -62,10 +62,16 @@ def city_of(c):
     return m.group(1) if m else ''
 
 def short_word(c):
-    s = str(c.get('short_name') or c.get('name') or '')
-    s = re.sub(r'[\s（(].*$', '', s)
+    """大きな 1 語の既定＝店名の短い形（2〜4 字）。「おもちゃの想永」→「想永」・「喫茶 こもれび」→「こもれび」（通し試験2 で「おも」に切れたのを直した 2026/11/24）。
+    店名を「の」・空白・「・」で分け、後ろから 2〜4 字の塊を取る。無ければ頭の 4 字まで"""
+    s = re.sub(r'[（(].*$', '', str(c.get('short_name') or c.get('name') or '')).strip()
     if 2 <= len(s) <= 4: return s
-    return s[:2] if len(s) > 4 else s
+    parts = [p for p in re.split(r'[\s　の・/／|｜]+', s) if p]
+    for p in reversed(parts):
+        if 2 <= len(p) <= 4: return p
+    for p in parts:
+        if len(p) > 4: return p[:4]
+    return s[:4] if s else ''
 
 def img(role, roles, cls='cover', extra=''):
     """役の写真の <img>（出どころの札つき）。役が無ければ空"""

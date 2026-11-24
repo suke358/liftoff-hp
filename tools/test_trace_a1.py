@@ -54,6 +54,10 @@ roles = [f for f in os.listdir(os.path.join(out1, 'images', 'a1')) if f.endswith
 check(len(roles) == 12, '6 12 の役の写真が images/a1/ にある', roles)
 check(h1.count('data-source="stock"') >= 12 and h1.count('class="img-note"') >= 12, '6 素材の写真に札が付く（札の文は wbr で <wbr> が入るので class で数える）', (h1.count('data-source="stock"'), h1.count('class="img-note"')))
 check('data-layout="a1trace"' in h1 and 'class="vt mi"' in h1 and 'data-pair="hero"' in h1, '6 検査用の印（data-layout・.vt・data-pair）がある')
+# 7 大きな 1 語の既定（店名の短い形）
+import trace_a1
+sw = lambda n: trace_a1.short_word({'name': n})
+check(sw('おもちゃの想永') == '想永' and sw('喫茶 こもれび') == 'こもれび' and sw('こども英語教室 ひだまり') == 'ひだまり' and sw('想永') == '想永' and sw('松葉造園') == '松葉造園' and sw('ひまわりベーカリー') == 'ひまわり', '7 大きな 1 語の既定：店名を の・空白 で分けて後ろから 2〜4 字', [sw(x) for x in ('おもちゃの想永', '喫茶 こもれび', 'こども英語教室 ひだまり', 'ひまわりベーカリー')])
 shutil.rmtree(root, ignore_errors=True)
 print('合格' if ok else '不合格')
 sys.exit(0 if ok else 1)
