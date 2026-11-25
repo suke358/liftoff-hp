@@ -37,6 +37,10 @@
      ②重なり＝縦書きの文（.vt）が 1 列 12 字を超える（ブラウザなしでも）／縦書きが写真の主役の帯（真ん中 60％）に重なる（ブラウザで測る）→ ⚠️
      どちらも ⚠️（push_small.sh は止めない。本人の決め 11/24）。決まりは tools/templates/配置の型.md
   17. 薄い字（2026/11/24 通し試験）：ブラウザで、文字の色と後ろの地の色の差（コントラスト比）が 3.0 未満の文字があれば ⚠️（背景が写真・半透明の所は見ない。幅 390・1280）
+  18. 入口の順・電話の欄の文・かっこの折り返し（2026/11/25 選ぶ形の3軒 B1・B3・B6）：
+     ①site.json に entry_order があるのに、最初の画面の 1 つめのボタン・下の帯の 1 つめ・メニューのカードのボタンが、その最初の入口でない → ❌
+     ②電話の欄が tel_note なしで、業種の既定の文（make_site.TEL_NOTES）でなく前の「作業中は…」のまま → ⚠️（前の道具で作ったお店があるので止めない。作り直すと直る）
+     ③閉じかっこの直前に <wbr>（「)」だけで折り返せる印）→ ❌。ブラウザで、幅 320・390 で「)」「）」が 1 字だけ次の行に落ちている → ❌
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -458,6 +462,7 @@ def run_static(root):
             has = 'cloudflareinsights.com/beacon' in src
             if tok and not has: add('❌', '集計', f'{rel}：設定に analytics_token があるのに、Cloudflare Web Analytics の一文がありません（make_site.py で作り直す）')
             elif has: add('✅', '集計', f'{rel}：Cloudflare Web Analytics の一文あり')
+        if is_top: check_entries(src, root, rel)  # 入口の順・電話の欄の文・かっこの折り返し（2026/11/25）
         # 商品ページの「特定商取引法に基づく表示」に「お問い合わせください」が残っていないか（本物のお店は ❌・見本（sample-note あり）は ⚠️。2026/10/22 マニュアル K）
         tk = re.search(r'<details class="tokushoho".*?</details>', src, re.S)
         if tk:
@@ -471,6 +476,61 @@ def run_static(root):
         add('⚠️', '古いスマホ', f'{os.path.relpath(path, root)}：{name} が {len(ls)} か所（{"・".join(map(str, ls[:8]))}{"…" if len(ls)>8 else ""}行目）… 予備：{fb}')
     if not old_found: add('✅', '古いスマホ', '崩れやすい書き方は見つかりませんでした（予備ありのものは除く）')
     return pages
+
+def check_entries(src, root, rel):
+    """入口の順（entry_order）・電話の欄の文・かっこの折り返し（2026/11/25 選ぶ形の3軒 B1・B3・B6。二度目を止める）"""
+    nb = re.findall(r'(.{0,12})<wbr>([)）])', re.sub(r'<(?!wbr>)[^>]+>', '', src))
+    if nb: add('❌', '折り返し', f'{rel}：閉じかっこの前で折り返せる印（<wbr>）があります → ' + '／'.join(a + b for a, b in nb[:5]) + '（「)」だけが次の行に落ちる。wbr.py で作り直す）')
+    sj = os.path.join(root, 'site.json')
+    if not os.path.exists(sj) or is_a1trace(src): return
+    try:
+        import json as _json; c = _json.load(open(sj, encoding='utf-8'))
+    except Exception: return
+    if not isinstance(c, dict) or c.get('pages'): return
+    # ① 入口の順
+    if c.get('entry_order'):
+        P = c.get('parts') or {}
+        have = {'reserve': c.get('reserve_url'), 'line': c.get('line_url'), 'dm': c.get('dm_url'), 'tel': c.get('tel'), 'form': ('form' in P and P.get('form') is not False) or c.get('form_url')}
+        first = next((k for k in c['entry_order'] if k in have and have[k]), None)
+        if first:
+            want = {'reserve': c.get('reserve_url'), 'line': c.get('line_url'), 'dm': c.get('dm_url'), 'tel': 'tel:', 'form': '#form' if 'form' in P else c.get('form_url')}[first]
+            def ok(h):  # LINE はメニューごとに下書きの文が付くので、line.me の入口なら同じとみる
+                h = h or ''
+                if first == 'tel': return h.startswith('tel:')
+                if first == 'line': return h.startswith('https://line.me')
+                return h.split('?')[0] == str(want).split('?')[0]
+            got = []
+            m = re.search(r'<div class="hero-btns">\s*<a [^>]*href="([^"]*)"', src)
+            if m and not ok(html.unescape(m.group(1))): got.append(f'最初の画面の 1 つめ（{m.group(1)[:40]}）')
+            m = re.search(r'<nav class="spbar[^"]*"[^>]*>\s*<a [^>]*href="([^"]*)"', src)
+            if m and not ok(html.unescape(m.group(1))): got.append(f'下の帯の 1 つめ（{m.group(1)[:40]}）')
+            for card in re.findall(r'<article class="card".*?</article>', src, re.S):
+                m = re.search(r'<a class="ask-line[^"]*"[^>]*href="([^"]*)"', card)
+                if m and not ok(html.unescape(m.group(1))): got.append(f'メニューのカード（{m.group(1)[:40]}）'); break
+            if got: add('❌', '入口の順', f'{rel}：entry_order の最初は「{first}」なのに、ボタンがちがいます → ' + '／'.join(got) + '（make_site.py で作り直す）')
+            else: add('✅', '入口の順', f'{rel}：最初の画面・下の帯・メニューのカードのボタンが entry_order の最初（{first}）')
+    # ② 電話の欄の文
+    if c.get('tel') and not c.get('tel_note'):
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import make_site as _ms
+            want = None if _ms.is_kaigo(c) else _ms.tel_note_default(c)
+        except Exception: want = None
+        flat = src.replace('<wbr>', '')
+        if want and want not in flat and '作業中は出られないことがあります' in flat:
+            add('⚠️', '電話の文', f'{rel}：電話の欄が前の文「作業中は…」のままです（業種「{c.get("業種") or c.get("kind")}」の文は「{want[:16]}…」。make_site.py で作り直すか tel_note を書く）')
+
+PAREN_JS = r"""() => { const out=[]; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
+ while((n=w.nextNode())){ const el=n.parentElement; if(!el||!/[)）]/.test(n.data)) continue;
+  const t=n.data; for(let i=0;i<t.length;i++){ if(!/[)）]/.test(t[i])) continue;
+   const r=document.createRange(); r.setStart(n,i); r.setEnd(n,i+1); const a=r.getClientRects()[0]; if(!a||!a.width) continue;
+   // 「)」が行の頭（枠の左の端）にあり、1 行目でなく、そのあとに同じ行の字が無い＝1 字だけ落ちた
+   let blk=el; while(blk&&getComputedStyle(blk).display.startsWith('inline')) blk=blk.parentElement; if(!blk) continue;
+   const b=blk.getBoundingClientRect(), cs=getComputedStyle(blk), left=b.left+parseFloat(cs.paddingLeft)+parseFloat(cs.borderLeftWidth);
+   const top=b.top+parseFloat(cs.paddingTop)+parseFloat(cs.borderTopWidth);
+   if(Math.abs(a.left-left)>2||a.top<top+a.height*0.8) continue;
+   const rest=t.slice(i+1).trim(); if(rest) continue;
+   out.push(blk.innerText.replace(/\s+/g,'').slice(-14)); } }
+ return [...new Set(out)].slice(0,5); }"""
 
 def is_a1trace(src): return 'data-layout="a1trace"' in src
 
@@ -529,7 +589,7 @@ def run_browser(root):
         add('⚠️', 'はみ出し', 'ブラウザが使えないので、はみ出しは調べていません（Claude の作業場所で調べる）'); return
     top = 'file://' + os.path.abspath(os.path.join(root, 'index.html'))
     a1 = is_a1trace(open(os.path.join(root, 'index.html'), encoding='utf-8', errors='ignore').read())
-    bad = []; a1_bad = {}; thin = {}
+    bad = []; a1_bad = {}; thin = {}; paren = {}
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         for w in WIDTHS:
@@ -542,12 +602,16 @@ def run_browser(root):
             if a1 and w in (390, 1280):  # 配置の型：釣り合い・重なり（スマホ 390 とパソコン 1280 で測る）
                 for line in pg.evaluate(A1_JS, w):
                     area, msg = line.split('|', 1); a1_bad.setdefault((area, msg), []).append(str(w))
+            if w in (320, 390):  # かっこの「)」が 1 字だけ次の行に落ちていないか（2026/11/25 B6）
+                for line in pg.evaluate(PAREN_JS): paren.setdefault(line, []).append(str(w))
             if w in (390, 1280):  # 薄い字（文字と地の色の差 3.0 未満）
                 for line in pg.evaluate(THIN_JS, THIN_MIN): thin.setdefault(line, []).append(str(w))
             pg.close()
         b.close()
     if bad: add('❌', 'はみ出し', '横にはみ出しています → ' + '、'.join(bad))
     else: add('✅', 'はみ出し', '幅 ' + '・'.join(map(str, WIDTHS)) + ' ではみ出しなし')
+    if paren: add('❌', 'かっこ', '「)」が 1 字だけ次の行に落ちています → ' + '／'.join(f'{k}（幅{"・".join(v)}）' for k, v in paren.items()) + '（make_site.py で作り直す。wbr.py が閉じかっこを前の字とくっつける）')
+    else: add('✅', 'かっこ', '「)」だけが次の行に落ちる所なし（幅 320・390）')
     if thin: add('⚠️', '薄い字', '文字が地の色に溶けて読みにくい（差 %.1f 未満）→ ' % THIN_MIN + '／'.join(f'{k}' for k in list(thin)[:8]) + '（文字の色を濃く。幅 ' + '・'.join(sorted(set(sum(thin.values(), [])))) + '）')
     else: add('✅', '薄い字', '文字と地の色の差は %.1f 以上（背景が写真の所は見ていない。幅 390・1280）' % THIN_MIN)
     if a1:

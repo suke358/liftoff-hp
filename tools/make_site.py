@@ -71,6 +71,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   写真が足りない・フォルダが無い・"業種" が無いときは ⚠️ で止まり、何も書かない（黙って仮の絵にしない）。
   ごあいさつ・部品（belt・cases・shop・compare）の写真はまだ自動では入れない（⑥-3）。設定に書いた場所にファイルが無ければ ⚠️ で止まる（写真を置くか、設定から外す）。
   スマホではトップの写真が画面の高さの 6 割になる（最初の画面の半分以上が写真。layout の型を使うときは型の決まりのまま）。仮の絵が残っていないかは check_site.py が ❌ で止める
+入口の順（2026/11/25）："entry_order": ["form", "tel"] のように書くと、最初の画面のボタン・スマホの下の帯（先の 3 つ）・メニューのカードのボタン・ご予約の欄を、その順に出す
+  （使える名前：reserve・line・dm・tel・form）。書かなければ今までの並び。メニューのカードは最初の入口のボタンになる（ネット予約→「ネットで予約する」・フォーム→「フォームで相談する」）
+電話の欄の文（2026/11/25）：tel_note を書かなければ業種で決まる（サロン系＝施術中は…／飲食＝混み合う時間は…／工事・造園＝作業で外に出ていて…／それ以外＝作業中は…）。TEL_NOTES
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
@@ -204,6 +207,16 @@ def build(c):
     if has_line: first_btns.append(f'<a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}{W["line_btn"]}</a>')
     if dm: first_btns.append(f'<a class="btn btn-main btn-dm" {ext(dm)}>{IG_ICON}{W["dm_btn"]}</a>')
     if tel: first_btns.append(f'<a class="btn btn-ghost" href="tel:{tel_d}">電話する <span class="nw">{e(tel)}</span></a>')
+    # 入口の順（2026/11/25 選ぶ形の3軒 B1）："entry_order": ["form","tel"] のように書くと、最初の画面・下の帯・メニューのカードのボタンをその順に出す。
+    # 書かなければ上の今までの並び。書いた入口が先、書かなかった入口は後ろに今までの順で付く。お店に無い入口は出ない
+    order = entry_order(c, P)
+    if order:
+        fb = {'reserve': f'<a class="btn btn-main" {ext(c.get("reserve_url"))}>{W["rsv_btn"]}</a>',
+              'line': f'<a class="btn btn-line" {ext(c.get("line_url"))}>{LINE_ICON}{W["line_btn"]}</a>',
+              'dm': f'<a class="btn btn-main btn-dm" {ext(dm)}>{IG_ICON}{W["dm_btn"]}</a>',
+              'tel': f'<a class="btn btn-ghost" href="tel:{tel_d}">電話する <span class="nw">{e(tel)}</span></a>',
+              'form': f'<a class="btn btn-main" href="#form">{W["form_btn"]}</a>' if 'form' in P else f'<a class="btn btn-main" {ext(c.get("form_url"))}>{W["form_btn"]}</a>'}
+        first_btns = [fb[k] for k in order]
     if not first_btns: first_btns.append(f'<a class="btn btn-main" href="#reserve">{W["ask_btn"]}</a>')
 
     secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
@@ -332,6 +345,15 @@ def build(c):
             ask = f'<a class="ask-line tel" href="tel:{tel_d}"><span class="nw">{W["ask_tel"]}</span></a>'
         if dm and not has_line:
             ask = f'<a class="ask-line dm" {ext(dm)}>{IG_ICON}<span class="nw">インスタのDMで相談</span></a>' + ask
+        if order:  # 入口の順（B1）：いちばん先の入口のボタンにする（ネット予約・フォームのお店で「電話で相談する」固定にしない）
+            k = order[0]
+            if k == 'line':
+                msg = c.get('line_msg', W['line_msg']).replace('{name}', m['name'])
+                ask = f'<a class="ask-line" {ext(line_url(c, msg))}>{LINE_ICON}<span class="nw">{W["ask_line"].replace("{word}", e(c.get("menu_word","メニュー")))}</span></a>'
+            elif k == 'tel': ask = f'<a class="ask-line tel" href="tel:{tel_d}"><span class="nw">{W["ask_tel"]}</span></a>'
+            elif k == 'dm': ask = f'<a class="ask-line dm" {ext(dm)}>{IG_ICON}<span class="nw">インスタのDMで相談</span></a>'
+            elif k == 'reserve': ask = f'<a class="ask-line tel go" {ext(c["reserve_url"])}><span class="nw">{W["ask_rsv"]}</span></a>'
+            elif k == 'form': ask = f'<a class="ask-line tel go" href="#form"><span class="nw">{W["ask_form"]}</span></a>' if 'form' in P else f'<a class="ask-line tel go" {ext(c["form_url"])}><span class="nw">{W["ask_form"]}</span></a>'
         cards.append(f'''
         <article class="card" id="m-{e(m["id"])}">
           {img}
@@ -404,6 +426,14 @@ def build(c):
         ways.append(f'<div class="way"><h3>フォーム</h3><p>{e(P["form"].get("way_text","選んで送るだけ。24時間いつでも送れます。"))}</p><a class="btn btn-main" href="#form">{W["form_btn"]}</a></div>')
     elif c.get('form_url'):
         ways.append(f'<div class="way"><h3>フォーム</h3><p>24時間いつでも送れます。</p><a class="btn btn-main" {ext(c["form_url"])}>フォームを開く</a></div>')
+    if order:  # 入口の順（B1）：欄の並びも同じ順に
+        tagged = []
+        if has_rsv: tagged.append('reserve')
+        if has_line: tagged.append('line')
+        if dm: tagged.append('dm')
+        if tel: tagged.append('tel')
+        if 'form' in P or c.get('form_url'): tagged.append('form')
+        ways = [ways[tagged.index(k)] for k in order]
     if not ways: sys.exit('⚠️ 止めました：連絡の入口（tel・line_url・form・dm_url・reserve_url）が設定に1つもありません（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     rules = ''.join(f'<li>{e(x)}</li>' for x in c.get('rules', []))
     ctx = dict(c=c, P=P, I=I, has_line=has_line, tel=tel, tel_d=tel_d, name=name, short=short)
@@ -485,6 +515,15 @@ def build(c):
     elif dm: bar.insert(0, f'<a class="r" {ext(dm)}>{IG_ICON}インスタのDM</a>')  # DM は電話より先（左）
     elif 'form' in P: bar.append(f'<a class="r" href="#form">{W["form_bar"]}</a>')
     else: bar.append('<a class="r" href="#menu">メニュー</a>')
+    if order:  # 入口の順（B1）：先の 3 つまで（帯は 3 つが上限）。最初の入口を色付き（r）にする
+        bb = {'tel': ('', f'href="tel:{tel_d}"', '電話する'), 'line': ('l', ext(c.get('line_url')), W['line_bar']),
+              'reserve': ('r', ext(c.get('reserve_url')), W['rsv_bar']), 'dm': ('r', ext(dm), f'{IG_ICON}インスタのDM'),
+              'form': ('r', 'href="#form"' if 'form' in P else ext(c.get('form_url')), W['form_bar'])}
+        bar = []
+        for i, k in enumerate(order[:3]):
+            cls, href, lab = bb[k]
+            if i == 0 and k == 'tel': cls = 'r'
+            bar.append(('<a class="' + cls + '" ' if cls else '<a ') + f'{href}>{lab}</a>')
 
     # ---------- 頭 ----------
     desc = c.get('description', c.get('lead', ''))
@@ -596,7 +635,7 @@ def build(c):
     <p class="copy">© {e(short)}</p>
   </div>
 </footer>
-{f'<nav class="spbar n{len(bar)}" aria-label="ご予約・ご相談">' + ''.join(bar) + '</nav>' if (tel or has_line or has_rsv or dm) else ''}
+{f'<nav class="spbar n{len(bar)}" aria-label="ご予約・ご相談">' + ''.join(bar) + '</nav>' if (tel or has_line or has_rsv or dm or order) else ''}
 <a class="totop" href="#top" aria-label="ページの上へ">↑</a>
 <script>
 {js}
@@ -944,20 +983,51 @@ def is_kaigo(c):
     s = ' '.join(str(c.get(k) or '') for k in ('kind', '業種', 'title_place'))
     return any(w in s for w in ('介護', 'デイサービス', '訪問看護', '福祉用具', '通所', '居宅'))
 
+ENTRY_KEYS = ('reserve', 'line', 'dm', 'tel', 'form')
+def entry_order(c, P):
+    """入口の順（2026/11/25 B1）。設定の "entry_order" が無ければ []（今までの並び）。書いた順の入口を先に、書かなかった入口を後ろに（reserve・line・dm・tel・form の順）。お店に無い入口は除く"""
+    eo = c.get('entry_order')
+    if not eo: return []
+    have = {'reserve': bool(c.get('reserve_url')), 'line': bool(c.get('line_url')), 'dm': bool(c.get('dm_url')), 'tel': bool(c.get('tel')),
+            'form': 'form' in P or bool(c.get('form_url'))}
+    bad = [k for k in eo if k not in ENTRY_KEYS]
+    if bad: sys.exit(f'⚠️ 止めました（何も書きかえていません）："entry_order" に使えない名前があります → {"・".join(map(str, bad))}（使えるもの：' + '・'.join(ENTRY_KEYS) + '）')
+    out = [k for k in eo if have[k]]
+    return list(dict.fromkeys(out + [k for k in ENTRY_KEYS if have[k]]))
+
+# 電話の欄の既定の文（2026/11/25 B3。前は全部「作業中は…」）。業種（"業種"・"kind"）の言葉で選ぶ。合わなければ None＝今までの文
+TEL_NOTES = [
+    (('ネイル', 'まつげ', '美容室', 'よもぎ蒸し', '整体', 'エステ', 'サロン', 'トリミング', 'マッサージ'), '施術中は電話に出られないことがあります。折り返しご連絡いたします。'),
+    (('居酒屋', 'カフェ', 'パン屋', 'バー', '飲食', '食堂', 'レストラン', '料理'), '混み合う時間は電話に出られないことがあります。折り返しご連絡いたします。'),
+    (('造園', '工務店', '工事', '電気水道', '設備', 'リフォーム', '修繕', '伐採', '草刈り', '塗装', '外構'), '作業で外に出ていて、電話に出られないことがあります。折り返しご連絡いたします。'),
+]
+def tel_note_default(c):
+    gy = str(c.get('業種') or '').strip()
+    for words, note in TEL_NOTES:  # 先に "業種"（素材写真のフォルダ名）だけで決める
+        if gy and any(w in gy for w in words): return note
+    kind = str(c.get('kind') or '')
+    for words, note in TEL_NOTES:
+        if any(w in kind for w in words): return note
+    return None
+
 def reserve_words(c):
     """予約・相談の入口の言葉。ふつうは「予約・相談」。介護系は「見学・体験・ご相談」（介護は予約でなく見学から。しさくんと同じ言葉。
     効果・医療・一番・割引の言葉は入れない＝成果物/2026-11-22/HP制作/介護系_言葉の決まり ⑤。2026/11/22）"""
     if not is_kaigo(c):
-        return dict(rsv_btn='ネットで<wbr>予約する', rsv_bar='ネット予約', rsv_h='ネット予約', rsv_p='空いている日時を見て、24時間いつでもご予約いただけます。',
+        w = dict(rsv_btn='ネットで<wbr>予約する', rsv_bar='ネット予約', rsv_h='ネット予約', rsv_p='空いている日時を見て、24時間いつでもご予約いただけます。',
                     line_btn='LINEで<wbr>相談する', line_bar='LINEで相談', line_p='友だち追加して、メッセージでご相談ください。',
                     line_msg='ホームページを見ました。{name}について相談したいです。', ask_line='この{word}を<wbr>LINEで相談', ask_tel='電話で相談する',
                     tel_p='作業中は出られないことがあります。折り返しご連絡いたします。', dm_btn='インスタの<wbr>DMで予約・相談',
-                    form_btn='フォームで<wbr>送る', form_bar='フォーム', ask_btn='お問い合わせ', title='ご予約・ご相談', lead='')
+                    form_btn='フォームで<wbr>送る', form_bar='フォーム', ask_btn='お問い合わせ', title='ご予約・ご相談', lead='',
+                    ask_rsv='ネットで予約する', ask_form='フォームで相談する')
+        tn = tel_note_default(c)  # 電話の欄の既定の文を業種で（2026/11/25 B3）。設定の tel_note があればそちらが勝つ（使う所は c.get("tel_note", W["tel_p"])）
+        if tn: w['tel_p'] = tn
+        return w
     return dict(rsv_btn='見学・体験を<wbr>申し込む', rsv_bar='見学を申し込む', rsv_h='見学・体験の申し込み', rsv_p='空いている日にちを選んで、見学・体験を申し込めます。',
                 line_btn='LINEで<wbr>見学・ご相談', line_bar='見学・ご相談', line_p='友だち追加して、見学・体験・ご相談のメッセージをどうぞ。ケアマネジャーさんからのご相談も受けています。',
                 line_msg='ホームページを見ました。{name}の見学・体験について相談したいです。', ask_line='この{word}を<wbr>LINEで相談', ask_tel='電話で見学・ご相談',
                 tel_p='お電話で見学・体験・ご相談を承ります。ケアマネジャーさんからのご相談も受けています。', dm_btn='インスタの<wbr>DMで見学・ご相談',
-                form_btn='フォームで<wbr>見学・ご相談', form_bar='ご相談', ask_btn='見学・ご相談', title='ご見学・体験・ご相談',
+                form_btn='フォームで<wbr>見学・ご相談', form_bar='ご相談', ask_btn='見学・ご相談', title='ご見学・体験・ご相談', ask_rsv='見学・体験を申し込む', ask_form='フォームで見学・ご相談',
                 lead='ご利用には要介護・要支援の認定が必要です。認定前の方もご相談ください。')
 
 HAND_BY_GYOUSHU = {'造園': 'Klee One', 'カフェ': 'Yomogi', 'パン屋': 'Yomogi', 'まつげ': 'Zen Kurenaido', 'ネイル': 'Zen Kurenaido', 'よもぎ蒸し': 'Klee One', '美容室': 'Zen Kurenaido', '整体': 'Klee One',

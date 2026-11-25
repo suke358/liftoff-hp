@@ -26,7 +26,20 @@ KEEP = ['よもぎ', 'ホームページ', 'Googleマップ', '目立ちにく�
         '日替わり', 'ひとつずつ', '1本ずつ', '少しずつ', '贈りもの', 'ながめる', 'たのしんで', 'うかがい', 'うかがえ',
         'へこみ', '軽自動車', 'あおぞら', '送り迎え', '取り置き', '1〜2回',  # 11/17 夜 残り13見本で切れた言葉を足した（別の目の指摘）
         '今日']  # 11/18 残り18見本で切れた言葉を足した（別の目の指摘：wa の「今/日」）
+PAREN_MAX = 12  # かっこを 1 かたまりにする長さ（かっこを含む字数。2026/11/25 B6。長いものは狭い画面で入りきらず、かえって変な所で切られるので中で折り返す）
 JA = re.compile(r'[぀-ヿ㐀-鿿]')
+
+
+def paren_glue(t):
+    """かっこの折り返し（2026/11/25 B6：定休日「不定休(LINE・…)」の「)」1字だけが次の行に落ちた）。
+    ①かっこの中が短い（PAREN_MAX 字まで）なら 1 かたまり（中の <wbr> を消し、かっこの前で折り返せるようにする）
+    ②閉じかっこは前の 1 字と折り返さない枠（nw）でくっつける（狭い所で言葉が入りきらず、最後の 1 字で切られても「)」だけにならない）"""
+    def one(m):
+        g = m.group(0).replace('<wbr>', '')
+        if len(g) > PAREN_MAX: return m.group(0)
+        return ('<wbr>' if m.start() and JA.match(m.string[m.start() - 1]) else '') + g
+    t = re.sub(r'[（(][^（）()<>]*(?:<wbr>[^（）()<>]*)+[）)]', one, t)
+    return re.sub(r'(?:<wbr>)?([^\s<>（）()])(?:<wbr>)?([）)])', r'<span class="nw">\1\2</span>', t)
 
 
 def add_wbr(s):
@@ -41,11 +54,11 @@ def add_wbr(s):
             out.append(part); continue
         lead = re.match(r'\s*', part).group(0); tail = re.search(r'\s*$', part).group(0)
         chunks = P.parse(part[len(lead):len(part) - len(tail)]); n += len(chunks) - 1
-        out.append(lead + '<wbr>'.join(chunks) + tail)
+        out.append(lead + paren_glue('<wbr>'.join(chunks)) + tail)
     s = ''.join(out)
     # かっこの内側・句読点の前では折り返さない
-    s = re.sub(r'([（「『【〈《])<wbr>', r'\1', s)
-    s = re.sub(r'<wbr>([）」』】〉》、。・])', r'\1', s)
+    s = re.sub(r'([（「『【〈《(])<wbr>', r'\1', s)
+    s = re.sub(r'<wbr>([）」』】〉》、。・)])', r'\1', s)  # 半角の「)」も（2026/11/25 B6）
     for w in KEEP:
         for i in range(1, len(w)):
             s = s.replace(w[:i] + '<wbr>' + w[i:], w)
