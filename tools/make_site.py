@@ -73,6 +73,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   スマホではトップの写真が画面の高さの 6 割になる（最初の画面の半分以上が写真。layout の型を使うときは型の決まりのまま）。仮の絵が残っていないかは check_site.py が ❌ で止める
 入口の順（2026/11/25）："entry_order": ["form", "tel"] のように書くと、最初の画面のボタン・スマホの下の帯（先の 3 つ）・メニューのカードのボタン・ご予約の欄を、その順に出す
   （使える名前：reserve・line・dm・tel・form）。書かなければ今までの並び。メニューのカードは最初の入口のボタンになる（ネット予約→「ネットで予約する」・フォーム→「フォームで相談する」）
+  最初の画面のボタンは先の 2 つまで（2026/11/25 夜 整備の箱 34。"hero_entries": 1 で 1 つ）。残りの入口はご予約の欄と下の帯に出る。entry_order が無いお店は今までどおり
+業種を 2 つ（2026/11/25 夜 整備の箱 31）："業種": ["伐採・草刈り", "家の修繕"] のように並びでも書ける（先が主）。素材は両方のフォルダから選び、メニューのカードは名前に近いフォルダの写真を先に
+  （「庭木の伐採」→ 伐採・草刈り/、「家の修繕・リフォーム」→ 家の修繕/）。トップは主の業種から。電話の文・手書きフォントも主から。1 つの文字は今までどおり
 電話の欄の文（2026/11/25）：tel_note を書かなければ業種で決まる（サロン系＝施術中は…／飲食＝混み合う時間は…／工事・造園＝作業で外に出ていて…／それ以外＝作業中は…）。TEL_NOTES
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
@@ -216,7 +219,9 @@ def build(c):
               'dm': f'<a class="btn btn-main btn-dm" {ext(dm)}>{IG_ICON}{W["dm_btn"]}</a>',
               'tel': f'<a class="btn btn-ghost" href="tel:{tel_d}">電話する <span class="nw">{e(tel)}</span></a>',
               'form': f'<a class="btn btn-main" href="#form">{W["form_btn"]}</a>' if 'form' in P else f'<a class="btn btn-main" {ext(c.get("form_url"))}>{W["form_btn"]}</a>'}
-        first_btns = [fb[k] for k in order]
+        # 最初の画面は先頭の 2 つまで（2026/11/25 夜 整備の箱 34。サロンで 4 つ縦に並んで「ごちゃごちゃ」本人6点）。
+        # 残りの入口は「ご予約・ご相談」の欄と下の帯に出る（そちらは今までどおり全部・先の 3 つ）。"hero_entries": 1 で 1 つだけ。entry_order が無いお店は今までどおり
+        first_btns = [fb[k] for k in order[:hero_entries(c)]]
     if not first_btns: first_btns.append(f'<a class="btn btn-main" href="#reserve">{W["ask_btn"]}</a>')
 
     secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
@@ -980,7 +985,7 @@ def is_kaigo(c):
     """介護系か（デイサービス・訪問介護・訪問看護・福祉用具 など）。設定の "reserve_words": "kengaku" でも介護の言葉にできる（2026/11/22）"""
     if c.get('reserve_words') == 'kengaku': return True
     if c.get('reserve_words') == 'yoyaku': return False
-    s = ' '.join(str(c.get(k) or '') for k in ('kind', '業種', 'title_place'))
+    s = ' '.join([str(c.get(k) or '') for k in ('kind', 'title_place')] + gyoushu_list(c))  # 業種は並びでも書ける（2026/11/25 夜 箱31）
     return any(w in s for w in ('介護', 'デイサービス', '訪問看護', '福祉用具', '通所', '居宅'))
 
 ENTRY_KEYS = ('reserve', 'line', 'dm', 'tel', 'form')
@@ -995,6 +1000,17 @@ def entry_order(c, P):
     out = [k for k in eo if have[k]]
     return list(dict.fromkeys(out + [k for k in ENTRY_KEYS if have[k]]))
 
+def hero_entries(c):
+    """entry_order があるときの最初の画面のボタンの数（2026/11/25 夜 整備の箱 34）。既定 2・"hero_entries": 1 で 1。ほかの値は 2"""
+    return 1 if c.get('hero_entries') == 1 else 2
+
+def gyoushu_list(c):
+    """設定の "業種" を並びで返す（2026/11/25 夜 整備の箱 31）。"業種": "造園" → ["造園"]／"業種": ["伐採・草刈り", "家の修繕"] → そのまま（先が主）。無ければ []"""
+    v = c.get('業種')
+    if isinstance(v, (list, tuple)): return [str(x).strip() for x in v if str(x or '').strip()]
+    v = str(v or '').strip()
+    return [v] if v else []
+
 # 電話の欄の既定の文（2026/11/25 B3。前は全部「作業中は…」）。業種（"業種"・"kind"）の言葉で選ぶ。合わなければ None＝今までの文
 TEL_NOTES = [
     (('ネイル', 'まつげ', '美容室', 'よもぎ蒸し', '整体', 'エステ', 'サロン', 'トリミング', 'マッサージ'), '施術中は電話に出られないことがあります。折り返しご連絡いたします。'),
@@ -1002,9 +1018,9 @@ TEL_NOTES = [
     (('造園', '工務店', '工事', '電気水道', '設備', 'リフォーム', '修繕', '伐採', '草刈り', '塗装', '外構'), '作業で外に出ていて、電話に出られないことがあります。折り返しご連絡いたします。'),
 ]
 def tel_note_default(c):
-    gy = str(c.get('業種') or '').strip()
-    for words, note in TEL_NOTES:  # 先に "業種"（素材写真のフォルダ名）だけで決める
-        if gy and any(w in gy for w in words): return note
+    for gy in gyoushu_list(c):  # 先に "業種"（素材写真のフォルダ名）だけで決める。並びなら先（主）から（2026/11/25 夜 箱31）
+        for words, note in TEL_NOTES:
+            if any(w in gy for w in words): return note
     kind = str(c.get('kind') or '')
     for words, note in TEL_NOTES:
         if any(w in kind for w in words): return note
@@ -1046,7 +1062,7 @@ def hand_font(c, t):
     if isinstance(v, str):
         if v in HAND_FONTS: return v
         print(f'⚠️ hand_font「{v}」は使えません（使えるもの：' + '・'.join(HAND_FONTS) + '）。業種・雰囲気から選びます')
-    return HAND_BY_GYOUSHU.get(str(c.get('業種') or '').strip()) or HAND_BY_THEME.get(c.get('theme_base', ''), 'Klee One')
+    return next((HAND_BY_GYOUSHU[g] for g in gyoushu_list(c) if g in HAND_BY_GYOUSHU), None) or HAND_BY_THEME.get(c.get('theme_base', ''), 'Klee One')
 
 # 重ねる型（2026/11/22 ⑥-2 ネイル1周目。AI が「最初の画面に写真と文字の重ねが無い」と毎回書いた分）。OV_〜 は build で 暗い／明るい上の部分に合わせて置きかえる
 OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出し・一言・ボタンを重ねる（"hero_overlay": false で前の形） */
@@ -1812,7 +1828,7 @@ PHOTO_WORDS = {
     'よもぎ': ['yomogi', 'steam'], '脱毛': ['datsumou', 'removal', 'smooth'], 'フェイシャル': ['facial', 'face'], 'ボディ': ['body'], '整体': ['seitai', 'massage'], '骨盤': ['pelvis', 'kotsuban'],
     'パン': ['bread', 'pan'], 'コーヒー': ['coffee'], 'ケーキ': ['cake', 'sweet'], 'ランチ': ['lunch', 'plate'], 'モーニング': ['morning', 'toast'],
     'ジントニック': ['gin', 'tonic', 'cocktail'], 'カクテル': ['cocktail'], 'ウイスキー': ['whisk'], 'ビール': ['beer'], 'ワイン': ['wine'], 'おつまみ': ['food', 'snack', 'plate'], 'ライブ': ['live', 'stage', 'drums', 'music'],
-    'リフォーム': ['reform', 'renov'], 'キッチン': ['kitchen'], '外壁': ['wall', 'exterior'], '屋根': ['roof'], '水回り': ['bath', 'sink'],
+    'リフォーム': ['reform', 'renov'], '草刈り': ['kusakari', 'mow', 'trimmer'], '修繕': ['shuzen', 'repair'], 'キッチン': ['kitchen'], '外壁': ['wall', 'exterior'], '屋根': ['roof'], '水回り': ['bath', 'sink'],
     '英会話': ['english', 'eikaiwa'], '学習': ['study', 'desk'], '車検': ['shaken', 'inspection'], '整備': ['repair', 'engine'], 'トリミング': ['trim', 'dog'], 'シャンプー': ['shampoo'],
 }
 
@@ -1829,15 +1845,35 @@ def menu_tokens(m):
         if jp in name: toks.update(('word', w) for w in ens)
     return toks
 
-def match_menus(menus, photos):
+def common_len(a, b):
+    """2 つの文のいちばん長い共通の部分の字数（「庭木の伐採」と「伐採・草刈り」→ 2）"""
+    best = 0
+    for i in range(len(a)):
+        for j in range(i + best + 1, len(a) + 1):
+            if a[i:j] in b: best = j - i
+            else: break
+    return best
+
+def menu_folder(m, folders):
+    """業種が 2 つ以上のとき、メニューの名前にいちばん近い業種のフォルダ（共通の部分が 2 字以上で、ほかより長いときだけ。決まらなければ None。2026/11/25 夜 箱31）"""
+    name = str(m.get('name') or '')
+    sc = sorted(((common_len(name, f), f) for f in folders), reverse=True)
+    if not sc or sc[0][0] < 2 or (len(sc) > 1 and sc[1][0] == sc[0][0]): return None
+    return sc[0][1]
+
+def match_menus(menus, photos, folder_of=None):
     """メニューと素材を、名前の手がかりが合う組から当てる（stock 5点・id 3点・言葉 2点）。手がかりの無いメニューは残りを順に（景色→人の気配）。
     返り：[(menu, (name, path)), …]（メニューの順）。写真が足りなければ足りない分は入らない"""
     pairs = []
+    # 業種が 2 つ以上（folder_of＝素材の名前→業種のフォルダ）：メニューの名前に近いフォルダの素材に 4 点（伐採のカードに伐採・草刈り/、修繕のカードに家の修繕/。2026/11/25 夜 箱31）
+    folders = list(dict.fromkeys(folder_of.values())) if folder_of else []
+    aff = {i: menu_folder(m, folders) for i, m in enumerate(menus)} if len(folders) > 1 else {}
     for i, m in enumerate(menus):
         for j, (n, _) in enumerate(photos):
             nl = n.lower(); s = 0
             for kind, t in menu_tokens(m):
                 if t in nl: s += {'stock': 5, 'id': 3, 'word': 2}[kind]
+            if aff.get(i) and folder_of.get(n) == aff[i]: s += 4
             if s: pairs.append((s, i, j))
     pairs.sort(key=lambda x: (-x[0], x[1], x[2]))
     got, used = {}, set()
@@ -1868,6 +1904,15 @@ def stock_photos(gyoushu):
         p = os.path.join(STOCK_ROOT, rel)
         if os.path.exists(p): out.append((os.path.basename(rel), p))
     return out
+
+def stock_photos_multi(gys):
+    """業種の並び（gyoushu_list）の素材を合わせて返す。返り：(写真の並び, {素材の名前: 業種のフォルダ})。同じ名前は先の業種の物だけ（2026/11/25 夜 箱31）"""
+    out, folder_of = [], {}
+    for g in gys:
+        for n, pth in stock_photos(g):
+            if n in folder_of: continue
+            folder_of[n] = g; out.append((n, pth))
+    return out, folder_of
 
 def jpeg_size(path):
     """JPEG の幅と高さ（Pillow なしで読む。読めなければ None）"""
@@ -2000,20 +2045,24 @@ def fill_photos(c, outdir):
     part_need = need_pairs or need_shop or need_belt or (bp is not None and not bp.get('items'))
     if not need_hero and not need_menus and not sec_slots and not part_need: return
     where = (['トップ（hero）'] if need_hero else []) + ['メニュー「' + m['name'] + '」' for m in need_menus]
-    gy = str(c.get('業種') or '').strip()
-    if not gy:
+    gys = gyoushu_list(c)  # "業種" は 1 つの文字か並び（2026/11/25 夜 箱31。["伐採・草刈り", "家の修繕"]。先が主）
+    gy = '／'.join(gys)
+    if not gys:
         if not (need_hero or need_menus): return  # 後半の区画だけなら、業種が無ければ黙って入れない
         sys.exit('⚠️ 止めました（何も書きかえていません）：' + '・'.join(where) + ' に写真がありません。\n'
                  f'   設定に "業種": "〇〇" を1行足すと、{STOCK_ROOT}/〇〇/ の写真を自動で入れます（今あるフォルダ：' + '・'.join(stock_folders()) + '）。\n'
                  '   または、設定に書いた場所（images/〜）に写真を置いてください（仮の絵は作りません。2026/11/21）')
-    folder = os.path.join(STOCK_ROOT, gy)
-    if not os.path.isdir(folder):
-        if not (need_hero or need_menus): return
-        sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{gy}」の写真のフォルダ {folder} がありません（今あるフォルダ：' + '・'.join(stock_folders()) +
-                 '。写真の取り方は _素材写真/素材の探し方と置き方.md）')
-    photos = stock_photos(gy)
+    for g in gys:
+        folder = os.path.join(STOCK_ROOT, g)
+        if not os.path.isdir(folder):
+            if not (need_hero or need_menus): return
+            sys.exit(f'⚠️ 止めました（何も書きかえていません）：業種「{g}」の写真のフォルダ {folder} がありません（今あるフォルダ：' + '・'.join(stock_folders()) +
+                     '。写真の取り方は _素材写真/素材の探し方と置き方.md）')
+    folder = os.path.join(STOCK_ROOT, gys[0]) if len(gys) == 1 else '・'.join(os.path.join(STOCK_ROOT, g) for g in gys)
+    photos, folder_of = stock_photos_multi(gys)
     photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))  # 明るい素材を先に（⑥-2 3周目。前は素材一覧.md の順）
     heroes = [p for p in photos if 'hero' in p[0].lower()]
+    if len(gys) > 1: heroes.sort(key=lambda p: gys.index(folder_of[p[0]]))  # トップは主の業種（先）の素材から
     rest = [p for p in photos if 'hero' not in p[0].lower() and 'owner' not in p[0].lower()]  # 人物（owner）はお店の人と間違われるので使わない
     is_people = lambda n: any(k in n.lower() for k in ('hands', 'back', 'work', 'tool'))  # 人の気配（顔の出ない手元・後ろ姿）
     rest = [p for p in rest if not is_people(p[0])] + [p for p in rest if is_people(p[0])]  # カードには景色を先に。人の気配は後半の区画へ（⑥-2 4周目）
@@ -2033,7 +2082,7 @@ def fill_photos(c, outdir):
         if not o.get('alt'): o['alt'] = alt
         o['source'] = 'stock'  # 素材写真＝札「写真はイメージです」が付く（2026/11/24 壊し役 4）
         STOCK_USED.add(name)
-        print(f'写真を入れました：{label} ← _素材写真/{gy}/{name} → {rel}')
+        print(f'写真を入れました：{label} ← _素材写真/{folder_of.get(name, gy)}/{name} → {rel}')
     if need_hero:
         c['hero'] = hero; put(hero, heroes[0], 'トップ', (c.get('short_name') or c['name']) + 'のイメージ', None)
     # before/after の組（施工例・見比べ用。〇〇_before.jpg ↔ 〇〇_after.jpg）を先に取り分ける。カードの分が足りなくなるなら組をほどく（カードが先）
@@ -2047,7 +2096,7 @@ def fill_photos(c, outdir):
     avail = [p for p in rest if p[0] not in reserved]
     while len(avail) < len(need_menus) and pairs:
         pr = pairs.pop(); reserved -= set(n for n, _ in pr); avail = [p for p in rest if p[0] not in reserved]
-    assign = match_menus(need_menus, avail)  # 仕事・メニューの名前に合う素材から（2026/11/22 ⑥-2 ネイル2周目）
+    assign = match_menus(need_menus, avail, folder_of if len(gys) > 1 else None)  # 仕事・メニューの名前に合う素材から（2026/11/22 ⑥-2 ネイル2周目）
     for m, src, how in assign:
         r = (m.get('w') / m.get('h')) if (m.get('w') and m.get('h')) else 4 / 3
         put(m, src, 'メニュー「' + m['name'] + '」' + ('' if how == '順' else '（' + how + '）'), m['name'], r)
@@ -2149,8 +2198,9 @@ def fill_a1(c, outdir):
     """A1 の見せ方（"photo_style":"a1"）の素材：①1画面目の後ろ（hero.bg）②写真の帯（bands。2 枚×最大 3）を、業種の素材の「まだ使っていない物」から入れる（2026/11/24 おしゃれの基準③ 1・壊し役 3）。
     お店の写真は差しかえない（hero.image はそのまま主役）。素材は source:stock（札が付く）。同じ写真は 2 回使わない。業種のフォルダが無い・足りないときは入れない（止めない）"""
     if c.get('photo_style') != 'a1': return
-    gy = str(c.get('業種') or '').strip()
-    if not gy or not os.path.isdir(os.path.join(STOCK_ROOT, gy)): print('（A1 の見せ方：業種の素材が無いので、1画面目の後ろと写真の帯は入れません）'); return
+    gys = [g for g in gyoushu_list(c) if os.path.isdir(os.path.join(STOCK_ROOT, g))]  # 業種が並びなら全部の素材から（2026/11/25 夜 箱31）
+    gy = '／'.join(gys)
+    if not gys: print('（A1 の見せ方：業種の素材が無いので、1画面目の後ろと写真の帯は入れません）'); return
     hero = c.get('hero') or {}
     used = set()  # もう使っている写真のファイル名（素材の名前の末尾と、images/ の中の名前）
     def walk(o):
@@ -2162,7 +2212,8 @@ def fill_a1(c, outdir):
     walk(c)
     # 「もう images/ にある」では除かない：完成図の係は前の周の images/ を写して次の周を作るので、前の周に入れた飛行機が除かれて別の素材（木の車）が 1画面目の後ろに入った（想永 05:41）。
     # 除くのは、設定が指している名前（used）と、この作成で fill_photos が使った元の名前（STOCK_USED。sec-about.jpg などに名前が変わっていても分かる）
-    photos = [p for p in stock_photos(gy) if 'owner' not in p[0].lower() and os.path.basename(p[0]) not in used and p[0] not in STOCK_USED]
+    _all, folder_of = stock_photos_multi(gys)
+    photos = [p for p in _all if 'owner' not in p[0].lower() and os.path.basename(p[0]) not in used and p[0] not in STOCK_USED]
     photos = sorted(photos, key=lambda p: -photo_brightness(p[1]))
     def take(prefer=None):
         if not photos: return None
@@ -2177,7 +2228,7 @@ def fill_a1(c, outdir):
         if wh: o['w'], o['h'] = wh
         if not o.get('alt'): o['alt'] = ''
         o['source'] = 'stock'; used.add(os.path.basename(rel)); STOCK_USED.add(name)
-        print(f'写真を入れました（A1）：{label} ← _素材写真/{gy}/{name} → {rel}')
+        print(f'写真を入れました（A1）：{label} ← _素材写真/{folder_of.get(name, gy)}/{name} → {rel}')
     # 1画面目の後ろ（素材）は、お店の写真（source own）が 1画面目にあるときは入れない＝お店の写真が画面いっぱいの大きな写真になる（2026/11/24 通し試験 おもちゃは想永：コーヒー豆の棚が大きく出た。本人の決め 1）
     if hero.get('image') and not (hero.get('bg') or {}).get('image') and hero.get('source') != 'own':
         src = take('hero')

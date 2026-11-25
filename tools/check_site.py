@@ -39,6 +39,7 @@
   17. 薄い字（2026/11/24 通し試験）：ブラウザで、文字の色と後ろの地の色の差（コントラスト比）が 3.0 未満の文字があれば ⚠️（背景が写真・半透明の所は見ない。幅 390・1280）
   18. 入口の順・電話の欄の文・かっこの折り返し（2026/11/25 選ぶ形の3軒 B1・B3・B6）：
      ①site.json に entry_order があるのに、最初の画面の 1 つめのボタン・下の帯の 1 つめ・メニューのカードのボタンが、その最初の入口でない → ❌
+       site.json に entry_order があるのに、最初の画面のボタンが 3 つ以上（"hero_entries": 1 なら 2 つ以上）→ ❌（2026/11/25 夜 整備の箱 34。サロンで 4 つ並んで「ごちゃごちゃ」）
      ②電話の欄が tel_note なしで、業種の既定の文（make_site.TEL_NOTES）でなく前の「作業中は…」のまま → ⚠️（前の道具で作ったお店があるので止めない。作り直すと直る）
      ③閉じかっこの直前に <wbr>（「)」だけで折り返せる印）→ ❌。ブラウザで、幅 320・390 で「)」「）」が 1 字だけ次の行に落ちている → ❌
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
@@ -507,6 +508,11 @@ def check_entries(src, root, rel):
             for card in re.findall(r'<article class="card".*?</article>', src, re.S):
                 m = re.search(r'<a class="ask-line[^"]*"[^>]*href="([^"]*)"', card)
                 if m and not ok(html.unescape(m.group(1))): got.append(f'メニューのカード（{m.group(1)[:40]}）'); break
+            hb = re.search(r'<div class="hero-btns">(.*?)</div>', src, re.S)
+            nmax = 1 if c.get('hero_entries') == 1 else 2
+            nb_ = len(re.findall(r'<a\b', hb.group(1))) if hb else 0
+            if nb_ > nmax: add('❌', '入口の数', f'{rel}：最初の画面のボタンが {nb_} つあります（entry_order のあるお店は {nmax} つまで。残りはご予約の欄と下の帯へ。make_site.py で作り直す）')
+            elif hb: add('✅', '入口の数', f'{rel}：最初の画面のボタンは {nb_} つ（{nmax} つまで）')
             if got: add('❌', '入口の順', f'{rel}：entry_order の最初は「{first}」なのに、ボタンがちがいます → ' + '／'.join(got) + '（make_site.py で作り直す）')
             else: add('✅', '入口の順', f'{rel}：最初の画面・下の帯・メニューのカードのボタンが entry_order の最初（{first}）')
     # ② 電話の欄の文
@@ -517,7 +523,8 @@ def check_entries(src, root, rel):
         except Exception: want = None
         flat = src.replace('<wbr>', '')
         if want and want not in flat and '作業中は出られないことがあります' in flat:
-            add('⚠️', '電話の文', f'{rel}：電話の欄が前の文「作業中は…」のままです（業種「{c.get("業種") or c.get("kind")}」の文は「{want[:16]}…」。make_site.py で作り直すか tel_note を書く）')
+            gy_label = '・'.join(map(str, c['業種'])) if isinstance(c.get('業種'), list) else (c.get('業種') or c.get('kind'))
+            add('⚠️', '電話の文', f'{rel}：電話の欄が前の文「作業中は…」のままです（業種「{gy_label}」の文は「{want[:16]}…」。make_site.py で作り直すか tel_note を書く）')
 
 PAREN_JS = r"""() => { const out=[]; const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
  while((n=w.nextNode())){ const el=n.parentElement; if(!el||!/[)）]/.test(n.data)) continue;
