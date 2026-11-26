@@ -16,6 +16,7 @@ make_site.py の設定（site.json）の下書きと、打ち合わせで聞く�
   ・空の答え・「わからない・あとで」は、その項目を出さない（確かめたい所.md の一覧に出す）
   ・11（Lift-Off との連絡先）は site.json にも確かめたい所.md にも入れない
   ・パスワードらしい文字（「パスワード」「pass」など）がある答えは使わず、確かめたい所.md に「パスワードが書かれていたので使っていません」とだけ書く
+  ・見た目の型は "style": "v2"（新しく作るお店の標準。2026/11/26 本人）。前の見た目にするなら site.json の "style" を "classic" に
   ・雰囲気 → theme_base：やわらか=salon・和=wa・さわやか=fresh・シンプル=simple・上品=jouhin・元気=genki
   ・好きな色は、primary・primary_deep・pale の3色をひと組で上書きする（1色だけ変えるとボタンや印が背景に溶けるため）。
     雰囲気の dark・白い文字と見分けにくい色なら上書きせず、確かめたい所.md に書く
@@ -326,6 +327,7 @@ def convert(qs, ans):
     except Exception:
         T = {'dark': '#23221f', 'pale': '#ffffff', 'hero_style': 'dark'}
     c['theme_base'] = tb; c['font'] = FONT_OF[tb]
+    c['style'] = 'v2'  # 新しく作るお店の見た目は新しい型（2026/11/26 本人 11:27「新しく作るお店の標準を style v2 に」。今あるお店は書いていないので今までの見た目のまま）
     c['hero_style'] = T.get('hero_style', 'dark')  # 上の部分の明るさは雰囲気から（やわらか・さわやか・シンプル・元気＝light、和・上品＝dark）
     col = re.sub(r'^[^A-Za-z0-9ぁ-んァ-ヶ一-龥]+', '', A('18')).strip()  # 選択肢の頭の色の四角(🟥など)を外す
     if col == '白・黒': note['other'].append('好きな色「白・黒」→ 雰囲気の色のまま（上書きしていない）。白・黒でよいか打ち合わせで聞く')
