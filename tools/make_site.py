@@ -1228,6 +1228,7 @@ h1,h2,h3{font-weight:500}
 .formbox textarea{min-height:96px}
 .formbox .chip{margin:3px}
 .formbox .chip span{border-radius:0;padding:9px 12px;font-size:.86rem}
+.formbox .opt-label{color:#fff;border-color:rgba(255,255,255,.5)}
 .formbox .chip span span{display:inline;border:0;padding:0;margin:0;min-height:0;font-size:inherit;background:none}  /* 折り返しの印（nw）の span に箱の形が付かないように */
 /* 店舗情報：白い箱をやめて線の表。地図・写真は角丸なし */
 .info{background:none;border-radius:0;padding:0;border-top:1px solid var(--line)}
