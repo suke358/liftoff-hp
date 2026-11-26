@@ -76,6 +76,9 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   最初の画面のボタンは先の 2 つまで（2026/11/25 夜 整備の箱 34。"hero_entries": 1 で 1 つ）。残りの入口はご予約の欄と下の帯に出る。entry_order が無いお店は今までどおり
 業種を 2 つ（2026/11/25 夜 整備の箱 31）："業種": ["伐採・草刈り", "家の修繕"] のように並びでも書ける（先が主）。素材は両方のフォルダから選び、メニューのカードは名前に近いフォルダの写真を先に
   （「庭木の伐採」→ 伐採・草刈り/、「家の修繕・リフォーム」→ 家の修繕/）。トップは主の業種から。電話の文・手書きフォントも主から。1 つの文字は今までどおり
+見た目の型（2026/11/26・いいサイト49 に合わせる）："style": "v2" と書くと新しい型（最初の画面のボタン 1 つ・下の帯は細く 1 本で 2 つまで・見出しは明朝・文字の色 3 つ・写真の角丸 0・
+  白いカード＋影と丸い目次をやめる・段を詰めて短く）。見出しは "font_heading": "gothic"（細いゴシック）／"hand"（手書き風）で選べる（手書き風は既定にしない）。
+  書かない・"classic" は今までの見た目のまま（1 字も変わらない）。新しく作るお店の既定は本人が見比べて決める（今は classic）。くわしくは STYLES・V2_CSS の上の注・検査は tools/test_make_site_style_v2.py
 電話の欄の文（2026/11/25）：tel_note を書かなければ業種で決まる（サロン系＝施術中は…／飲食＝混み合う時間は…／工事・造園＝作業で外に出ていて…／それ以外＝作業中は…）。TEL_NOTES
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
@@ -186,6 +189,7 @@ def build(c):
         pv_band = open(os.path.join(HERE, 'templates', 'preview_band.html'), encoding='utf-8').read().strip()
         return trace_a1.build(c, c.get('_a1_roles') or {}, {'version': TOOL_VERSION, 'pv_band': pv_band})
     t = dict(THEMES[c.get('theme_base', 'salon')]); t.update(c.get('theme', {}))
+    v2 = page_style(c) == 'v2'  # 見た目の型（2026/11/26 いいサイト49 に合わせた新しい型）。"style": "v2" のときだけ。書かない・"classic" は今までと 1 字も同じ
     # Cloudflare Web Analytics（2026/10/22）：設定に analytics_token があれば </body> の直前に入れる。空なら入れない（独自ドメインを Cloudflare につないだお店は自動で数えるので不要）
     tok = str(c.get('analytics_token') or '').strip()
     # 確認用の帯（部品 V・2026/11/14）：住所が preview- で始まるときだけ「確認用（まだ公開前です）」を出す。元は templates/preview_band.html の1か所
@@ -223,6 +227,7 @@ def build(c):
         # 残りの入口は「ご予約・ご相談」の欄と下の帯に出る（そちらは今までどおり全部・先の 3 つ）。"hero_entries": 1 で 1 つだけ。entry_order が無いお店は今までどおり
         first_btns = [fb[k] for k in order[:hero_entries(c)]]
     if not first_btns: first_btns.append(f'<a class="btn btn-main" href="#reserve">{W["ask_btn"]}</a>')
+    if v2: first_btns = first_btns[:1]  # 新しい型：最初の画面のボタンは 1 つ（いちばん先の入口。entry_order が無いお店も同じ）。残りは下の帯とご予約の欄に
 
     secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
     if 'shop' in P: secs.append(('shop', P['shop'].get('title', '商品')))  # 商品はメニューのすぐ後ろ
@@ -257,8 +262,9 @@ def build(c):
     # 重ねる型（2026/11/22 ⑥-2 ネイル1周目）：写真があり・横長のヘッダー画像でなく・型（layout）を使わないとき。"hero_overlay": false で前の形
     ov = bool(hero.get('image')) and not hero.get('banner') and not c.get('layout') and c.get('hero_overlay', True)
     if a1 and hero.get('image') and not hero.get('banner'): ov = True  # A1 の見せ方：素材が無くても写真を画面いっぱいに（型があっても）
+    if v2 and hero.get('image') and not hero.get('banner'): ov = True  # 新しい型：最初の画面はお店の写真を幅いっぱい・角丸なし（A1 の後ろの素材と白い枠の写真は使わない）
     addr_html = f'<p class="addr">{PIN}<span>{e(c.get("area") or c.get("address",""))}</span></p>' if (c.get("area") or c.get("address")) else ''
-    if a1 and hero.get('image') and not hero.get('banner') and (hero.get('bg') or {}).get('image'):
+    if a1 and not v2 and hero.get('image') and not hero.get('banner') and (hero.get('bg') or {}).get('image'):
         # A1 の見せ方 6（素材の後ろ（hero.bg）が無いときは、下の重ねる型＝お店の写真を画面いっぱいに。濃い地に写真 1 枚の形にはしない。秋 04:54 の直し）（2026/11/24 おしゃれの基準③・壊し役 3）：1画面目＝お店の写真（hero.image）が主役で大きく前、素材（hero.bg。source:stock で札）は後ろの雰囲気。文字は一言と小見出しとボタンだけ。重ねは囲み（stage）の中で切る
         bg = hero.get('bg') or {}
         bg_html = f'<figure class="hero-a1-bg"><img src="{e(bg["image"])}" alt="{e(bg.get("alt",""))}" width="{bg.get("w",1600)}" height="{bg.get("h",1000)}"></figure>' if bg.get('image') else ''
@@ -439,6 +445,7 @@ def build(c):
         if tel: tagged.append('tel')
         if 'form' in P or c.get('form_url'): tagged.append('form')
         ways = [ways[tagged.index(k)] for k in order]
+    if v2 and 'form' in P: ways = [w for w in ways if 'href="#form"' not in w] or ways  # 新しい型：フォームはすぐ下に出るので、同じ欄の「フォーム」の箱は出さない（ページを短く）
     if not ways: sys.exit('⚠️ 止めました：連絡の入口（tel・line_url・form・dm_url・reserve_url）が設定に1つもありません（「準備中」の欄は作りません。2026/11/21 ⑥-2）')
     rules = ''.join(f'<li>{e(x)}</li>' for x in c.get('rules', []))
     ctx = dict(c=c, P=P, I=I, has_line=has_line, tel=tel, tel_d=tel_d, name=name, short=short)
@@ -529,6 +536,9 @@ def build(c):
             cls, href, lab = bb[k]
             if i == 0 and k == 'tel': cls = 'r'
             bar.append(('<a class="' + cls + '" ' if cls else '<a ') + f'{href}>{lab}</a>')
+    if v2:  # 新しい型：下に張りつく帯は細く 1 本・入口は 2 つまで（色で塗り分けない。CSS は V2_CSS）
+        if not order and len(bar) > 1 and 'class="r"' in bar[-1]: bar = [bar[-1]] + bar[:-1]  # entry_order が無いお店は、ネット予約・フォームなど「いま使える窓口」を先に
+        bar = bar[:2]
 
     # ---------- 頭 ----------
     desc = c.get('description', c.get('lead', ''))
@@ -566,7 +576,14 @@ def build(c):
     if (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light': css += '\n' + LIGHT_HERO_CSS
     if dm: css += '\n' + DM_CSS
     if m2: css += '\n' + MENU2_CSS
-    if c.get('layout'): css += '\n' + layouts.css(c['layout'])  # レイアウトの型（2026/11/11。tools/layouts.py）
+    if v2:  # 新しい型（2026/11/26）：型（layout）・背景の模様・斜め・A1 の重ねは使わない。写真の上の影・重ねる型・色味だけ残し、最後に V2_CSS で上書き
+        light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
+        css += '\n' + HERO_SP_CSS.replace('HERO_SHADE_A', 'rgba(255,255,255,.6)' if light else 'rgba(0,0,0,.3)').replace('HERO_SHADE_B', 'rgba(255,255,255,0)' if light else 'rgba(0,0,0,0)')
+        tone = c.get('photo_tone', True)
+        if tone: css += '\n' + TONE_CSS.replace('PHOTO_TONE', tone if isinstance(tone, str) else PHOTO_TONE.get(c.get('theme_base', ''), 'saturate(.9)'))
+        # 写真の上の字は明るい上の部分でも白（写真の上に暗い膜を敷く。文字の色を増やさない）
+        css += '\n' + OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.28)').replace('OV_END', 'rgba(0,0,0,.55)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)')
+    elif c.get('layout'): css += '\n' + layouts.css(c['layout'])  # レイアウトの型（2026/11/11。tools/layouts.py）
     else:  # 型を使わないときだけ：写真の上の端に影・スマホでトップの写真を画面の 6 割の高さに（2026/11/21 ⑥-1。型は layouts.py の決まりのまま）
         light = (c.get('hero_style') or t.get('hero_style') or 'dark') == 'light'
         # 影は薄く（⑥-2 3周目。本人「もう少し明るい方がいい」：黒 .5 → .3、白 .7 → .6）
@@ -578,16 +595,18 @@ def build(c):
         if c.get('hero_overlay', True):  # 重ねる型（⑥-2 ネイル1周目）
             css += '\n' + (OVERLAY_CSS.replace('OV_MID', 'rgba(255,255,255,.22)').replace('OV_END', 'var(--pale)').replace('OV_TEXT', 'var(--ink)').replace('OV_SHADOW', '0 1px 14px rgba(255,255,255,.95), 0 0 2px rgba(255,255,255,.8)') if light else
                             OVERLAY_CSS.replace('OV_MID', 'rgba(0,0,0,.25)').replace('OV_END', 'var(--dark)').replace('OV_TEXT', '#fff').replace('OV_SHADOW', '0 2px 16px rgba(0,0,0,.45)'))
-    if a1: css += '\n' + A1_CSS  # 写真の見せ方を A1 に寄せる（2026/11/24 おしゃれの基準③。"photo_style":"a1" のときだけ）
+    if a1 and not v2: css += '\n' + A1_CSS  # 写真の見せ方を A1 に寄せる（2026/11/24 おしゃれの基準③。"photo_style":"a1" のときだけ）
     if P:
         pk = [k for k in PART_ORDER if k in P]
         if 'events' in P and 'notice' not in pk: pk.insert(0, 'notice')  # events が最上部に出す「次のライブ」の帯は notice の見た目を使う（最後のテスト・バー 2026/11/22）
         css += '\n' + PARTS_CSS['common'] + ''.join('\n' + PARTS_CSS[k] for k in pk)
+    if v2: css += '\n' + V2_CSS  # 新しい型の上書き（いちばん最後。部品の白いカード・丸い札・角丸もここで外す）
     js = JS
     if P: js += ''.join('\n' + PARTS_JS[k] for k in PART_ORDER if k in P and k in PARTS_JS)
+    if v2: head_font = heading_font(c)[0]  # 新しい型：見出しは明朝が基本（"font_heading": "gothic"＝細いゴシック・"hand"＝手書き風）。今の "font" は本文の見出し以外に使わない
     for k, v in t.items(): css = css.replace('{{' + k + '}}', v)
     css = css.replace('{{head_font}}', head_font)
-    hf = hand_font(c, t)  # 手書き風フォント（⑥-2 6周目）
+    hf = heading_font(c)[1] and hand_font(c, t) if v2 else hand_font(c, t)  # 手書き風フォント（⑥-2 6周目）。新しい型は "font_heading": "hand" のときだけ
     css = css.replace('{{hand_font}}', (f'"{hf}",' if hf else '') + 'var(--head)')
     if hf: css += '\n' + HAND_CSS
     belt_html, calc_html, cases_html, compare_html, shop_html = part_belt(ctx), part_calc(ctx), part_cases(ctx), part_compare(ctx), part_shop(ctx)
@@ -612,7 +631,7 @@ def build(c):
 {og}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700{('&family=' + HAND_FONTS[hf]) if hf else ''}&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Shippori+Mincho+B1:wght@{'400;' if v2 else ''}500;600;700&family=Zen+Kaku+Gothic+New:wght@{'300;' if v2 else ''}400;500;700{('&family=' + HAND_FONTS[hf]) if hf else ''}&display=swap" rel="stylesheet">
 <script type="application/ld+json">
 {json.dumps(ld, ensure_ascii=False)}
 </script>
@@ -650,9 +669,13 @@ def build(c):
 </body>
 </html>
 '''
-    if c.get('eyebrow_en', True) is False or a1: out = strip_eyebrow_en(out)  # 英字の飾りを出さない（2026/11/24 おしゃれの基準 6：英字と日本語で同じ意味を 2 回言わない。A1 の見せ方では必ず）
+    if v2:  # 新しい型：小さい英字の見出しは残し（いいサイトの共通点 6）、後ろの大きい薄い英字は付けない。背景は白と薄い灰の交互＋細い線
+        if c.get('eyebrow_en', True) is False: out = strip_eyebrow_en(out)
+        out = a1_backgrounds(out)
+    elif c.get('eyebrow_en', True) is False or a1: out = strip_eyebrow_en(out)  # 英字の飾りを出さない（2026/11/24 おしゃれの基準 6：英字と日本語で同じ意味を 2 回言わない。A1 の見せ方では必ず）
     else: out = add_sec_en(out)  # 見出しの後ろの薄い英字（⑥-2 5周目）
-    if a1: out = a1_backgrounds(out)  # A1 の見せ方：区画の背景は白と薄い灰の交互（模様・斜めなし。2026/11/24 おしゃれの基準③）
+    if v2: pass
+    elif a1: out = a1_backgrounds(out)  # A1 の見せ方：区画の背景は白と薄い灰の交互（模様・斜めなし。2026/11/24 おしゃれの基準③）
     elif c.get('design', True) and not c.get('layout'): out = vary_backgrounds(out)  # 区画ごとの背景（⑥-3 3周目。同じ見え方が続かないように）
     out = mark_sources(out, c)  # 写真の出どころ（source：own＝お店の写真／stock＝素材）を img に書き、素材には「写真はイメージです」の札（2026/11/24 おしゃれの基準③ 壊し役 4）
     return out
@@ -1063,6 +1086,217 @@ def hand_font(c, t):
         if v in HAND_FONTS: return v
         print(f'⚠️ hand_font「{v}」は使えません（使えるもの：' + '・'.join(HAND_FONTS) + '）。業種・雰囲気から選びます')
     return next((HAND_BY_GYOUSHU[g] for g in gyoushu_list(c) if g in HAND_BY_GYOUSHU), None) or HAND_BY_THEME.get(c.get('theme_base', ''), 'Klee One')
+
+# ======================================================================
+# 見た目の型（2026/11/26・いいサイト49 に合わせる。指示書 成果物/2026-11-26/システム開発/00_指示書_いいサイトに合わせて見た目を直す）
+#   "style": "v2" … 新しい型。①最初の画面のボタン 1 つ・下の帯は細く 1 本で入口 2 つまで ②見出しは明朝（"font_heading" で gothic＝細いゴシック／hand＝手書き風）・
+#                    文字の色は 3 つ（本文 ink・白・差し色 primary_deep）・差し色は小さい面だけ ③写真は角丸 0・最初の画面とメニューは幅いっぱい・
+#                    白いカード＋影と丸い目次ボタンをやめる・段の余白を詰めてページを短く
+#   書かない・"classic" … 今までの見た目（1 字も変わらない）。新しく作るお店の既定は、見比べを見て本人が決める（今は classic のまま）
+#   型（layout）は新しい型では使わない（⚠️ を出して外す）。"a1trace" は別の道具が作るので新しい型は効かない（⚠️）
+# ======================================================================
+STYLES = ('classic', 'v2')
+FONT_HEADINGS = ('mincho', 'gothic', 'hand')
+
+def page_style(c):
+    """見た目の型。"style" が無い・"classic" → 'classic'、"v2" → 'v2'。ほかの値は止める（黙って前の見た目にしない）"""
+    s = c.get('style') or 'classic'
+    if s not in STYLES: sys.exit(f'⚠️ 止めました（何も書きかえていません）："style" に使えない値です → {s}（使えるもの：' + '・'.join(STYLES) + '）')
+    if s == 'v2' and c.get('layout') and not c.get('_v2_warned'):
+        c['_v2_warned'] = True
+        print(f'⚠️ "style": "v2" では型（layout「{c["layout"]}」）を使いません' + ('（a1trace は別の道具が作るので、新しい型は効きません）' if c['layout'] == 'a1trace' else '（外して作ります）'))
+    if s == 'v2' and c.get('layout') == 'a1trace': return 'classic'
+    return s
+
+def heading_font(c):
+    """新しい型の見出しの字：("var(--mincho)" など, 手書き風を使うか)。"font_heading" が無ければ明朝"""
+    f = c.get('font_heading') or 'mincho'
+    if f not in FONT_HEADINGS: sys.exit(f'⚠️ 止めました（何も書きかえていません）："font_heading" に使えない値です → {f}（使えるもの：' + '・'.join(FONT_HEADINGS) + '）')
+    return ('var(--gothic)' if f == 'gothic' else 'var(--mincho)'), f == 'hand'
+
+V2_CSS = r'''/* ===== 新しい型（"style": "v2"・2026/11/26 いいサイト49 に合わせる）===== */
+/* 文字の色は 3 つ：本文（ink）・白（写真と暗い面の上）・差し色（primary_deep。小さい英字・番号・リンクだけ） */
+:root{--r:0;--muted:var(--ink);--on-dark:#fff;--accent-soft:#fff}
+body{line-height:1.95}
+h1,h2,h3{font-weight:500}
+.mk{display:none}
+/* 見出し：明朝（または細いゴシック）1 つ。小さい英字は差し色 */
+.sec-head{margin-bottom:30px}
+.sec-head i{font-size:.82rem;font-style:normal;letter-spacing:.24em;text-transform:uppercase;color:var(--primary-deep);margin-bottom:6px}
+.sec-head h2{font-size:1.55rem;font-size:clamp(1.35rem,2.4vw,1.9rem);letter-spacing:.14em;font-weight:500}
+.dark .sec-head i{color:#fff}
+/* 段の余白を詰める（いいサイトの真ん中 約 6,900px に近づける） */
+.sec{padding:72px 0}
+@media (max-width:860px){
+  .sec{padding:36px 0}.sec-head{margin-bottom:16px}
+  .price-note{margin-top:16px}
+  .hero.ov .wrap{min-height:500px;min-height:68vh}
+  .hero-under .toc,.hero-under .addr,.menu-tabs,.foot nav{display:none}  /* 住所は店舗情報と下の段にある */
+  body{line-height:1.85}
+  .sec p,.card p,.why p,.steps p,.faq p{font-size:.86rem}
+  .formbox .form-lead{font-size:.84rem;line-height:1.8}  /* 目次は ≡メニュー と同じなので、スマホでは出さない（ページを短く） */
+  .sec-lead{margin:-10px auto 18px}
+}
+.sec+.sec.a1-white,.sec+.sec.a1-gray{border-top:1px solid var(--line)}
+.sec.a1-white{background:var(--bg)}
+.sec.a1-gray{background:var(--bg2)}
+.menu,.access,.faq{background-image:none}
+/* ボタン：角ばった形。色は差し色 1 つ（LINE の緑は LINE のボタンの中だけ） */
+.btn{border-radius:2px;letter-spacing:.14em;padding:.9em 1.6em}
+.btn-ghost{border-color:#fff}
+.nav .rsv{border-radius:2px}
+.menubtn{border-radius:2px}
+/* ヘッダー・最初の画面：写真を幅いっぱい・角丸なし。文字は写真の上に白で、ボタンは 1 つ */
+.head .wrap{color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.55)}
+.head .bk,.bk{color:#fff}
+@media (max-width:860px){.menubtn{background:rgba(0,0,0,.35);color:#fff;border-color:rgba(255,255,255,.6)}}
+.hero,.hero.ov{background:var(--bg);color:var(--ink)}
+.hero.ov .poster img{border-radius:0}
+.hero.ov .hero-over .eyebrow{color:#fff;font-weight:500;font-size:.88rem}
+.hero.ov .hero-over .eyebrow::before{background:#fff}
+.hero.ov .hero-over h1{color:#fff;font-weight:500;letter-spacing:.16em}
+.hero.ov .hero-btns .btn{flex:0 1 auto;min-width:240px}
+.hero-under{padding:26px 0 8px;background:var(--bg)}
+.hero-under .lead,.hero.ov .hero-under .lead,.hero .lead{color:var(--ink);font-size:.92rem}
+.hero-under .addr,.addr{color:var(--ink);border-top:1px solid var(--line)}
+.addr svg{fill:var(--primary-deep)}
+/* 目次：丸いボタンをやめて、細い線で区切った文字のリンク */
+.toc{margin:14px 0 0;border-top:1px solid var(--line)}
+.toc li{margin:0}
+.toc a,.hero.ov .hero-under .toc a,.hero.a1 .hero-under .toc a{display:inline-block;border:0;border-radius:0;background:none;padding:.55em .9em .55em 0;color:var(--ink);font-size:.8rem;letter-spacing:.08em;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:.4em}
+/* 写真：角丸 0 */
+.photo,.sec-photo,.sec-photo img,.card .photo img,.b-shot img,.case figure,.case figure img,.cmp-frame,.cmp-frame img,.map,.foot-map,.ev-photo,.vid-box,.vid-file,.pband img{border-radius:0}
+.sec-photo{overflow:hidden}
+.sec-photo::after{display:none}
+.sec-photos .sec-photo2{display:none}
+/* メニュー：白いカード＋影をやめ、写真＋見出し＋細い線。スマホは写真を幅いっぱい */
+.menu-tabs{margin:-6px auto 26px}
+.menu-tabs a{background:none;border:0;border-radius:0;padding:.3em .6em;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:.4em;color:var(--ink)}
+.card{background:none;border-radius:0;box-shadow:none;overflow:visible;border-bottom:1px solid var(--line)}
+.card .photo{height:260px}
+.card .photo img{height:100%;-o-object-fit:cover;object-fit:cover}  /* 写真の形がそろわないと段がでこぼこになるので、高さをそろえる */
+.card-body{padding:16px 0 20px}
+.card h3{font-size:1.15rem}
+.sub-items li{background:none;border-radius:0;border:1px solid var(--line);color:var(--ink);padding:0 .7em}
+.price{border-top:1px solid var(--line)}
+.price b{color:var(--ink)}
+.ask-line,.ask-line.tel{border:0;border-radius:0;padding:0;margin-top:10px;justify-content:flex-start;color:var(--primary-deep);text-decoration:underline;text-underline-offset:.35em;font-size:.84rem}
+.ask-line:hover{background:none;color:var(--primary-deep)}
+.ask-line svg{width:1em;height:1em}
+.ask-line.dm{background:none;color:var(--primary-deep)}
+.ptable{background:none;border-radius:0;padding:24px 0 0;border-top:1px solid var(--line)}
+.tbl .tag{background:none;border:1px solid var(--line);border-radius:0;color:var(--ink)}
+.tbl tr.first{background:none}
+.tbl td.yen,.price b{color:var(--ink)}
+.extra{background:none;border-radius:0;border-left:2px solid var(--line);padding:4px 14px}
+@media (max-width:640px){
+  .menu-cards{grid-gap:8px;gap:8px}
+  .card .photo{margin:0 -20px;height:190px}
+  .card .photo img{height:100%;-o-object-fit:cover;object-fit:cover}
+  .card-body{padding:14px 0 18px}
+  .card p{font-size:.86rem}
+}
+@media (min-width:861px){.menu-cards.n4 .card:nth-child(even),.menu-cards.n3 .card:nth-child(2){margin-top:0}}
+/* 流れ：丸い番号をやめて、番号の文字＋細い線 */
+.steps li{padding:0 0 18px 48px}
+.steps li::before{border-radius:0;background:none;color:var(--primary-deep);width:auto;height:auto;font-size:1.3rem;top:2px;left:0;display:block}
+.steps li::after{border-left:1px solid var(--line);left:8px;top:40px}
+.steps h3{font-size:1.05rem}
+.steps p{font-size:.88rem}
+.flow .sec-photo{height:220px}
+@media (max-width:860px){.flow .wrap.has-photo{grid-gap:18px;gap:18px}.flow .sec-photo{height:180px;margin:0 -20px}}
+/* ご予約・ご相談：枠の箱をやめ、細い線で区切る。暗い面の文字は白 1 色 */
+.dark{color:#fff}.dark .muted{color:#fff}
+.reserve.dark{background:var(--dark)}
+.ways{grid-gap:0;gap:0;border-top:1px solid rgba(255,255,255,.25)}
+.way{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.25);border-radius:0;padding:16px 4px;text-align:left;display:block}
+.way h3{color:#fff;font-size:.95rem;letter-spacing:.16em;margin-bottom:4px}
+.way p{color:#fff;font-size:.86rem;margin-bottom:12px}
+.way .btn{width:auto;min-width:220px}
+.reserve .tel{color:#fff;font-size:1.6rem}
+.rules{border:0;border-top:1px solid rgba(255,255,255,.25);border-radius:0;padding:20px 0 0;margin-top:24px}
+.rules h4{color:#fff}
+@media (min-width:861px){.ways,.ways.n2{grid-template-columns:repeat(2,1fr);grid-gap:0 40px;gap:0 40px;max-width:none}.ways.n1{grid-template-columns:1fr}}
+@media (max-width:860px){.ways,.ways.n2{grid-template-columns:1fr}.way .btn{width:100%}}
+.reserve .sec-bg img{opacity:.22}
+/* フォーム（暗い面の中） */
+.formbox{background:none;border:1px solid rgba(255,255,255,.3);border-radius:0;margin-top:28px}
+.form-top{background:none;border-bottom:1px solid rgba(255,255,255,.3)}
+.formbox .form-lead,.formnote,.form-sub{color:#fff}
+.formbox input,.formbox textarea{border-radius:0}
+.formbox form{grid-gap:14px;gap:14px}
+.formbox textarea{min-height:96px}
+.formbox .chip{margin:3px}
+.formbox .chip span{border-radius:0;padding:9px 12px;font-size:.86rem}
+.formbox .chip span span{display:inline;border:0;padding:0;margin:0;min-height:0;font-size:inherit;background:none}  /* 折り返しの印（nw）の span に箱の形が付かないように */
+/* 店舗情報：白い箱をやめて線の表。地図・写真は角丸なし */
+.info{background:none;border-radius:0;padding:0;border-top:1px solid var(--line)}
+.info div{padding:11px 0}
+.info dt{color:var(--ink);font-size:.84rem}
+.route{border-radius:2px;background:var(--dark);color:#fff}
+.route svg{fill:#fff}
+.map{height:200px}
+.access .sec-photo{height:360px}
+@media (max-width:860px){.access .wrap{grid-gap:20px;gap:20px}.access .sec-photo{height:180px;margin:0 -20px}.map{height:150px}.info div{padding:8px 0}}
+/* よくある質問：白い箱と丸い Q をやめ、線で区切る */
+.faq details{background:none;border-radius:0;border-bottom:1px solid var(--line);margin:0}
+.faq-list{border-top:1px solid var(--line)}
+.faq summary{padding:14px 40px 14px 0}
+.faq p{padding:0 0 16px}
+.faq .q,.faq .a{border-radius:0;background:none;width:auto;height:auto;margin-right:12px;font-style:normal;font-family:var(--mincho)}
+.faq .q{color:var(--primary-deep)}.faq .a{color:var(--ink)}
+.faq summary::after{color:var(--ink)}
+.faq .sec-photo{height:300px}
+@media (max-width:860px){.faq .sec-photo{height:130px;margin:0 -20px}}
+/* 下の段 */
+.foot{padding:44px 0 96px;color:#fff}
+.foot-info .flabel{color:#fff;opacity:.7}
+.foot-info .route{border-radius:2px;background:none;border:1px solid rgba(255,255,255,.5)}
+.foot .copy{opacity:.7}
+/* 下に張りつく帯：細く 1 本。色で塗り分けない（2 つまで） */
+@media (max-width:860px){
+  .spbar{grid-template-columns:1fr 1fr;background:var(--dark);border-top:0}
+  .spbar.n1{grid-template-columns:1fr}
+  .spbar a,.spbar a.l,.spbar a.r{background:none;color:#fff;padding:.8em .3em;font-size:.84rem}
+  .spbar a + a{border-left:1px solid rgba(255,255,255,.3)}
+  .spbar a:first-child{background:var(--primary)}
+  .totop{bottom:62px}
+}
+.totop{border-radius:0;box-shadow:none}
+/* 部品：白いカード＋影・丸い札をやめる */
+.why{grid-gap:0 32px;gap:0 32px;border-top:1px solid var(--line)}
+.why li{background:none;border-radius:0;box-shadow:none;padding:14px 0 12px;border-bottom:1px solid var(--line)}
+.why .no{font-style:normal;font-size:1.3rem;color:var(--primary-deep);margin-bottom:2px}
+.why h3{font-size:1.05rem}
+.why p{font-size:.88rem;line-height:1.85}
+.cred{padding:26px 0;background:var(--bg)}
+.cv{color:var(--primary-deep);font-weight:500;font-size:1.6rem}
+.cl{color:var(--ink)}
+.areas li{border-radius:0;background:none}
+.areas li.m{background:none;color:var(--ink);border-color:var(--ink)}
+.voices li,.ev-next,.ev-ticket,.worry-list a{background:none;border-radius:0;box-shadow:none;border-bottom:1px solid var(--line)}
+.ntag,.notice b,.ev-label,.role,.hrs-badge{border-radius:0}
+.notice{background:var(--dark)}
+/* A1 の写真の帯（photo_style:a1）：重ね・白い枠・影をやめ、2 枚を角丸なしで並べる */
+.pband{padding:0;background:var(--bg)}
+.pband .pb-wrap{display:grid;grid-template-columns:3fr 2fr;grid-gap:4px;gap:4px;width:100%;height:auto;padding:0;margin:0}
+.pband.alt .pb-wrap{grid-template-columns:2fr 3fr}
+.pband.one .pb-wrap{grid-template-columns:1fr}
+.pband figure{position:static;margin:0;width:auto;height:170px;overflow:hidden}
+.pband.alt .pb-big{-webkit-box-ordinal-group:3;order:2}
+.pband img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover}
+@media (min-width:861px){.pband figure{height:420px}}
+/* スマホだけの詰め（上の決まりより後に置く） */
+.why li{position:relative;padding-left:2.6em}
+.why .no{position:absolute;left:0;top:14px;line-height:1.7;font-size:1.05rem}
+@media (max-width:860px){
+  .formbox .chip span{padding:8px 10px;font-size:.8rem;white-space:nowrap}
+  .formbox legend{margin-bottom:4px}
+  .pband figure{height:150px}
+  .foot{padding:36px 0 64px}
+  .foot-grid{margin-bottom:12px}
+}
+'''
 
 # 重ねる型（2026/11/22 ⑥-2 ネイル1周目。AI が「最初の画面に写真と文字の重ねが無い」と毎回書いた分）。OV_〜 は build で 暗い／明るい上の部分に合わせて置きかえる
 OVERLAY_CSS = r'''/* 重ねる型：最初の画面で写真の上に小見出し・一言・ボタンを重ねる（"hero_overlay": false で前の形） */
