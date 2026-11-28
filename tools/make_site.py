@@ -81,6 +81,7 @@ colore で作った「最初から入れる UI/UX の標準」（決定事項）
   書かない・"classic" は今までの見た目のまま（1 字も変わらない）。新しく作るお店は "style": "v2" が標準（2026/11/26 本人 11:27）：新しいお店の site.json を作る道具
   （form_to_site.py・しさくんの取り込み fetch_honban.py）が "style": "v2" を書く。make_site の書かないときの見た目は classic のまま（今あるお店の site.json を変えずに守るため）。くわしくは STYLES・V2_CSS の上の注・検査は tools/test_make_site_style_v2.py
 電話の欄の文（2026/11/25）：tel_note を書かなければ業種で決まる（サロン系＝施術中は…／飲食＝混み合う時間は…／工事・造園＝作業で外に出ていて…／それ以外＝作業中は…）。TEL_NOTES
+空の段（2026/11/28 聞き取りの道具の直し B5）：menus も price_table も無ければ「メニュー・料金」の段・目次・下の帯の「メニュー」・404 の「メニューを見る」を出さない。faq が無ければ「よくある質問」の段とその横の写真を出さない
 連絡の入口（2026/11/21・⑥-2 1周目）：ご予約・ご相談の欄には、設定にある入口（tel・line_url・parts の form・form_url・dm_url・reserve_url）だけを出す。
   1つも無いときは「準備中」の欄を出さずに ⚠️ で止まる（pending_text はもう使わない）。check_site.py は「準備中」の欄が残っていれば ❌
 下の段（2026/11/21・⑥-2 2周目）：フッターに 店名・住所（address）・電話（tel）・営業時間（hours）・定休日（holiday）・「Googleマップで道順を見る」（map_query）・Googleマップの埋め込み（map_query。show_map:false で消える）を出す。
@@ -230,12 +231,15 @@ def build(c):
     if not first_btns: first_btns.append(f'<a class="btn btn-main" href="#reserve">{W["ask_btn"]}</a>')
     if v2: first_btns = first_btns[:1]  # 新しい型：最初の画面のボタンは 1 つ（いちばん先の入口。entry_order が無いお店も同じ）。残りは下の帯とご予約の欄に
 
-    secs = [('menu', c.get('menu_title', 'メニュー・料金'))]
+    # 空の段は出さない（2026/11/28 聞き取りの道具の直し B5）：メニューも料金表も無ければ「メニュー・料金」の段を、よくある質問が無ければその段を出さない（前は「税込」だけ・見出しと写真だけの段が出た）
+    has_menu = bool(c.get('menus') or c.get('price_table'))
+    has_faq = bool(c.get('faq'))
+    secs = [('menu', c.get('menu_title', 'メニュー・料金'))] if has_menu else []
     if 'shop' in P: secs.append(('shop', P['shop'].get('title', '商品')))  # 商品はメニューのすぐ後ろ
     if 'calc' in P: secs.append(('calc', P['calc'].get('title', '料金の目安')))
     if 'cases' in P: secs.append(('cases', P['cases'].get('title', '施工例')))
     if c.get('flow'): secs.append(('flow', c.get('flow_title', 'ご依頼の流れ')))
-    secs += [('reserve', c.get('reserve_title', W['title'])), ('access', c.get('info_title', '店舗情報')), ('faq', 'よくある質問')]
+    secs += [('reserve', c.get('reserve_title', W['title'])), ('access', c.get('info_title', '店舗情報'))] + ([('faq', 'よくある質問')] if has_faq else [])
     if c.get('greeting'): secs.insert(0, ('greeting', 'ごあいさつ'))
     def _ins(before, item):  # 追加の部品をメニューの順番のよい所に入れる
         for n, (k, _v) in enumerate(secs):
@@ -392,7 +396,7 @@ def build(c):
         </div>
         {f'<p class="extra">{e(pt["note"])}</p>' if pt.get("note") else ''}
       </div>'''
-    menu_html = f'''
+    menu_html = '' if not has_menu else f'''
   <section id="menu" class="sec menu">
     <div class="wrap">
       <div class="sec-head center"><i>{I()}menu</i><h2>{e(c.get("menu_title","メニュー・料金"))}</h2></div>
@@ -500,7 +504,7 @@ def build(c):
     # ---------- よくある質問 ----------
     faq = ''.join(f'<details><summary><span class="q">Q</span><span>{e(f["q"])}</span></summary><p><span class="a">A</span><span>{e(f["a"])}</span></p></details>' for f in c.get('faq', []))
     qp = sec_photo('faq')  # よくある質問の横の写真（⑥-2 ネイル8周目。PC は左に縦長・スマホは上に横長の帯）
-    faq_html = f'''
+    faq_html = '' if not has_faq else f'''
   <section id="faq" class="sec faq">
     <div class="wrap{' has-photo' if qp else ''}">
       <div class="sec-head center"><i>{I()}q &amp; a</i><h2>よくある<wbr>ご質問</h2></div>
@@ -527,7 +531,8 @@ def build(c):
     if has_rsv: bar.append(f'<a class="r" {ext(c["reserve_url"])}>{W["rsv_bar"]}</a>')
     elif dm: bar.insert(0, f'<a class="r" {ext(dm)}>{IG_ICON}インスタのDM</a>')  # DM は電話より先（左）
     elif 'form' in P: bar.append(f'<a class="r" href="#form">{W["form_bar"]}</a>')
-    else: bar.append('<a class="r" href="#menu">メニュー</a>')
+    elif has_menu: bar.append('<a class="r" href="#menu">メニュー</a>')
+    else: bar.append(f'<a class="r" href="#reserve">{W["ask_btn"]}</a>')  # メニューの段が無いとき（B5）は、無い段へ飛ばさず「ご予約・ご相談」へ
     if order:  # 入口の順（B1）：先の 3 つまで（帯は 3 つが上限）。最初の入口を色付き（r）にする
         bb = {'tel': ('', f'href="tel:{tel_d}"', '電話する'), 'line': ('l', ext(c.get('line_url')), W['line_bar']),
               'reserve': ('r', ext(c.get('reserve_url')), W['rsv_bar']), 'dm': ('r', ext(dm), f'{IG_ICON}インスタのDM'),
@@ -2269,6 +2274,7 @@ def fill_photos(c, outdir):
     spc = c.get('sec_photos')
     # faq（よくある質問の横）・about2（店舗情報の小さい写真）は ⑥-2 ネイル8周目（本人「写真が7枚以下」→ 1ページ 8枚以上に。大きさを変えて同じ構図のくり返しにしない）
     sec_slots = [] if spc is False else [k for k in ('about', 'flow', 'reserve', 'faq', 'about2') if missing((spc if isinstance(spc, dict) else {}).get(k))]
+    if not c.get('faq'): sec_slots = [k for k in sec_slots if k != 'faq']  # よくある質問の段を出さないとき（B5）は、その横の写真に素材を使わない
     # 部品の写真（2026/11/22 ⑥-3 1周目）：belt・cases・compare・shop に写真が無ければ、業種の素材から入れる（下の「部品の写真」）
     P = c.get('_P') if isinstance(c.get('_P'), dict) else {}
     cs, cp, sp, bp = P.get('cases') or {}, P.get('compare'), P.get('shop') or {}, P.get('belt')
@@ -2550,7 +2556,7 @@ def build_404(c):
     logo = c.get('logo', '')
     if logo and not re.match(r'(https?:|/)', logo): logo = '/' + logo
     brand_img = f'<img src="{e(logo)}" alt="{e(short)}" width="46" height="46">' if logo else '<svg class="mk" viewBox="0 0 24 24" aria-hidden="true">' + mark + '</svg>'
-    btns = ['<a class="btn btn-main" href="/">トップへ<wbr>戻る</a>', '<a class="btn btn-ghost" href="/menu">メニューを<wbr>見る</a>']
+    btns = ['<a class="btn btn-main" href="/">トップへ<wbr>戻る</a>'] + (['<a class="btn btn-ghost" href="/menu">メニューを<wbr>見る</a>'] if (c.get('menus') or c.get('price_table') or c.get('pages')) else [])  # メニューの段が無いお店（B5）は出さない（法人の型 pages は make_houjin が事業内容に置きかえるので残す）
     if c.get('line_url'): btns.append(f'<a class="btn btn-line" {ext(c["line_url"])}>{LINE_ICON}LINE で<wbr>相談</a>')
     tel_html = f'<div class="tel-box">お電話での<wbr>ご相談<a class="tel" href="tel:{tel_d}">{e(tel)}</a></div>' if tel else ''
     return f'''<!DOCTYPE html>

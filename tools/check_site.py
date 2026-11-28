@@ -42,6 +42,8 @@
        site.json に entry_order があるのに、最初の画面のボタンが 3 つ以上（"hero_entries": 1 なら 2 つ以上）→ ❌（2026/11/25 夜 整備の箱 34。サロンで 4 つ並んで「ごちゃごちゃ」）
      ②電話の欄が tel_note なしで、業種の既定の文（make_site.TEL_NOTES）でなく前の「作業中は…」のまま → ⚠️（前の道具で作ったお店があるので止めない。作り直すと直る）
      ③閉じかっこの直前に <wbr>（「)」だけで折り返せる印）→ ❌。ブラウザで、幅 320・390 で「)」「）」が 1 字だけ次の行に落ちている → ❌
+  19. 頼みの文（2026/11/28 聞き取りの道具の直し B2）：「(いい感じに言葉を考えてほしい)」「〇〇参照」のような、作る人への頼みの文が公開の文に出ていたら
+     2026/12/05 までは ⚠️、そのあとは ❌（フォームの答えをそのまま入れた文を本番に出さない）
 結果: ✅ 問題なし ／ ⚠️ 確かめる ／ ❌ 直す
 """
 import sys, os, re, glob, html
@@ -155,6 +157,29 @@ results = []  # (mark, area, message)
 OLD_HITS = {}  # (file, name, fallback) -> [lines]
 ROOT = '.'
 def add(mark, area, msg): results.append((mark, area, msg))
+
+# 19. 頼みの文（2026/11/28 聞き取りの道具の直し B2）：フォームの答えの「(いい感じに言葉を考えてほしい)」のような、作る人への頼みの文が
+#     そのまま公開の文に出ていないか。最初の 1 週間（REQ_WARN_UNTIL まで）は ⚠️、そのあとは ❌（一度起きた失敗を二度起こさない。~/src/CLAUDE.md）
+REQ_WARN_UNTIL = '2026-12-05'
+REQ_PATTERNS = [
+    # 「(楽器はご持参ください)」「(ツヤがほしい方に)」「(デザインおまかせ)」のようなお客さんへの案内・メニュー名は数えない（別の目 11/28）
+    (r'[（(][^（）()]{0,40}(考えて|作って|書いて|整えて|まとめて)(ほしい|欲しい|ください|下さい)[^（）()]{0,4}[）)]', 'かっこの中の頼み'),
+    (r'(言葉|文章|文句|コピー|キャッチ|ロゴ)を?(考えて|作って)(ほしい|欲しい)', '作る人への頼み'),
+    (r'(いい|良い|イイ)(感じ|かんじ)に(考えて|作って|まとめて|して)(ほしい|欲しい|ください)', '作る人への頼み'),
+    (r'(HP|ＨＰ|ホームページ|サイト|インスタ|URL)\s*(を)?\s*参照', '「〇〇参照」（中身が入っていない）'),
+]
+def check_request_text(text, rel):
+    import datetime
+    hits, spans = [], []
+    for rx, why in REQ_PATTERNS:
+        for m in re.finditer(rx, text):
+            if any(m.start() < y and x < m.end() for x, y in spans): continue  # 同じ所を 2 回数えない
+            spans.append((m.start(), m.end()))
+            a, b = max(0, m.start() - 8), min(len(text), m.end() + 8)
+            hits.append(f'「{text[a:b].strip()}」（{why}）')
+    if not hits: return
+    mark = '⚠️' if datetime.date.today().isoformat() <= REQ_WARN_UNTIL else '❌'
+    add(mark, '頼みの文', f'{rel}：作る人への頼みの文がそのまま出ています → ' + '／'.join(hits[:5]) + '（フォームの答えを文に直す。form_to_site は (案) を付けて入れる）')
 
 def check_css(path, css, base_line=0):
     found = False
@@ -451,6 +476,7 @@ def run_static(root):
             # 「(案)」の消し忘れ（2026/11/24 指示書「おしゃれの基準と採点の物差し」：確かめてから使う文に付けた印が本番に残らないように）
             an = len(re.findall(r'[（(]案[)）]', text))
             if an: add('⚠️', '仮の文', f'{rel}：「(案)」が {an} か所あります（店主に確かめてから本物の文に直す。本公開までに消す）')
+            check_request_text(text, rel)  # 頼みの文がそのまま公開の文に出ていないか（2026/11/28 聞き取りの道具の直し B2）
         check_a1_static(src, rel)  # 配置の型（a1trace）の縦書きの字数（2026/11/24）
         # Cloudflare Web Analytics（2026/10/22）：設定（site.json）に analytics_token があるのに、数える一文がないページは ❌
         if is_top:

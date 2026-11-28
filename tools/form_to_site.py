@@ -20,6 +20,11 @@ make_site.py の設定（site.json）の下書きと、打ち合わせで聞く�
   ・雰囲気 → theme_base：やわらか=salon・和=wa・さわやか=fresh・シンプル=simple・上品=jouhin・元気=genki
   ・好きな色は、primary・primary_deep・pale の3色をひと組で上書きする（1色だけ変えるとボタンや印が背景に溶けるため）。
     雰囲気の dark・白い文字と見分けにくい色なら上書きせず、確かめたい所.md に書く
+  ・選択肢にない答えは黙って読みかえず、確かめたい所.md に答えのまま出す（2026/11/28 聞き取りの道具の直し B1・B3）：雰囲気（17）・ロゴ（15）・写真の掲載（16。「良い」「OK」は載せてよい）・
+    予約と問い合わせ（23。「フォームから」→ 問い合わせがメインと読んで書く）。「なし」と書いた答え（05 など）は空と同じ
+  ・決め文句（19）も答えのままは「(案)」を付ける。「(いい感じに考えてほしい)」のような頼みのかっこ書きは文から外し、確かめたい所.md に出す（B2。check_site 19 番でも止める）
+  ・お店の種類（02）から素材写真の "業種"（~/src/_素材写真/ のフォルダ名）を選ぶ。合うフォルダが無ければ make_site を動かさずに終え、確かめたい所.md に出す（B4）
+  ・予約の受け方（24）・23 の答えに出てきた入口の順に "entry_order" を書く（最初のボタン・メニューのボタンの並び。B6）
 """
 import sys, os, re, csv, json, time, subprocess
 
@@ -206,6 +211,48 @@ def sns_name(url):
     return 'SNS'
 
 
+# ---------- 答えの読み分け（2026/11/28 聞き取りの道具の直し B1〜B4・B6） ----------
+NONE_RX = re.compile(r'^(なし|無し|ない|無い|ありません|持っていない|使っていない|-|ー|―|×)$')  # 「なし」と書いた答え（05 公式LINE など）。空と同じに扱う
+YES_RX = re.compile(r'^(はい|良い|よい|いい|OK|ok|ＯＫ|大丈夫|かまわない|構わない|載せてよい|載せていい|問題ない)[。!！]?$')  # 答え全体で見る（「いいえ」「良いけど顔はNG」を載せてよいと読まない。別の目 11/28）
+REQ_RX = re.compile(r'[（(]([^（）()]*(?:ほしい|欲しい|ください|下さい|お願い|いい感じ|良い感じ|おまかせ|お任せ)[^（）()]*)[）)]')
+
+
+def split_request(v):
+    """答えから、作る人への頼み（「(いい感じに言葉を考えてほしい)」のようなかっこ書き）を外す → (残りの文, [頼み])。公開の文に頼みを出さない（B2）"""
+    reqs = [m.group(1).strip() for m in REQ_RX.finditer(v)]
+    return REQ_RX.sub('', v).strip(), reqs
+
+
+def guess_gyoushu(kind):
+    """お店の種類 → 素材写真のフォルダ名（~/src/_素材写真/<業種>/）。フォルダ名が種類の言葉に入っていれば、いちばん長いものを選ぶ
+    （「飲食店・カフェ」→ カフェ、「web制作会社」→ WEB制作）。合うものが無ければ ''（B4）"""
+    try:
+        sys.path.insert(0, HERE)
+        from make_site import stock_folders
+        folders = stock_folders()
+    except Exception:
+        return ''
+    k = kind.lower()
+    hit = [f for f in folders if f.lower() in k]
+    if not hit:  # 「伐採・草刈り」のようなフォルダは、その一部（2字以上）でも見る
+        hit = [f for f in folders if any(len(x) >= 2 and x.lower() in k for x in f.split('・'))]
+    return max(hit, key=len) if hit else ''
+
+
+ENTRY_WORDS = [('form', r'(?<!予約)フォーム'), ('tel', r'電話'), ('line', r'LINE|(?<!オン)ライン|ﾗｲﾝ'), ('reserve', r'ネット|オンライン|予約サービス|予約フォーム|今使って|web予約|WEB予約'), ('dm', r'DM|インスタ')]  # 「オンライン予約」は LINE でない・「予約フォーム」はネット予約（別の目 11/28）
+
+
+def entry_keys(text):
+    """予約の受け方の答え → 入口の名前（make_site の entry_order）を、答えに出てきた順に（B6）"""
+    pos = []
+    for k, rx in ENTRY_WORDS:
+        m = re.search(rx, text, re.I)
+        if m: pos.append((m.start(), k))
+    keys = [k for _, k in sorted(pos)]
+    # ネットで 24 時間受けられる入口（ネット予約・フォーム）を電話より先に（11/25 の試し：フォーム・ネット予約を選んだのに「電話」が先、が 2 回）。同じ組の中は答えの順
+    return sorted(keys, key=lambda k: {'reserve': 0, 'form': 0, 'line': 1, 'dm': 1, 'tel': 2}[k])
+
+
 # ---------- 本体 ----------
 def convert(qs, ans):
     """答え → (site.json の辞書, 確かめたい所の辞書)"""
@@ -241,11 +288,19 @@ def convert(qs, ans):
         c['kind'] = kind + ('｜' + city if city else '')
         c['schema_type'] = SCHEMA_OF.get(kind, 'LocalBusiness')
         if kind not in SCHEMA_OF: note['other'].append(f'業種が「その他」（{kind}）→ 見本の業種に近いものを選ぶ')
+    gy = guess_gyoushu(kind) if kind else ''
+    if gy:
+        c['業種'] = gy  # 素材写真のフォルダ。make_site がトップとメニューのカードに写真を入れ、電話の欄の文も業種で選ぶ（B4・B6）
+        note['photo'].append(f'素材写真：業種「{gy}」の写真を仮に入れる（_素材写真/{gy}/）→ 合っているか見る。お店の写真が届いたら差しかえ')
+    else:
+        note['other'].insert(0, f'業種「{kind or "（答えなし）"}」に合う素材写真のフォルダがない → 試作はまだ作っていません。site.json に "業種": "〇〇" を1行書いてから make_site.py を動かす'
+                             '（今あるフォルダは ~/src/_素材写真/ を見る）')
     tel = A('04')
     if tel:
         if re.match(r'^[\d\-‐－() 　]{9,15}$', tel): c['tel'] = tel.replace('－', '-').replace('‐', '-').replace(' ', '').replace('　', '')
         else: note['other'].append(f'電話番号の形が読めない（{tel}）→ 確かめる')
     ln = A('05')
+    if NONE_RX.match(ln): ln = ''  # 「なし」は空と同じ（B3。前は「ID でも URL でもない」と出ていた）
     if ln:
         if ln.startswith('@'): c['line_id'] = ln; c['line_url'] = 'https://line.me/R/ti/p/' + ln
         elif ln.startswith('http'): c['line_url'] = ln
@@ -283,6 +338,10 @@ def convert(qs, ans):
     menu_lines = [l for l in A('12').splitlines() if l.strip()]
     if A('12b') and not menu_lines:
         note['other'].append('12 メニュー：「メニュー表の写真・データを別に送る」にチェック → 受け取ってから menus と料金を作る（今は menus なし）')
+    ref = [l.strip() for l in menu_lines if re.search(r'(HP|ＨＰ|ホームページ|サイト|インスタ|URL|チラシ|メニュー表).{0,4}(参照|を見て|見てください)', l, re.I)]  # 「Lift-offHP参照」のような答え（B3。前はそのままメニューの名前になった）
+    if ref:
+        note['other'].append('12 メニュー：「' + '／'.join(ref) + '」→ 中身が書かれていない。見る先（URL・写真）を受け取ってから menus と料金を作る（今はその行を入れていない）')
+        menu_lines = [l for l in menu_lines if l.strip() not in ref]
     if any(re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l) for l in menu_lines):
         note['other'].append('12 メニュー：「別送」→ メニューの写真・データを受け取ってから menus と料金を作る（今は menus なし）')
         menu_lines = [l for l in menu_lines if not re.match(r'^\s*(別送|あとで送る|写真で送る|データで送る)', l)]
@@ -309,15 +368,23 @@ def convert(qs, ans):
     elif '14' in note['skip']: note['photo'].append('写真：「わからない・あとで」→ 打ち合わせで送り方を決める')
     else: note['photo'].append('写真：答えなし → 打ち合わせで送り方を決める')
     lg = A('15'); tb = THEME_OF.get(A('17'), 'salon')
+    if A('17') and A('17') not in THEME_OF:  # 選択肢にない雰囲気（「クール」など）。前は黙って「やわらか」にしていた（B1）
+        note['other'].append(f'雰囲気：選択肢にない答え「{A("17")}」→ 仮に「やわらか」（salon）で作った。近い雰囲気（' + '・'.join(THEME_OF) + '）を打ち合わせで決める')
     if lg.startswith('ある'):
         note['photo'].append('ロゴ：ある（' + lg + '）→ 受け取ったら images/logo.png に入れ、site.json の logo に書く')
+    elif lg and lg != 'ない' and not NONE_RX.match(lg):  # 選択肢にない答え（「〇〇ロゴ」など）。前は「答えなし」と読んでいた（B3）
+        c['mark'] = MARK_OF[tb]
+        note['photo'].append(f'ロゴ：選択肢にない答え「{lg}」→ ロゴがあるらしい。データを受け取るまで仮に印（mark）を雰囲気から選んだ（{MARK_OF[tb]}）')
     else:
         c['mark'] = MARK_OF[tb]
         if '15' in note['skip']: note['photo'].append('ロゴ：「わからない・あとで」→ 仮に印（mark）を雰囲気から選んだ（' + MARK_OF[tb] + '）。あるかどうかを打ち合わせで聞く')
-        elif lg == 'ない': note['photo'].append('ロゴ：ない → 印（mark）を雰囲気から選んだ（' + MARK_OF[tb] + '）。ロゴを作るなら別料金（料金表）')
+        elif lg == 'ない' or NONE_RX.match(lg): note['photo'].append('ロゴ：ない → 印（mark）を雰囲気から選んだ（' + MARK_OF[tb] + '）。ロゴを作るなら別料金（料金表）')
         else: note['photo'].append('ロゴ：答えなし → 仮に印（mark）を雰囲気から選んだ（' + MARK_OF[tb] + '）。あるかどうかを打ち合わせで聞く')
-    if A('16') and A('16') != 'はい': note['photo'].append('写真の掲載：「相談したい」→ 了承をもらうまで写真は使わない')
-    elif not A('16'): note['photo'].append('写真の掲載：答えなし → 了承を確かめてから使う')
+    ok16 = A('16')
+    if ok16 and YES_RX.match(ok16): pass  # 「はい」「良い」「OK」など＝載せてよい（B3。前は「はい」以外を全部「相談したい」と読んでいた）
+    elif ok16.startswith('相談'): note['photo'].append('写真の掲載：「相談したい」→ 了承をもらうまで写真は使わない')
+    elif ok16: note['photo'].append(f'写真の掲載：選択肢にない答え「{ok16}」→ 載せてよいか読めない。了承を確かめるまで写真は使わない')
+    else: note['photo'].append('写真の掲載：答えなし → 了承を確かめてから使う')
 
     # 4. 好み・伝えたいこと
     sys.path.insert(0, HERE)
@@ -341,16 +408,21 @@ def convert(qs, ans):
                 note['other'].append(f'好きな色「{col}」は雰囲気「{A("17")}」の色と見分けにくい（上書きしていない）→ 打ち合わせで決める')
         else:
             note['other'].append(f'好きな色「{col}」（その他）→ 色（theme の primary）を打ち合わせで決める')
-    catch = A('19')
-    if catch: c['catch'] = catch
+    catch, req = split_request(A('19'))
+    if catch or req:
+        c['catch'] = '(案)' + (catch or name)  # 答えのままは (案) を付ける（B2。前は (案) なしで入れていた）
+        note['text'].append(('19 決め文句 → 答えをそのまま (案) で入れた。文を整える' if catch else '19 決め文句：頼みだけだった → 店名を仮に (案) で入れた。文を作る') + ('（頼み：「' + '」「'.join(req) + '」）' if req else ''))
     else: c['catch'] = '(案)' + name; note['text'].append('19 決め文句：答えなし → 文を作る（今は店名を仮に入れた）')
-    who = A('20')
+    who, req20 = split_request(A('20'))
+    if req20: note['text'].append('20 来てほしいお客さん：頼み「' + '」「'.join(req20) + '」→ 文を作るときに')
     if who:
         c['lead'] = '(案)' + who; c['description'] = '(案)' + who
         note['text'].append('20 来てほしいお客さん → lead・description の文を作る（答えをそのまま (案) で入れた）')
     else: note['text'].append('20 来てほしいお客さん：答えなし → lead・description の文を作る')
     if city and kind: c['title_place'] = '(案)' + city + 'の' + kind; note['text'].append('title_place（検索の題名）→ 文を整える')
-    diff = [l.strip() for l in re.split(r'[\n／/]', A('21')) if l.strip()]  # 1行に1つ。／や/で区切ってあっても分ける
+    d21, req21 = split_request(A('21'))
+    if req21: note['text'].append('21 ほかのお店との違い：頼み「' + '」「'.join(req21) + '」→ 文を作るときに')
+    diff = [l.strip() for l in re.split(r'[\n／/]', d21) if l.strip()]  # 1行に1つ。／や/で区切ってあっても分ける
     parts = {}
     if diff:
         parts['strengths'] = {'title': '選ばれる理由', 'items': [{'title': '(案)' + l} for l in diff[:4]]}
@@ -363,7 +435,13 @@ def convert(qs, ans):
     if main == '予約がメイン': c['reserve_title'] = 'ご予約'
     elif main == '問い合わせがメイン': c['reserve_title'] = 'お問い合わせ'
     elif main == '両方': c['reserve_title'] = 'ご予約・お問い合わせ'
-    elif main: note['other'].append('23 予約と問い合わせ：「まだわからない」→ 打ち合わせで決める')
+    elif main.startswith('まだ'): note['other'].append('23 予約と問い合わせ：「まだわからない」→ 打ち合わせで決める')
+    elif main:  # 選択肢にない答え（「フォームから」など）。前は全部「まだわからない」と読んでいた（B3）
+        r_ = bool(re.search(r'予約', main)); q_ = bool(re.search(r'問い?合わせ|相談|フォーム|見積', main))
+        if r_ or q_:
+            c['reserve_title'] = 'ご予約・お問い合わせ' if (r_ and q_) else ('ご予約' if r_ else 'お問い合わせ')
+            note['other'].append(f'23 予約と問い合わせ：選択肢にない答え「{main}」→「' + ('両方' if (r_ and q_) else ('予約がメイン' if r_ else '問い合わせがメイン')) + '」と読んだ。合っているか確かめる')
+        else: note['other'].append(f'23 予約と問い合わせ：選択肢にない答え「{main}」→ 読めない。打ち合わせで決める')
     if main == '予約がメイン' and rsv == '使わない': note['conflict'].append('予約がメインなのに、予約の受け方が「使わない」')
     if main == '予約がメイン' and not (c.get('tel') or c.get('line_url')) and not rsv.startswith('今使'): note['conflict'].append('予約がメインなのに、電話も LINE もない（予約の入口がない）')
     if main == '問い合わせがメイン' and 'お問い合わせフォーム' not in A('26') and not (c.get('tel') or c.get('line_url')): note['conflict'].append('問い合わせがメインなのに、電話・LINE・フォームのどれもない')
@@ -388,6 +466,20 @@ def convert(qs, ans):
         elif key == 'video': note['other'].append('26 動画 → お店の動画（YouTube の ID か mp4）を受け取ってから parts.video に書く')
         elif key == 'lightbox': parts['lightbox'] = True
         else: note['other'].append(f'26 欲しい機能に知らないものがある（{f}）')
+    # 入口の順（B6）：予約の受け方（24）・予約と問い合わせ（23）の答えに出てきた順に、最初の画面・下の帯・メニューのカードのボタンを並べる（make_site の entry_order）
+    eo = entry_keys(rsv + ' ' + main)
+    if 'form' in eo and 'form' not in parts:  # フォームの部品は足さない（欲しい機能 26 で選んだときだけ）。確かめたい所に出す（別の目 11/28）
+        note['other'].append('24 予約の受け方に「フォーム」があるのに、欲しい機能（26）にお問い合わせフォームがない → 入れるか打ち合わせで決める（入れるなら Formspree の送り先と「フォームの管理」月 550円）')
+    if not eo and main == '問い合わせがメイン' and 'form' in parts: eo = ['form']
+    have = {'form': 'form' in parts, 'tel': bool(c.get('tel')), 'line': bool(c.get('line_url')), 'reserve': bool(c.get('reserve_url')), 'dm': bool(c.get('dm_url'))}
+    gone = [k for k in eo if not have[k]]  # まだ無い入口は並びに書かない（make_site も出さない。check_site 18 と食い違わないように）
+    if gone: note['other'].append('入口：答えにあるが、まだ無い入口 → ' + '・'.join({'form': 'フォーム', 'tel': '電話', 'line': 'LINE', 'reserve': 'ネット予約（予約のURL）', 'dm': 'インスタのDM'}[k] for k in gone) + '（用意できたら entry_order に足す）')
+    eo = [k for k in eo if have[k]]
+    if len(eo) >= 3:  # 3 つ以上（「全部」）は並びの好みが読めないので書かない（make_site の今までの並び＝ネット予約→LINE→…）
+        note['other'].append('入口：' + str(len(eo)) + ' つ選んだ → 並びは道具のまま（ネット予約→LINE→インスタのDM→電話）。いちばん使ってほしい入口があれば entry_order に書く'); eo = []
+    if eo:
+        c['entry_order'] = eo
+        note['other'].append('入口の順：' + '→'.join({'form': 'フォーム', 'tel': '電話', 'line': 'LINE', 'reserve': 'ネット予約', 'dm': 'インスタのDM'}[k] for k in eo) + '（24・23 の答えから。最初のボタンとメニューのボタンがこの順）→ 合っているか確かめる')
     if parts: c['parts'] = parts
 
     # 6. ほか
@@ -442,6 +534,9 @@ def main():
     print(f'読んだ答え：{os.path.basename(src)} の {row_no} 行目（{c["name"]}）')
     print('作りました：', sj)
     print('作りました：', md, f'（空欄 {len(note["blank"])}・食い違い {len(note["conflict"])}・分けられない行 {len(note["menu"])}・あとで {len(note["skip"])}）')
+    if not c.get('業種'):  # 素材写真の業種が決まらないときは、make_site を止めずに（止まる前に）ここで終える（B4）
+        print('⚠️ 業種に合う素材写真のフォルダが無いので、試作はまだ作っていません → 確かめたい所.md の ⑦ の 1 行目。site.json に "業種" を書いてから make_site.py を動かす')
+        print(f'\nかかった時間：{time.time() - t0:.1f} 秒'); sys.exit(0)
     print('→ make_site.py で試作を作ります'); sys.stdout.flush()
     rc = subprocess.call([sys.executable, os.path.join(HERE, 'make_site.py'), sj, outdir])
     took = time.time() - t0
